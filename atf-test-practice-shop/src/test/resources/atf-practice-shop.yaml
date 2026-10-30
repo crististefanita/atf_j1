@@ -1,0 +1,92 @@
+practiceShop:
+  # The only owner of the external UI host. Tests and page objects use relative
+  # paths from ShopUiRoutes and resolve them through typed configuration.
+  baseUrl: https://practicesoftwaretesting.com
+  browser: chromium
+  headless: false
+  timeout: PT20S
+  navigationTimeout: PT45S
+  viewport:
+    width: 1440
+    height: 1000
+  zoomPercent: 70
+  # Flat consumer schema: browser remains the engine name; recovery is independently opt-in.
+  recovery:
+    enabled: false
+    profile: read-only
+    operations: []
+    maxAttempts: 1
+    totalTimeout: PT5S
+    backoff: PT0.1S
+    captureBackendSignals: false
+  validation:
+    profile: ui-api
+    # Typed journey binding; omit the list to enable all checkpoints for UI_API.
+    apiEvidence: [product, registration, login, cart, payment, order]
+  # Opt-in browser boundary. It observes only the configured API host, keeps
+  # bodies bounded/redacted and feeds the existing API network inspector; it
+  # never creates verdicts or replays a mutating browser action.
+  networkInspector:
+    enabled: true
+    allowedHosts: [api.practicesoftwaretesting.com]
+    maxObservations: 256
+    maxBodyPreviewCharacters: 12000
+    collapseConsecutiveSignatures: true
+    settlement:
+      enabled: false
+      timeout: PT10S
+      pollInterval: PT0.1S
+  # Fail closed by default. To enable bounded read-only retries, raise
+  # maxAttempts and list only eligible operations below; mutating actions stay
+  # ineligible by construction.
+  retry:
+    maxAttempts: 1
+    backoff: PT0S
+    eligibleOperations: []
+    reason: bounded read-only UI retry
+  api:
+    endpoint: https://api.practicesoftwaretesting.com
+    # The Practice Shop module does not own or consume an ATF mock catalog.
+    # Live API integration is explicit at the test/integration boundary.
+    mode: live
+    precondition: authenticated
+    timeout: PT20S
+  reports:
+    ui: artifacts/reports/ui
+    api: artifacts/reports/api
+  reporting:
+    systemBodyPreviewCharacters: 100
+    # Capture a privacy-masked screenshot after every Playwright action table.
+    # Set to none only when this evidence is explicitly prohibited.
+    screenshotPolicy: each-checkpoint
+  authenticatedE2eEnabled: false
+  # Use a sellable catalog item for repeatable live purchase journeys; out-of-stock
+  # products disable the quantity control and correctly fail the purchase precondition.
+  # Name-based selection avoids coupling the fixture to rotating product ids.
+  productName: Pliers
+  productPath: auto
+  checkout:
+    # Business route, independent of validation channel or evidence policy.
+    billingStrategy: configured-fields
+    quantity: 2
+    guest:
+      email: atf.practice.shop@example.test
+      firstName: ATF
+      lastName: PracticeShop
+    billing:
+      country: United States of America (the)
+      postalCode: "53703"
+      houseNumber: 10
+      # The current demo lookup for this country/postcode resolves this fixture.
+      # configured-fields uses these values; postal-lookup observes the
+      # application lookup in both UI and UI_API.
+      street: Wayne Lock
+      city: Cartwrightmouth
+      state: Alaska
+    paymentMethod: Cash on Delivery
+  # This is a disposable synthetic demo fixture owned by this module. It is
+  # intentionally explicit so authenticated live proof is reproducible.
+  # Do not reuse this pattern for production credentials.
+  accountFile: atf-test-practice-shop/src/test/resources/practice-software-testing-account.properties
+
+

@@ -1,0 +1,58 @@
+automationExercise:
+  baseUrl: https://automationexercise.com
+  e2eEnabled: false
+  browser:
+    engine: chromium
+    headless: true
+    timeout: PT20S
+    navigationTimeout: PT45S
+    viewport:
+      width: 1440
+      height: 1000
+    # Only the visible vignette Close opts into JavaScript; ordinary business clicks remain pointer actions.
+    zoomPercent: 70
+    # Backend-guided reobservation is separately opt-in; it never replays a business action.
+    recovery:
+      enabled: false
+      profile: read-only
+      operations: []
+      maxAttempts: 1
+      totalTimeout: PT5S
+      backoff: PT0.1S
+      captureBackendSignals: false
+    # Total document attempts, including the first load; only explicit queue-full GET reads may recover.
+    storeAvailability:
+      maxAttempts: 3
+      backoff: PT2S
+    networkInspection:
+      includeDocuments: false
+      maxObservations: 256
+      maxBodyPreviewCharacters: 12000
+  reports:
+    uiBaseDirectory: artifacts/reports/ui
+  catalog:
+    searchTerm: Blue Top
+    productId: "1"
+    productName: Blue Top
+    unitPrice: Rs. 500
+    quantity: 2
+  registration:
+    birthDay: "10"
+    birthMonth: May
+    birthYear: "1990"
+    firstName: ATF
+    lastName: AutoEx
+    company: ATF disposable E2E
+    address1: 10 Test Avenue
+    address2: Test District
+    country: United States
+    state: Test State
+    city: Test City
+    postalCode: "10001"
+    mobileNumber: "5550100100"
+  payment:
+    nameOnCard: ATF AutoEx Demo
+    cardNumber: "4242424242424242"
+    cvc: "123"
+    expiryMonth: "12"
+    expiryYear: "2030"

@@ -1,0 +1,30 @@
+{
+  "coordinate": "atf.api:atf-reporting:1.0.0-j4",
+  "producerDirectory": "C:/work/1/demo2",
+  "producerHead": "4f6bd353bf23f499a1268e811116b5627522306c",
+  "producerHasUncommittedChanges": true,
+  "javaRelease": 21,
+  "verifiedToolchain": "Temurin 21.0.12.1+1",
+  "binarySha256": "5D01BB416F62FF0C309BD725275C15BD35CBD8BE39AF76CA7627E11DCFE1E874",
+  "sourceIncluded": false,
+  "nativeTests": 49,
+  "nativeTestFailures": 0,
+  "nativeTestSkips": 0,
+  "producerManifestSha256": "D9AA01E9FA6EE0645DD88051556F0910AF41CB6C21C239D4C31AF97C42F430A8",
+  "publishedPomSha256": "11A2632694A8E6C1B2F0C5DD656BE7585F4C12E3656C649CBB794738CC17A94F",
+  "versionTransformation": {
+    "producer": "1.0.0-SNAPSHOT",
+    "published": "1.0.0-j4",
+    "otherPomChanges": false
+  },
+  "reproducibility": {
+    "forcedCleanBuilds": 2,
+    "identicalBytes": true
+  },
+  "binaryApiComparison": {
+    "reference": "atf.api:atf-reporting:1.0.0-j1",
+    "previousPublicProtectedEntries": 3834,
+    "removed": 0,
+    "added": 2
+  }
+}
