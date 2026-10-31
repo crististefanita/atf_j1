@@ -330,7 +330,7 @@ Smoke-testul manual al compoziției IntelliJ este necesar numai la schimbări
 relevante:
 
 - rulează suitele cu working directory la root-ul reactorului și la
-  `atf-reporting-tests`, conform [ghidului suitei Extent](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij);
+  `atf-reporting-tests`, conform [ghidului suitei Extent](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij);
 - testele componente verifică separat rezolvarea deterministă a căilor, dar nu
   lansează IntelliJ.
 
@@ -369,7 +369,7 @@ generic de meta-adnotări, superclass sau override per metodă.
 
 Selecția canalelor este un contract închis; redeschiderea cere un consumer nou
 sau o regresie. Paritatea și verdicturile au probe la ownerul
-[Reporting Tests](../../demo2/atf-reporting-tests/README.md); controalele Git verificate sunt în
+[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); controalele Git verificate sunt în
 [baseline](ATF_Test_Changes_Baseline.md#controale-tehnice-verificate).
 Pentru dovezi și layout, contractele normative rămân
 [Reporting](ATF_Reporting_Contract.md), [display/layout](ATF_Reporting_Display_Contract.md)

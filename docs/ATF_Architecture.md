@@ -6,17 +6,17 @@ cunoaște rutele sau intenția unui test de produs.
 
 ## Pe scurt
 
-Reactorul păstrează exact cele 10 module existente. Reporting este consumat
-ca bibliotecă externă, nu ca sursă în reactor; [POM-ul J1](../pom.xml) fixează
-inventarul și versiunea, iar [ghidul J1](ATF_J1_Consumer.md) fixează ownership-ul.
+Reactorul păstrează exact cele 9 module existente. Core și Reporting sunt consumate
+ca biblioteci externe, fără surse în reactor; [POM-ul J1](../pom.xml) fixează
+inventarul și versiunea, iar [ghidul J1](ATF_Reporting_Consumer.md) fixează ownership-ul.
 
 | Boundary | Owner | Contract stabil | Gate executabil |
 |---|---|---|---|
 | kernel și politici | `atf-core` | modele, porturi, snapshot-uri și vocabular fizic | unit + governance |
 | execuție API generică | `atf-core` | executor, lifecycle și binding de transport | unit/component + consumer |
 | verdicturi | `atf-validation` | reguli și `ValidationResult` prin port neutru | unit/component |
-| artifact extern | Reporting JAR | modele și Extent/HTML; producător în `demo2` | consum binar J1; sursă/native la producător |
-| reporting composition externă | `demo2/atf-reporting-tests`, numai în TMP | mock → API → raport, cu component/integration proof și browser/E2E pentru contractul reporting | component + integration/API + Chromium/Playwright |
+| artifact extern | Reporting JAR | modele și Extent/HTML; producător în `atf_j0` | consum binar J1; sursă/native la producător |
+| reporting composition externă | `atf_j0/atf-reporting-tests`, numai în TMP | mock → API → raport, cu component/integration proof și browser/E2E pentru contractul reporting | component + integration/API + Chromium/Playwright |
 | Practice Shop consumer | `atf-test-practice-shop` | journey UI/API, configurație, pagini și runtime de aplicație | component + API live + E2E |
 | Automation Exercise consumer | `atf-test-auto-ex` | journey UI, contracte API și runtime separat de adaptorul JUnit | component + API live + E2E opt-in |
 | guvernanță whole-ATF | `atf-tests` | graph, dependency direction și architecture boundary | architecture/component |
@@ -37,7 +37,7 @@ Dependențele Maven și relațiile de guvernanță au sensuri distincte, explici
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Debug["Debug UI"] -->|compile| Console["Console"]
-    Console -->|compile| Core["Core"]
+    Console -->|compile| Core["Core JAR"]
     Console -->|optional compile| Kit["Test Kit"]
     Mock["Mock"] -->|compile| Core
     Validation["Validation"] -->|compile| Core
@@ -604,7 +604,7 @@ Etichetele scurte păstrează următorul sens:
 - `AtfRuntimeSnapshot` păstrează `ApiSettingsSnapshot` și `ReportingSettings`
   fără YAML, filesystem, environment sau Extent în `atf-core`;
 - `atf-core` deține modelele typed, snapshot-urile și adaptorul explicit
-  [ApiBootstrapConfigurationLoader](../atf-core/src/main/java/atf/core/config/source/ApiBootstrapConfigurationLoader.java).
+  [ApiBootstrapConfigurationLoader](../../atf_j0/atf-core/src/main/java/atf/core/config/source/ApiBootstrapConfigurationLoader.java).
   Adaptorul citește sursele la composition root; modelele nu citesc YAML ori environment.
   Compoziția de test API este în `atf-reporting-tests`, iar consumerii își păstrează wiring-ul;
 - `ApiModuleFactory` proiectează snapshot-ul în executorul API, iar reporting
@@ -632,7 +632,7 @@ Reconcilierea curentă separă contractul implementat de riscurile de evoluție:
 | raport UI read-only pe tab-urile principale | `@UiExtentReportContract` și `StaticUiExtentReportContractTest` | `atf-reporting-tests` |
 | HTML/CSS/JavaScript și asset manifest | contracte pure în `atf-reporting` | `UiReportArtifactContractTest` |
 | direcție module, ownership constante/CSS, output și import graph | boundary-uri Maven/source | `atf-tests` + architecture tests |
-| paritate Extent ↔ fallback | `AtfReportSemanticSnapshot` | [comparație între renderer-e în test](../../demo2/atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java) |
+| paritate Extent ↔ fallback | `AtfReportSemanticSnapshot` | [comparație între renderer-e în test](../../atf_j0/atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java) |
 | consistență internă fallback | `AtfReportSemanticSnapshot.from(ReportExecutionModel)` | documentul și recorderul aceleiași sesiuni sunt comparate înainte de render |
 
 Acestea sunt capabilități închise și normative. Un document de feedback nu le
@@ -683,7 +683,7 @@ Etichetele scurte păstrează următorul sens:
 | `AtfReportSemanticSnapshot` | recorder comun și adaptoare | contract semantic renderer-neutral |
 
 Guard-ul local verifică arborele `class → scenario → phase → request → validation`,
-package-ul și evidence counts. [AtfReportSemanticSnapshotTest](../../demo2/atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java)
+package-ul și evidence counts. [AtfReportSemanticSnapshotTest](../../atf_j0/atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java)
 compară separat rezultatele Extent/fallback. Modelele rămân distincte; renderul
 fallback nu deschide o sesiune Extent pentru a-și confirma outputul.
 
@@ -895,3 +895,9 @@ Clasele executabile ale fiecărui consumer sunt repartizate exact o dată între
 local, UI E2E și API live. Opt-in-urile externe rămân independente; mutarea unui
 helper nu autorizează un apel remote și nu transformă un fixture în dovadă live.
 
+## Core ca bibliotecă — owner și deployment
+
+Acest consumer are 9 module sursă. Core C1 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+
+[Contractul Core C1](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
+Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.

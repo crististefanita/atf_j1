@@ -2,11 +2,11 @@
 
 **Perimetru J1:** Reporting este JAR extern. Comenzile care țintesc
 `atf-reporting/pom.xml`, resursele native sau auditul sursei se execută în
-staging-ul producătorului `demo2`; [ghidul J1](ATF_J1_Consumer.md) separă gate-urile și ownership-ul.
+staging-ul producătorului `atf_j0`; [ghidul J1](ATF_Reporting_Consumer.md) separă gate-urile și ownership-ul.
 
 ## Pe scurt
 
-Defectele Reporting observate în consumeri primesc [regresie permanentă](../../demo2/atf-reporting-tests/README.md#regresia-permanentă-a-fiecărui-defect-reporting)
+Defectele Reporting observate în consumeri primesc [regresie permanentă](../../atf_j0/atf-reporting-tests/README.md#regresia-permanentă-a-fiecărui-defect-reporting)
 la producător, cu mock/contract și browser după boundary-ul afectat. Fiecare
 JAR candidat trece gate-ul extern în TMP; harness-ul nu este modul în J1.
 
@@ -102,7 +102,7 @@ nu au această obligație; probele rendererului rămân o categorie separată î
   contorul DOM sincron numără activările native fără o confirmare RPC asincronă.
 - Lansarea individuală și suita folosesc același adaptor al aplicației;
   validările Extent/fallback și interacțiunea disclosure-ului sunt probate la
-  [Reporting Tests](../../demo2/atf-reporting-tests/README.md).
+  [Reporting Tests](../../atf_j0/atf-reporting-tests/README.md).
 
 Sesiunea comună aparține clasei sau suitei declarate; scenariul, comparațiile
 și timing-ul măsurat rămân per invocare. Publicarea finală și notificarea căii
@@ -186,14 +186,14 @@ Celulele arată doar nivelurile care există în suitele executabile curente.
 
 | Modul | Unit | Component | Integration | E2E | Owner și scopul principal |
 |---|:---:|:---:|:---:|:---:|---|
-| [`atf-core`](../atf-core/README.md) | ✅ | — | — | — | contracte neutre și politici reutilizabile |
+| [`atf-core`](../../atf_j0/atf-core/README.md) | ✅ | — | — | — | contracte neutre și politici reutilizabile |
 | [`atf-validation`](../atf-validation/README.md) | ✅ | ✅ | — | — | reguli de validare și rezultate typed |
 | [`atf-console`](../atf-console/README.md) | ✅ | — | ✅ | — | policy/formatter unitare; integrarea extension-ului cu Jupiter real |
 | [`atf-mock`](../atf-mock/README.md) | — | ✅ | — | — | transport fake și comportament determinist |
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | policy și adapter Playwright generic |
 | [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și launcher read-only pentru inspecție |
 | [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | excepție: suite standalone fără adnotări sau dependențe ATF |
-| [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | composition și proof pentru librăria reporting |
+| [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | composition și proof pentru librăria reporting |
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumer: contracte, API, flow-uri și journey browser |
 | [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumer: purchase journey în profile UI distincte, probe component și API live opt-in |
 | [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | boundary și guvernanță whole-reactor |
@@ -223,7 +223,7 @@ invariantul, nu fixture-ul și nici testul întreg:
 |---|---|---|
 | regulile aplicației, traseele UI/API, payload-ul și propagarea datelor | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#limita-dintre-testele-shop-și-testele-reporting) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suite-și-variante-de-evidence) | toate probele business, inclusiv cele cu mock; mock-ul izolează transportul, nu schimbă owner-ul |
 | traducerea contractului aplicației în portul public Reporting | consumerul care deține adaptorul | intenția/titlul business, asocierea așteptării la exchange, statusul specific și politica locală de redactare |
-| semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
+| semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
 | API-uri și lifecycle-uri reutilizabile strict test-only: adnotări, resolver-e, clasificare și primitive generice | [`atf-test-kit`](../atf-test-kit/README.md#regula-de-promovare-a-testelor-reutilizabile) | aplicația păstrează fixture-ul, lifecycle-ul și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste Reporting |
 
 O probă poate rămâne consumer-owned chiar dacă publică un artifact: trebuie să
@@ -565,7 +565,7 @@ variație de conținut.
 
 Aceste probe nu certifică automat toate proiecțiile sau verdictul local al
 fiecărui exchange. Matricea contractelor și probelor aparține
-[Reporting Tests](../../demo2/atf-reporting-tests/README.md); lacunele active rămân în
+[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); lacunele active rămân în
 [registrul feedback-urilor](feedback/README.md), separat de controalele tehnice.
 
 ## Principii pentru teste scurte și plug-and-play
@@ -593,7 +593,7 @@ Contractele test-only și adnotările sunt în [`atf-test-kit`](../atf-test-kit/
 |---|---|
 | un test țintit într-un modul și dependențele sale | `mvn -pl <modul> -am "-Dtest=<ClasaTest>" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 | suitea whole-ATF | `mvn -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
-| librăria `atf-reporting` izolată — numai în staging `demo2` | `mvn -f atf-reporting/pom.xml test` |
+| librăria `atf-reporting` izolată — numai în staging `atf_j0` | `mvn -f atf-reporting/pom.xml test` |
 | Practice Shop — contracte selectate | `mvn -pl atf-test-practice-shop -am "-Dtest=ShopConfigurationTest,ShopCheckoutConfigurationTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 | boundary-uri Shop/AutoEx whole-ATF | `mvn -pl atf-tests -am "-Dtest=ConsumerModuleArchitectureGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 

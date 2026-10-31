@@ -1,7 +1,7 @@
 # Contractul de raportare Extent pentru ATF Java
 
 În J1, acest contract descrie rezultatul cerut la integrarea bibliotecii.
-Modelele, rendererul și regresiile generice au owner în `demo2`; [atlasul JAR](ATF_Reporting_Library_Atlas.md)
+Modelele, rendererul și regresiile generice au owner în `atf_j0`; [atlasul JAR](ATF_Reporting_Library_Atlas.md)
 permite folosirea lor fără sursă locală, fără a garanta orice API `public`.
 
 ## Pe scurt

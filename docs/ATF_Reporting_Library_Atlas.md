@@ -1,10 +1,10 @@
-# Reporting ca bibliotecă — atlasul integrării J1
+# Reporting ca bibliotecă — atlasul integrării consumerului
 
 ## Pe scurt
 
 Acest atlas permite integrarea Reporting fără sursa bibliotecii. Pornește de
 la contractele consumate, callerul local și JAR-ul încărcat; implementarea,
-regresiile generice și documentația bibliotecii au owner în `demo2`.
+regresiile generice și documentația bibliotecii au owner în `atf_j0`.
 
 | Intenție | Intrare | Verifică la caller |
 |---|---|---|
@@ -15,18 +15,18 @@ regresiile generice și documentația bibliotecii au owner în `demo2`.
 
 ## Identitatea bibliotecii
 
-Versiunea este declarată în [POM-ul J1](../pom.xml); repository-ul este în
-[lib](../lib/README.md). [Proveniența](../library-provenance.json) identifică
-binarul/POM-ul, iar [manifestul](../reporting-source-manifest.json) identifică intrările producătorului.
+Versiunea este declarată în [POM-ul J1](../pom.xml); [lib](../lib) conține
+numai JAR-ul și POM-ul. [Proveniența](../library-provenance.json) păstrează
+hash-urile binarului/POM-ului, amprenta intrărilor și catalogul probelor native.
 
-Manifestul oferă hash-uri, nu acces la sursă ori la schimbările ulterioare
-din `demo2`. Un diagnostic identifică mai întâi versiunea încărcată; numele
-unei clase din stack trace nu implică sursă disponibilă în J1.
+Amprenta identifică snapshot-ul producătorului, fără a transporta sursa ori
+schimbările ulterioare din `atf_j0`. Diagnosticul pornește de la versiunea
+încărcată; numele unei clase din stack trace nu implică sursă disponibilă în J1.
 
 API-ul folosit poate fi inspectat din binar:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j5.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j6.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
 Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
@@ -230,11 +230,11 @@ Shop/AutoEx rămân la consumer dacă modulul generic de teste este retras.
 
 | Observație | Verifică întâi în J1 | Ownerul corecției |
 |---|---|---|
-| clasă sau metodă absentă | versiune, POM, CodeSource și apelul compilat | adaptor J1 ori compatibilitate Reporting în `demo2` |
+| clasă sau metodă absentă | versiune, POM, CodeSource și apelul compilat | adaptor J1 ori compatibilitate Reporting în `atf_j0` |
 | raport absent | opt-in, Store JUnit, cauza close-ului și output-ul | caller J1; publisher defect la producător |
 | verdict/captură greșite | expected, mapper și identitatea invocării | consumer pentru input; Reporting pentru proiecție |
-| coloane ori backlink defecte | același HTML, fază/ordinal, viewport și tastatură | Reporting și regresia sa în `demo2` |
+| coloane ori backlink defecte | același HTML, fază/ordinal, viewport și tastatură | Reporting și regresia sa în `atf_j0` |
 
 Handoff-ul include coordonata/hash-ul, input minim fără secrete, cauza,
-expected/actual și reproducerea. [Procesul J1](ATF_J1_Consumer.md) fixează livrarea;
+expected/actual și reproducerea. [Procesul J1](ATF_Reporting_Consumer.md) fixează livrarea;
 sursa bibliotecii și fișierele din JAR nu se repară în `lib`.

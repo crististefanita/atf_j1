@@ -57,7 +57,7 @@ Diagnosticul generic al excepției folosește
 [formatterul Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare).
 AutoEx păstrează asocierea cu API-ul și faza, plus probele adaptorului real;
 grafurile ciclice, redactarea și randarea neutră au
-[probe la Reporting Tests](../../demo2/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+[probe la Reporting Tests](../../atf_j0/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
 
 - Acest modul deține journey-ul E2E și suportul specific site-ului AutoEx.
 - Gate-ul uzual selectează direct `AutoExPurchaseUiE2eTest` și execută cumpărarea o singură dată.
@@ -440,7 +440,7 @@ punctele următoare descriu numai ce afirmă testele specifice Automation Exerci
   chiar când body-ul declară succes; DTO-ul păstrează form-encoding și MIME-ul
   upstream. Artifactele Extent și fallback sunt verificate pentru lipsa parolei,
   iar formatarea și redactarea comune se probează în
-  [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md);
+  [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md);
 - replay-ul form-encoded fără adaptor este probat prin
   `ApiManualReplayProjectionTest` în Reporting Tests; aici rămâne verificarea
   că artifactul efectiv AutoEx nu expune parola;
@@ -1124,7 +1124,7 @@ clasă/suită, diagnosticul și închiderea raportului.
 - Aserțiunile componente rămân în pasul standard colapsat; bugetul configurat și
   redactarea textului complet înaintea plafonului rămân obligatorii.
 
-Contractul producerului este la [Core](../atf-core/README.md#istoric-la-eroare-terminală),
+Contractul producerului este la [Core](../../atf_j0/atf-core/README.md#istoric-la-eroare-terminală),
 iar proiecția la [Reporting](../docs/ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate).
 
 ### De ce raportul API nu arată ca raportul UI
@@ -1570,6 +1570,18 @@ cauzal al interacțiunilor browserului.
 </details>
 
 </details>
+
+### Credentiale în aserțiunile componente API
+
+Oracolul formularului compară integral map-urile originale, inclusiv valoarea,
+prezența și casing-ul cheii `password`. Raportul primește proiecția câmpurilor
+nesensibile și rezultatul boolean al egalității complete; nu primește parola
+fixture-ului, nici când comparația eșuează.
+
+[AutoExApiContractComponentTest](src/test/java/atf/autoex/tests/component/api/AutoExApiContractComponentTest.java)
+păstrează round-trip-ul pentru caractere rezervate și Unicode. Negativele
+refuză mismatch-ul, câmpul lipsă, câmpul gol neașteptat și cheia cu casing greșit;
+diagnosticul JUnit și pasul standard colapsabil rămân fără credentiale brute.
 
 ## Politica BE a catalogului
 

@@ -105,7 +105,7 @@ Fiecare clasă executabilă declară exact un nivel:
 
 - API, precedență și probe: [adnotările de infrastructură](../docs/ATF_Test_Infrastructure_Annotations.md).
 - Verificarea manuală IntelliJ pentru output project-relative:
-  [ghidul suitei Extent](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij).
+  [ghidul suitei Extent](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij).
 
 ### Lansarea scoped a acceptanței
 

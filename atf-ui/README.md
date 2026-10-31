@@ -72,7 +72,7 @@ Etichetele scurte păstrează următorul sens:
 
 `atf-ui` nu importă executorul de audit și publisherul de secțiune: validarea
 statică și proiecția raportului aparțin `atf-reporting`, iar scenariile E2E sunt
-în [README-ul auditului browser](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md).
+în [README-ul auditului browser](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md).
 Modulul UI nu publică Extent și nu emite assertions de secțiune.
 
 ## Traseul de integrare
@@ -130,7 +130,7 @@ generică. Nu este owner pentru `report.directory`, `apiSetup`, `audit` sau
 `filePrefix`; aceste valori sunt test-only și aparțin configurației interne a
 modulului `atf-reporting`:
 
-[`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../../demo2/atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
+[`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../../atf_j0/atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
 
 ```yaml
 ui:

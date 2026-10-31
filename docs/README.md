@@ -1,7 +1,7 @@
 # Documentația ATF Java
 
 Documentația descrie deployment-ul J1: 10 module sursă și Reporting extern.
-Începe cu [ownership-ul J1](ATF_J1_Consumer.md), apoi cu [atlasul general](ATF_Context_Atlas.md)
+Începe cu [ownership-ul J1](ATF_Reporting_Consumer.md), apoi cu [atlasul general](ATF_Context_Atlas.md)
 sau [atlasul Reporting fără sursă](ATF_Reporting_Library_Atlas.md).
 
 Acest director este indexul contractelor stabile ale ATF Java și al
@@ -18,10 +18,24 @@ particular.
 
 ## Pe scurt
 
+| Pentru | Citește întâi |
+|---|---|
+| orientare între proiecte | [workspace-uri](ATF_Workspace_Synchronization.md), apoi [atlasul de context](ATF_Context_Atlas.md) |
+| contract și owner | [arhitectură](ATF_Architecture.md), POM și README-ul modulului |
+| problemă încă deschisă | [registrul feedback-urilor](feedback/README.md); contractele livrate rămân la owner |
+| Kafka/Podman în J2 | [atlasul WIP](../../atf_j2/docs/ATF_Context_Atlas.md); nu este o extensie web a J1 |
+
+
+
+J0 deține implementarea și testele Core/Reporting; J1 deține scenariile AutoEx/Shop.
+J2 a început bootstrap-ul pentru cozi și mesaje;
+[harta workspace-urilor](ATF_Workspace_Synchronization.md) separă infrastructura copiată de contractele și acceptanța mesageriei.
+
 | Nivel | Documente | Întrebarea la care răspund |
 |---|---|---|
+| workspace și livrare | [ATF_Workspace_Synchronization.md](ATF_Workspace_Synchronization.md) | unde se repară Reporting și cum se validează separat fiecare consumer? |
 | context progresiv | [ATF_Context_Atlas.md](ATF_Context_Atlas.md) | ce contract, intrare și probă citesc înainte de a extinde contextul? |
-| bibliotecă Reporting | [atlasul JAR](ATF_Reporting_Library_Atlas.md) și [ghidul J1](ATF_J1_Consumer.md) | cum integrez fără sursă și cine repară biblioteca? |
+| bibliotecă Reporting | [atlasul JAR](ATF_Reporting_Library_Atlas.md) și [ghidul J1](ATF_Reporting_Consumer.md) | cum integrez fără sursă și cine repară biblioteca? |
 | hartă | [ATF_Architecture.md](ATF_Architecture.md), README-ul root | cine deține ce și în ce direcție curg dependențele? |
 | contract | [ATF_Reporting_Contract.md](ATF_Reporting_Contract.md), [ATF_Reporting_Display_Contract.md](ATF_Reporting_Display_Contract.md), ghidurile de modul | ce comportament semantic și ce formă vizibilă sunt stabile? |
 | evidence transversal | [ATF_Evidence_Capture_Contract.md](ATF_Evidence_Capture_Contract.md) | cum se separă flow-ul, policy-ul, sursa și publisherul? |
@@ -90,13 +104,13 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
 <summary>Ordinea completă de lectură și toate documentele</summary>
 
 1. [ATF_Architecture.md](ATF_Architecture.md) — module, dependențe și responsabilități.
-2. [../atf-core/README.md](../atf-core/README.md) — kernelul neutru, porturile
+2. [../atf-core/README.md](../../atf_j0/atf-core/README.md) — kernelul neutru, porturile
    și modelele comune.
 3. [../atf-mock/README.md](../atf-mock/README.md) — fake-ul determinist,
    catalogul YAML și transportul acceptance.
 4. [../atf-test-kit/README.md](../atf-test-kit/README.md) — contractele testelor,
    nivelurile unit/component/integration/e2e și excepția Console `optional compile`.
-5. [../atf-reporting-tests/README.md](../../demo2/atf-reporting-tests/README.md) — fixture-uri
+5. [../atf-reporting-tests/README.md](../../atf_j0/atf-reporting-tests/README.md) — fixture-uri
    API, composition root și lifecycle de test.
 6. [../atf-validation/README.md](../atf-validation/README.md) — validarea
    independentă și portul de publicare.
@@ -111,7 +125,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
    de consolă și contractul de output.
 12. [../atf-ui/README.md](../atf-ui/README.md) — politicile generice și adaptorul
    Playwright.
-13. [../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md)
+13. [../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md)
    — contractul stabil pentru selecția API, mock-backed expected projection,
    secțiuni Extent și validarea UI reutilizabilă.
 14. [../atf-debug-ui/README.md](../atf-debug-ui/README.md) — publicarea
@@ -235,3 +249,10 @@ sunt interzise.
 
 Validitatea linkurilor nu certifică semantica unui contract. Comanda gate-ului
 și limitele lui sunt la [ATF Tests](../atf-tests/README.md#verificare-rapidă).
+
+## Core ca bibliotecă — owner și deployment
+
+Acest consumer are 9 module sursă. Core C1 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+
+[Contractul Core C1](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
+Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.

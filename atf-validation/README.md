@@ -24,7 +24,7 @@ rădăcină și în `docs/ATF_Architecture.md`.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Core["Core"] -->|alimentează| Validation["Validation"]
+    Core["Core JAR"] -->|alimentează| Validation["Validation"]
     Tests["Reporting tests"] -. fixtures .-> Validation
     Validation -->|calculează| Decision["Verdict typed"]
     Decision -->|publică| Sink["Sink"]
@@ -228,6 +228,16 @@ Aceste contracte sunt utilizabile independent de un evaluator general nou.
   dependențe Kit către Core, Validation ori Reporting.
 
 </details>
+
+### Vocabular HTTP independent de locale
+
+Comparația case-insensitive Content-Type și identitatea regulii pentru un
+header folosesc `Locale.ROOT`. DSL-ul `contentTypeContains` rămâne o verificare
+de conținut declarată de caller; nu devine clasificator MIME ori parser de body.
+
+[ResponseContractRuleSetTest](src/test/java/atf/validation/contract/ResponseContractRuleSetTest.java)
+verifică aceeași decizie nominală, refuzul unui tip diferit și identitatea regulii
+în `tr-TR`; testul izolează și restaurează starea JVM.
 
 ## Reguli de separare
 

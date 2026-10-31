@@ -1278,7 +1278,7 @@ Implementarea vertical slice analizată live:
 - `../atf-ui/src/main/java/atf/ui`;
 - `../atf-ui/src/main/java/atf/ui`;
 - `../atf-test-practice-shop/src/main/atf/shop`;
-- Reporting extern: modelele și porturile din JAR, adaptate în J1; sursa bibliotecii are owner în `demo2`.
+- Reporting extern: modelele și porturile din JAR, adaptate în J1; sursa bibliotecii are owner în `atf_j0`.
 
 ## 34. Readiness și dovezi
 

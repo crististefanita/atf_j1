@@ -1,12 +1,24 @@
 # ATF — platformă modulară pentru testare și rezultate verificabile
 
-J1 este proiectul principal pentru schimbările din afara Reporting.
-Biblioteca și regresiile generice se întrețin în `demo2`, apoi se livrează
-aici ca JAR; [ownership-ul și sincronizarea](docs/ATF_J1_Consumer.md) au direcții explicite.
+Referința surselor Core/Reporting și a regresiilor este `atf_j0`; distribuția către J1 și J2 urmează [protocolul de sincronizare](docs/ATF_Workspace_Synchronization.md).
+
+J1 este proiectul principal pentru testele AutoEx/Shop și integrarea lor.
+Infrastructura comună se reconciliază cu ownerii afectați; J2 este rezervat
+testării cozilor și mesajelor, cu bootstrap și acceptanță proprii.
+Biblioteca și regresiile generice se întrețin în `atf_j0`, apoi se livrează
+aici ca JAR; [ownership-ul și sincronizarea](docs/ATF_Reporting_Consumer.md) au direcții explicite.
 
 `API determinist → validare semantică → raport Extent → audit UI`
 
 ## ATF Java — prezentare executivă
+
+| Workspace | Rol și punct de intrare |
+|---|---|
+| J0 | 12 module, sursa Reporting și regresiile native/mock/browser; [atlasul sursei](../atf_j0/docs/ATF_Context_Atlas.md) |
+| J1 | 9 module sursă, scenarii AutoEx/Shop și Core/Reporting JAR; [atlasul consumerului](../atf_j1/docs/ATF_Context_Atlas.md) |
+| J2 · WIP | 7 module sursă, Core/Reporting JAR, un modul de test Kafka/mesagerie și Setup PowerShell în Podman; [atlasul WIP](../atf_j2/docs/ATF_Context_Atlas.md) |
+
+Rolul proiectului și rezultatul verificat sunt distincte: un build sau un MOCK verde nu certifică serviciul extern, brokerul ori întregul ATF.
 
 ATF Java este platforma care leagă execuția deterministă a testelor API de
 validarea semantică, publicarea artefactului Extent și auditul UI al rezultatului.
@@ -15,7 +27,7 @@ nu enumerate ca un inventar Maven:
 
 | Zonă | Module live | Responsabilitate | Întrebarea cititorului |
 |---|---|---|---|
-| **Contract & foundation** | `atf-test-kit`, `atf-core` | adnotări de test, resolvere neutre, lifecycle, transport ports | ce poate fi reutilizat fără reporting sau business? |
+| **Contract & foundation** | `atf-test-kit`, Core JAR C1 | adnotări de test, resolvere neutre, lifecycle, transport ports | ce poate fi reutilizat fără reporting sau business? |
 | **Execution & verdict** | `atf-mock`, `atf-validation`, `atf-console` | schimb determinist, verdict semantic și diagnostic | cum devine un test reproductibil și explicabil? |
 | **Reporting & UI audit** | Reporting JAR, `atf-ui`, `atf-debug-ui` | artifact standalone, browser audit și publicare read-only | cum devine rezultatul observabil și verificabil? |
 | **Composition + consumers** | `atf-test-practice-shop`, `atf-test-auto-ex` | Shop și AutoEx compun journey-uri; Reporting Tests verifică binarul într-un gate extern TMP | cine verifică librăriile și cine le folosește într-un produs? |
@@ -77,10 +89,10 @@ a aceleiași legende.
 | transport determinist | `atf-mock` | rute și răspunsuri fake configurabile | component |
 | verdict | `atf-validation` | contracte response, evaluare și evidence | unit |
 | diagnostic | `atf-console` | proiecție de consolă și formatter | unit |
-| reporting library externă | `atf-reporting` din `lib` | renderer Extent/HTML; sursa și regresiile au owner în `demo2` | acceptanță binară J1; standalone la producător |
+| reporting library externă | `atf-reporting` din `lib` | renderer Extent/HTML; sursa și regresiile au owner în `atf_j0` | acceptanță binară J1; standalone la producător |
 | browser runtime | `atf-ui` | sesiune Playwright și politici generice | component |
 | debug inspector | `atf-debug-ui` | servește read-only un HTML pe loopback | component |
-| reporting test harness extern | `demo2/atf-reporting-tests`, numai în TMP | component/API mock → publisher și UI/E2E pentru librăria reporting | component/integration/E2E |
+| reporting test harness extern | `atf_j0/atf-reporting-tests`, numai în TMP | component/API mock → publisher și UI/E2E pentru librăria reporting | component/integration/E2E |
 | aplicații consumatoare | `atf-test-practice-shop`, `atf-test-auto-ex` | config, locatori, pages și journey-uri independente | component/E2E |
 | whole-ATF governance | `atf-tests` | module graph și boundary-uri ale reactorului | component/architecture |
 Etichetele scurte păstrează următorul sens:
@@ -100,7 +112,7 @@ Etichetele scurte păstrează următorul sens:
 ## Harta modulelor
 
 Două perspective ale aceluiași reactor: consumatorii și apoi verificarea cu
-guvernanța. J1 cuprinde 10 module sursă: șapte de platformă, doi consumatori,
+guvernanța. J1 cuprinde 9 module sursă: șase de platformă, doi consumatori,
 guvernanța. Reporting este consumat separat ca bibliotecă externă; harness-ul rămâne la producător.
 
 ### Consum
@@ -148,7 +160,7 @@ flowchart LR
 
 - `ReportingTests` este `atf-reporting-tests`: verifică `atf-reporting` și
   folosește celelalte module partajate numai în `test` scope;
-- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 10 module sursă locale și integrarea bibliotecii externe,
+- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 9 module sursă locale și integrarea bibliotecii externe,
   nu doar librăriile comune;
 - săgețile sunt drepte pentru a păstra etichetele lizibile; detaliile și
   ownership-ul fiecărui modul sunt în tabel și în README-ul modulului.
@@ -399,14 +411,14 @@ fără să parcurgă aceeași explicație în root și în fiecare modul; indexu
 | Zonă | Document owner | Întrebarea la care răspunde |
 |---|---|---|
 | contract transversal | [TestKit](atf-test-kit/README.md), [adnotări implementate](docs/ATF_Test_Infrastructure_Annotations.md) | cum declarăm nivelul, canalul, output-ul și setup-ul unui test? |
-| kernel reutilizabil | [`atf-core/README.md`](atf-core/README.md) | ce modele, lifecycle și porturi sunt neutre? |
+| kernel reutilizabil | [`atf-core/README.md`](../atf_j0/atf-core/README.md) | ce modele, lifecycle și porturi sunt neutre? |
 | transport determinist | [`atf-mock/README.md`](atf-mock/README.md) | cum obținem schimburi API reproducibile? |
 | verdict semantic | [`atf-validation/README.md`](atf-validation/README.md) | cum se transformă un response într-un verdict? |
 | diagnostic | [`atf-console/README.md`](atf-console/README.md) | cum ajung evenimentele neutre în consolă? |
 | reporting standalone | [atlasul Reporting JAR](docs/ATF_Reporting_Library_Atlas.md) | cum se consumă JAR-ul fără sursa Reporting? |
 | browser runtime | [`atf-ui/README.md`](atf-ui/README.md) · [convenții pentru locatori](atf-ui/README.md#convenții-pentru-locatori-ui) | cum sunt controlate browserul și convențiile generice pentru locatori, fără logică de produs? |
 | inspector read-only | [`atf-debug-ui/README.md`](atf-debug-ui/README.md) | cum investigăm un HTML deja generat? |
-| reporting test harness | [`atf-reporting-tests/README.md`](../demo2/atf-reporting-tests/README.md) | cum sunt verificate compoziția API/mock și randarea UI a reportingului? |
+| reporting test harness | [`atf-reporting-tests/README.md`](../atf_j0/atf-reporting-tests/README.md) | cum sunt verificate compoziția API/mock și randarea UI a reportingului? |
 | consumer aplicație | [`atf-test-practice-shop/README.md`](atf-test-practice-shop/README.md) | cum folosește o aplicație reală infrastructura ATF? |
 | consumer Automation Exercise | [`atf-test-auto-ex/README.md`](atf-test-auto-ex/README.md) | cum se compun UI E2E-uri separate folosind adnotările Test Kit? |
 | guvernanță reactor | [`atf-tests/README.md`](atf-tests/README.md) | cine apără modulele și direcția dependențelor? |
@@ -431,4 +443,9 @@ Root README-ul descrie sistemul de sus în jos. Nu păstrează lifecycle-ul inte
 schema completă YAML, class contracts, CSS sau jurnalul unui run; acestea aparțin
 ownerului și sunt protejate de testele lui.
 
+## Core ca bibliotecă — owner și deployment
 
+Acest consumer are 9 module sursă. Core C1 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+
+[Contractul Core C1](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
+Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.

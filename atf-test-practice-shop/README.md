@@ -7,7 +7,7 @@
 `ShopApiRunReport` păstrează lifecycle-ul și verdictul business. Sumarul sigur
 al excepției este delegat către
 [Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare),
-cu [probe neutre în Reporting Tests](../../demo2/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+cu [probe neutre în Reporting Tests](../../atf_j0/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
 Probele Shop continuă să verifice configurația, selecția exchange-ului și adaptorul real.
 
 **Trasee rapide:** [Journey](#traseul-de-achiziție) · [Fixture și billing](#configurația-modulului) · [Dovada order](#dovada-comenzii-curente) · [Raport per suită](#raport-partajat--starea-consumerului) · [Componentă sau E2E](#verificare-rapidă)
@@ -788,7 +788,7 @@ Testele API de componentă verifică separat rutele și metodele typed, variante
 guest/authenticated, payload-ul și semantica exchange-ului prin transporturi
 controlate. Ele nu certifică serviciul live; `ShopStandaloneApiReportTest` este
 proba opt-in separată, iar testele generice pentru renderer și markup aparțin
-[`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md).
+[`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md).
 
 `PUT` pentru actualizarea cantității și `DELETE` pentru eliminarea unui produs
 sunt contracte API ale modulului, nu pași din purchase-ul E2E curent.
@@ -1075,7 +1075,7 @@ raportului, păstrând cauza primară și celelalte exchange-uri observate.
 - Aserțiunile componente rămân în pasul standard colapsat, cu redactare înaintea
   plafonului 240. Transportul controlat rămâne distinct de verdictul live.
 
-Producerul și disponibilitatea sunt la [Core](../atf-core/README.md#istoric-la-eroare-terminală),
+Producerul și disponibilitatea sunt la [Core](../../atf_j0/atf-core/README.md#istoric-la-eroare-terminală),
 iar randarea este la [Reporting](../docs/ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate).
 
 ### De ce raportul API nu arată ca raportul UI
@@ -1369,7 +1369,7 @@ HTTP respins, transport fără răspuns și cleanup eșuat. Rularea autentificat
 verifică separat comportamentul serverului; un raport 401 auditabil nu certifică un flow reușit.
 
 Interacțiunea generică a raportului este probată în
-[Reporting Tests](../../demo2/atf-reporting-tests/README.md); mapping-ul business rămâne Shop.
+[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); mapping-ul business rămâne Shop.
 Login-ul API nu dovedește automat autentificarea UI a aceluiași cont.
 
 </details>
@@ -1399,7 +1399,7 @@ copiate aici ca reguli paralele.
 - [Ghidul de testare ATF](../docs/ATF_Testing_Guide.md) — niveluri de verificare și traseul canonic;
 - [Contractul adnotărilor](../docs/ATF_Test_Infrastructure_Annotations.md) — declarațiile de nivel, canal, fixture și output;
 - [Contractul de captură](../docs/ATF_Evidence_Capture_Contract.md) — axele generice pentru flow, acțiuni și screenshot;
-- [`atf-core`](../atf-core/README.md) — contracte neutre și transport;
+- [`atf-core`](../../atf_j0/atf-core/README.md) — contracte neutre și transport;
 - [`atf-console`](../atf-console/README.md) — politica diagnosticelor și afișarea căii raportului;
 - [`atf-ui`](../atf-ui/README.md) — contractul browserului, locatorilor și inspectorului;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — modelul și randarea raportului;
@@ -1601,3 +1601,14 @@ Comanda selectează proba numită și construiește dependențele; nu declară
 trecerea întregului modul. Captura recepționată după marcaj nu dovedește singură începutul cererii curente.
 
 </details>
+
+## Configurare și proiecție independente de locale
+
+Profilele UI/UI_API, aliasurile checkpoint-urilor, identitatea metodei HTTP și
+vocabularul precondiției din Overview/System folosesc `Locale.ROOT`. Locale-ul
+JVM nu schimbă selecția evidence-ului sau profilul obținut prin încărcarea YAML.
+
+[ShopLocaleConfigurationComponentTest](src/test/atf/shop/tests/component/configuration/ShopLocaleConfigurationComponentTest.java)
+verifică aliasurile, YAML-ul fără override și proiecția precondiției în `tr-TR`,
+`en-US` și `lt-LT`. Testul restaurează toate categoriile locale și păstrează
+asserțiunile în pasul standard colapsabil `Component assertions`.

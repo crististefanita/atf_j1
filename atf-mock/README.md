@@ -53,7 +53,7 @@ Etichetele scurte păstrează următorul sens:
 | request fără rută eligibilă | [matching și prioritate](#potrivirea-și-prioritatea-rutelor) | fallback-ul configurat, cu URL-ul păstrat |
 | două rute cu etichetă asemănătoare | [identitatea rutelor](src/test/java/atf/mock/MockRouteIdentityTest.java) | sursa selectată rămâne distinctă de eticheta diagnostică |
 | query duplicat sau gol | [catalog YAML](#configurația-yaml) | perechile nu se pierd prin conversie la map |
-| răspuns fake corect, raport greșit | [adaptorul consumerului](../../demo2/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock) | aceeași rută și aceleași dovezi sunt adaptate |
+| răspuns fake corect, raport greșit | [adaptorul consumerului](../../atf_j0/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock) | aceeași rută și aceleași dovezi sunt adaptate |
 
 Pornește cu `AtfMockTransport.defaults()` pentru o probă offline ori cu
 `fromConfiguration(...)` pentru catalogul explicit. Alegerea unui URL în
@@ -183,7 +183,7 @@ flowchart LR
 
 `MockRoute.key()` este o etichetă de diagnostic, nu un identificator unic de
 catalog. Consumerul care adaptează ruta păstrează separat sursa selectată;
-adaptorul Reporting Tests folosește [asocierea directă](../../demo2/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock),
+adaptorul Reporting Tests folosește [asocierea directă](../../atf_j0/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock),
 fără reasociere prin string ori schimbarea regulilor Mock.
 
 | Dimensiune | Regulă | Owner |
@@ -324,9 +324,9 @@ tragă după el rendererul, browserul sau un domeniu de business.
 
 ## Documente asociate
 
-- [`atf-core`](../atf-core/README.md) — porturile consumate de transport;
+- [`atf-core`](../../atf_j0/atf-core/README.md) — porturile consumate de transport;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — biblioteca standalone;
-- [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md) — consumer și
+- [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md) — consumer și
   composition root pentru contractele de reporting;
 - [`ATF Architecture`](../docs/ATF_Architecture.md) — boundary-urile reactorului;
 - [`Bune practici de cod`](../docs/README_Atf_CodeBestPractices.md) — ownership,
@@ -353,3 +353,16 @@ Comanda selectează proba numită și construiește dependențele; nu declară
 trecerea întregului modul. Proba nu confirmă disponibilitatea unui serviciu real.
 
 </details>
+
+## MIME și validitatea payload-ului
+
+Matching-ul folosește clasificarea media type din Core, separată de validitatea
+body-ului. `text/plain; profile=json` nu satisface o rută JSON; aceeași cerere
+cu JSON valid poate satisface numai modul explicit `WRONG_CONTENT_TYPE`.
+
+`application/json` și sufixele `+json` păstrează parametrizarea și casing-ul
+acceptate. Un payload invalid este refuzat de ambele moduri; configurația
+catalogului nu inventează un body valid.
+
+[MockMediaTypeContractTest](src/test/java/atf/mock/MockMediaTypeContractTest.java)
+verifică deciziile opuse și axa independentă a payload-ului invalid.
