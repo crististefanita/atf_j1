@@ -8,10 +8,11 @@ Proveniența și inventarul native sunt la rădăcină; istoricul J6 este păstr
 
 S-au verificat separat un caz ShopConfiguration și un publisher AutoEx, plus guvernanța binară și controlul schimbării POM. Nu s-au rerulat purchase-urile web complete.
 
-J0 deține implementarea și probele generice: 52 native, regresii Extent/fallback,
-JAR fizic, refuz cu asset lipsă și artifact anterior păstrat. Două build-uri
-curate produc aceiași bytes. Inventarul public/protected are zero eliminări;
-noile variante sealed cer revizuirea switch-urilor exhaustive.
+- J0 deține implementarea și probele generice: 52 native, regresii Extent/fallback,
+  JAR fizic, refuz cu asset lipsă și artifact anterior păstrat.
+- Două build-uri curate produc aceiași bytes.
+- Inventarul public/protected are zero eliminări; noile variante sealed cer
+  revizuirea switch-urilor exhaustive.
 
 [Contractul observațiilor](../../atf_j0/atf-reporting/README.md#observații-publice-fără-transport)
 separă observația INFO de assertions și verdict. Noile simboluri sunt opționale
