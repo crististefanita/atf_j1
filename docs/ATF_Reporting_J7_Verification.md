@@ -1,4 +1,4 @@
-# Reporting J7 — acceptanță J1
+# Reporting J7 — acceptanță istorică J1
 
 ## Pe scurt
 
@@ -17,3 +17,5 @@ S-au verificat separat un caz ShopConfiguration și un publisher AutoEx, plus gu
 [Contractul observațiilor](../../atf_j0/atf-reporting/README.md#observații-publice-fără-transport)
 separă observația INFO de assertions și verdict. Noile simboluri sunt opționale
 pentru callerii existenți. Sursele/harness-ul Reporting nu sunt copiate aici.
+
+Adopția curentă și probele noi sunt în [livrarea J8](ATF_Reporting_J8_Verification.md).

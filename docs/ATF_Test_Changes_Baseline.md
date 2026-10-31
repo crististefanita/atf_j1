@@ -4225,3 +4225,74 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Control verificat — MIME-CORE-J1</strong></summary>
+
+```yaml
+testChanges:
+  - id: MIME-CORE-J1
+    status: VERIFIED
+    base: 5da91113d35416c9fbe7e2008d30ea5f3673d6b4
+    expires: 2026-11-30
+    reason: Adoptă clasificarea MIME prin Core la owner și consumeri; păstrează contains literal. Probele Core disting înainte/după dispatch la 10 ms, cu clock controlat, snapshot, anulare și cauza diagnosticului originale; fără schimbarea implementării Core, a Reporting, a modulelor ori a preview-ului 240.
+    proof: 'mvn -B -ntp -pl atf-validation,atf-tests -am "-Dtest=JsonMediaTypeContractTest,TestChangeGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test'
+    paths:
+      - atf-validation/src/test/java/atf/validation/media/JsonMediaTypeContractTest.java
+```
+
+</details>
+
+
+<details>
+<summary><strong>Control verificat — MIME-LIVE-J1</strong></summary>
+
+```yaml
+testChanges:
+  - id: MIME-LIVE-J1
+    status: VERIFIED
+    base: f58973a5c96665d28ec7852fb3ebfd6ac651234b
+    expires: 2026-11-30
+    reason: Revalidează aceleași schimbări MIME și probe Core după commit-ul live concurent; sursele verificate sunt neschimbate. Păstrează controalele istorice la bazele originale, fără Reporting source sau teste generice noi.
+    proof: 'mvn -B -ntp -pl atf-validation,atf-tests -am "-Dtest=JsonMediaTypeContractTest,TestChangeGovernanceTest,Documentation*Test" "-Dsurefire.failIfNoSpecifiedTests=false" test'
+    paths:
+      - atf-validation/src/test/java/atf/validation/media/JsonMediaTypeContractTest.java
+```
+
+</details>
+
+<details>
+<summary><strong>Control VERIFIED — adopția J8</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORT-J8-J1-ADOPTION
+    status: VERIFIED
+    base: 5da91113d35416c9fbe7e2008d30ea5f3673d6b4
+    expires: 2026-11-30
+    reason: Adoptă perechea J8 fizică și reconciliază catalogul nativ finit cu Observation existent și noua probă ValidationDisclosure. Păstrează egalitatea exactă, Core C1, nouă module și toate probele consumerului.
+    proof: mvn -B -pl atf-tests,atf-test-practice-shop,atf-test-auto-ex -am "-Dtest=WholeAtfGovernanceSuiteTest,ShopConfigurationTest,AutoExApiContractReportPublisherComponentTest" "-Datf.governance.testChanges.baseRef=5da91113d35416c9fbe7e2008d30ea5f3673d6b4" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+```
+
+</details>
+
+
+<details>
+<summary><strong>Control verificat — Reporting J8 după reconcilierea live</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORT-J8-LIVE-ATF-J1
+    status: VERIFIED
+    base: f58973a5c96665d28ec7852fb3ebfd6ac651234b
+    expires: 2026-11-30
+    reason: Revalidează schimbările J8 după commit-ul concurent al consumerului, păstrând controalele istorice la bazele originale. Catalogul finit include Observation și ValidationDisclosure, fără wildcard; fixture-ul J2 pregătește payload-ul înaintea deadline-ului neschimbat de 250 ms. Assertions, preview 240, modulele și pragurile de guvernanță sunt păstrate.
+    proof: mvn -B -pl atf-tests -am "-Dtest=TestChangeGovernanceTest,AtfTestLayerArchitectureTest,Documentation*Test" "-Datf.governance.testChanges.baseRef=f58973a5c96665d28ec7852fb3ebfd6ac651234b" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java
+      - pom.xml
+```
+
+</details>
