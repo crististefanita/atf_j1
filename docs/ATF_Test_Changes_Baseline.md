@@ -4187,3 +4187,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Control tehnic verificat — REPORT-J7-J1-ADOPTION</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORT-J7-J1-ADOPTION
+    status: VERIFIED
+    base: ea386996d4fac01e2fd7191ff863e8b6604a0c7b
+    expires: 2026-11-30
+    reason: Adoptă Reporting J7 fizic pentru observații neutre și disclosure imbricat, fără module ori modificări de scenarii; păstrează Core C1 și verifică separat Shop și AutoEx.
+    proof: 'mvn "-Dtest=ShopConfigurationTest#yamlDefinesOwnedJourneyAndSyntheticFixtureInSourceResources,AutoExApiContractReportPublisherComponentTest#publisherForwardsTheAutoExContractAndDoesNotExposeFormCredentials" "-Dsurefire.failIfNoSpecifiedTests=false" test'
+    paths:
+      - pom.xml
+```
+
+</details>

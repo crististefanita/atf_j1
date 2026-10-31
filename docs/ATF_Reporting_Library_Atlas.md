@@ -1,5 +1,8 @@
 # Reporting ca bibliotecă — atlasul integrării consumerului
 
+Adopția curentă este J7; inventarul J6 de mai jos rămâne baza istorică.
+[Delta și proba J7](ATF_Reporting_J7_Verification.md) includ observațiile typed și limitele compatibilității.
+
 ## Pe scurt
 
 Acest atlas permite integrarea Reporting fără sursa bibliotecii. Pornește de

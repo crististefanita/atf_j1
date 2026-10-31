@@ -445,7 +445,9 @@ ownerului și sunt protejate de testele lui.
 
 ## Core ca bibliotecă — owner și deployment
 
-Acest consumer are 9 module sursă. Core C1 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+Acest consumer are 9 module sursă. Core C1 și Reporting J7 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
 
 [Contractul Core C1](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
+
+[Acceptanța Reporting J7](docs/ATF_Reporting_J7_Verification.md) păstrează catalogul existent și istoricul J6.
