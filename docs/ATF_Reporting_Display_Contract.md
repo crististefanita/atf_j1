@@ -226,5 +226,5 @@ redeschide singur un ToDo. Redeschiderea cere o abatere reproductibilă în codu
 - [Contractul semantic de raportare](ATF_Reporting_Contract.md)
 - [Contractul de captură a evidence-ului](ATF_Evidence_Capture_Contract.md)
 - [Atlasul Reporting JAR](ATF_Reporting_Library_Atlas.md)
-- [README `atf-reporting-tests`](../atf-reporting-tests/README.md)
+- [README `atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md)
 - [Registrul feedback-ului activ](feedback/README.md)

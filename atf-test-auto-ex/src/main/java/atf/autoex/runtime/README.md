@@ -16,6 +16,7 @@ iar integrarea runnerului rămâne în `src/test`.
 | failure business controlat | [acceptanța explicită](../../../../../test/java/atf/autoex/tests/e2e/failures/AutoExBusinessFailureAcceptance.java) | fixture în test; journey real, captură originală, cleanup al contului deținut și JUnit FAIL păstrat |
 | configurație și sesiune de raport | [AutoExReportSession](AutoExReportSession.java) | factory și delegare către biblioteca Reporting |
 | download-ul facturii | [AutoExInvoiceDownload](invoice/AutoExInvoiceDownload.java) | un click; recuperare numai pentru GET-ul invoice queue-full observat |
+| verdictul sumei facturii | [validatorul pur](../business/invoice/AutoExInvoiceValidator.java) → [adaptorul](../support/checkout/AutoExInvoiceAssertions.java) | clauză completă, sintaxă înainte de BigDecimal și FAIL fidel; fără replay |
 | confirmarea produsului după click | [AutoExProductTransition](catalog/AutoExProductTransition.java) | un pointer, Close explicit dacă reclama interceptează, GET deținut 2xx și numele configurat; un singur buget |
 | reclama apărută după pointer | [AutoExVignetteHandler](../support/browser/AutoExVignetteHandler.java) | Close explicit, fără replay; child INFO în durata părintelui |
 | readiness read-only | [navigarea AutoEx](navigation/AutoExReadOnlyNavigation.java) | politică specifică documentului și originii AutoEx |

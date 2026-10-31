@@ -72,7 +72,7 @@ Etichetele scurte păstrează următorul sens:
 
 `atf-ui` nu importă executorul de audit și publisherul de secțiune: validarea
 statică și proiecția raportului aparțin `atf-reporting`, iar scenariile E2E sunt
-în [README-ul auditului browser](../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md).
+în [README-ul auditului browser](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md).
 Modulul UI nu publică Extent și nu emite assertions de secțiune.
 
 ## Traseul de integrare
@@ -91,12 +91,21 @@ descrie configurația și nu substituie măsurătoarea browserului.
 ### Lifecycle-ul sesiunii și limita probei
 
 `PlaywrightUiSession` deține Playwright, browser, context, pagină și inspector.
-La `close()` încearcă închiderea inspectorului, contextului, browserului și
-driverului, iar apelul repetat nu reexecută secvența.
+Înregistrează release-ul imediat după dobândirea fiecărui owner. Pagina este
+închisă de context; nu primește un al doilea close independent.
 
-Păstrarea tuturor cauzelor la eșecuri simultane și rollback-ul pentru achiziție
-parțială au [criteriu explicit](../docs/feedback/ATF_UI_Backend_Guided_Recovery_Feedback.md#ui-session-lifecycle-59--cauza-primară-la-achiziție-și-close).
-Probele listener-elor au alt boundary și nu închid implicit această cerință.
+| Boundary | Contract verificat |
+|---|---|
+| achiziție parțială | `RuntimeException` și `Error` păstrează aceeași instanță; rollback-ul atinge numai resursele returnate cu succes |
+| release | inspector → context → browser → driver; fiecare etapă este încercată, chiar dacă cea anterioară eșuează |
+| cauze simultane | prima cauză rămâne primară; cauzele distincte urmează în `suppressed`, fără self-suppression |
+| close repetat | ownership-ul este consumat inclusiv când primul close eșuează; secvența nu se reexecută |
+
+[Proba lifecycle](src/test/java/atf/ui/playwright/PlaywrightUiSessionTest.java)
+folosește dubluri ale interfețelor driverului și o seamă package-private, fără
+hook public de fault. [Componenta nativă](src/test/java/atf/ui/playwright/PlaywrightUiSessionTest.java)
+verifică separat browserul, scala și pointerul. Probele listener-elor rămân
+distincte: ele nu substituie ownership-ul sesiunii ori politica contului consumer.
 
 ## Componentele runtime
 
@@ -121,7 +130,7 @@ generică. Nu este owner pentru `report.directory`, `apiSetup`, `audit` sau
 `filePrefix`; aceste valori sunt test-only și aparțin configurației interne a
 modulului `atf-reporting`:
 
-[`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
+[`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../../demo2/atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
 
 ```yaml
 ui:
@@ -155,6 +164,9 @@ ui:
   Fiecare consumer deține separat configurația aplicației sale.
 
 ### Geometria nativă a contextului
+
+Implicitul generic al `zoomPercent` este `100`; valorile configurate ale
+consumerilor sunt citite separat din YAML. Exemplul de mai jos nu schimbă acest implicit.
 
 [`UiViewportScale`](src/main/java/atf/ui/config/geometry/UiViewportScale.java)
 deține calculul pur, fără Playwright sau Reporting. Sesiunea aplică viewport-ul

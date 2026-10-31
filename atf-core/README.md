@@ -62,6 +62,9 @@ creează o dependență runtime Reporting → Core.
 Contractul său nu promite agregarea oricărui `Throwable`; un adaptor de browser
 trebuie să-și probeze separat achiziția parțială și cauza primară.
 
+- Contextul redactării este în [harta pachetului security](src/main/java/atf/core/security/README.md):
+  input original, strategie, fallback și limita dintre redactare și preview.
+
 ## Responsabilități
 
 | Zonă | Owner în `atf-core` | Nu face |

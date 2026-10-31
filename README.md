@@ -18,7 +18,7 @@ nu enumerate ca un inventar Maven:
 | **Contract & foundation** | `atf-test-kit`, `atf-core` | adnotări de test, resolvere neutre, lifecycle, transport ports | ce poate fi reutilizat fără reporting sau business? |
 | **Execution & verdict** | `atf-mock`, `atf-validation`, `atf-console` | schimb determinist, verdict semantic și diagnostic | cum devine un test reproductibil și explicabil? |
 | **Reporting & UI audit** | Reporting JAR, `atf-ui`, `atf-debug-ui` | artifact standalone, browser audit și publicare read-only | cum devine rezultatul observabil și verificabil? |
-| **Composition + consumers** | `atf-reporting-tests`, `atf-test-practice-shop`, `atf-test-auto-ex` | harness-ul verifică reporting-ul în test scope; Shop și AutoEx compun journey-uri de aplicație | cine verifică librăriile și cine le folosește într-un produs? |
+| **Composition + consumers** | `atf-test-practice-shop`, `atf-test-auto-ex` | Shop și AutoEx compun journey-uri; Reporting Tests verifică binarul într-un gate extern TMP | cine verifică librăriile și cine le folosește într-un produs? |
 | **Governance** | `atf-tests` | graph-ul reactorului și boundary gates | cine protejează separarea modulelor? |
 
 ## Diagramă de bază
@@ -80,7 +80,7 @@ a aceleiași legende.
 | reporting library externă | `atf-reporting` din `lib` | renderer Extent/HTML; sursa și regresiile au owner în `demo2` | acceptanță binară J1; standalone la producător |
 | browser runtime | `atf-ui` | sesiune Playwright și politici generice | component |
 | debug inspector | `atf-debug-ui` | servește read-only un HTML pe loopback | component |
-| reporting test harness | `atf-reporting-tests` | component/API mock → publisher și UI/E2E pentru librăria reporting | component/integration/E2E |
+| reporting test harness extern | `demo2/atf-reporting-tests`, numai în TMP | component/API mock → publisher și UI/E2E pentru librăria reporting | component/integration/E2E |
 | aplicații consumatoare | `atf-test-practice-shop`, `atf-test-auto-ex` | config, locatori, pages și journey-uri independente | component/E2E |
 | whole-ATF governance | `atf-tests` | module graph și boundary-uri ale reactorului | component/architecture |
 Etichetele scurte păstrează următorul sens:
@@ -100,8 +100,8 @@ Etichetele scurte păstrează următorul sens:
 ## Harta modulelor
 
 Două perspective ale aceluiași reactor: consumatorii și apoi verificarea cu
-guvernanța. J1 cuprinde 11 module sursă: șapte de platformă, doi consumatori,
-testele Reporting și guvernanța. Reporting este consumat separat ca bibliotecă externă.
+guvernanța. J1 cuprinde 10 module sursă: șapte de platformă, doi consumatori,
+guvernanța. Reporting este consumat separat ca bibliotecă externă; harness-ul rămâne la producător.
 
 ### Consum
 
@@ -148,7 +148,7 @@ flowchart LR
 
 - `ReportingTests` este `atf-reporting-tests`: verifică `atf-reporting` și
   folosește celelalte module partajate numai în `test` scope;
-- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 11 module sursă locale și integrarea bibliotecii externe,
+- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 10 module sursă locale și integrarea bibliotecii externe,
   nu doar librăriile comune;
 - săgețile sunt drepte pentru a păstra etichetele lizibile; detaliile și
   ownership-ul fiecărui modul sunt în tabel și în README-ul modulului.
@@ -406,7 +406,7 @@ fără să parcurgă aceeași explicație în root și în fiecare modul; indexu
 | reporting standalone | [atlasul Reporting JAR](docs/ATF_Reporting_Library_Atlas.md) | cum se consumă JAR-ul fără sursa Reporting? |
 | browser runtime | [`atf-ui/README.md`](atf-ui/README.md) · [convenții pentru locatori](atf-ui/README.md#convenții-pentru-locatori-ui) | cum sunt controlate browserul și convențiile generice pentru locatori, fără logică de produs? |
 | inspector read-only | [`atf-debug-ui/README.md`](atf-debug-ui/README.md) | cum investigăm un HTML deja generat? |
-| reporting test harness | [`atf-reporting-tests/README.md`](atf-reporting-tests/README.md) | cum sunt verificate compoziția API/mock și randarea UI a reportingului? |
+| reporting test harness | [`atf-reporting-tests/README.md`](../demo2/atf-reporting-tests/README.md) | cum sunt verificate compoziția API/mock și randarea UI a reportingului? |
 | consumer aplicație | [`atf-test-practice-shop/README.md`](atf-test-practice-shop/README.md) | cum folosește o aplicație reală infrastructura ATF? |
 | consumer Automation Exercise | [`atf-test-auto-ex/README.md`](atf-test-auto-ex/README.md) | cum se compun UI E2E-uri separate folosind adnotările Test Kit? |
 | guvernanță reactor | [`atf-tests/README.md`](atf-tests/README.md) | cine apără modulele și direcția dependențelor? |

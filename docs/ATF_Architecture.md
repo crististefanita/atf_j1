@@ -6,7 +6,7 @@ cunoaște rutele sau intenția unui test de produs.
 
 ## Pe scurt
 
-Reactorul păstrează exact cele 11 module existente. Reporting este consumat
+Reactorul păstrează exact cele 10 module existente. Reporting este consumat
 ca bibliotecă externă, nu ca sursă în reactor; [POM-ul J1](../pom.xml) fixează
 inventarul și versiunea, iar [ghidul J1](ATF_J1_Consumer.md) fixează ownership-ul.
 
@@ -16,16 +16,15 @@ inventarul și versiunea, iar [ghidul J1](ATF_J1_Consumer.md) fixează ownership
 | execuție API generică | `atf-core` | executor, lifecycle și binding de transport | unit/component + consumer |
 | verdicturi | `atf-validation` | reguli și `ValidationResult` prin port neutru | unit/component |
 | artifact extern | Reporting JAR | modele și Extent/HTML; producător în `demo2` | consum binar J1; sursă/native la producător |
-| reporting composition | `atf-reporting-tests` | mock → API → raport, cu component/integration proof și browser/E2E pentru contractul reporting | component + integration/API + Chromium/Playwright |
+| reporting composition externă | `demo2/atf-reporting-tests`, numai în TMP | mock → API → raport, cu component/integration proof și browser/E2E pentru contractul reporting | component + integration/API + Chromium/Playwright |
 | Practice Shop consumer | `atf-test-practice-shop` | journey UI/API, configurație, pagini și runtime de aplicație | component + API live + E2E |
 | Automation Exercise consumer | `atf-test-auto-ex` | journey UI, contracte API și runtime separat de adaptorul JUnit | component + API live + E2E opt-in |
 | guvernanță whole-ATF | `atf-tests` | graph, dependency direction și architecture boundary | architecture/component |
 
 - `atf-reporting` este biblioteca standalone și nu compune suita;
 - `atf-reporting-tests` dovedește integrarea API/mock și randarea browser;
-- `atf-tests` conține și gate-uri moștenite ale producătorului; [adaptarea
-  consumerului](feedback/ATF_J1_Consumer_Feedback.md#report-j1-validation-01--gate-uri-pentru-consumerul-binar) rămâne deschisă;
-- `atf-reporting-tests` există încă, cu owner canonic în producător și retragere propusă;
+- `atf-tests` aplică aceeași suită pe [suprafețele sursă și binară](../atf-tests/README.md#guvernanța-deployment-ului-sursă-sau-binar), cu dovezi și baze Git proprii;
+- Reporting Tests rămâne la producător și verifică fiecare binar în consumerul TMP;
 - feedback-ul activ păstrează numai riscuri reproductibile care pot schimba
   codul sau packaging-ul; nu redefinește contractele închise.
 
@@ -87,12 +86,12 @@ lista dintr-o celulă înseamnă dependență directă către fiecare modul enum
 | AutoEx | Core, Reporting, UI | Console, Test Kit |
 
 **Relațiile de verificare.** Compoziția Reporting consumă biblioteca în test;
-guvernanța inspectează sursele consumerului și ale probelor Reporting.
+guvernanța inspectează sursele consumerului și binarul declarat. Probele Reporting sunt externe în TMP.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Governance["Guvernanță"] -.->|guard, not dependency| Shop["Shop"]
-    Governance -.->|guard, not dependency| ReportingTests["Reporting tests"]
+    Governance -.->|acceptanță externă| ReportingTests["Reporting tests<br/>gate extern TMP"]
     ReportingTests -.->|test composition| Reporting["Reporting"]
 ```
 <details>
@@ -100,8 +99,8 @@ flowchart LR
 
 - `Reporting tests` înseamnă `atf-reporting-tests`; muchia `test composition`
   este dependența sa `test` către `atf-reporting`.
-- `Guvernanță` înseamnă `atf-tests`; cele două muchii `guard, not dependency`
-  inspectează repository-ul și nu adaugă dependențe Maven către Shop sau Reporting Tests.
+- `Guvernanță` înseamnă `atf-tests`; muchiile de verificare
+  inspectează repository-ul și declară acceptanța externă; nu adaugă dependențe Maven către Shop sau Reporting Tests.
 - Scope-urile complete ale compozițiilor se citesc în POM-uri. Harta selectează
   relațiile explicative, păstrând explicit diferența dintre consum și verificare.
 
@@ -633,7 +632,7 @@ Reconcilierea curentă separă contractul implementat de riscurile de evoluție:
 | raport UI read-only pe tab-urile principale | `@UiExtentReportContract` și `StaticUiExtentReportContractTest` | `atf-reporting-tests` |
 | HTML/CSS/JavaScript și asset manifest | contracte pure în `atf-reporting` | `UiReportArtifactContractTest` |
 | direcție module, ownership constante/CSS, output și import graph | boundary-uri Maven/source | `atf-tests` + architecture tests |
-| paritate Extent ↔ fallback | `AtfReportSemanticSnapshot` | [comparație între renderer-e în test](../atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java) |
+| paritate Extent ↔ fallback | `AtfReportSemanticSnapshot` | [comparație între renderer-e în test](../../demo2/atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java) |
 | consistență internă fallback | `AtfReportSemanticSnapshot.from(ReportExecutionModel)` | documentul și recorderul aceleiași sesiuni sunt comparate înainte de render |
 
 Acestea sunt capabilități închise și normative. Un document de feedback nu le
@@ -684,7 +683,7 @@ Etichetele scurte păstrează următorul sens:
 | `AtfReportSemanticSnapshot` | recorder comun și adaptoare | contract semantic renderer-neutral |
 
 Guard-ul local verifică arborele `class → scenario → phase → request → validation`,
-package-ul și evidence counts. [AtfReportSemanticSnapshotTest](../atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java)
+package-ul și evidence counts. [AtfReportSemanticSnapshotTest](../../demo2/atf-reporting-tests/src/test/java/atf/reporting/semantic/AtfReportSemanticSnapshotTest.java)
 compară separat rezultatele Extent/fallback. Modelele rămân distincte; renderul
 fallback nu deschide o sesiune Extent pentru a-și confirma outputul.
 

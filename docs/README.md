@@ -1,6 +1,6 @@
 # Documentația ATF Java
 
-Documentația descrie deployment-ul J1: 11 module sursă și Reporting extern.
+Documentația descrie deployment-ul J1: 10 module sursă și Reporting extern.
 Începe cu [ownership-ul J1](ATF_J1_Consumer.md), apoi cu [atlasul general](ATF_Context_Atlas.md)
 sau [atlasul Reporting fără sursă](ATF_Reporting_Library_Atlas.md).
 
@@ -96,7 +96,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
    catalogul YAML și transportul acceptance.
 4. [../atf-test-kit/README.md](../atf-test-kit/README.md) — contractele testelor,
    nivelurile unit/component/integration/e2e și excepția Console `optional compile`.
-5. [../atf-reporting-tests/README.md](../atf-reporting-tests/README.md) — fixture-uri
+5. [../atf-reporting-tests/README.md](../../demo2/atf-reporting-tests/README.md) — fixture-uri
    API, composition root și lifecycle de test.
 6. [../atf-validation/README.md](../atf-validation/README.md) — validarea
    independentă și portul de publicare.
@@ -111,7 +111,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
    de consolă și contractul de output.
 12. [../atf-ui/README.md](../atf-ui/README.md) — politicile generice și adaptorul
    Playwright.
-13. [../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md](../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md)
+13. [../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md)
    — contractul stabil pentru selecția API, mock-backed expected projection,
    secțiuni Extent și validarea UI reutilizabilă.
 14. [../atf-debug-ui/README.md](../atf-debug-ui/README.md) — publicarea

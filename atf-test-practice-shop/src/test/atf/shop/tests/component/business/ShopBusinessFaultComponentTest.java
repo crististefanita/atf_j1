@@ -35,6 +35,14 @@ class ShopBusinessFaultComponentTest {
                     assertTrue(locators.pageBody(page).locator().textContent().contains("Thanks for your order!"), "The real native confirmation wait remains satisfied");
                     assertFalse(locators.pageBody(page).locator().textContent().contains("INV-001"), "Only the invoice business oracle is broken");
                 }
+                case AFTER_SETUP -> {
+                    assertTrue(locators.accountHeading(page).locator().isVisible(), "The account observation remains healthy before the generic error");
+                    assertEquals(0, fault.injections(), "Arming alone cannot invent a post-PASS failure");
+                    var failure = assertThrows(IllegalStateException.class, fault::afterSetup, "The explicit post-checkpoint boundary fails once");
+                    assertEquals(ShopBusinessFault.AFTER_SETUP_MESSAGE, failure.getMessage(), "The exact generic diagnostic is preserved");
+                    fault.afterSetup();
+                    assertTrue(locators.accountHeading(page).locator().isVisible(), "Generic failure does not corrupt an earlier PASS observation");
+                }
             }
             fault.arm();
             assertEquals(1, fault.injections(), "The fault is applied exactly once in this browser context");

@@ -1,9 +1,5 @@
 # ATF Tests — guvernanță whole-reactor
 
-**Perimetru J1:** modulele locale și integrarea JAR au inventar distinct de
-producător. Gate-urile moștenite pentru 12 surse, ținta README Reporting și
-baseline-ul Git cer [adaptare explicită](../docs/feedback/ATF_J1_Consumer_Feedback.md#report-j1-validation-01--gate-uri-pentru-consumerul-binar), fără directoare fictive ori verificări dezactivate.
-
 ## Pe scurt
 
 **Trasee rapide:** [Whole-ATF](#suita-whole-atf-și-reziduul-de-compatibilitate) · [Rădăcini Java](#inventarul-comun-al-surselor-java) · [Controale Git](#guvernanța-schimbării-testelor) · [Gate și limite](#verificare-rapidă)
@@ -67,6 +63,29 @@ cer și proba ownerului; comenzile `proof` din YAML se execută separat.
 Pentru IntelliJ și Maven folosește același [staging cu Git real](../docs/ATF_Build_And_Execution_Safety.md#staging-pentru-guvernanța-schimbării-testelor).
 Harta de [rădăcini Java](#inventarul-comun-al-surselor-java) explică layout-urile
 consumerilor înaintea oricărei mutări de teste.
+
+## Guvernanța deployment-ului sursă sau binar
+
+`WholeAtfGovernanceSuiteTest` păstrează aceeași selecție explicită în J1 și în
+producător. [Pachetul deployment](src/test/java/atf/api/tests/governance/distribution/README.md)
+selectează dovada după declarația Maven, fără a deduce excepții din fișiere lipsă.
+
+| Regulă | Reporting sursă | Reporting binar |
+|---|---|---|
+| reactor | catalogul canonic de 12 module, cu POM-uri existente | 10 module, versiune explicită și JAR/POM direct în `lib`; gate-ul extern poate adăuga explicit Reporting Tests în TMP, cu 11 module. Sursa shadow și harness-ul nedeclarat sunt refuzate. |
+| documentație | README Reporting | atlas JAR, ghid J1 și README lib; aceleași controale de structură/link/proză |
+| ownership | fișierul Java exact și interdicțiile de package | clasa exactă din JAR și absența duplicatelor interzise |
+| independență | importuri sursă și POM standalone | POM fără parent/dependențe ATF și referințe de bytecode prin JDK `jdeps` |
+| identitate | modul sursă local | versiune, JAR/POM/manifest, POM embedded și hash-ul CodeSource-ului |
+| test layer | sursele native și adnotările lor | manifest native legat de proveniență; fără a-l prezenta drept execuție locală a sursei |
+
+Modul șters, coordonată absentă/greșită, artifact alterat și dependență ascunsă
+au controale negative. Mutantul factual funcționează pentru 10/11/12 module;
+asta nu autorizează un reactor cu module eliminate din catalog.
+
+Controlul Git folosește baza reală de review a fiecărui proiect. Sincronizarea
+surselor comune nu copiază `.git`, POM-ul reactorului, JAR-ul sau controale
+cu baza celuilalt proiect; eligibilitatea se verifică distinct.
 
 ## Suita whole-ATF și reziduul de compatibilitate
 
@@ -210,9 +229,8 @@ flowchart LR
 
 </details>
 
-- Output-urile `target`, `artifacts`, `.tmp` și `.git` sunt excluse.
-  O rădăcină goală, ieșită din modul, nesigură sau cu expresie Maven
-  nerezolvată produce diagnostic, fără omisiune tăcută.
+- Inventarul exclude segmentele numite `target`, `artifacts`, `.tmp` și `.git`, inclusiv sub rădăcinile Java; aceasta este o limită de acoperire, nu dovada că fiecare clasă compilată a fost inspectată.
+- O rădăcină goală, ieșită din modul, nesigură sau cu expresie Maven nerezolvată produce diagnostic.
 - Inventarul citește căile literale din POM; nu înlocuiește effective POM,
   moștenirea ori activarea profilelor Maven. Comentariile XML nu declară rădăcini.
 - Guard-ul expresiilor rămâne limitat la reporting tests și păstrează cele
@@ -257,25 +275,31 @@ Ambele intră în suita whole-ATF; `@DocumentationTarget` aplică aceeași verif
 și documentelor selectate explicit. Existența țintei nu certifică sensul etichetei.
 
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
-compară numărul declarat al modulelor și scope-ul Kit din matricea Shop/AutoEx
-cu POM-urile reale. Intră în suita whole-ATF; guard-ul structural rămâne separat.
+compară modulele și scope-ul Kit cu POM-urile reale.
+[DocumentedUiGeometryContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedUiGeometryContractTest.java)
+extinde aceeași limită factuală la geometria numerică selectată, fără surse Reporting.
+Ambele probe sunt selectate explicit de `WholeAtfGovernanceSuiteTest`.
 
 | Afirmație delimitată | Sursă executabilă | Refuz observabil |
 |---|---|---|
-| numărul modulelor din arhitectură | declarațiile directe `modules/module` din POM-ul reactorului | număr diferit, afirmație absentă ori duplicată |
+| numărul modulelor din arhitectură | declarațiile directe `modules/module` din POM | număr diferit, afirmație absentă ori duplicată |
 | Kit în matricea consumerului | dependența directă din POM; scope omis înseamnă `compile` | scope diferit, Kit absent ori prezent în ambele coloane |
+| zoom generic versus exemplu configurat | `UiBrowserConfiguration.defaults()` | un exemplu particular nu redefinește implicitul runtime |
+| CSS și DPR din exemplul UI | `UiViewportScale` pentru intrările declarate | geometria derivată nu concordă cu modelul executabil |
+| ieșire, zoom, CSS și DPR în Shop/AutoEx | YAML-ul livrat și același model UI | fiecare câmp numeric poate fi refuzat independent; fără un registru paralel de valori |
 
-Mutanții schimbă numai documentul: `12→13`, Kit mutat în `compile`, rând eliminat
-sau duplicat. Diagnosticul indică documentul/linia, valoarea declarată, valoarea
-observată și POM-ul sursă, fără modificarea sursei executabile.
+Mutanții schimbă numai documentul; YAML-ul și POM-ul rămân intacte. Lipsa,
+duplicarea și o declarație ascunsă într-un fence sunt refuzate cu document,
+linie, valoare declarată/observată și sursa executabilă.
 
-Acest contract restrâns nu este un parser general al prozei și nu interpretează
-effective POM ori profile Maven. Celelalte afirmații se confruntă în continuare
-cu ownerul; default-urile și distribuția Reporting păstrează contractele bibliotecii.
+Guard-ul numeric verifică intenția configurată și modelul de layout, nu pixeli
+de screenshot. [Probele native UI](../atf-ui/README.md#geometria-nativă-a-contextului)
+verifică separat pointerul, viewport-ul, DPR și captura browserului.
+Ambiguitățile prozei și afirmațiile neselectate păstrează review-ul manual.
 
 | Informație | Owner documentar | Conținut |
 |---|---|---|
-| Cerință funcțională | feedback-ul domeniului, de exemplu [Consumer](../docs/feedback/ATF_Consumer_Business_Test_Focus_Feedback.md) | lacună observabilă, responsabil, criteriu și dovadă lipsă |
+| Cerință funcțională | [feedback-ul ownerului](../docs/feedback/README.md) | lacună observabilă, responsabil, criteriu și dovadă lipsă |
 | Control tehnic activ | documentul feedback al ownerului din [`docs/feedback`](../docs/feedback/README.md) | numai intrări `ACTIVE` pentru diff-uri în lucru, alături de cerința pe care o autorizează |
 | Control tehnic verificat | [Registrul verificat](../docs/ATF_Test_Changes_Baseline.md) | context business, roluri, lifecycle și intrări `VERIFIED` colapsate |
 | Comportament stabil | README-ul sau contractul ownerului | regula implementată și demonstrată |

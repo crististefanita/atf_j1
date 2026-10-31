@@ -53,7 +53,7 @@ Etichetele scurte păstrează următorul sens:
 | request fără rută eligibilă | [matching și prioritate](#potrivirea-și-prioritatea-rutelor) | fallback-ul configurat, cu URL-ul păstrat |
 | două rute cu etichetă asemănătoare | [identitatea rutelor](src/test/java/atf/mock/MockRouteIdentityTest.java) | sursa selectată rămâne distinctă de eticheta diagnostică |
 | query duplicat sau gol | [catalog YAML](#configurația-yaml) | perechile nu se pierd prin conversie la map |
-| răspuns fake corect, raport greșit | [adaptorul consumerului](../atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock) | aceeași rută și aceleași dovezi sunt adaptate |
+| răspuns fake corect, raport greșit | [adaptorul consumerului](../../demo2/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock) | aceeași rută și aceleași dovezi sunt adaptate |
 
 Pornește cu `AtfMockTransport.defaults()` pentru o probă offline ori cu
 `fromConfiguration(...)` pentru catalogul explicit. Alegerea unui URL în
@@ -183,7 +183,7 @@ flowchart LR
 
 `MockRoute.key()` este o etichetă de diagnostic, nu un identificator unic de
 catalog. Consumerul care adaptează ruta păstrează separat sursa selectată;
-adaptorul Reporting Tests folosește [asocierea directă](../atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock),
+adaptorul Reporting Tests folosește [asocierea directă](../../demo2/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock),
 fără reasociere prin string ori schimbarea regulilor Mock.
 
 | Dimensiune | Regulă | Owner |
@@ -326,7 +326,7 @@ tragă după el rendererul, browserul sau un domeniu de business.
 
 - [`atf-core`](../atf-core/README.md) — porturile consumate de transport;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — biblioteca standalone;
-- [`atf-reporting-tests`](../atf-reporting-tests/README.md) — consumer și
+- [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md) — consumer și
   composition root pentru contractele de reporting;
 - [`ATF Architecture`](../docs/ATF_Architecture.md) — boundary-urile reactorului;
 - [`Bune practici de cod`](../docs/README_Atf_CodeBestPractices.md) — ownership,

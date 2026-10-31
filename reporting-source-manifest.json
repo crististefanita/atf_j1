@@ -529,7 +529,7 @@
   },
   {
     "Path": "src/main/java/atf/reporting/html/evidence/HtmlReportEvidenceView.java",
-    "Hash": "9D5874C82F9B69C56ABA5B93691FE1A72679FB7338948480BD184C4E8C3AD842"
+    "Hash": "2ABB41EEA5EB03B56C81B8056EB2111C24E94380C2D21C62F41D4603A825DB46"
   },
   {
     "Path": "src/main/java/atf/reporting/html/HtmlReportCategoryView.java",
@@ -569,7 +569,7 @@
   },
   {
     "Path": "src/main/java/atf/reporting/html/HtmlReportTestsView.java",
-    "Hash": "4F1F1B88A5A83A6E40251B89709CEF49FEBD6C7A3DA132EAAD8B675CA8026C91"
+    "Hash": "A61CAD241B2DAEE2C1E6C5133520136F605CAC7BA3294585B495D29F3A500CA2"
   },
   {
     "Path": "src/main/java/atf/reporting/html/README.md",
@@ -1289,7 +1289,7 @@
   },
   {
     "Path": "src/main/java/atf/reporting/ui/UiEvidencePublisher.java",
-    "Hash": "A78494B1DD5B434EABE5258841620C973F89B6236ED1FA41F38F426134A00C62"
+    "Hash": "B65C0E4866DC65C483F957002CAF693E20442ED9865ECD0FE597422B990A850D"
   },
   {
     "Path": "src/main/java/atf/reporting/ui/UiExtentReportOptions.java",

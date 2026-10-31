@@ -4,26 +4,48 @@ import com.microsoft.playwright.Page;
 
 /** Controlled display corruption; it never dispatches an application request or changes configured expected values. */
 public final class ShopBusinessFault {
-    public enum Point { ACCOUNT, CART, PURCHASE }
+    public enum Point { ACCOUNT, CART, PURCHASE, AFTER_SETUP }
     public static final String MARKER = "atf-business-fault";
+    public static final String AFTER_SETUP_MESSAGE = "Controlled failure after account setup PASS";
+    private static final java.util.concurrent.atomic.AtomicInteger CAPTURE_COLORS = new java.util.concurrent.atomic.AtomicInteger(0xC00000);
+    private final int captureColor = CAPTURE_COLORS.incrementAndGet();
     private final Page page;
     private final Point point;
 
     public ShopBusinessFault(Page page, Point point) { this.page = page; this.point = point; }
 
     public void arm() {
-        String script = "(" + SCRIPT + ")(" + "'" + point.name() + "'" + ")";
+        if (point == Point.AFTER_SETUP) return;
+        String script = "(" + SCRIPT + ")({point:'" + point.name() + "',color:'" + Integer.toHexString(captureColor) + "'})";
         page.addInitScript(script);
         page.evaluate(script);
+    }
+
+    /** The journey calls this only after its real account checkpoint has returned successfully. */
+    public void afterSetup() {
+        if (point != Point.AFTER_SETUP || injections() != 0) return;
+        page.evaluate("""
+                color => {
+                    sessionStorage.setItem('atf-business-fault-count', '1');
+                    const badge = document.createElement('div'); badge.id = 'atf-business-fault';
+                    badge.textContent = 'CONTROLLED BUSINESS FAILURE: AFTER_SETUP';
+                    badge.style.cssText = 'position:fixed;left:16px;top:100px;width:300px;height:44px;'
+                        + 'background:#' + color + ';color:#fff;font:12px sans-serif;z-index:2147483647;';
+                    document.body.appendChild(badge);
+                }
+                """, Integer.toHexString(captureColor));
+        throw new IllegalStateException(AFTER_SETUP_MESSAGE);
     }
 
     public int injections() {
         if (page.isClosed() || !page.url().startsWith("http")) return 0;
         return ((Number) page.evaluate("() => Number(sessionStorage.getItem('atf-business-fault-count') || 0)")).intValue();
     }
+    public int captureColor() { return captureColor; }
 
     private static final String SCRIPT = """
-            point => {
+            input => {
+                const point = input.point;
                 if (window.__atfBusinessFaultObserver) return;
                 const apply = () => {
                     if (sessionStorage.getItem('atf-business-fault-count')) return;
@@ -51,7 +73,7 @@ public final class ShopBusinessFault {
                     const badge = document.createElement('div'); badge.id = 'atf-business-fault';
                     badge.textContent = 'CONTROLLED BUSINESS FAILURE: ' + point;
                     badge.style.cssText = 'position:fixed;left:16px;top:100px;width:300px;height:44px;'
-                        + 'background:#ff00ff;color:#000;font:12px sans-serif;z-index:2147483647;';
+                        + 'background:#' + input.color + ';color:#fff;font:12px sans-serif;z-index:2147483647;';
                     document.body.appendChild(badge);
                 };
                 window.__atfBusinessFaultObserver = new MutationObserver(apply);

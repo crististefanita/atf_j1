@@ -57,7 +57,7 @@ Diagnosticul generic al excepției folosește
 [formatterul Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare).
 AutoEx păstrează asocierea cu API-ul și faza, plus probele adaptorului real;
 grafurile ciclice, redactarea și randarea neutră au
-[probe la Reporting Tests](../atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+[probe la Reporting Tests](../../demo2/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
 
 - Acest modul deține journey-ul E2E și suportul specific site-ului AutoEx.
 - Gate-ul uzual selectează direct `AutoExPurchaseUiE2eTest` și execută cumpărarea o singură dată.
@@ -440,7 +440,7 @@ punctele următoare descriu numai ce afirmă testele specifice Automation Exerci
   chiar când body-ul declară succes; DTO-ul păstrează form-encoding și MIME-ul
   upstream. Artifactele Extent și fallback sunt verificate pentru lipsa parolei,
   iar formatarea și redactarea comune se probează în
-  [`atf-reporting-tests`](../atf-reporting-tests/README.md);
+  [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md);
 - replay-ul form-encoded fără adaptor este probat prin
   `ApiManualReplayProjectionTest` în Reporting Tests; aici rămâne verificarea
   că artifactul efectiv AutoEx nu expune parola;
@@ -653,6 +653,53 @@ cu [Test Case 24 — Download Invoice after purchase](https://automationexercise
 spațiilor de prezentare și folosește aceeași regulă pentru rândul din coș și
 checkout. Un nume corect nu poate ascunde un cod poștal, telefon, preț sau
 cantitate greșite.
+
+### Validarea completă a sumei facturii
+
+Validatorul extrage clauza de după `total purchase amount is`, cu prefixul
+opțional `Rs.` case-insensitive. Clauza se termină la sfârșitul liniei/artifactului
+sau la punctul de propoziție urmat de spațiu orizontal ori sfârșit; punctele zecimale
+și spațiile interne rămân parte din observație.
+
+| Criteriu | Contract |
+|---|---|
+| Sintaxă | cifre ASCII, opțional punct și cel puțin o cifră fracționară; fără semn, exponent, sufix ori separatori de mii |
+| Valoare | `BigDecimal.compareTo` cu expected-ul independent; `1000`, `1000.0` și `1000.0000` sunt echivalente |
+| Diagnostic | valoarea observată completă, fără prefixul valutar și punctuația propoziției; fără reparare din expected sau dintr-un prefix numeric |
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
+flowchart LR
+    Amount["Sumă observată"] -->|extrage| Syntax["Sintaxă"]
+    Syntax -->|validă| Value["BigDecimal"]
+    Syntax -->|invalidă| Check["Invoice amount"]
+    Value -->|compară| Check
+```
+
+<details>
+<summary><strong>Legendă — observație, sintaxă și verdict</strong></summary>
+
+| În schemă | Sens complet |
+|---|---|
+| Sumă observată | clauza citită din artifact; nu este completată din expected |
+| Sintaxă | validează întregul token, inclusiv spațiile și sufixele neacceptate |
+| BigDecimal | compară numai observația sintactic validă cu totalul așteptat |
+| Invoice amount | FAIL la sintaxă invalidă sau valoare diferită; PASS numai dacă ambele criterii sunt îndeplinite |
+
+</details>
+
+`1000.00oops`, `1000.00.99`, `1000,99` și `1000 99` rămân FAIL cu actual-ul
+fidel; `1000.00. Thank you.` păstrează forma nominală. Numele fișierului,
+clientul și disponibilitatea au checks independente. Ambele overload-uri
+`AutoExInvoiceAssertions` păstrează verdictul și valorile; adaptorul și preview-ul
+nu reevaluează suma și nu schimbă limita configurată de afișare.
+
+[AutoExInvoiceComponentTest](src/test/java/atf/autoex/tests/component/journey/AutoExInvoiceComponentTest.java)
+probează fișierul real UTF-8, formele invalide, scalele echivalente și ambii
+adaptori prin aserțiuni auditate. Acceptanța de publicare rulează același
+checkpoint pe artifacte locale, individual și prin suită restrânsă: JUnit și
+Extent păstrează FAIL-ul, iar cazul sănătos rămâne PASS în raportul comun.
+Această probă nu certifică o factură defectă a serviciului public și nu repetă download-ul.
 
 ### Descărcarea cauzală a facturii
 
@@ -1424,10 +1471,24 @@ individual poate fi selectat prin `-Datf.business.probe.case=AccountUi` sau
 - Rezultatul acceptanței nu măsoară stabilitatea în multe repetări și nu
   autorizează automat eliminarea selecțiilor business protejate.
 
-CLI-ul verifică numărul JUnit, cauza originală, contoarele și un HTML per
-lansare. Asocierea automată a verdictului și capturii cu fiecare invocare din
-raportul comun are [criteriu deschis](../docs/feedback/ATF_Consumer_Business_Test_Focus_Feedback.md#consumer-acceptance-oracles-58--dovadă-pe-fiecare-invocare);
-auditul TAB și proba locală rămân verificări distincte.
+CLI-ul verifică fiecare invocare în Tests/Fails/Overview: owner și scenariu
+exacte, fază, verdict, checkpoint, cauza originală și captura cu marcaj cromatic
+propriu. `UiCheckpointFailure` păstrează comparația deja publicată; proba cere
+o captură originală, inclusiv la failure-ul final al coșului gol. Vecinul sănătos
+nu moștenește cauza ori evidence-ul FAIL.
+
+Oracolul degradează numai DOM-ul raportului încărcat în browserul de audit:
+elimină o captură, o reasociază, schimbă verdictul, elimină cauza și introduce
+o cauză străină în vecinul sănătos. Fiecare refuz indică invocarea și câmpul;
+artifactul salvat și aplicația nu se modifică. HTML-ul este servit printr-o
+rută interceptată local, fără limita căii Windows și fără request extern.
+
+`artifact-expectations.json` este scris din observațiile execuției înaintea
+verificării HTML. Modul `audit <artifact-expectations.json>` reverifică acel
+raport și mutanții fără opt-in live, cont nou sau replay. Lansarea și colectarea
+neutre folosesc [ScopedAcceptanceRun](../atf-test-kit/README.md#lansarea-scoped-a-acceptanței);
+launcherul, politica contului și oracolul AutoEx rămân în test scope la consumer.
+Auditul TAB și componentele locale rămân dovezi distincte.
 
 Componentele locale verifică numai injecția și restaurarea fără serviciu public.
 Fixture-ul de browser rămâne în suportul testelor; portul journey-ului este în main.
@@ -1755,6 +1816,21 @@ coșului rămân independente; această sincronizare locală nu implementează
 [politica BE a catalogului](#politica-be-a-catalogului), care nu reexecută checkout-ul.
 
 </details>
+
+## Geometria YAML livrată
+
+Tabelul descrie configurația livrată, fără override-uri de proces sau ale probei.
+Sursa este [YAML-ul consumerului](src/test/resources/atf-auto-ex.yaml); calculul pur
+aparține [UI](../atf-ui/README.md#geometria-nativă-a-contextului).
+
+| Sursă | Ieșire cerută | Zoom | Viewport CSS | DPR |
+|---|---|---|---|---|
+| YAML livrat | `1440 × 1000` | `70` | `2057 × 1429` | `0.70` |
+
+`DocumentedUiGeometryContractTest` compară declarația cu YAML-ul live și modelul
+UI executabil; mutanții schimbă numai documentul. Acesta nu măsoară pixeli de
+captură: geometria browserului are proba nativă la ownerul UI, iar System
+publică configurația efectivă a rulării, inclusiv când ea diferă de acest tabel.
 
 ## Verificare rapidă
 

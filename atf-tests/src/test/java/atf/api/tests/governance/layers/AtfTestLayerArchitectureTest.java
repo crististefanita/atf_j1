@@ -1,5 +1,7 @@
 package atf.api.tests.governance.layers;
 
+import atf.api.tests.governance.distribution.ReportingGovernanceSurface;
+
 import atf.testkit.AtfIntegrationTest;
 import atf.api.tests.governance.AtfGovernanceTestSupport;
 
@@ -115,7 +117,8 @@ public class AtfTestLayerArchitectureTest {
     @Test
     void standaloneReportingUsesAFormalIndependentPolicy() throws Exception {
         Path projectRoot = locateProjectRoot();
-        String pom = Files.readString(projectRoot.resolve("atf-reporting/pom.xml"));
+        var surface = ReportingGovernanceSurface.read(projectRoot);
+        String pom = surface.pom();
         List<Path> standaloneTests = testSources(projectRoot).stream()
                 .filter(file -> isStandaloneReportingTest(file, projectRoot))
                 .toList();
@@ -126,11 +129,15 @@ public class AtfTestLayerArchitectureTest {
                 () -> assertFalse(pom.matches("(?s).*<artifactId>atf-(core|mock|execution|validation|console|ui|debug-ui|test-kit)</artifactId>.*"),
                         "standalone reporting must not depend on an ATF module"),
                 () -> assertEquals(STANDALONE_REPORTING_TEST_NAMES,
-                        standaloneTests.stream()
-                                .map(path -> path.getFileName().toString())
-                                .collect(java.util.stream.Collectors.toSet()),
+                        surface.source() ? standaloneTests.stream().map(path -> path.getFileName().toString())
+                                .collect(java.util.stream.Collectors.toSet()) : surface.nativeTestManifest(),
                         "standalone reporting tests must remain an explicit, finite exception"));
 
+        if (!surface.source()) {
+            surface.assertBinaryLayout();
+            assertTrue(surface.forbiddenReferences(List.of("atf.core", "atf.validation", "atf.testkit", "org.junit")).isEmpty(),
+                    "The loaded library must retain the standalone binary boundary");
+        }
         for (Path file : standaloneTests) {
             String source = Files.readString(file);
             assertFalse(LAYER_ANNOTATIONS.stream().anyMatch(source::contains),
@@ -163,8 +170,13 @@ public class AtfTestLayerArchitectureTest {
         }
 
         assertFalse(matrix.isEmpty(), "the live reactor must expose an executable test matrix");
-        assertEquals(Set.of(STANDALONE_REPORTING_LAYER), matrix.get("atf-reporting"),
+        var reporting = ReportingGovernanceSurface.read(projectRoot);
+        if (reporting.source()) assertEquals(Set.of(STANDALONE_REPORTING_LAYER), matrix.get("atf-reporting"),
                 () -> "atf-reporting must be represented as an independent test surface: " + matrix);
+        else {
+            reporting.assertBinaryLayout();
+            assertFalse(matrix.containsKey("atf-reporting"), "A binary dependency cannot masquerade as a local test source");
+        }
         assertTrue(matrix.values().stream().allMatch(layers -> !layers.isEmpty()),
                 () -> "matrix contains an empty module layer: " + matrix);
     }

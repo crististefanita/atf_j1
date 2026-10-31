@@ -271,8 +271,8 @@ nu demonstrează singur că fiecare adaptor selectează dovada potrivită.
 |---|---|
 | care este contractul transversal al capturii? | acest document |
 | cum publică reporting-ul policy-ul și HTML-ul? | [atlasul Reporting JAR](ATF_Reporting_Library_Atlas.md) |
-| cum se testează biblioteca fără browser? | [`atf-reporting-tests/README.md`](../atf-reporting-tests/README.md) |
-| cum se auditează artifactul în browser? | [`atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md`](../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md) |
+| cum se testează biblioteca fără browser? | [`atf-reporting-tests/README.md`](../../demo2/atf-reporting-tests/README.md) |
+| cum se auditează artifactul în browser? | [`atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md`](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md) |
 | cum furnizează browserul un payload neutru? | [`atf-ui/README.md`](../atf-ui/README.md) |
 | cum mapează un consumer propriul YAML și flow? | README-ul consumerului |
 | ce mai lipsește și cum se închide? | [`feedback/README.md`](feedback/README.md) și feedback-ul ownerului |

@@ -10,17 +10,22 @@ POM-ul livrat, CodeSource-ul și contractul observabil, fără sursă presupusă
 
 | Subiect | Hartă locală | Citește codul când |
 |---|---|---|
+| guvernanță source/binary | [deployment](../atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md) | schimbi catalogul, țintele documentare, POM-ul distribuit, CodeSource-ul ori dovada de independență; aceeași suită protejează ambele forme |
+| redactare și mască literală | [Core security](../atf-core/src/main/java/atf/core/security/README.md) | schimbi strategia, replacement-ul, câmpurile sensibile ori fallback-ul; preview-ul și rendererul au alt owner |
+| inventar main/test și output exclus | [inventarul ATF Tests](../atf-tests/README.md#inventarul-comun-al-surselor-java) | schimbi parcurgerea POM-urilor sau excluderea segmentelor; confruntă sursa compilabilă cu setul inspectat |
 | promovare selectivă | [guard-ul Core](../atf-core/README.md#manifest-și-promovare-guarded) | schimbi baseline-ul, eligibilitatea sursei/părinților ori copierea atomică |
+| suma facturii AutoEx | [contractul monetar](../atf-test-auto-ex/README.md#validarea-completă-a-sumei-facturii) | schimbi delimitarea clauzei, gramatica numerică, comparația sau proiecția; checks independente și probe negative auditabile |
 | runtime AutoEx | [runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) | schimbi compoziția, ownerul contului, observația facturii ori finalizarea |
 | suport Shop | [suport Shop](../atf-test-practice-shop/src/main/atf/shop/support/README.md) | schimbi validarea, confirmarea coșului, selecția traficului ori readiness-ul |
 | operații browser | [operații browser](../atf-ui/src/main/java/atf/ui/playwright/README.md) | schimbi deadline-ul, interacțiunea ori diagnosticul |
 | tranziția produsului AutoEx | [contractul AutoEx](../atf-test-auto-ex/README.md#confirmarea-tranziției-către-produs) | schimbi clickul unic, documentul observat ori GET-ul bounded |
 | billing și autofill Shop | [contractul Shop](../atf-test-practice-shop/README.md#confirmarea-lookup-ului-de-adresă) | schimbi debounce-ul, scope-ul lookup-ului ori ownership-ul câmpurilor |
+| rădăcina rapoartelor Shop | [rezolvarea configurației](../atf-test-practice-shop/README.md#rădăcina-directoarelor-de-raportare) | schimbi working directory ori consumul sursă/JAR; POM-ul Shop stabilește baza, fără marker Reporting |
 | geometrie și iframe | [geometria UI](../atf-ui/README.md#geometria-nativă-a-contextului) | schimbi ieșirea cerută, viewport-ul CSS, DPR ori proiecția System în consumeri |
 | gate de geometrie 850 ms | [pregătirea fixture-ului](../atf-ui/README.md#gate-ul-fixture-ului-de-geometrie) | separi inițializarea, layout-ul stabil și captura de unicul pointer; verifici bugetul nereînnoit de navigare și contorul zero |
 | lifecycle observeri | [scope-ul UI](../atf-ui/README.md#scope-ul-listener-elor-de-observație) | schimbi activarea callback-urilor, rollback-ul, cauzele sau close-once |
 | observație și decizie catalog | [contractul UI](../atf-ui/README.md#scope-ul-listener-elor-de-observație) → [harta Shop](../atf-test-practice-shop/src/main/atf/shop/support/README.md) | separi listener-ele pasive GET/QUERY de refresh-ul Shop; controllerul GET/HEAD și navigarea AutoEx au alte protocoale |
-| fidelitate documentară executabilă | [guard-ul factual](../atf-tests/README.md#documente-și-responsabilități) | schimbi inventarul J1 ori matricea Kit; compară proza cu POM-ul; mutanții istorici de 12 module cer adaptarea consumerului |
+| fidelitate documentară executabilă | [guard-ul factual](../atf-tests/README.md#documente-și-responsabilități) | schimbi modulele, scope-ul Kit, implicitul UI ori geometria YAML Shop/AutoEx; proza se compară cu POM/configurație/model, prin mutanți documentari |
 | continuitatea selectului | [contractul UI](../atf-ui/README.md#așteptare-nativă-și-unicitate) | schimbi observația înaintea activării, confirmarea nativă ori refuzul replay-ului |
 | rețea browser | [rețea browser](../atf-ui/src/main/java/atf/ui/network/README.md) | schimbi hook-uri, identitate, retenție ori cleanup |
 | biblioteca Reporting | [integrare Reporting](ATF_Reporting_Library_Atlas.md#api-consumat-și-ownerul-adaptorului) | schimbi adaptorul local ori diagnostichezi binarul; modelul/rendererul se repară în `demo2` |
@@ -131,7 +136,7 @@ negative nu intră în selecțiile canonice și nu devin componente live mascate
 | diagnostic de consolă | [Console](../atf-console/README.md); bridge la compoziție | alegerea sink-ului; fără dependență Console în JAR-ul Reporting |
 | stub, rutare și asociere mock | [Mock](../atf-mock/README.md); adaptorul de raportare este verificat separat | fixture-ul și intenția scenariului |
 | inspecție locală read-only | [Debug UI](../atf-debug-ui/README.md) | alegerea sursei și sesiunea inspectată |
-| probe neutre de raportare și compoziție | [Reporting Tests](../atf-reporting-tests/README.md) | proba adaptorului real și traseul business rămân Shop/AutoEx |
+| probe neutre de raportare și compoziție | [Reporting Tests](../../demo2/atf-reporting-tests/README.md) | proba adaptorului real și traseul business rămân Shop/AutoEx |
 | guvernanță cross-module și probe negative | [ATF Tests](../atf-tests/README.md) | respectarea contractului, fără excepții locale pentru refactor |
 
 Un import Reporting într-un test Shop nu îl transformă într-un test generic.
@@ -218,7 +223,7 @@ fără oracle wall-clock sau cursa slow-520.
 | componentă cu fixture/proxy/loopback | verifică boundary-ul și refuzurile locale; serviciul extern și izolarea suitei complete cer execuții distincte | [niveluri de testare](ATF_Testing_Guide.md) |
 | suită filtrată și raport unic | verifică selecția efectivă; nu certifică toate profilele UI/UI+API, conturile sau combinațiile de clase | [profile consumer](ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită) |
 | jurnal cu `201` urmat de `500` | prezentarea poate compacta; selecția business citește observațiile eligibile și nu moștenește PASS-ul vechi | [comanda curentă Shop](../atf-test-practice-shop/README.md#dovada-comenzii-curente) |
-| guard documentar verde | confirmă regulile implementate de guard; sensul afirmației se confruntă cu POM/sursă, independent de text | [fidelitate factuală](feedback/ATF_Documentation_Feedback.md) |
+| guard documentar verde | confirmă regulile implementate de guard; sensul afirmației se confruntă cu POM/sursă, independent de text | [fidelitate factuală](../atf-tests/README.md#documente-și-responsabilități) |
 
 Feedback-ul indică lipsa și criteriul de închidere, README-ul ownerului descrie
 contractul, iar baseline-ul `VERIFIED` autorizează o diferență Git precisă.

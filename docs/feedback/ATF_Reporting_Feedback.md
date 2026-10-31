@@ -8,7 +8,7 @@ apoi se sincronizează. [Handoff-ul J1](../ATF_Reporting_Library_Atlas.md#diagno
 
 Reporting deține publicarea neutră, sumarul sigur, query-ul typed și proiecția
 cauzei terminale. Sursa izolată și JAR-ul fizic au gate separat în
-[Reporting Tests](../../atf-reporting-tests/README.md#gate-ul-bibliotecii-distribuite).
+[Reporting Tests](../../../demo2/atf-reporting-tests/README.md#gate-ul-bibliotecii-distribuite).
 
 - Pregătirea pentru release păstrează criterii distincte: API susținut,
   distribuție și documentație portabilă. Expected-urile, endpoint-urile,
@@ -119,7 +119,7 @@ Namespace-ul întreg nu poate deveni automat o promisiune de compatibilitate.
 ## REPORT-RELEASE-CONTRACT-45 — ce conține și ce promite pachetul
 
 **Prioritate: 73/100** = impact 25 + lacună 22 + lucrabil 17 + documentare 9.
-**Owner:** [POM Reporting](../../lib/atf/api/atf-reporting/1.0.0-j4/atf-reporting-1.0.0-j4.pom), manifestul de assets și procesul de release.
+**Owner:** [POM Reporting](../../lib/atf-reporting-1.0.0-j5.pom), manifestul de assets și procesul de release.
 
 JAR-ul inspectat conține clasele de producție și toate cele 54 resurse CSS/JS;
 loaderul le citește din classpath. Nu este demonstrată o lipsă de asset în
@@ -180,10 +180,16 @@ a modulului păstrează codul, dar nu transportă acei owneri documentari.
       Actualizați exemplele odată cu API-ul și probați-le pe consumerul extern.
 - [ ] Verificați din copia izolată README-ul, linkurile, fragmentele compilabile,
       configurația și randarea diagramelor; guard-ul structural nu dovedește adevărul.
-- [ ] Mențineți [critica factuală a documentației](ATF_Documentation_Feedback.md)
+- [ ] Mențineți [controlul factual selectiv](../../atf-tests/README.md#documente-și-responsabilități)
       ca regulă comună; criteriul de aici deține numai portabilitatea documentației Reporting.
 
 ## REPORT-FLOW-PROJECTION-36 — plan de dovezi separat de publicare
+
+- [ ] Armonizați și eticheta metadatelor UI-only agregate per fază. Proba AutoEx
+      pe J5 păstrează un flow, 79 actions, 49 assertions și captura finală, dar
+      cele patru câmpuri UI de context apar sub `Response details`, fără HTTP.
+      Înaintea schimbării, adăugați contract typed și probă DOM Extent/fallback
+      în Reporting Tests; păstrați distincția față de agregarea între faze.
 
 **Prioritate: 62/100** = impact 24 + lacună 17 + lucrabil 16 + documentare 5.
 **Owner:** Reporting; oracolele neutre și browserul rămân în Reporting Tests.
@@ -268,7 +274,7 @@ sau repetarea deciziei la renderer.
 | Exchange terminal în Tests/Fails și backlink către execution evidence | [Reporting](../ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate) |
 | JSON semantic, canary-uri și degradarea inputului invalid | [Security](../ATF_Reporting_Library_Atlas.md#redactare-și-previzualizare) |
 | YAML strict și defaults legitime | [Reporting](../ATF_Reporting_Library_Atlas.md#metadata-și-configurație) |
-| Sursa izolată și JAR-ul fizic consumat extern | [Reporting Tests](../../atf-reporting-tests/README.md#gate-ul-bibliotecii-distribuite) |
+| Sursa izolată și JAR-ul fizic consumat extern | [Reporting Tests](../../../demo2/atf-reporting-tests/README.md#gate-ul-bibliotecii-distribuite) |
 | Buget configurabil și valoarea efectivă în System | [Reporting](../ATF_Reporting_Library_Atlas.md#verdict-și-aserțiuni) |
 | Lifecycle și refuzul constructorului | [Reporting](../ATF_Reporting_Library_Atlas.md#lifecycle-și-publicare) |
 | Cauza publicării directe și închiderea scope-urilor | [Reporting](../ATF_Reporting_Library_Atlas.md#lifecycle-și-publicare) |
@@ -276,12 +282,12 @@ sau repetarea deciziei la renderer.
 | Timing explicit, capturi și publicare | [Reporting](../ATF_Reporting_Library_Atlas.md#timing-măsurat-de-caller) |
 | Setup și dovezi UI în fallback | [Reporting](../ATF_Reporting_Library_Atlas.md#arbore-și-scope-uri) |
 | Coloane dinamice și scroll local | [Reporting](../ATF_Reporting_Library_Atlas.md#tabele-și-randare) |
-| Probe de compatibilitate și browser | [Reporting Tests](../../atf-reporting-tests/README.md) |
+| Probe de compatibilitate și browser | [Reporting Tests](../../../demo2/atf-reporting-tests/README.md) |
 | Oracole, fixture-uri binare și dovezi exacte | [Feedback Reporting Tests](ATF_Reporting_Tests_Feedback.md) |
-| Inventar UI/API/UI+API și controale negative de randare | [Reporting Tests](../../atf-reporting-tests/README.md#tabele-publicate-și-inventar-independent) |
+| Inventar UI/API/UI+API și controale negative de randare | [Reporting Tests](../../../demo2/atf-reporting-tests/README.md#tabele-publicate-și-inventar-independent) |
 | Controale Git verificate | [Baseline](../ATF_Test_Changes_Baseline.md#controale-tehnice-verificate) |
-| Criterii active ale consumerilor | [Consumer](ATF_Consumer_Business_Test_Focus_Feedback.md) |
-| Identitatea query-ului între modele | [Reporting Tests](../../atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock) |
+| Contractele consumerilor | [Acceptanța business](../ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită) |
+| Identitatea query-ului între modele | [Reporting Tests](../../../demo2/atf-reporting-tests/README.md#fidelitatea-query-ului-și-asocierea-mock) |
 
 Refactorizările păstrează contractele ownerilor de mai sus și urmează
 [ghidul de probă](../ATF_Testing_Guide.md#proba-fiecărui-owner-de-resurse).

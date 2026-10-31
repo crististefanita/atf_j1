@@ -1,20 +1,20 @@
 {
-  "coordinate": "atf.api:atf-reporting:1.0.0-j4",
+  "coordinate": "atf.api:atf-reporting:1.0.0-j5",
   "producerDirectory": "C:/work/1/demo2",
   "producerHead": "4f6bd353bf23f499a1268e811116b5627522306c",
   "producerHasUncommittedChanges": true,
   "javaRelease": 21,
   "verifiedToolchain": "Temurin 21.0.12.1+1",
-  "binarySha256": "5D01BB416F62FF0C309BD725275C15BD35CBD8BE39AF76CA7627E11DCFE1E874",
+  "binarySha256": "1928EBDBADCF0CA8846FFA45B68563DA3C75399C2A437E2FD5E13F2A6F864768",
   "sourceIncluded": false,
   "nativeTests": 49,
   "nativeTestFailures": 0,
   "nativeTestSkips": 0,
-  "producerManifestSha256": "D9AA01E9FA6EE0645DD88051556F0910AF41CB6C21C239D4C31AF97C42F430A8",
-  "publishedPomSha256": "11A2632694A8E6C1B2F0C5DD656BE7585F4C12E3656C649CBB794738CC17A94F",
+  "producerManifestSha256": "FEBA51B1C4B38D4470F266939D3FC2A099F6228E08B9D1271D0B901959698EE3",
+  "publishedPomSha256": "BC3244B84FA651568FA0A71F7C36166D1169F55FF6C089A2FAAC6C7ACEBF9CA5",
   "versionTransformation": {
     "producer": "1.0.0-SNAPSHOT",
-    "published": "1.0.0-j4",
+    "published": "1.0.0-j5",
     "otherPomChanges": false
   },
   "reproducibility": {
@@ -22,9 +22,28 @@
     "identicalBytes": true
   },
   "binaryApiComparison": {
-    "reference": "atf.api:atf-reporting:1.0.0-j1",
-    "previousPublicProtectedEntries": 3834,
+    "reference": "atf.api:atf-reporting:1.0.0-j4",
+    "previousPublicProtectedEntries": 3836,
     "removed": 0,
-    "added": 2
+    "added": 1
+  },
+  "consumerDistribution": {
+    "layout": "flat-lib",
+    "jar": "lib/atf-reporting-1.0.0-j5.jar",
+    "pom": "lib/atf-reporting-1.0.0-j5.pom",
+    "bootstrap": "root validate; maven-install-plugin:3.2.0:install-file",
+    "sourceModules": 10,
+    "reportingTests": "producer-owned; full binary acceptance in temporary consumer"
+  },
+  "binaryAcceptance": {
+    "producerOwnedTests": "C:/work/1/demo2/atf-reporting-tests",
+    "classes": 271,
+    "methodDefinitions": 871,
+    "testInvocations": 1414,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "producerGovernance": 129,
+    "consumerGovernance": 129
   }
 }

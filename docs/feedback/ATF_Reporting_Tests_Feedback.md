@@ -30,7 +30,7 @@ păstrată în staging. O selecție focalizată verde nu certifică inventarul r
 **Owner:** probele de compoziție și browser din Reporting Tests.
 
 Identitatea backlink-ului, ordinalul dovezii originale, starea asincronă și
-root-ul fixture-urilor binare au probe la [README-ul modulului](../../atf-reporting-tests/README.md).
+root-ul fixture-urilor binare au probe la [README-ul modulului](../../../demo2/atf-reporting-tests/README.md).
 Diagnosticul execution și refuzul imediat al celei de-a doua capturi sunt
 clasificate la ownerul lor; suitele canonice păstrează toate comparațiile.
 
@@ -78,6 +78,6 @@ rămâne la aplicație; fixture-ul neutru nu aduce Shop/AutoEx în Reporting Tes
 | browser | fază și comparație exacte, două diagnostice omonime, tastatură, reload și panou îngust |
 | acceptare | gate-urile relevante trec, criteriul demonstrat se elimină, controlul Git verificat trece în baseline |
 
-Contractele și selecțiile sunt la [README-ul modulului](../../atf-reporting-tests/README.md).
+Contractele și selecțiile sunt la [README-ul modulului](../../../demo2/atf-reporting-tests/README.md).
 Build-ul și auditul respectă [procesul izolat](../ATF_Build_And_Execution_Safety.md);
 documentele normative nu păstrează artifacte sau rezultate datate.

@@ -1,5 +1,7 @@
 package atf.api.tests.governance.consumers;
 
+import atf.api.tests.governance.distribution.ReportingHarnessOwnership;
+
 import atf.core.files.AtfFileTree;
 import atf.core.files.AtfJavaSourceReferences;
 import atf.testkit.AtfIntegrationTest;
@@ -380,7 +382,7 @@ public class ConsumerModuleArchitectureGovernanceTest {
     }
 
     @Test
-    void sharedConsumerSupportIsWiredAtItsOwnerWithoutLocalCopies() throws IOException {
+    void sharedConsumerSupportIsWiredAtItsOwnerWithoutLocalCopies() throws Exception {
         Path kit = module("atf-test-kit");
         for (String primitive : List.of("lifecycle/CloseOnceResource", "lifecycle/ArmedCleanup")) {
             assertTrue(Files.isRegularFile(kit.resolve("src/main/java/atf/testkit/" + primitive + ".java")));
@@ -404,8 +406,8 @@ public class ConsumerModuleArchitectureGovernanceTest {
         assertTrue(support.contains("ShopPurchaseConfirmation.assertions(result)"));
         assertTrue(Files.isRegularFile(module("atf-ui").resolve(
                 "src/main/java/atf/ui/audit/UiScreenAudit.java")));
-        assertTrue(Files.isRegularFile(module("atf-reporting-tests").resolve(
-                "src/test/java/atf/reporting/ui/failure/UiSetupFailureEvidenceComponentTest.java")));
+        ReportingHarnessOwnership.read(AtfGovernanceTestSupport.locateProjectRoot()).requireFile(module("atf-reporting-tests").resolve(
+                "src/test/java/atf/reporting/ui/failure/UiSetupFailureEvidenceComponentTest.java"));
     }
 
     private static List<Path> javaFiles(Path... roots) throws IOException {

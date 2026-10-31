@@ -6,6 +6,10 @@ staging-ul producătorului `demo2`; [ghidul J1](ATF_J1_Consumer.md) separă gate
 
 ## Pe scurt
 
+Defectele Reporting observate în consumeri primesc [regresie permanentă](../../demo2/atf-reporting-tests/README.md#regresia-permanentă-a-fiecărui-defect-reporting)
+la producător, cu mock/contract și browser după boundary-ul afectat. Fiecare
+JAR candidat trece gate-ul extern în TMP; harness-ul nu este modul în J1.
+
 Ghidul explică unde aparține un test, cum alegem cel mai mic nivel care poate
 dovedi comportamentul și cum trecem de la o verificare locală la proof de
 compoziție sau randare. Matricea reflectă adnotările executabile din codul live;
@@ -98,7 +102,7 @@ nu au această obligație; probele rendererului rămân o categorie separată î
   contorul DOM sincron numără activările native fără o confirmare RPC asincronă.
 - Lansarea individuală și suita folosesc același adaptor al aplicației;
   validările Extent/fallback și interacțiunea disclosure-ului sunt probate la
-  [Reporting Tests](../atf-reporting-tests/README.md).
+  [Reporting Tests](../../demo2/atf-reporting-tests/README.md).
 
 Sesiunea comună aparține clasei sau suitei declarate; scenariul, comparațiile
 și timing-ul măsurat rămân per invocare. Publicarea finală și notificarea căii
@@ -128,7 +132,7 @@ din fixture; expected-ul, operația și verdictul aplicației rămân independen
 | Punct business | după setup-ul contului, la confirmarea coșului și după plata terminată |
 | Canal | UI și UI_API păstrează aceeași cauză primară, fază și comparație business |
 | Individual | un fault, apoi aceeași poveste sănătoasă în profil opus, în browser nou |
-| Suită fixture | șase FAIL-uri intenționate și șase succese; un singur HTML comun |
+| Suită fixture | matricea Account/Cart/Purchase: șase FAIL-uri și șase succese; `boundaries`: AutoEx 6/6, Shop 2/2; un HTML per lansare |
 | Cleanup | captura originală precede navigarea; AutoEx confirmă ștergerea owned, Shop închide referința scoped |
 | Contoare | mutațiile nu se repetă; evenimentele browser și navigările business sunt măsurate separat |
 | Raport | checkpoint exact, expected/actual expandabile, Fails → comparație, Setup, capturi și vecini sănătoși |
@@ -137,6 +141,28 @@ Negativele explicite rămân FAIL în JUnit și Extent. CLI-ul verifică indepen
 numărul intenționat de eșecuri și succese, aceeași excepție originală, închiderea
 contextului și existența unui HTML; opt-in-ul fault-urilor este separat de cel E2E.
 
+Oracolul artifactului asociază ownerul, scenariul și faza cu verdictul,
+checkpoint-ul, cauza și fiecare captură cerută de traseul consumerului. Marcajul
+cromatic diferă per invocare. Refuză eliminarea sau reasocierea unei singure
+capturi, un verdict schimbat, cauza eliminată și contaminarea vecinului sănătos;
+totalurile Tests/Fails/Overview trebuie să corespundă execuției JUnit.
+
+- AutoEx păstrează comparația publicată de `UiCheckpointFailure` și o captură
+  originală; Shop poate publica separat captura checkpoint-ului respins și
+  diagnosticul generic ulterior. Numărul declarat urmează aceste suprafețe,
+  nu prezența globală a unui PNG sau a unui selector FAIL în HTML.
+- Recalculation/Removal AutoEx folosesc explicit `recalculatesAndRemovesProduct`:
+  mismatch-ul cantității oprește removal-ul, iar confirmarea removal-ului nu
+  poate relua ștergerea. Povestea guest nu dobândește cont și nu începe payment.
+- Eroarea generică se injectează numai după întoarcerea checkpoint-ului PASS;
+  `journey.pass(...)` Shop finalizează scenariul și nu substituie un checkpoint
+  intermediar. Failure-ul ulterior are diagnostic propriu, păstrând PASS-ul anterior.
+- `artifact-expectations.json` provine din observațiile execuției înaintea
+  auditului HTML. Modul CLI `audit` reverifică acel artifact fără opt-in live
+  și fără mutații remote. Mutanții schimbă numai DOM-ul browserului de audit.
+- `ScopedAcceptanceRun` din Kit deține override-ul temporar și colectarea
+  selectată de caller; launcherul JUnit și browserul rămân la consumer.
+
 - `OTHER` nu devine o a doua navigare de ștergere AutoEx; două navigări reale
   sunt refuzate. [Contractul de ștergere](../atf-test-auto-ex/README.md#delete-account--navigare-întreruptă)
   separă diagnosticul complet de permisul de continuare, fără efecte server-side inventate.
@@ -144,6 +170,9 @@ contextului și existența unui HTML; opt-in-ul fault-urilor este separat de cel
   cele ale ownerului; unit tests nu primesc artificial contractul E2E/componentă.
 - O indisponibilitate externă nu este fault business acceptat. Raportul ei se
   păstrează, iar o invocare nouă nu reia mutația incertă a invocării precedente.
+  `acceptance.json` păstrează observațiile și `verified: false` înaintea
+  oricărui refuz al acceptanței; dacă injecția nu a fost atinsă, CLI-ul propagă
+  aceeași cauză inițială, nu o înlocuiește cu verdictul fixture-ului.
 - Selecțiile canonice nu se reduc automat după aceste probe. Reducerea cere
   review separat al poveștilor, conturilor și configurațiilor care ar dispărea.
 
@@ -164,7 +193,7 @@ Celulele arată doar nivelurile care există în suitele executabile curente.
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | policy și adapter Playwright generic |
 | [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și launcher read-only pentru inspecție |
 | [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | excepție: suite standalone fără adnotări sau dependențe ATF |
-| [`atf-reporting-tests`](../atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | composition și proof pentru librăria reporting |
+| [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | composition și proof pentru librăria reporting |
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumer: contracte, API, flow-uri și journey browser |
 | [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumer: purchase journey în profile UI distincte, probe component și API live opt-in |
 | [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | boundary și guvernanță whole-reactor |
@@ -194,7 +223,7 @@ invariantul, nu fixture-ul și nici testul întreg:
 |---|---|---|
 | regulile aplicației, traseele UI/API, payload-ul și propagarea datelor | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#limita-dintre-testele-shop-și-testele-reporting) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suite-și-variante-de-evidence) | toate probele business, inclusiv cele cu mock; mock-ul izolează transportul, nu schimbă owner-ul |
 | traducerea contractului aplicației în portul public Reporting | consumerul care deține adaptorul | intenția/titlul business, asocierea așteptării la exchange, statusul specific și politica locală de redactare |
-| semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
+| semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
 | API-uri și lifecycle-uri reutilizabile strict test-only: adnotări, resolver-e, clasificare și primitive generice | [`atf-test-kit`](../atf-test-kit/README.md#regula-de-promovare-a-testelor-reutilizabile) | aplicația păstrează fixture-ul, lifecycle-ul și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste Reporting |
 
 O probă poate rămâne consumer-owned chiar dacă publică un artifact: trebuie să
@@ -536,7 +565,7 @@ variație de conținut.
 
 Aceste probe nu certifică automat toate proiecțiile sau verdictul local al
 fiecărui exchange. Matricea contractelor și probelor aparține
-[Reporting Tests](../atf-reporting-tests/README.md); lacunele active rămân în
+[Reporting Tests](../../demo2/atf-reporting-tests/README.md); lacunele active rămân în
 [registrul feedback-urilor](feedback/README.md), separat de controalele tehnice.
 
 ## Principii pentru teste scurte și plug-and-play

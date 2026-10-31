@@ -105,7 +105,20 @@ Fiecare clasă executabilă declară exact un nivel:
 
 - API, precedență și probe: [adnotările de infrastructură](../docs/ATF_Test_Infrastructure_Annotations.md).
 - Verificarea manuală IntelliJ pentru output project-relative:
-  [ghidul suitei Extent](../atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij).
+  [ghidul suitei Extent](../../demo2/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij).
+
+### Lansarea scoped a acceptanței
+
+[ScopedAcceptanceRun](src/main/java/atf/testkit/lifecycle/ScopedAcceptanceRun.java)
+este partea neutră folosită de CLI-urile Shop și AutoEx: override temporar,
+callback sincron și colecție imutabilă de artifacte. Serializează apelurile
+cooperante; nu oferă izolare față de scriitori externi ai proprietății JVM.
+
+Consumerul furnizează launcherul, configurația, filtrul fișierelor și
+oracolele business. Kit nu importă launcherul JUnit, Reporting ori Playwright,
+nu creează directorul și nu interpretează HTML-ul. Testul
+[ScopedAcceptanceRunTest](src/test/java/atf/testkit/lifecycle/ScopedAcceptanceRunTest.java)
+rămâne unitar; contractul Extent aparține acceptanței consumerului.
 
 ### Declarația neutră pentru recuperare BE
 

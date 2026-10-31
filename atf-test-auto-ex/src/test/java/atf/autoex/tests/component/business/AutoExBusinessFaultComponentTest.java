@@ -10,6 +10,25 @@ import static atf.testkit.assertions.AuditedAssertions.*;
 /** Local fixture proof. The public-site negative journeys are explicit live acceptance probes. */
 @AutoExComponentTest
 class AutoExBusinessFaultComponentTest {
+    @org.junit.jupiter.api.Test
+    void cleanupCannotInjectAnUnreachedBusinessFaultOrCorruptTheOwnedIdentity() {
+        try (var fixture = new AutoExBusinessFault.LocalFixture()) {
+            for (var point : AutoExBusinessFault.Point.values()) {
+                var fault = fixture.fault(point);
+                fault.restore();
+                fault.beforeRead(AutoExSelectors.LOGGED_IN_NAME);
+                fault.beforeRead(AutoExSelectors.CART_QUANTITY);
+                fault.beforeRead(AutoExSelectors.CART_QUANTITY);
+                fault.beforeRead(AutoExSelectors.ORDER_SUCCESS);
+                fault.beforeRead(AutoExSelectors.EMPTY_CART);
+                fault.afterCheckpoint(atf.autoex.support.journey.AutoExPurchaseTraceStep.ACCOUNT_CREATED);
+                assertFalse(fault.injected(), point + ": cleanup cannot invent the intended fault after an earlier failure");
+                assertEquals(0, fixture.markers(), point + ": cleanup cannot create a false original-capture marker");
+                assertEquals("Owned Account", fixture.text(AutoExSelectors.LOGGED_IN_NAME), point + ": ownership reads retain the real account identity");
+                assertEquals("2", fixture.text(AutoExSelectors.CART_QUANTITY), point + ": cleanup reads do not corrupt the cart");
+            }
+        }
+    }
     @ParameterizedTest
     @org.junit.jupiter.params.provider.CsvSource({
             "http://foreign.local/font?families=a|b, 0",
@@ -31,13 +50,14 @@ class AutoExBusinessFaultComponentTest {
         assertEquals("/login", actual.redirectSourcePath(), "Diagnostics retain the observed path without query values or URI parsing failures");
     }
 
-    @ParameterizedTest @EnumSource(AutoExBusinessFault.Point.class)
+    @ParameterizedTest @EnumSource(value = AutoExBusinessFault.Point.class, names = {"ACCOUNT", "CART", "PURCHASE"})
     void corruptsOnlyTheChosenObservedValueAndRestoresItWithoutNavigation(AutoExBusinessFault.Point point) {
         try (var fixture = new AutoExBusinessFault.LocalFixture()) {
             String selector = switch (point) {
                 case ACCOUNT -> AutoExSelectors.LOGGED_IN_NAME;
                 case CART -> AutoExSelectors.CART_QUANTITY;
                 case PURCHASE -> AutoExSelectors.ORDER_SUCCESS;
+                default -> throw new IllegalArgumentException("Not an original boundary: " + point);
             };
             String original = fixture.text(selector);
             var fault = fixture.fault(point);
@@ -49,6 +69,7 @@ class AutoExBusinessFaultComponentTest {
                 case ACCOUNT -> "ATF controlled ACCOUNT mismatch";
                 case CART -> "99";
                 case PURCHASE -> "ATF controlled PURCHASE mismatch";
+                default -> throw new IllegalArgumentException("Not an original boundary: " + point);
             };
             assertEquals(rejected, fixture.text(selector), "The exact intended observed value is corrupted, without changing the independent expected value");
             assertEquals(1, fixture.markers(), "One visible marker identifies original failure evidence");
@@ -59,6 +80,49 @@ class AutoExBusinessFaultComponentTest {
             assertEquals(original, fixture.text(selector), "Owned cleanup sees the restored original identity");
             assertEquals(0, fixture.markers(), "The fixture removes only its marker");
             assertEquals("about:blank", fixture.url(), "Corruption and restoration never navigate or dispatch a mutation");
+        }
+    }
+
+    @ParameterizedTest @EnumSource(value = AutoExBusinessFault.Point.class, names = {"RECALCULATION", "REMOVAL"})
+    void guestCartFaultWaitsForItsOwnReadAndNeverChangesTheExpectedValue(AutoExBusinessFault.Point point) {
+        try (var fixture = new AutoExBusinessFault.LocalFixture()) {
+            var fault = fixture.fault(point);
+            String selector = point == AutoExBusinessFault.Point.RECALCULATION ? AutoExSelectors.CART_QUANTITY : AutoExSelectors.EMPTY_CART;
+            String expected = fixture.text(selector);
+            fault.beforeRead(AutoExSelectors.ORDER_SUCCESS);
+            assertFalse(fault.injected(), "Another boundary cannot arm the guest-cart fault");
+            if (point == AutoExBusinessFault.Point.RECALCULATION) {
+                fault.beforeRead(selector);
+                assertFalse(fault.injected(), "The initial cart remains healthy before the second add");
+                assertEquals(expected, fixture.text(selector), "The first quantity read retains the original value");
+            }
+            fault.beforeRead(selector);
+            assertTrue(fault.injected(), "The selected guest-cart boundary is reached");
+            assertFalse(expected.equals(fixture.text(selector)), "Only observed DOM changes; expected stays independent");
+            fault.beforeRead(selector);
+            assertEquals(1, fixture.markers(), "Repeated reads do not duplicate failure evidence");
+            fault.restore();
+            assertEquals(expected, fixture.text(selector), "Restoration preserves the original cart text");
+            assertEquals("about:blank", fixture.url(), "The fixture performs no navigation or replay");
+        }
+    }
+
+    @org.junit.jupiter.api.Test
+    void genericFailureIsArmedOnlyAfterTheAccountCreationCheckpointReturns() {
+        try (var fixture = new AutoExBusinessFault.LocalFixture()) {
+            var fault = fixture.fault(AutoExBusinessFault.Point.AFTER_SETUP);
+            fault.beforeRead(AutoExSelectors.LOGGED_IN_NAME);
+            fault.afterCheckpoint(atf.autoex.support.journey.AutoExPurchaseTraceStep.STORE_OPEN);
+            assertFalse(fault.injected(), "Earlier reads and checkpoints remain healthy");
+            var failure = assertThrows(IllegalStateException.class,
+                    () -> fault.afterCheckpoint(atf.autoex.support.journey.AutoExPurchaseTraceStep.ACCOUNT_CREATED),
+                    "The generic error follows the delegated PASS checkpoint");
+            assertEquals(AutoExBusinessFault.AFTER_SETUP_MESSAGE, failure.getMessage(), "The exact controlled diagnostic remains available");
+            fault.afterCheckpoint(atf.autoex.support.journey.AutoExPurchaseTraceStep.ACCOUNT_CREATED);
+            assertEquals(1, fixture.markers(), "The post-PASS fault is injected only once");
+            assertEquals(0, fixture.markedNodes(), "No account value was corrupted to manufacture the generic failure");
+            fault.restore();
+            assertEquals(0, fixture.markers(), "Owned cleanup can remove the screenshot marker");
         }
     }
 }

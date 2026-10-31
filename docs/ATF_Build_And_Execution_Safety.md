@@ -237,6 +237,14 @@ working directory-ul IDE/Maven.
 O copie simplă fără istoric nu constituie dovadă pentru acest gate și eșuează
 explicit; nu se dezactivează verificarea pentru a face staging-ul verde.
 
+- Staging-ul pornește fără checkout și preia snapshot-ul live, inclusiv absența
+  fișierelor șterse sau relocate. Verifică inventarul față de live; o clonă cu
+  checkout nu poate reintroduce implicit copia veche din `HEAD`.
+- Ref-ul remote se identifică înainte de fetch; nu se presupune numele `main`.
+  Fetch-ul nu autorizează pull, reset ori overwrite al refactorizărilor locale;
+  starea live și baza reală de review rămân intrări distincte ale reconcilierii.
+
+
 - Creează o clonă locală izolată, fără checkout și fără hardlink-uri.
 - Inițializează indexul clonei din `HEAD`, apoi copiază sursele live fără `.git`,
   `target`, `artifacts` sau configurații locale cu credentiale.

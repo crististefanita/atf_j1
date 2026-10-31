@@ -7,7 +7,7 @@
 `ShopApiRunReport` păstrează lifecycle-ul și verdictul business. Sumarul sigur
 al excepției este delegat către
 [Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare),
-cu [probe neutre în Reporting Tests](../atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+cu [probe neutre în Reporting Tests](../../demo2/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
 Probele Shop continuă să verifice configurația, selecția exchange-ului și adaptorul real.
 
 **Trasee rapide:** [Journey](#traseul-de-achiziție) · [Fixture și billing](#configurația-modulului) · [Dovada order](#dovada-comenzii-curente) · [Raport per suită](#raport-partajat--starea-consumerului) · [Componentă sau E2E](#verificare-rapidă)
@@ -788,7 +788,7 @@ Testele API de componentă verifică separat rutele și metodele typed, variante
 guest/authenticated, payload-ul și semantica exchange-ului prin transporturi
 controlate. Ele nu certifică serviciul live; `ShopStandaloneApiReportTest` este
 proba opt-in separată, iar testele generice pentru renderer și markup aparțin
-[`atf-reporting-tests`](../atf-reporting-tests/README.md).
+[`atf-reporting-tests`](../../demo2/atf-reporting-tests/README.md).
 
 `PUT` pentru actualizarea cantității și `DELETE` pentru eliminarea unui produs
 sunt contracte API ale modulului, nu pași din purchase-ul E2E curent.
@@ -1369,7 +1369,7 @@ HTTP respins, transport fără răspuns și cleanup eșuat. Rularea autentificat
 verifică separat comportamentul serverului; un raport 401 auditabil nu certifică un flow reușit.
 
 Interacțiunea generică a raportului este probată în
-[Reporting Tests](../atf-reporting-tests/README.md); mapping-ul business rămâne Shop.
+[Reporting Tests](../../demo2/atf-reporting-tests/README.md); mapping-ul business rămâne Shop.
 Login-ul API nu dovedește automat autentificarea UI a aceluiași cont.
 
 </details>
@@ -1435,10 +1435,30 @@ iar suita rămâne completă.
 - Componentele locale probează exclusiv injecția; rularea externă și auditul
   raportului rămân probe distincte, fără retry de mutație sau timeout mărit.
 
-CLI-ul de acceptanță verifică numărul JUnit, cauza și contoarele per invocare,
-plus existența unui HTML. Asocierea automată a verdictului și capturii cu
-fiecare scenariu din HTML-ul comun are [criteriu separat](../docs/feedback/ATF_Consumer_Business_Test_Focus_Feedback.md#consumer-acceptance-oracles-58--dovadă-pe-fiecare-invocare);
-un control global de prezență nu substituie auditul fiecărui caz.
+CLI-ul asociază fiecare invocare cu ownerul, scenariul și faza ei în HTML,
+apoi verifică verdictul, checkpoint-ul, cauza și fiecare captură originală.
+
+| Dovadă | Criteriu |
+|---|---|
+| Capturi | Cart/Purchase: checkpoint respins și diagnostic ulterior; Account/AfterSetup: failure fără acțiuni business intermediare |
+| Apartenență | marcaj cromatic propriu; captura unui sibling este refuzată |
+| Coerență | Tests/Fails/Overview păstrează totalurile JUnit și vecinul sănătos fără cauză moștenită |
+
+<details>
+<summary><strong>Detalii — degradări controlate și audit fără aplicație</strong></summary>
+
+Controalele negative elimină sau reasociază o singură captură, schimbă un
+verdict, elimină cauza și contaminează vecinul sănătos. Mută numai DOM-ul din
+browserul auditului, păstrând artifactul salvat și request-urile business.
+Raportul este încărcat printr-o rută locală interceptată, fără request extern.
+
+`artifact-expectations.json` păstrează observațiile execuției înaintea auditului
+HTML. Modul `audit <artifact-expectations.json>` reverifică raportul existent
+fără opt-in E2E și fără registration nou. Partea neutră de lansare/colectare
+folosește [ScopedAcceptanceRun](../atf-test-kit/README.md#lansarea-scoped-a-acceptanței);
+launcherul și oracolul rămân la consumer, în test scope.
+
+</details>
 
 ### Limita suportului partajat
 
@@ -1505,6 +1525,60 @@ Etapele catalog/checkout din `ShopPurchaseFlow` sunt implementate; separarea
 business → flow UI → acțiuni compuse → Playwright este încă țintă de design.
 [Ghidul de testare](../docs/ATF_Testing_Guide.md#separarea-flow-urilor-business-ui-și-a-validărilor)
 definește boundary-urile și proba de componentă pentru primul increment.
+
+## Rădăcina directoarelor de raportare
+
+`reports.ui`, `reports.api` și override-urile lor relative se rezolvă față de
+părintele modulului Shop identificat prin POM-ul propriu. Reporting poate fi
+modul sursă sau JAR; prezența unui checkout Reporting nu decide destinația.
+
+| Lansare | Rezolvare |
+|---|---|
+| reactor, modul Shop ori subdirector al modulului | aceeași bază pentru UI/API și componente; fără output implicit sub modul |
+| cale configurată absolută | se păstrează normalizată, fără schimbarea bazei |
+| standalone fără modul Shop în strămoși | fallback la working directory, fără folosirea unui marker Reporting străin |
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
+flowchart LR
+    Start["Working directory"] -->|caută în strămoși| Own["POM Shop"]
+    Own -->|identifică| Root["Reactor"]
+    Root -->|rezolvă| Output["UI / API output"]
+```
+
+<details>
+<summary><strong>Legendă — rădăcina output-ului relativ</strong></summary>
+
+| În schemă | Sens complet |
+|---|---|
+| Working directory | reactor, modul sau subdirector capturat la încărcarea configurației |
+| POM Shop | markerul modulului consumer, găsit prin Core |
+| Reactor | părintele modulului Shop; forma sursă/JAR a Reporting nu participă la alegere |
+| UI / API output | calea relativă configurată, rezolvată față de aceeași bază |
+
+O cale absolută se păstrează; lipsa modulului în strămoși folosește fallback-ul
+standalone din tabel. Rezolvarea configurației nu creează directoarele.
+
+</details>
+
+`ShopConfigurationLoader` reutilizează căutarea de fișier din Core, fără
+dependență runtime către Kit. [ShopConfigurationTest](src/test/atf/shop/tests/component/configuration/ShopConfigurationTest.java)
+verifică API-ul public în ambele layout-uri și păstrează izolarea `user.dir`.
+
+## Geometria YAML livrată
+
+Tabelul descrie configurația livrată, fără override-uri de proces sau ale probei.
+Sursa este [YAML-ul consumerului](src/test/resources/atf-practice-shop.yaml); calculul pur
+aparține [UI](../atf-ui/README.md#geometria-nativă-a-contextului).
+
+| Sursă | Ieșire cerută | Zoom | Viewport CSS | DPR |
+|---|---|---|---|---|
+| YAML livrat | `1440 × 1000` | `70` | `2057 × 1429` | `0.70` |
+
+`DocumentedUiGeometryContractTest` compară declarația cu YAML-ul live și modelul
+UI executabil; mutanții schimbă numai documentul. Acesta nu măsoară pixeli de
+captură: geometria browserului are proba nativă la ownerul UI, iar System
+publică configurația efectivă a rulării, inclusiv când ea diferă de acest tabel.
 
 ## Verificare rapidă
 

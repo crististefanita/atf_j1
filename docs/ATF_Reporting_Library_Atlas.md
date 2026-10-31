@@ -26,10 +26,10 @@ unei clase din stack trace nu implică sursă disponibilă în J1.
 API-ul folosit poate fi inspectat din binar:
 
 ```powershell
-javap -classpath lib/atf/api/atf-reporting/1.0.0-j4/atf-reporting-1.0.0-j4.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j5.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
-Exemplul fixează versiunea inițial livrată; după upgrade folosește coordonata
+Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
 din POM. Clasele `public` nu reprezintă automat suprafață stabilă pentru orice
 release; compatibilitatea se verifică pentru utilizările reale.
 
