@@ -4354,3 +4354,22 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Control verificat — Reporting J10</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORT-J10-ATF-J1
+    status: VERIFIED
+    base: db35dd515e644a8eb0b5e1a08ddee5c453dece25
+    expires: 2026-11-30
+    reason: Adoptă J10 și catalogul nativ finit, cu bridge binar deprecated verificat prin inventar exact și negative de creștere sau substituție. Limita opt și API-ul vechi rămân; Core C2 și domeniul consumerului sunt păstrate.
+    proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+      - atf-tests/src/test/java/atf/api/tests/governance/AtfPackageCohesionGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java
+```
+
+</details>

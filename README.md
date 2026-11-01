@@ -445,11 +445,13 @@ ownerului și sunt protejate de testele lui.
 
 ## Core ca bibliotecă — owner și deployment
 
-Acest consumer are 9 module sursă. Core C2 și Reporting J9 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+Acest consumer are 9 module sursă. Core C2 și Reporting J10 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
 
 [Contractul Core C2](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
-[Acceptanța Reporting J9](docs/ATF_Reporting_J8_Verification.md) păstrează catalogul existent și istoricul J6/J7.
+[Acceptanța istorică Reporting J8](docs/ATF_Reporting_J8_Verification.md) păstrează catalogul existent și istoricul J6/J7.
 
 [Acceptanța JSON C2/J9](docs/ATF_JSON_Binary_Verification.md) separă sursa, JAR-ul, rendererele și limitele rămase.
+
+[Reporting J10](docs/ATF_Reporting_J10_Verification.md) documentează disclosure-ul local, puntea binară și regresiile sursă/JAR.
