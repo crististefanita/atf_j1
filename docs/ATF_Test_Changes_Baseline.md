@@ -4296,3 +4296,61 @@ testChanges:
 ```
 
 </details>
+
+
+<details>
+<summary><strong>Control verificat — KIT-BODY-J1</strong></summary>
+
+```yaml
+testChanges:
+  - id: KIT-BODY-J1
+    status: VERIFIED
+    base: b616d459f0e3a23a194199badbd728a7d0b6c910
+    expires: 2026-11-30
+    reason: Adaugă politica neutră opt-in TEST BODY, cu comparație structurală actual=0 la lipsa auditului; păstrează implicit ANY_PHASE, verdicturile FAIL/SKIP, cauza originală și preview 240. Nativele permanente sunt la owner Kit, fără Reporting ori ASR.
+    proof: 'mvn -B -ntp -pl atf-test-kit test'
+    paths:
+      - atf-test-kit/src/test/java/atf/testkit/assertions/TestBodyAssertionRequirementTest.java
+      - atf-test-kit/src/test/java/atf/testkit/assertions/TestBodyAssertionRequirementComponentTest.java
+```
+
+</details>
+
+<details>
+<summary><strong>Control VERIFIED — Core C2 și Reporting J9</strong></summary>
+
+```yaml
+testChanges:
+  - id: CORE-C2-J9-ATF-J1
+    status: VERIFIED
+    base: b616d459f0e3a23a194199badbd728a7d0b6c910
+    expires: 2026-11-30
+    reason: Adoptă aceiași bytes Core C2 și Reporting J9, catalogul nativ finit și contractele Mock stricte, cu precizie numerică independentă și nominalele păstrate. Fără praguri relaxate sau surse shadow.
+    proof: mvn -B -pl atf-tests,atf-mock,atf-validation -am "-Dtest=WholeAtfGovernanceSuiteTest,MockNumericContractComponentTest,MockJsonFixtureComponentTest,MockJsonCatalogComponentTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+      - atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java
+      - atf-mock/src/test/java/atf/mock/json/MockNumericContractComponentTest.java
+      - atf-mock/src/test/java/atf/mock/json/MockJsonFixtureComponentTest.java
+      - atf-mock/src/test/java/atf/mock/json/MockJsonCatalogComponentTest.java
+```
+
+</details>
+
+<details>
+<summary><strong>Control VERIFIED — Kit assertion requirement</strong></summary>
+
+```yaml
+testChanges:
+  - id: KIT-REQUIREMENT-COHESION-ATF-J1
+    status: VERIFIED
+    base: b616d459f0e3a23a194199badbd728a7d0b6c910
+    expires: 2026-11-30
+    reason: Separă semantic regresiile assertion requirement prin API-ul public Kit, păstrând integral cele zece cazuri și fixture-urile negative controlate prin Launcher. Pragul opt nu este relaxat; numele claselor și selecțiile finite rămân stabile.
+    proof: mvn -B -pl atf-test-kit -am test
+    paths:
+      - atf-test-kit/src/test/java/atf/testkit/assertions/requirements/TestBodyAssertionRequirementTest.java
+      - atf-test-kit/src/test/java/atf/testkit/assertions/requirements/TestBodyAssertionRequirementComponentTest.java
+```
+
+</details>

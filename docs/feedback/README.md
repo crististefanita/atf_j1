@@ -10,8 +10,11 @@ J1 deține testele AutoEx/Shop și integrarea Reporting JAR; implementarea și r
 
 Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Formula este impact /40 + lacună /30 + lucrabil /20 + datorie documentară /10; definiția și dovada rămân la owner.
 
-| Ordine | Owner și criteriu | Prioritate /100 | Restanță concretă |
-|---:|---|---:|---|
+| Boundary consumat | Owner canonic | Acceptanță locală |
+|---|---|---|
+| Core C1 | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | adopția bibliotecii nu închide documentul JSON complet sau fidelitatea numerică |
+| Reporting J8 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
+| Mock comun | [Mock J0](../../../atf_j0/docs/feedback/ATF_Mock_Feedback.md) | guard-ul candidatului J2 și exactitatea numerică cer reconciliere și probe J1 proprii |
 
 [Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
 
