@@ -4393,3 +4393,37 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Control verificat — CORE-C3-ATF-J1</strong></summary>
+
+```yaml
+testChanges:
+  - id: CORE-C3-ATF-J1
+    status: VERIFIED
+    base: 14b9b79ba3b97c0916d285a4b14f9d0e4d8dafa6
+    expires: 2026-11-30
+    reason: Adoptă profilul explicit și corecțiile Core cerute, păstrând oracolele independente, nominalele și controalele negative; fără praguri relaxate sau surse shadow.
+    proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+```
+
+</details>
+
+<details>
+<summary><strong>Control verificat — Reporting J13</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORT-J13-CATALOG-ATF-J1
+    status: VERIFIED
+    base: 14b9b79ba3b97c0916d285a4b14f9d0e4d8dafa6
+    expires: 2026-11-30
+    reason: Adaugă exclusiv noua probă nativă de integritate PNG în catalogul finit al bibliotecii; păstrează clasificarea separată, pragul opt și oracolele consumerului.
+    proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java
+```
+
+</details>

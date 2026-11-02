@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j12` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
+`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j14` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
 iar Eventuate din J2 exclude și modulele UI/Debug UI. Implementarea,
 assets și regresiile generice Reporting au owner în `atf_j0`.
 
@@ -231,5 +231,5 @@ Documentația descrie consumerul și snapshot-ul său; regulile sursei standalon
 producătorului sunt delimitate explicit. Acest document deține ownership-ul
 și sincronizarea; [atlasul integrării](ATF_Reporting_Library_Atlas.md) deține contextul consumerului fără sursă.
 
-Adopția curentă este J12. [Verificarea livrării](ATF_Reporting_J12_Verification.md)
+Adopția curentă este J14. [Verificarea livrării](ATF_Reporting_J14_Verification.md)
 separă proba acestui increment de acceptanțele istorice J6/J7/J8/J9.

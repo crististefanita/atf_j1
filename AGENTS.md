@@ -24,3 +24,5 @@
 - Keep owner documentation and feedback current with the actual code and
   tests. Preserve historical build provenance; a directory rename alone does
   not require a new Reporting version or imply a fresh test execution.
+
+- Keep active J0 feedback limited to Core/Reporting, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.

@@ -12,15 +12,15 @@ Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Form
 
 | Boundary consumat | Owner canonic | Acceptanță locală |
 |---|---|---|
-| Core C1 | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | adopția bibliotecii nu închide documentul JSON complet sau fidelitatea numerică |
-| Reporting J8 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
-| Mock comun | [Mock J0](../../../atf_j0/docs/feedback/ATF_Mock_Feedback.md) | guard-ul candidatului J2 și exactitatea numerică cer reconciliere și probe J1 proprii |
+| Core C3 | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | documentul JSON complet și fidelitatea numerică sunt livrate; viitoarele schimbări cer acceptanță proprie |
+| Reporting J12 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
+| Mock comun | [Mock J1](../../atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
 
 [Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
 
 ## Contracte și controale verificate
 
-[Contractul Core C1](../ATF_Core_Consumer.md) fixează sursa și nativele în J0,
+[Contractul Core C3](../ATF_Core_Consumer.md) fixează sursa și nativele în J0,
 consumul prin JAR în J1/J2 și acceptanțele distincte. Criteriile rezolvate ale
 distribuției și probele deterministe de timeout sunt în documentația ownerului
 și în baseline; nu rămân defecte active în feedback.
@@ -41,3 +41,16 @@ distribuției și probele deterministe de timeout sunt în documentația ownerul
 | control Git verificat | [baseline](../ATF_Test_Changes_Baseline.md); nu se rebazează ori prelungește implicit |
 
 [Protocolul documentar](../README_Atf_DocumentationBestPractices.md#păstrarea-și-ștergerea-feedback-ului) și [build-ul în TMP](../ATF_Build_And_Execution_Safety.md) guvernează fiecare increment. Criteriul se elimină numai după probă și promovarea contractului stabil.
+
+## Cerințe comune preluate din J0 — 2026-11-02
+
+| Owner în J1 | Criterii păstrate | Limită |
+|---|---|---|
+| [Test Kit](ATF_Common_Test_Support_Feedback.md) | KIT-UNICODE-PREVIEW-127 (84), KIT-ACCEPTANCE-DIAGNOSTICS-123 (78) | surse/teste comune coordonate aici; probele consumerilor rămân distincte |
+| [Guvernanță documentară](ATF_Documentation_Feedback.md) | DOC-CONTEXT-DEPLOYMENT-111 (81) | guard semantic rămas; corecțiile editoriale verificate nu sunt relistate |
+| [AI](README_AI_Evaluation.md) | ID-urile AI-EVAL/AI-WORKFLOW existente | design separat, fără funcționalitate nouă autorizată prin mutare |
+| [Coordonare Android](ATF_Consumer_Reporting_Handoff_Feedback.md) | responsabilități device/business și dovezi J4 | oracolele și execuția Android rămân în J4; rendererul generic rămâne J0 |
+
+Transferul păstrează prioritățile și dovezile originale. J0 deține exclusiv backlog-ul Core/Reporting; contractele livrate se citesc la owner și nu devin ToDo prin mutare.
+
+
