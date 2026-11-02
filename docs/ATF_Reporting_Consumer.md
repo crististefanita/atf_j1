@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j10` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
+`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j12` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
 iar Eventuate din J2 exclude și modulele UI/Debug UI. Implementarea,
 assets și regresiile generice Reporting au owner în `atf_j0`.
 
@@ -13,7 +13,7 @@ assets și regresiile generice Reporting au owner în `atf_j0`.
 | Suprafață | În această copie | Owner |
 |---|---|---|
 | Reporting producție | JAR și POM în `lib`; fără modul sursă în reactor | producătorul păstrează codul și reconstruiește biblioteca |
-| consumatori | J1: 9 module sursă journeys; J2: 7 module sursă Eventuate WIP; dependențele Reporting folosesc `atf.reporting.version` | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
+| consumatori | J1: 9 module sursă journeys; J2: 8 module sursă Eventuate WIP; dependențele Reporting folosesc `atf.reporting.version` | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
 | Reporting Tests | gate extern, adăugat explicit numai în TMP | `atf_j0` păstrează toate regresiile; acceptarea verifică JAR-ul înaintea distribuției |
 | proveniență | un singur `library-provenance.json`, cu hash-uri și amprenta surselor | identifică exact binarul inclus |
 | build și rapoarte | copie de verificare în TMP | [procesul de execuție](ATF_Build_And_Execution_Safety.md) |
@@ -231,5 +231,5 @@ Documentația descrie consumerul și snapshot-ul său; regulile sursei standalon
 producătorului sunt delimitate explicit. Acest document deține ownership-ul
 și sincronizarea; [atlasul integrării](ATF_Reporting_Library_Atlas.md) deține contextul consumerului fără sursă.
 
-Adopția curentă este J10. [Verificarea livrării](ATF_Reporting_J10_Verification.md)
+Adopția curentă este J12. [Verificarea livrării](ATF_Reporting_J12_Verification.md)
 separă proba acestui increment de acceptanțele istorice J6/J7/J8/J9.

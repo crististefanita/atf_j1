@@ -37,9 +37,9 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 
 [Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
 
-## REPORT-FALLBACK-INDEX-66 — status separat de lizibilitatea indexului
+## Index fallback — contract livrat J11
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-fallback-index-66--status-separat-de-lizibilitatea-indexului).
+[Contractul și probele J11](../ATF_Reporting_J11_Verification.md) păstrează indexul neutru, statusul separat și numele integrale; criteriul generic 66 nu mai este deschis.
 
 ## Contracte existente
 

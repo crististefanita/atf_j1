@@ -1,7 +1,7 @@
 # Reporting ca bibliotecă — atlasul integrării consumerului
 
-Adopția curentă este J10; inventarul J6 de mai jos și delta J7 rămân istorice.
-[Proba J10](ATF_Reporting_J10_Verification.md) fixează independența expandărilor și ABI-ul tagurilor; [proba istorică J8](ATF_Reporting_J8_Verification.md) fixează colapsarea API; [delta J7](ATF_Reporting_J7_Verification.md) păstrează observațiile typed și limitele compatibilității.
+Adopția curentă este J12; inventarul J6 de mai jos și delta J7 rămân istorice.
+[Proba istorică J10](ATF_Reporting_J10_Verification.md) fixează independența expandărilor și ABI-ul tagurilor; [proba istorică J8](ATF_Reporting_J8_Verification.md) fixează colapsarea API; [delta J7](ATF_Reporting_J7_Verification.md) păstrează observațiile typed și limitele compatibilității.
 
 ## Pe scurt
 
@@ -29,7 +29,7 @@ schimbările ulterioare din `atf_j0`. Diagnosticul pornește de la versiunea
 API-ul folosit poate fi inspectat din binar:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j10.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j12.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
 Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
@@ -241,3 +241,8 @@ Shop/AutoEx rămân la consumer dacă modulul generic de teste este retras.
 Handoff-ul include coordonata/hash-ul, input minim fără secrete, cauza,
 expected/actual și reproducerea. [Procesul J1](ATF_Reporting_Consumer.md) fixează livrarea;
 sursa bibliotecii și fișierele din JAR nu se repară în `lib`.
+
+## Profil explicit și surse temporale
+
+[Contractul J0](../../atf_j0/atf-reporting/README.md#inspecția-artifactului-cu-intenție-explicită) separă intenția callerului de inspecția artifactului; apelul legacy rămâne Extent/HTTP.
+[Acceptanța J12](ATF_Reporting_J12_Verification.md) fixează binarul și probele consumerului, fără surse ori harness Reporting în acest reactor.
