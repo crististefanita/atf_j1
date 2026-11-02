@@ -187,3 +187,17 @@ Aceasta este contendență de execuție, nu un defect de randare Reporting.
 - J4 așteaptă acces exclusiv pentru lectura completă și duelul AI. Avizul este în `../../../../whist_back/android-ui-lease.json`.
 - Diagnosticul este în `../../../../whist_back/ai-training/20261102-143525/device-contention.json`.
 - Gate-urile generice Reporting nu folosesc ADB. Captura altui journey nu devine dovadă validă prin simpla prezență în HTML.
+
+## Compoziție J4 fără artifacte externe — J15
+
+[Contractul J4](../../../atf_j4/docs/ATF_Android_Report_Contract.md) deține identitatea cazurilor, proiecția semantică, comparațiile capturate și PNG-urile per checkpoint. [Criteriile active](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md) includ raw dumps și acceptori globali; J1 coordonează, fără duplicarea backlog-ului. Corecția generică TEXT și regresiile neutre au owner în J0.
+
+## J4 — audit nou al componentelor și viewer-ului
+
+[Auditul J4](../../../atf_j4/docs/ATF_J4_Report_Audit.md) leagă selecția proaspătă, reconstrucția E2E arhivată și negativele. J4 deține receipt-uri goale, SKIP, acceptorul CR, metricile și timing-ul; [Reporting 137](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-return-137--png-reutilizat-schimbă-ownerul-și-pierde-expandările) deține pierderea contextului la PNG duplicat, cu regresie neutră în J0.
+
+## J4 — artifact autonom și ecran Android integral
+
+[Criteriile J4](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#un-singur-artifact--prototip-verificabil-migrare-încă-deschisă) cer compoziție per invocare și recepte tipizate, fără dependențe externe ori scenarii PASS de rezumat. Prototipul diagnostic nu este migrarea live și nu închide detaliile de assertions lipsă din captura legacy.
+
+Captura integrală aparține J4; [viewer-ul 138](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-viewport-138--imagine-integrală-în-spațiul-disponibil) și regresiile neutre au owner în J0. Criteriul 137 pentru owner/disclosures/scroll rămâne deschis separat; acest increment documentar nu schimbă JAR-urile consumerilor.

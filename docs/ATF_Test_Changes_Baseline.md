@@ -4427,3 +4427,22 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Control verificat — adopție Reporting J15</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORTING-J15-BINARY-ADOPTION
+    status: VERIFIED
+    base: adc93ad42efdeca54539268cfcd5bac4f4dacd4a
+    expires: 2026-11-30
+    reason: Actualizează numai versiunea dependenței Reporting la candidatul J15 verificat pe JAR fizic; păstrează modulele, selecțiile, assertions și preview 240, cu sanity distinct al consumerului.
+    proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+```
+
+[Acceptanța candidatului](ATF_Reporting_J15_Verification.md) păstrează scope-ul propriu și limitele live.
+
+</details>
