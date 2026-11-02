@@ -200,4 +200,10 @@ Aceasta este contendență de execuție, nu un defect de randare Reporting.
 
 [Criteriile J4](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#un-singur-artifact--prototip-verificabil-migrare-încă-deschisă) cer compoziție per invocare și recepte tipizate, fără dependențe externe ori scenarii PASS de rezumat. Prototipul diagnostic nu este migrarea live și nu închide detaliile de assertions lipsă din captura legacy.
 
-Captura integrală aparține J4; [viewer-ul 138](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-viewport-138--imagine-integrală-în-spațiul-disponibil) și regresiile neutre au owner în J0. Criteriul 137 pentru owner/disclosures/scroll rămâne deschis separat; acest increment documentar nu schimbă JAR-urile consumerilor.
+Captura integrală aparține J4; [viewer-ul 138](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-viewport-138--imagine-integrală-în-spațiul-disponibil) și regresiile neutre au owner în J0. Criteriile generice 137/138 au acum [livrarea J16](../ATF_Reporting_J16_Verification.md); constatările din incrementul documentar anterior rămân istorice.
+
+## J16 — viewer comun și input-uri J4 separate
+
+[J16](../ATF_Reporting_J16_Verification.md) păstrează cadrul integral, caption-ul local și contextul la close, cu regresii neutre sursă/JAR. [J4-RPT-07–13](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#reader-autonomy--input-uri-pentru-implementarea-j4) și [detaliul adaptiv](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#adaptive-game-detail--configurație-consumer-fără-pierderea-verdictului) rămân implementare consumer: scop/setup/input/oracol, grupare lizibilă și bugete configurabile, fără bypass nelimitat sau assertions pierdute.
+
+O copie a JAR-ului nu certifică aceste criterii și nu transformă replay-ul arhivat într-o execuție device nouă. J0 deține numai randarea comună și testele Reporting, iar J4 păstrează capturile și oracolele aplicației.

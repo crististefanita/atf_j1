@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j15` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
+`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j16` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
 iar Eventuate din J2 exclude și modulele UI/Debug UI. Implementarea,
 assets și regresiile generice Reporting au owner în `atf_j0`.
 
@@ -233,3 +233,5 @@ producătorului sunt delimitate explicit. Acest document deține ownership-ul
 
 Adopția curentă este J15. [Verificarea livrării](ATF_Reporting_J15_Verification.md)
 separă proba acestui increment de acceptanțele istorice J6/J7/J8/J9.
+
+Current viewer behavior and separate consumer acceptance: [J16 verification](ATF_Reporting_J16_Verification.md).
