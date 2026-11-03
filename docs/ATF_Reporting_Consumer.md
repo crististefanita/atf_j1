@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j16` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
+`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j18` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
 iar Eventuate din J2 exclude și modulele UI/Debug UI. Implementarea,
 assets și regresiile generice Reporting au owner în `atf_j0`.
 
@@ -231,7 +231,19 @@ Documentația descrie consumerul și snapshot-ul său; regulile sursei standalon
 producătorului sunt delimitate explicit. Acest document deține ownership-ul
 și sincronizarea; [atlasul integrării](ATF_Reporting_Library_Atlas.md) deține contextul consumerului fără sursă.
 
-Adopția curentă este J15. [Verificarea livrării](ATF_Reporting_J15_Verification.md)
+Adopția J15 este istorică. [Verificarea livrării](ATF_Reporting_J15_Verification.md)
 separă proba acestui increment de acceptanțele istorice J6/J7/J8/J9.
 
-Current viewer behavior and separate consumer acceptance: [J16 verification](ATF_Reporting_J16_Verification.md).
+J16 introduced the current full-image viewer: [J16 verification](ATF_Reporting_J16_Verification.md).
+
+## Current binary — J18
+
+The latest flat JAR/POM pair and separate consumer rendering acceptance are
+recorded in [J18 verification](ATF_Reporting_J18_Verification.md). Core C3 is
+unchanged; no producer source or Reporting test harness is copied here.
+
+## Cold readiness acceptance
+
+[Current J18 proof](ATF_Reporting_J18_Verification.md) separates physical-JAR
+bootstrap/rendering from business execution. Core C3 and default preview 240
+are unchanged; the prior [J17 record](ATF_Reporting_J17_Verification.md) remains historical.

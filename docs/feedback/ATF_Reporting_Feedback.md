@@ -46,3 +46,9 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 [Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#contracte-existente).
 
 </details>
+
+## Current library adoption — J18
+
+[The J18 record](../ATF_Reporting_J18_Verification.md) links cold readiness,
+unchanged deadlines, source/JAR regressions and this consumer’s own acceptance.
+Generic control 141 is maintained only in J0; no duplicate open criterion is added here.

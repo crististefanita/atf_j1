@@ -1,6 +1,6 @@
 # Reporting ca bibliotecă — atlasul integrării consumerului
 
-Adopția curentă este J15; inventarul J6 de mai jos și delta J7 rămân istorice.
+Adopția curentă este [J18](ATF_Reporting_J18_Verification.md); inventarul J6 de mai jos și delta J7 rămân istorice.
 [Proba istorică J10](ATF_Reporting_J10_Verification.md) fixează independența expandărilor și ABI-ul tagurilor; [proba istorică J8](ATF_Reporting_J8_Verification.md) fixează colapsarea API; [delta J7](ATF_Reporting_J7_Verification.md) păstrează observațiile typed și limitele compatibilității.
 
 ## Pe scurt
@@ -19,7 +19,7 @@ regresiile generice și documentația bibliotecii au owner în `atf_j0`.
 ## Identitatea bibliotecii
 
 Versiunea este declarată în [POM-ul J1](../pom.xml); [lib](../lib) conține
-perechile Core C3 și Reporting J15 JAR/POM, direct în folder. [Proveniența](../library-provenance.json) păstrează
+perechile Core C3 și Reporting J18 JAR/POM, direct în folder. [Proveniența](../library-provenance.json) păstrează
 hash-urile binarului/POM-ului, amprenta intrărilor și catalogul probelor native.
 
 Amprenta identifică snapshot-ul producătorului, fără a transporta sursa ori
@@ -29,7 +29,7 @@ schimbările ulterioare din `atf_j0`. Diagnosticul pornește de la versiunea
 API-ul folosit poate fi inspectat din binar:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j15.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j18.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
 Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
