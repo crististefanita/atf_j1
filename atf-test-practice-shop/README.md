@@ -1612,3 +1612,17 @@ JVM nu schimbă selecția evidence-ului sau profilul obținut prin încărcarea 
 verifică aliasurile, YAML-ul fără override și proiecția precondiției în `tr-TR`,
 `en-US` și `lt-LT`. Testul restaurează toate categoriile locale și păstrează
 asserțiunile în pasul standard colapsabil `Component assertions`.
+
+## Screenshot context
+
+Screenshot evidence uses the whole browser viewport at the configured 70% zoom,
+retaining the page around the current action. Region close-ups supplement the
+complete frame; the report fits the full image with its aspect ratio and all edges.
+
+The [shared capture contract](../atf-ui/README.md#full-context-screenshots) and
+[native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
+protect context independently of the screenshot publication policy.
+
+| Latest live screenshot acceptance | Verified scope |
+|---|---|
+| [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One Shop purchase per launch, 70% whole-context screenshots, 150 comparison rows and 10 PNG references; rendering and physical JAR identity checked |

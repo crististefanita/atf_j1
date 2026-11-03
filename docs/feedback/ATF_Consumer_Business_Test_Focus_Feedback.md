@@ -1,22 +1,19 @@
-# Consumer business verification — current findings
+# Consumer business verification — current status
 
-## AUTOEX-SEARCH-READINESS-143 — capture the failed search transition
+## AutoEx search — delivered contract
 
-**Priority: P2. Owner:** AutoEx interaction/consumer in J1; generic Reporting
-is owned by J0. The final J18 replay retained an actual search failure before
-the cart assertions; the independently rerun case passed with unchanged code.
+AUTOEX-SEARCH-READINESS-143 is resolved by the owned GET/fresh-DOM contract and
+permanent consumer regressions. The [verification record](../ATF_AutoEx_Search_Verification.md)
+retains the original queue-full PNG, unknown original HTTP status, separate API
+probes, source behavior and individual/suite/rendering evidence.
 
-| Witness | Observed fact |
+| Status | Current owner and evidence |
 |---|---|
-| first E2E | pointer click completed; the first product Blue Top was not confirmed within the existing action budget |
-| captured URL | https://automationexercise.com/products?search=Blue%20Top |
-| later HTTP probe | 200, 12,976 characters and Blue Top present; a separate observation, not proof of the earlier response |
-| independent UI recheck | same J18, selectors, configuration and timeouts; one case passes |
-| Reporting | the original FAIL report and its captured evidence remain; no verdict is rewritten |
+| Search classification | J1 AutoEx; one pointer/GET, explicit terminal HTTP/DOM failure, no replay or timeout increase |
+| Permanent coverage | Existing readiness plus twelve response cases; final suite 15 passed and focused missing-response diagnostics 3 passed |
+| Fresh real purchase acceptance | [2026-11-03](../ATF_J1_Live_Screenshot_Verification.md): AutoEx and Shop, individually and through filtered canonical suites, all four pass; full-context 70% screenshots and Extent rendering audited |
+| Fixture preparation resolved | [UI-FIRST-PAINT-144 verification](../ATF_UI_First_Frame_Verification.md): SDK-default runtime, original budgets, 39 individual and 39 suite cases pass |
+| Test-change authorization | Verified control in the [technical baseline](../ATF_Test_Changes_Baseline.md#autoex-search-owned-response) |
 
-- [ ] Capture the actual search response/status, redirect chain, first product text and local DOM around the failed click with the existing interaction receipts.
-- [ ] Reproduce the exact transition with an independent consumer component oracle; distinguish empty/reordered response, transport failure and unconfirmed UI state from evidence rather than the final URL alone.
-- [ ] Retain screenshot, cause and timing inline in Extent; do not increase timeouts, accept URL-only success or add an automatic retry to hide the witness.
-
-The root cause remains unestablished. [The retained failure](http://127.0.0.1:59987/j1-autoex-search-failure-j18.html#test-view)
-and [library acceptance](../ATF_Reporting_J18_Verification.md) have distinct scopes.
+No resolved search ToDo remains here. Public-service unavailability still
+produces an honest FAIL; successful later probes do not rewrite earlier evidence.

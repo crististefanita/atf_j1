@@ -15,6 +15,7 @@ Pachetul este adaptorul browser generic. Primește configurație și sink explic
 | vocabularul acțiunii | [PlaywrightActionSequence](PlaywrightActionSequence.java) | fațadă publică, nu implementarea tuturor operațiilor |
 | download și cleanup-ul observației | [PlaywrightBrowserActions](PlaywrightBrowserActions.java) | listener armat înainte de click, deadline comun și eveniment real |
 | readiness și buget | [PlaywrightBrowserActions](PlaywrightBrowserActions.java) | așteptări browser și observație în buget |
+| explicit fixture preparation | [PlaywrightPagePreparation](PlaywrightPagePreparation.java) | load, current root attachment and native PNG share the existing navigation budget; target actionability remains native |
 | locator și interacțiune | [PlaywrightLocatorActions](PlaywrightLocatorActions.java) | operații asupra locatorului |
 | select înlocuit în timpul așteptării | [PlaywrightSelectAction](selection/PlaywrightSelectAction.java) | observație read-only înaintea unicului apel nativ, fără replay |
 | observația BE pasivă și dezabonarea | [UiBackendRecovery](recovery/UiBackendRecovery.java) și [UiRecoveryObserver](recovery/UiRecoveryObserver.java) | metadata scoped; fără dispatch, replay sau body capturat |
@@ -44,6 +45,7 @@ navigării, apoi pointer la 850 ms. Runtime-ul nu primește un warm-up implicit.
 | Contract | Probă de pornire |
 |---|---|
 | vocabular și înregistrarea acțiunilor | [PlaywrightActionSequenceTest](../../../../../test/java/atf/ui/playwright/PlaywrightActionSequenceTest.java) |
+| first-frame preparation and its independent deadline | [clock contracts](../../../../../test/java/atf/ui/playwright/PlaywrightPagePreparationTest.java) / [native pixels and refusals](../../../../../test/java/atf/ui/playwright/PlaywrightPagePreparationComponentTest.java) |
 | pointer trusted, focus, captură și refuz la 70% | [PlaywrightPointerGeometryComponentTest](../../../../../test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java) |
 | download, eveniment și cleanup | [PlaywrightDownloadComponentTest](../../../../../test/java/atf/ui/playwright/download/PlaywrightDownloadComponentTest.java) |
 | continuitatea selectului și refuzul replay-ului | [PlaywrightSelectContinuityComponentTest](../../../../../test/java/atf/ui/playwright/selection/PlaywrightSelectContinuityComponentTest.java) |

@@ -995,6 +995,50 @@ trecerea întregului modul. Retenția completă nu probează livrarea tuturor su
 
 </details>
 
+## Full-context screenshots
+
+Every screenshot used as test evidence preserves the surrounding page context.
+Shop and AutoEx journeys use their configured 70% zoom and complete browser
+viewport; Android retains its entire physical display and orientation.
+
+| Boundary | Required behavior |
+|---|---|
+| Capture | Use the complete page viewport; preserve navigation, surrounding content and every frame edge |
+| Zoom | Keep the configured browser-context scale; Shop/AutoEx use 70% to expose more page context |
+| Additional detail | A region or element close-up may supplement the original context image, never replace it |
+| Report viewer | Fit the complete source image to the available screen, preserving aspect ratio and every edge |
+| Full document | Explicit full-page capture preserves document height; the configured output height does not crop it |
+| Test coverage | Pixel oracles verify all four corners at 70/100% and extra lower-page context at 70%; independent geometry-scale tests keep their own scales |
+
+The [native geometry regression](src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
+checks captured PNG pixels rather than configuration alone. The
+[verification record](../docs/ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up)
+separates capture, viewer and consumer acceptance.
+
+## Explicit fixture preparation
+
+[`PlaywrightPagePreparation`](src/main/java/atf/ui/playwright/PlaywrightPagePreparation.java)
+prepares a document before a measured native operation. Callers choose it
+explicitly; ordinary runtime actions retain their existing behavior.
+
+| Phase | Native operation | Budget and authority |
+|---|---|---|
+| Document load | `navigate` or `setContent` | existing navigation budget starts once |
+| Current document context | attach `:root` | remaining navigation budget; no target selection or mutation |
+| Rendered viewport | native PNG, animations allowed | same remaining budget; no click, fill or forced action |
+| Native input and postcondition | existing recorder | original action budget; strict visibility/stability/hit testing and no replay |
+
+- The receipt exposes fresh viewport PNG bytes, elapsed preparation time and
+  the document URL. PNG bytes are defensive copies; capture failure or late
+  completion cannot authorize input.
+- A painted document does not certify a disabled, covered, moving or readonly
+  target. Those refusals and a false postcondition keep their original action deadline.
+- Fixture preparation consumes one bounded navigation allowance across all
+  stages; attachment and capture do not receive a renewed timeout.
+
+[First-frame verification](../docs/ATF_UI_First_Frame_Verification.md) separates
+fixture preparation, the actual driver runtime and the measured operation.
+
 ## Deadline determinist al clickului cu postcondiție
 
 `ObservationBudgetComponentTest` verifică aritmetica și ownerul real

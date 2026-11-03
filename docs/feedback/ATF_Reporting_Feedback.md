@@ -52,3 +52,32 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 [The J18 record](../ATF_Reporting_J18_Verification.md) links cold readiness,
 unchanged deadlines, source/JAR regressions and this consumer’s own acceptance.
 Generic control 141 is maintained only in J0; no duplicate open criterion is added here.
+
+## Verified J1 live acceptance
+
+The [2026-11-03 receipt](../ATF_J1_Live_Screenshot_Verification.md) retains four
+passing real purchase invocations and their four Extent reports. Every PNG
+reference resolves to a complete 70% viewport capture; generic J0 criteria
+retain their separate neutral source/JAR acceptance.
+
+## J1-LAUNCH-CONTEXT-146 — record the actual launch scope
+
+**Priority: P2. Owner:** J1 launch metadata and consumer composition; reusable
+JUnit context capture belongs in Kit. This is an audit-context gap, with all
+four business and rendering gates passing.
+
+| Witness | Observed fact |
+|---|---|
+| Actual launch | The retained discovery plan executes one purchase through AutoExE2eSuite or ShopE2eSuite |
+| Published identity | Neither suite HTML contains its actual canonical suite name; secondary execution metadata does not supply it |
+| Ambiguous filename | AutoEx uses purchase-suite in both individual and suite report names |
+| Existing boundary | ReportEnvironmentField.SUITE is intentionally hidden from operational System; launch facts belong in secondary Tests/trace metadata |
+
+- [ ] Capture immutable launch scope, real suite root when known, selected class/method and effective selection count at the JUnit boundary; preserve an explicit unknown state when unavailable.
+- [ ] Supply those safe facts through existing neutral metadata/observation APIs; retain the business step titles, one report per suite and preview 240.
+- [ ] Add permanent component contracts for direct and filtered canonical-suite launches, including same-title classes and a misleading filename; never derive scope from artifact text.
+- [ ] Keep browser acquisition and application behavior out of this metadata change; generic rendering regressions belong in J0 only if an actual publication defect is reproduced.
+
+**Closure:** a standalone reader identifies the real launch context from each
+HTML without the source checkout or external launcher log. These passing live
+artifacts are the baseline, not a substitute for the permanent negative oracle.

@@ -517,6 +517,7 @@ indisponibilitatea documentului, nu schimbarea locatorilor.
 | Opt-in | secțiune absentă sau `maxAttempts: 1`: diagnostic explicit, fără repetare |
 | Evidence | observație Store availability; în acțiunea bounded, Store GET recovery și durata unică a tranziției; UI-only nu activează inspectorul API |
 | Epuizare | `AutoExStoreUnavailableException`, FAIL și captura reală; fără PASS/SKIP fabricat |
+| Search button | Separate one-click contract below: no recovery GET or pointer replay; its own HTTP/DOM result remains authoritative |
 
 - Politica tipizată `UiRetryPolicy` este separată de retry-ul acțiunilor obișnuite;
   nu reexecută click-uri, căutarea, testul, crearea contului ori plata.
@@ -1278,17 +1279,32 @@ atât prin suită, cât și la rularea unei metode individuale.
 `ProductsPage` cere activarea prin `AutoExCatalogPagePort`; portul nu expune
 browserul sau jurnalul API. Runtime-ul main compune `AutoExCatalogSearch`.
 
-- Căutarea face un singur click nativ și confirmă URL-ul cu query decodat,
-  plus primul produs configurat vizibil, în bugetul comun al acțiunii.
-- Catalogul fără query-ul cerut sau un prim produs greșit nu confirmă căutarea.
-- Eșecul postcondiției păstrează FAIL; nu reia căutarea, coșul, contul ori plata.
-- Confirmarea folosește commit-ul URL-ului și polling-ul nativ al primului
-  produs exact și vizibil. Înlocuirea documentului nu reexecută pointerul.
-- Diagnosticul păstrează gate-ul încă așteptat și ultimul URL confirmat în
-  buget; ieșirea de eroare nu reinteroghează pagina pentru a schimba verdictul.
-- `AutoExSearchReadinessComponentTest` probează documente înlocuite prin HTTP,
-  prima și a doua căutare, produs întârziat, query diferit și produs greșit;
-  probele UI neutre rămân la `atf-ui`.
+- One native click owns one main-frame GET response. Its origin, path and
+  single decoded search parameter must match the configured term; HTTP must be 2xx.
+- A fresh parsed document must show the configured first product, with native
+  polling inside the original shared action budget. URL-only history changes,
+  stale DOM and a separately healthy JSON API cannot certify that click.
+- A visible exact queue-full message or unsuccessful HTTP response fails
+  explicitly, without spending the remaining budget waiting for a product.
+  There is no search replay, recovery GET or timeout increase.
+- `Catalog search response` is an INFO action carrying owned method/status/URL,
+  navigation count, the awaited gate and observed DOM state. The timed Click
+  retains PASS/FAIL; response metadata does not fabricate a business assertion.
+- The passive observer uses `UiListenerScope` and detaches on success or failure.
+  It ignores XHR/subframes and rejects a second main-frame request in its scope.
+- `AutoExSearchReadinessComponentTest` retains delayed product, replaced
+  document, wrong-query/product and one-click oracles at the original 700 ms.
+  `AutoExSearchResponseComponentTest` adds terminal HTTP/DOM, stale-DOM,
+  independent API and transport-failure regressions.
+- Both browser fixtures explicitly prepare their initial native viewport in
+  the existing 5 s navigation budget before starting the 700 ms action. Decoded
+  PNG dimensions, fixture URL and trusted activation remain auditable comparisons.
+- Preparation does not grant time to the document produced by Search; that
+  transition still shares the original action deadline. Driver/runtime
+  identity is recorded in [first-frame verification](../docs/ATF_UI_First_Frame_Verification.md).
+
+[Search verification](../docs/ATF_AutoEx_Search_Verification.md) separates the
+original queue-full PNG, later healthy API probes and fresh execution evidence.
 
 Aceeași compoziție este folosită în UI și UI+API. Inspectorul rămâne pasiv;
 postcondiția DOM nu inventează un răspuns HTTP și nu rescrie un FAIL deja publicat.
@@ -1315,7 +1331,7 @@ Etichetele scurte păstrează următorul sens:
 | Page port | AutoExCatalogPagePort |
 | Search | AutoExCatalogSearch |
 | Click unic | Pointer strict |
-| Confirmare | URL + query + produs vizibil |
+| Confirmare | Owned GET 2xx + exact query + fresh DOM + configured first product |
 | cere | cere prin port |
 | deleagă | deleagă în main |
 | activează | activează o dată |
@@ -1865,3 +1881,17 @@ Comanda selectează proba numită și construiește dependențele; nu declară
 trecerea întregului modul. Contractul de componentă nu confirmă site-ul public ori identitatea/coșul după înregistrare.
 
 </details>
+
+## Screenshot context
+
+Screenshot evidence uses the whole browser viewport at the configured 70% zoom,
+retaining the page around the current action. Region close-ups supplement the
+complete frame; the report fits the full image with its aspect ratio and all edges.
+
+The [shared capture contract](../atf-ui/README.md#full-context-screenshots) and
+[native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
+protect context independently of the screenshot publication policy.
+
+| Latest live screenshot acceptance | Verified scope |
+|---|---|
+| [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One AutoEx purchase per launch, 70% whole-context screenshots, 49 comparison rows and 13 PNG references; rendering and physical JAR identity checked |

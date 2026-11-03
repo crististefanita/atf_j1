@@ -18,6 +18,7 @@ iar integrarea runnerului rămâne în `src/test`.
 | download-ul facturii | [AutoExInvoiceDownload](invoice/AutoExInvoiceDownload.java) | un click; recuperare numai pentru GET-ul invoice queue-full observat |
 | verdictul sumei facturii | [validatorul pur](../business/invoice/AutoExInvoiceValidator.java) → [adaptorul](../support/checkout/AutoExInvoiceAssertions.java) | clauză completă, sintaxă înainte de BigDecimal și FAIL fidel; fără replay |
 | confirmarea produsului după click | [AutoExProductTransition](catalog/AutoExProductTransition.java) | un pointer, Close explicit dacă reclama interceptează, GET deținut 2xx și numele configurat; un singur buget |
+| search response and DOM | [AutoExCatalogSearch](catalog/AutoExCatalogSearch.java) / [AutoExSearchDocument](catalog/AutoExSearchDocument.java) | one pointer and owned GET 2xx, exact decoded term, fresh visible first product; queue-full fails without replay |
 | reclama apărută după pointer | [AutoExVignetteHandler](../support/browser/AutoExVignetteHandler.java) | Close explicit, fără replay; child INFO în durata părintelui |
 | readiness read-only | [navigarea AutoEx](navigation/AutoExReadOnlyNavigation.java) | politică specifică documentului și originii AutoEx |
 | conversia traficului observat | [AutoExObservedExchangeMapper](AutoExObservedExchangeMapper.java) | păstrează query-ul typed, service-ul și disponibilitatea response-ului în Reporting |
@@ -49,6 +50,7 @@ iar integrarea runnerului rămâne în `src/test`.
 | Contract | Probă de pornire |
 |---|---|
 | produs și refuzuri | [AutoExProductTransitionComponentTest](../../../../../test/java/atf/autoex/tests/component/pages/AutoExProductTransitionComponentTest.java) |
+| search ownership and terminal outcomes | [response contracts](../../../../../test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java) / [readiness](../../../../../test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java) |
 | factură și refuzuri | [AutoExInvoiceDownloadComponentTest](../../../../../test/java/atf/autoex/tests/component/pages/AutoExInvoiceDownloadComponentTest.java) |
 | identitate și checkout unic | [AutoExCustomerIdentityObservationComponentTest](../../../../../test/java/atf/autoex/tests/component/pages/AutoExCustomerIdentityObservationComponentTest.java) |
 | boundary runtime | [AutoExRuntimeBoundaryComponentTest](../../../../../test/java/atf/autoex/tests/component/lifecycle/AutoExRuntimeBoundaryComponentTest.java) |

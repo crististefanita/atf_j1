@@ -392,6 +392,24 @@ Etichetele scurte păstrează următorul sens:
   implicit, nu o garanție pentru orice volum; fork-urile concurente și
   browserele consumă memorie suplimentară.
 
+## Playwright driver runtime identity
+
+Validation runners inherit Playwright Java's bundled Node by default; they
+must not silently replace it with the agent application's Node executable.
+An intentional `PLAYWRIGHT_NODEJS_PATH` override is a separate environment experiment.
+
+| Evidence | Required distinction |
+|---|---|
+| SDK default | inspect the published driver bundle and the actual child process used by Java |
+| Explicit override | retain its executable/version, configuration and outcomes; preserve the original failing logs |
+| Functional fixture | load, native document attachment and viewport capture belong to one existing navigation allowance |
+| Native operation | retain its original deadline, strict actionability, trusted-event and negative oracles |
+| Resource failures | capture, startup and cleanup remain distinct from an unconfirmed business postcondition |
+
+[First-frame verification](ATF_UI_First_Frame_Verification.md) records the
+same-code runtime comparison. A different runtime's result is not silently
+substituted for SDK-default Maven/IDE acceptance.
+
 ## Ce se sincronizează și ce nu
 
 Se pot propaga numai surse și documente revizuite explicit:

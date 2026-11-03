@@ -1,5 +1,63 @@
 # ATF — registrul de control al schimbărilor de teste
 
+## AutoEx search owned response
+
+The [consumer verification](ATF_AutoEx_Search_Verification.md) records the
+terminal queue-full cause, independent HTTP/DOM oracles, preserved budgets and
+retained preparation failures. Existing controls keep their historical bases.
+
+<details>
+<summary><strong>Verified controls — initial J1 review base</strong></summary>
+
+```yaml
+testChanges:
+  - id: AUTOEX-SEARCH-READINESS-143
+    status: VERIFIED
+    base: 94b88a3e4d3f9aa8ba300e16e99409d5b0da28ac
+    expires: 2026-11-30
+    reason: Guard owned search responses and fresh DOM, terminal queue-full/HTTP failures, independent API and transport outcomes; preserve one click, original budgets and independent negative oracles.
+    proof: mvn -B -pl atf-test-auto-ex -am "-Dtest=AutoExSearchReadinessComponentTest,AutoExSearchResponseComponentTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java
+  - id: J1-EXISTING-REPORTING-J18-ADOPTION
+    status: VERIFIED
+    base: 94b88a3e4d3f9aa8ba300e16e99409d5b0da28ac
+    expires: 2026-11-30
+    reason: Record the existing consumer POM delta from J16 to the previously delivered J18; the physical JAR is unchanged and reverified by search component, real UI and rendered artifact acceptance.
+    proof: mvn -B -pl atf-tests -am "-Dtest=ReportingGovernanceSurfaceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+```
+
+The POM/library pair predates the search repair and is not promoted again.
+[J18 provenance](ATF_Reporting_J18_Verification.md) remains distinct from this
+consumer's fresh execution; no historical control is rebased or extended.
+
+</details>
+
+<details>
+<summary><strong>Verified control — live commit reconciled after promotion</strong></summary>
+
+The concurrent live commit changed the Git base, with all 372 compiled inputs
+and all eleven promoted files byte-identical to the verified snapshot. This
+separate control preserves the initial records and covers the current review.
+
+```yaml
+testChanges:
+  - id: AUTOEX-SEARCH-LIVE-BASE-143
+    status: VERIFIED
+    base: f2aaa41e1f0939b93ccdab509492f862c09d18cc
+    expires: 2026-11-30
+    reason: Reconcile the same reviewed search fix against the newly observed J1 live commit, preserving the initial control and independent HTTP/DOM oracles; no source input, deadline or library changes.
+    proof: mvn -B -pl atf-tests -am "-Dtest=TestChangeGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java
+```
+
+</details>
+
 **Context J1:** controalele istorice copiate păstrează bazele producătorului.
 Controalele J1 folosesc baza reală de review a consumerului; eligibilitatea
 este verificată de [controlul Git](../atf-tests/README.md#guvernanța-schimbării-testelor), fără conversia implicită a bazelor.
@@ -4444,5 +4502,49 @@ testChanges:
 ```
 
 [Acceptanța candidatului](ATF_Reporting_J16_Verification.md) păstrează scope-ul propriu și limitele live.
+
+</details>
+
+<details>
+<summary><strong>Verified control — UI-FIRST-PAINT-144</strong></summary>
+
+```yaml
+testChanges:
+  - id: UI-FIRST-PAINT-144
+    status: VERIFIED
+    base: f2aaa41e1f0939b93ccdab509492f862c09d18cc
+    expires: 2026-11-30
+    reason: Separate bounded native fixture preparation from measured input, retain trusted-event and blocked-target oracles, and prove that load, attachment and capture never renew the setup deadline.
+    proof: mvn -B -pl atf-ui -am "-Dtest=PlaywrightPagePreparationTest,PlaywrightPagePreparationComponentTest,PlaywrightClickPostconditionComponentTest,ObservationBudgetComponentTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-ui/src/test/java/atf/ui/playwright/PlaywrightPagePreparationTest.java
+      - atf-ui/src/test/java/atf/ui/playwright/PlaywrightPagePreparationComponentTest.java
+      - atf-ui/src/test/java/atf/ui/playwright/PlaywrightClickPostconditionComponentTest.java
+```
+
+The [verification record](ATF_UI_First_Frame_Verification.md) retains the independent
+pixel, native-event and deadline oracles. AutoEx fixture edits keep the existing
+`AUTOEX-SEARCH-LIVE-BASE-143` control at its original base; this control covers UI paths only.
+
+</details>
+
+<details>
+<summary><strong>Verified control — full-context screenshot evidence</strong></summary>
+
+```yaml
+testChanges:
+  - id: UI-SCREEN-CONTEXT-145
+    status: VERIFIED
+    base: f2aaa41e1f0939b93ccdab509492f862c09d18cc
+    expires: 2026-11-30
+    reason: Add independent PNG corner and surrounding-context oracles at 70/100 percent; preserve all existing geometry cases, scale defaults, native action deadlines and full-document height checks.
+    proof: 'mvn -B -pl atf-ui -am "-Dtest=PlaywrightPointerGeometryComponentTest#viewportCaptureRetainsEveryEdgeAndSurroundingPageContext+fullPageCaptureKeepsDocumentHeightInsteadOfCroppingToTheOutputViewport" "-Dsurefire.failIfNoSpecifiedTests=false" test'
+    paths:
+      - atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java
+```
+
+The [capture contract](../atf-ui/README.md#full-context-screenshots) and
+[verification follow-up](ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up)
+retain whole-frame PNG pixels, configured scale and independent viewer acceptance.
 
 </details>

@@ -13,12 +13,18 @@ Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Form
 | Boundary consumat | Owner canonic | Acceptanță locală |
 |---|---|---|
 | Core C3 | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | documentul JSON complet și fidelitatea numerică sunt livrate; viitoarele schimbări cer acceptanță proprie |
-| Reporting J12 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
+| Reporting J18 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
+| Launch context | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope) | P2: real suite identity in secondary audit metadata; business/rendering gates already pass |
+| AutoEx search | [consumer verification](ATF_Consumer_Business_Test_Focus_Feedback.md) | original queue-full, owned GET/DOM and permanent regressions; [stable contract](../ATF_AutoEx_Search_Verification.md) |
 | Mock comun | [Mock J1](../../atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
 
 [Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
 
 ## Contracte și controale verificate
+
+| Delivered UI contract | Verified boundary |
+|---|---|
+| [UI-FIRST-PAINT-144](../ATF_UI_First_Frame_Verification.md) | Explicit bounded setup, unchanged 700 ms action cap, native refusals and separate individual/suite/rendering evidence; control retained in the baseline |
 
 [Contractul Core C3](../ATF_Core_Consumer.md) fixează sursa și nativele în J0,
 consumul prin JAR în J1/J2 și acceptanțele distincte. Criteriile rezolvate ale

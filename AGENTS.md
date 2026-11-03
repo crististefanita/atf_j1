@@ -21,8 +21,17 @@
 - Build/test only in owned TMP staging; keep generated reports/cache/output
   there. Preserve the 240-character default reporting preview and auditable,
   collapsible component/E2E assertions.
+- Playwright validation must inherit the SDK-selected Node runtime by default.
+  Do not silently overwrite `PLAYWRIGHT_NODEJS_PATH` with the agent's runtime.
+  Record an explicit runtime experiment separately from SDK-default acceptance.
 - Keep owner documentation and feedback current with the actual code and
   tests. Preserve historical build provenance; a directory rename alone does
   not require a new Reporting version or imply a fresh test execution.
 
 - Keep active J0 feedback limited to Core/Reporting, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
+
+- Screenshot evidence preserves page context: capture the entire browser viewport
+  at the configured zoom (70% for Shop/AutoEx journeys), or the whole Android
+  display. Region crops may supplement the original frame, never replace it.
+  The report viewer fits the complete image to the screen with its aspect ratio
+  and all edges intact. Explicit geometry tests retain their independent scales.
