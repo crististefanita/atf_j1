@@ -1,6 +1,6 @@
 # ATF workspace rules
 
-- Use the sibling workspace `atf_j0` (`../atf_j0`) as the current Core/Reporting/Console/Mock/Console/Mock
+- Use the sibling workspace `atf_j0` (`../atf_j0`) as the current Core/Reporting/Console/Mock
   source and test reference.
   `demo2` is historical; do not edit or synchronize it for new work.
 - Read `docs/ATF_Workspace_Synchronization.md` and
@@ -28,7 +28,7 @@
   tests. Preserve historical build provenance; a directory rename alone does
   not require a new Reporting version or imply a fresh test execution.
 
-- Keep active J0 feedback limited to Core/Reporting/Console/Mock/Console/Mock, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
+- Keep active J0 feedback limited to Core/Reporting/Console/Mock, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
 
 - Screenshot evidence preserves page context: capture the entire browser viewport
   at the configured zoom (70% for Shop/AutoEx journeys), or the whole Android
@@ -37,5 +37,3 @@
   and all edges intact. Explicit geometry tests retain their independent scales.
 
 - Keep project README files and docs focused on current contracts. Retain only the current Reporting verification note beside its producer package in owned TMP; record its location in current consumer provenance. Do not accumulate per-release verification Markdown in docs or consumer lib. Preserve historical build/test provenance.
-
-- Console and Mock are J0-owned source/native-test libraries alongside Core/Reporting. J1–J4 keep four flat JAR/POM pairs; retain local adapters/configuration and validate each consumer independently. Read `docs/ATF_Platform_Libraries.md` before publication.

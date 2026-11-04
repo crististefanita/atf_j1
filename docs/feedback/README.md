@@ -6,17 +6,22 @@ J1 deține testele AutoEx/Shop și integrarea Reporting JAR; implementarea și r
 
 [Workspace-urile](../ATF_Workspace_Synchronization.md) separă J0 sursă, J1 consumer web și J2 WIP pentru Kafka/mesagerie cu Setup în Podman. Un rezultat sau o prioritate nu se transferă automat între ele.
 
+## Feedback pentru biblioteci
+
+Orice constatare despre Core, Reporting, Console sau Mock se înregistrează direct la ownerul J0, conform [ghidului bibliotecilor](../../lib/README.md). Aici rămân problemele domeniului și dovezile acceptanței locale, cu o trimitere la criteriul comun.
+
+
 ## Top feedback-uri active
 
 Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Formula este impact /40 + lacună /30 + lucrabil /20 + datorie documentară /10; definiția și dovada rămân la owner.
 
 | Boundary consumat | Owner canonic | Acceptanță locală |
 |---|---|---|
-| Core C3 | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | documentul JSON complet și fidelitatea numerică sunt livrate; viitoarele schimbări cer acceptanță proprie |
-| Reporting J18 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
+| Core | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | documentul JSON complet și fidelitatea numerică sunt livrate; viitoarele schimbări cer acceptanță proprie |
+| Reporting | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
 | Launch context | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope) | P2: real suite identity in secondary audit metadata; business/rendering gates already pass |
 | AutoEx search | [consumer verification](ATF_Consumer_Business_Test_Focus_Feedback.md) | original queue-full, owned GET/DOM and permanent regressions; [stable contract](../ATF_AutoEx_Search_Verification.md) |
-| Mock comun | [Mock J1](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
+| Mock comun | [Mock J0](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
 
 [Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
 
@@ -58,10 +63,3 @@ distribuției și probele deterministe de timeout sunt în documentația ownerul
 | [Coordonare Android](ATF_Consumer_Reporting_Handoff_Feedback.md) | responsabilități device/business și dovezi J4 | oracolele și execuția Android rămân în J4; rendererul generic rămâne J0 |
 
 Transferul păstrează prioritățile și dovezile originale. J0 deține backlog-ul bibliotecilor Core/Reporting/Console/Mock; contractele livrate se citesc la owner și nu devin ToDo prin mutare.
-
-
-
-
-## Console and Mock library ownership
-
-[J0 owns common library criteria](../../../atf_j0/docs/feedback/ATF_Console_Mock_Feedback.md); [the current adoption contract](../ATF_Platform_Libraries.md) defines the flat binary distribution. Consumer adapters, catalogs and domain acceptance remain local. Closed extraction requirements are retained as contracts, not duplicated TODOs.

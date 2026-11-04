@@ -1,5 +1,7 @@
 # ATF — platformă modulară pentru testare și rezultate verificabile
 
+[Bibliotecile comune](lib/README.md) au codul și feedback-ul în J0; aici păstrăm adaptoarele și acceptanța domeniului.
+
 Referința surselor Core/Reporting/Console/Mock și a regresiilor este `atf_j0`; distribuția către J1 și J2 urmează [protocolul de sincronizare](docs/ATF_Workspace_Synchronization.md).
 
 J1 este proiectul principal pentru testele AutoEx/Shop și integrarea lor.
@@ -470,8 +472,3 @@ Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 Library publication/rendering acceptance is separate from new business, device, broker or acoustic ASR execution. Release notes are not stored in project documentation or consumer `lib`.
 
 The [current consumer findings](docs/feedback/ATF_Consumer_Business_Test_Focus_Feedback.md) retain application failures and their independent rechecks separately from Reporting library acceptance.
-
-
-## Shared platform libraries
-
-The current reactor has 7 source modules. [Platform library consumption](docs/ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
