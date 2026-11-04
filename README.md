@@ -1,6 +1,6 @@
 # ATF — platformă modulară pentru testare și rezultate verificabile
 
-Referința surselor Core/Reporting și a regresiilor este `atf_j0`; distribuția către J1 și J2 urmează [protocolul de sincronizare](docs/ATF_Workspace_Synchronization.md).
+Referința surselor Core/Reporting/Console/Mock și a regresiilor este `atf_j0`; distribuția către J1 și J2 urmează [protocolul de sincronizare](docs/ATF_Workspace_Synchronization.md).
 
 J1 este proiectul principal pentru testele AutoEx/Shop și integrarea lor.
 Infrastructura comună se reconciliază cu ownerii afectați; J2 este rezervat
@@ -15,8 +15,8 @@ aici ca JAR; [ownership-ul și sincronizarea](docs/ATF_Reporting_Consumer.md) au
 | Workspace | Rol și punct de intrare |
 |---|---|
 | J0 | 12 module, sursa Reporting și regresiile native/mock/browser; [atlasul sursei](../atf_j0/docs/ATF_Context_Atlas.md) |
-| J1 | 9 module sursă, scenarii AutoEx/Shop și Core/Reporting JAR; [atlasul consumerului](../atf_j1/docs/ATF_Context_Atlas.md) |
-| J2 · WIP | 8 module sursă, Core/Reporting JAR, un modul de test Kafka/mesagerie și Setup PowerShell în Podman; [atlasul WIP](../atf_j2/docs/ATF_Context_Atlas.md) |
+| J1 | 7 module sursă, scenarii AutoEx/Shop și Core/Reporting JAR; [atlasul consumerului](../atf_j1/docs/ATF_Context_Atlas.md) |
+| J2 · WIP | 6 module sursă, Core/Reporting JAR, un modul de test Kafka/mesagerie și Setup PowerShell în Podman; [atlasul WIP](../atf_j2/docs/ATF_Context_Atlas.md) |
 
 Rolul proiectului și rezultatul verificat sunt distincte: un build sau un MOCK verde nu certifică serviciul extern, brokerul ori întregul ATF.
 
@@ -112,7 +112,7 @@ Etichetele scurte păstrează următorul sens:
 ## Harta modulelor
 
 Două perspective ale aceluiași reactor: consumatorii și apoi verificarea cu
-guvernanța. J1 cuprinde 9 module sursă: șase de platformă, doi consumatori,
+guvernanța. J1 cuprinde 7 module sursă: patru de platformă, doi consumatori,
 guvernanța. Reporting este consumat separat ca bibliotecă externă; harness-ul rămâne la producător.
 
 ### Consum
@@ -160,7 +160,7 @@ flowchart LR
 
 - `ReportingTests` este `atf-reporting-tests`: verifică `atf-reporting` și
   folosește celelalte module partajate numai în `test` scope;
-- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 9 module sursă locale și integrarea bibliotecii externe,
+- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 7 module sursă locale și integrarea bibliotecii externe,
   nu doar librăriile comune;
 - săgețile sunt drepte pentru a păstra etichetele lizibile; detaliile și
   ownership-ul fiecărui modul sunt în tabel și în README-ul modulului.
@@ -169,9 +169,9 @@ flowchart LR
 |---|---|---|---|
 | platform | `atf-test-kit` | adnotări, resolvere neutre și guard-uri | runtime sau fixture-uri de business |
 | platform | `atf-core` | request/response, lifecycle, transport și porturi | HTML, Extent, business services |
-| platform | `atf-mock` | fake transport și catalog determinist | HTTP live sau verdicturi |
+| library | `atf-mock` | fake transport și catalog determinist | HTTP live sau verdicturi |
 | platform | `atf-validation` | response contracts, verdict și evidence | transport sau HTML |
-| platform | `atf-console` | diagnostic output | reporting UI sau transport |
+| library | `atf-console` | diagnostic output | reporting UI sau transport |
 | reporting library | `atf-reporting` | renderer, document semantic și artifact | module ATF, mock sau browser |
 | platform | `atf-ui` | sesiune Playwright și politici browser | page objects de produs |
 | platform | `atf-debug-ui` | publicare read-only pentru investigație | generare sau modificare de HTML |
@@ -412,9 +412,9 @@ fără să parcurgă aceeași explicație în root și în fiecare modul; indexu
 |---|---|---|
 | contract transversal | [TestKit](atf-test-kit/README.md), [adnotări implementate](docs/ATF_Test_Infrastructure_Annotations.md) | cum declarăm nivelul, canalul, output-ul și setup-ul unui test? |
 | kernel reutilizabil | [`atf-core/README.md`](../atf_j0/atf-core/README.md) | ce modele, lifecycle și porturi sunt neutre? |
-| transport determinist | [`atf-mock/README.md`](atf-mock/README.md) | cum obținem schimburi API reproducibile? |
+| transport determinist | [`atf-mock/README.md`](../atf_j0/atf-mock/README.md) | cum obținem schimburi API reproducibile? |
 | verdict semantic | [`atf-validation/README.md`](atf-validation/README.md) | cum se transformă un response într-un verdict? |
-| diagnostic | [`atf-console/README.md`](atf-console/README.md) | cum ajung evenimentele neutre în consolă? |
+| diagnostic | [`atf-console/README.md`](../atf_j0/atf-console/README.md) | cum ajung evenimentele neutre în consolă? |
 | reporting standalone | [atlasul Reporting JAR](docs/ATF_Reporting_Library_Atlas.md) | cum se consumă JAR-ul fără sursa Reporting? |
 | browser runtime | [`atf-ui/README.md`](atf-ui/README.md) · [convenții pentru locatori](atf-ui/README.md#convenții-pentru-locatori-ui) | cum sunt controlate browserul și convențiile generice pentru locatori, fără logică de produs? |
 | inspector read-only | [`atf-debug-ui/README.md`](atf-debug-ui/README.md) | cum investigăm un HTML deja generat? |
@@ -445,20 +445,20 @@ ownerului și sunt protejate de testele lui.
 
 ## Core ca bibliotecă — owner și deployment
 
-Acest consumer are 9 module sursă. Core C3 și Reporting J20 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+This consumer has 7 source modules. Core, Reporting, Console and Mock are external libraries, one JAR/POM pair each directly in lib.
 
-[Contractul Core C3](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 [Acceptanța JSON C2/J9](docs/ATF_JSON_Binary_Verification.md) separă sursa, JAR-ul, rendererele și limitele rămase.
 
-## Core C3 — contract consolidat
+## Core — contract consolidat
 
-[Verificarea Core C3](docs/ATF_Core_C3_Verification.md) leagă noua pereche JAR/POM de nativele sursă/JAR și de acceptanța fiecărui consumer. Acceptanța C3 a folosit Reporting J12; livrarea curentă Reporting este consemnată separat mai jos, cu preview 240 și oracole independente.
+[Verificarea Core](docs/ATF_Core_C3_Verification.md) leagă noua pereche JAR/POM de nativele sursă/JAR și de acceptanța fiecărui consumer. Acceptanța C3 a folosit Reporting; livrarea curentă Reporting este consemnată separat mai jos, cu preview 240 și oracole independente.
 
 ## Reporting library and audit contracts
 
-[Library provenance](library-provenance.json) records the delivered Core C3 / Reporting J20 pair and each consumer's independent acceptance. J0 owns Reporting source and permanent mock, contract and browser regressions.
+[Library provenance](library-provenance.json) records the delivered Core / Reporting pair and each consumer's independent acceptance. J0 owns Reporting source and permanent mock, contract and browser regressions.
 
 | Topic | Current owner contract |
 |---|---|
@@ -470,3 +470,8 @@ Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 Library publication/rendering acceptance is separate from new business, device, broker or acoustic ASR execution. Release notes are not stored in project documentation or consumer `lib`.
 
 The [current consumer findings](docs/feedback/ATF_Consumer_Business_Test_Focus_Feedback.md) retain application failures and their independent rechecks separately from Reporting library acceptance.
+
+
+## Shared platform libraries
+
+The current reactor has 7 source modules. [Platform library consumption](docs/ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

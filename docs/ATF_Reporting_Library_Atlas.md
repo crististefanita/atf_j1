@@ -18,7 +18,7 @@ regresiile generice și documentația bibliotecii au owner în `atf_j0`.
 ## Identitatea bibliotecii
 
 Versiunea este declarată în [POM-ul J1](../pom.xml); [lib](../lib) conține
-perechile Core C3 și Reporting J20 JAR/POM, direct în folder. [Proveniența](../library-provenance.json) păstrează
+perechile Core și Reporting JAR/POM, direct în folder. [Proveniența](../library-provenance.json) păstrează
 hash-urile binarului/POM-ului, amprenta intrărilor și catalogul probelor native.
 
 Amprenta identifică snapshot-ul producătorului, fără a transporta sursa ori

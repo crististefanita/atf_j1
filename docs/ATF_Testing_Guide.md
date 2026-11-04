@@ -188,8 +188,8 @@ Celulele arată doar nivelurile care există în suitele executabile curente.
 |---|:---:|:---:|:---:|:---:|---|
 | [`atf-core`](../../atf_j0/atf-core/README.md) | ✅ | — | — | — | contracte neutre și politici reutilizabile |
 | [`atf-validation`](../atf-validation/README.md) | ✅ | ✅ | — | — | reguli de validare și rezultate typed |
-| [`atf-console`](../atf-console/README.md) | ✅ | — | ✅ | — | policy/formatter unitare; integrarea extension-ului cu Jupiter real |
-| [`atf-mock`](../atf-mock/README.md) | — | ✅ | — | — | transport fake și comportament determinist |
+| [`atf-console`](../../atf_j0/atf-console/README.md) | ✅ | — | ✅ | — | policy/formatter unitare; integrarea extension-ului cu Jupiter real |
+| [`atf-mock`](../../atf_j0/atf-mock/README.md) | — | ✅ | — | — | transport fake și comportament determinist |
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | policy și adapter Playwright generic |
 | [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și launcher read-only pentru inspecție |
 | [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | excepție: suite standalone fără adnotări sau dependențe ATF |

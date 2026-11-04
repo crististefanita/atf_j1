@@ -79,7 +79,7 @@ pornește investigația; nu înlocuiește verificarea sursei afectate.
 | Decizie inițială | Sursa de adevăr | Limita ei |
 |---|---|---|
 | ce reactor folosesc? | [workspace-uri](ATF_Workspace_Synchronization.md), apoi POM-ul țintei | J0 sursă 12, J1 JAR 9, J2 WIP 8, J3 speech 7, J4 Android 7; profilurile nu se deduc din foldere absente |
-| schimbare Reporting? | [atlasul sursei J0](../../atf_j0/atf-reporting/src/main/java/atf/reporting/README.md) și [regresiile permanente](../../atf_j0/atf-reporting-tests/README.md) | Reporting J14 are acceptanțe distincte în J1/J2/J3/J4; documentația sursei nu certifică automat JAR-ul consumat |
+| schimbare Reporting? | [atlasul sursei J0](../../atf_j0/atf-reporting/src/main/java/atf/reporting/README.md) și [regresiile permanente](../../atf_j0/atf-reporting-tests/README.md) | Reporting are acceptanțe distincte în J1/J2/J3/J4; documentația sursei nu certifică automat JAR-ul consumat |
 | schimbare de aplicație? | [Shop](../../atf_j1/atf-test-practice-shop/README.md) sau [AutoEx](../../atf_j1/atf-test-auto-ex/README.md) | expected, captură și selecție business rămân în consumer |
 | schimbare Kafka/Podman? | [atlasul J2](../../atf_j2/docs/ATF_Context_Atlas.md), apoi Setup și configurația | trei componente MOCK și scripturi existente; clientul Java/brokerul real sunt WIP |
 
@@ -158,8 +158,8 @@ negative nu intră în selecțiile canonice și nu devin componente live mascate
 | protocol runner, scope și cleanup neutru | [Test Kit](../atf-test-kit/README.md); compus la granița JUnit | Store-ul concret, conturile și ordinea proprie a resurselor |
 | proiecție typed, status, markup și publicare | [Reporting](ATF_Reporting_Library_Atlas.md); fără Core, UI sau Kit | observația, verdictul și metadata aplicației |
 | query observat și identitate | [contractul Reporting](ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate); UI calculează amprenta înaintea redactării | mapperul conservă perechile disponibile sau amprenta opacă; selecția business rămâne locală |
-| diagnostic de consolă | [Console](../atf-console/README.md); bridge la compoziție | alegerea sink-ului; fără dependență Console în JAR-ul Reporting |
-| stub, rutare și asociere mock | [Mock](../atf-mock/README.md); adaptorul de raportare este verificat separat | fixture-ul și intenția scenariului |
+| diagnostic de consolă | [Console](../../atf_j0/atf-console/README.md); bridge la compoziție | alegerea sink-ului; fără dependență Console în JAR-ul Reporting |
+| stub, rutare și asociere mock | [Mock](../../atf_j0/atf-mock/README.md); adaptorul de raportare este verificat separat | fixture-ul și intenția scenariului |
 | inspecție locală read-only | [Debug UI](../atf-debug-ui/README.md) | alegerea sursei și sesiunea inspectată |
 | probe neutre de raportare și compoziție | [Reporting Tests](../../atf_j0/atf-reporting-tests/README.md) | proba adaptorului real și traseul business rămân Shop/AutoEx |
 | guvernanță cross-module și probe negative | [ATF Tests](../atf-tests/README.md) | respectarea contractului, fără excepții locale pentru refactor |
@@ -277,7 +277,12 @@ decide ce se mută sau se elimină după dovadă.
 
 ## Core ca bibliotecă — owner și deployment
 
-Acest consumer are 9 module sursă. Core C3 și Reporting J14 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+This consumer has 7 source modules. Core, Reporting, Console and Mock are external libraries, one JAR/POM pair each directly in lib.
 
-[Contractul Core C3](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
+
+
+## Shared platform libraries
+
+The current reactor has 7 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

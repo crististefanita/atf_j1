@@ -6,7 +6,7 @@ cunoaște rutele sau intenția unui test de produs.
 
 ## Pe scurt
 
-Reactorul păstrează exact cele 9 module existente. Core și Reporting sunt consumate
+Reactorul păstrează exact cele 7 module existente. Core și Reporting sunt consumate
 ca biblioteci externe, fără surse în reactor; [POM-ul J1](../pom.xml) fixează
 inventarul și versiunea, iar [ghidul J1](ATF_Reporting_Consumer.md) fixează ownership-ul.
 
@@ -897,7 +897,12 @@ helper nu autorizează un apel remote și nu transformă un fixture în dovadă 
 
 ## Core ca bibliotecă — owner și deployment
 
-Acest consumer are 9 module sursă. Core C2 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+This consumer has 7 source modules. Core, Reporting, Console and Mock are external libraries, one JAR/POM pair each directly in lib.
 
-[Contractul Core C2](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
+
+
+## Shared platform libraries
+
+The current reactor has 7 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

@@ -413,6 +413,6 @@ protejează cele cinci contracte, strict/warning, nominale și parametri
 
 ### Parser comun și proprietatea datelor
 
-Documentele complete folosesc JsonDocuments din Core C2: fără duplicate ori
+Documentele complete folosesc JsonDocuments din Core: fără duplicate ori
 trailing content, cu decimale exacte. Validation păstrează diagnosticele și
 politica proprie pentru null; nu deține un mapper strict paralel.

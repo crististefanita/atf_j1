@@ -16,7 +16,7 @@ Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Form
 | Reporting J18 | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
 | Launch context | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope) | P2: real suite identity in secondary audit metadata; business/rendering gates already pass |
 | AutoEx search | [consumer verification](ATF_Consumer_Business_Test_Focus_Feedback.md) | original queue-full, owned GET/DOM and permanent regressions; [stable contract](../ATF_AutoEx_Search_Verification.md) |
-| Mock comun | [Mock J1](../../atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
+| Mock comun | [Mock J1](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
 
 [Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
 
@@ -57,6 +57,11 @@ distribuției și probele deterministe de timeout sunt în documentația ownerul
 | [AI](README_AI_Evaluation.md) | ID-urile AI-EVAL/AI-WORKFLOW existente | design separat, fără funcționalitate nouă autorizată prin mutare |
 | [Coordonare Android](ATF_Consumer_Reporting_Handoff_Feedback.md) | responsabilități device/business și dovezi J4 | oracolele și execuția Android rămân în J4; rendererul generic rămâne J0 |
 
-Transferul păstrează prioritățile și dovezile originale. J0 deține exclusiv backlog-ul Core/Reporting; contractele livrate se citesc la owner și nu devin ToDo prin mutare.
+Transferul păstrează prioritățile și dovezile originale. J0 deține backlog-ul bibliotecilor Core/Reporting/Console/Mock; contractele livrate se citesc la owner și nu devin ToDo prin mutare.
 
 
+
+
+## Console and Mock library ownership
+
+[J0 owns common library criteria](../../../atf_j0/docs/feedback/ATF_Console_Mock_Feedback.md); [the current adoption contract](../ATF_Platform_Libraries.md) defines the flat binary distribution. Consumer adapters, catalogs and domain acceptance remain local. Closed extraction requirements are retained as contracts, not duplicated TODOs.

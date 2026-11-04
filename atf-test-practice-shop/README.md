@@ -1400,7 +1400,7 @@ copiate aici ca reguli paralele.
 - [Contractul adnotărilor](../docs/ATF_Test_Infrastructure_Annotations.md) — declarațiile de nivel, canal, fixture și output;
 - [Contractul de captură](../docs/ATF_Evidence_Capture_Contract.md) — axele generice pentru flow, acțiuni și screenshot;
 - [`atf-core`](../../atf_j0/atf-core/README.md) — contracte neutre și transport;
-- [`atf-console`](../atf-console/README.md) — politica diagnosticelor și afișarea căii raportului;
+- [`atf-console`](../../atf_j0/atf-console/README.md) — politica diagnosticelor și afișarea căii raportului;
 - [`atf-ui`](../atf-ui/README.md) — contractul browserului, locatorilor și inspectorului;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — modelul și randarea raportului;
 - [`atf-test-kit`](../atf-test-kit/README.md) — adnotările și selecția testelor;

@@ -13,7 +13,7 @@ assets și regresiile generice Reporting au owner în `atf_j0`.
 | Suprafață | În această copie | Owner |
 |---|---|---|
 | Reporting producție | JAR și POM în `lib`; fără modul sursă în reactor | producătorul păstrează codul și reconstruiește biblioteca |
-| consumatori | J1: 9 module sursă journeys; J2: 8 module sursă Eventuate WIP; dependențele Reporting folosesc `atf.reporting.version` | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
+| consumatori | J1: 7 module sursă journeys; J2: 6 module sursă Eventuate WIP; dependențele Reporting folosesc `atf.reporting.version` | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
 | Reporting Tests | gate extern, adăugat explicit numai în TMP | `atf_j0` păstrează toate regresiile; acceptarea verifică JAR-ul înaintea distribuției |
 | proveniență | un singur `library-provenance.json`, cu hash-uri și amprenta surselor | identifică exact binarul inclus |
 | build și rapoarte | copie de verificare în TMP | [procesul de execuție](ATF_Build_And_Execution_Safety.md) |
@@ -233,8 +233,13 @@ producătorului sunt delimitate explicit. Acest document deține ownership-ul
 
 ## Current library and verification
 
-[Library provenance](../library-provenance.json) identifies the current Core C3 / Reporting J20 pair, source snapshot and independent consumer acceptance. Only the latest JAR/POM pairs are kept directly in `lib`; source and the permanent Reporting harness stay in J0.
+[Library provenance](../library-provenance.json) identifies the current Core / Reporting pair, source snapshot and independent consumer acceptance. Only the latest JAR/POM pairs are kept directly in `lib`; source and the permanent Reporting harness stay in J0.
 
 - The [inline audit contract](../../atf_j0/docs/ATF_Inline_Audit_Contract.md) owns complete PNG and assertion evidence. The [navigation contract](ATF_Large_Report_Navigation.md) owns cold readiness and unchanged deadlines.
 
 - The latest release verification is retained beside the producer package, following [evidence retention](ATF_Workspace_Synchronization.md#release-evidence-retention). It is distinct from fresh application, device, broker and ASR execution.
+
+
+## Shared platform libraries
+
+The current reactor has 7 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

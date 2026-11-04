@@ -104,7 +104,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
 1. [ATF_Architecture.md](ATF_Architecture.md) — module, dependențe și responsabilități.
 2. [../atf-core/README.md](../../atf_j0/atf-core/README.md) — kernelul neutru, porturile
    și modelele comune.
-3. [../atf-mock/README.md](../atf-mock/README.md) — fake-ul determinist,
+3. [../atf-mock/README.md](../../atf_j0/atf-mock/README.md) — fake-ul determinist,
    catalogul YAML și transportul acceptance.
 4. [../atf-test-kit/README.md](../atf-test-kit/README.md) — contractele testelor,
    nivelurile unit/component/integration/e2e și excepția Console `optional compile`.
@@ -119,7 +119,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
 9. [../atf-test-auto-ex/README.md](../atf-test-auto-ex/README.md) — consumerul
     Automation Exercise, profilele purchase UI și contractele API opt-in.
 10. [../atf-tests/README.md](../atf-tests/README.md) — guvernanța întregului reactor.
-11. [../atf-console/README.md](../atf-console/README.md) — proiecția diagnostică
+11. [../atf-console/README.md](../../atf_j0/atf-console/README.md) — proiecția diagnostică
    de consolă și contractul de output.
 12. [../atf-ui/README.md](../atf-ui/README.md) — politicile generice și adaptorul
    Playwright.
@@ -249,9 +249,9 @@ Validitatea linkurilor nu certifică semantica unui contract. Comanda gate-ului
 
 ## Core ca bibliotecă — owner și deployment
 
-Acest consumer are 9 module sursă. Core C1 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
+This consumer has 7 source modules. Core, Reporting, Console and Mock are external libraries, one JAR/POM pair each directly in lib.
 
-[Contractul Core C3](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
+[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 ## Library identity and release evidence
