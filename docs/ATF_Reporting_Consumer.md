@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j18` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
+`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j20` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
 iar Eventuate din J2 exclude și modulele UI/Debug UI. Implementarea,
 assets și regresiile generice Reporting au owner în `atf_j0`.
 
@@ -231,19 +231,10 @@ Documentația descrie consumerul și snapshot-ul său; regulile sursei standalon
 producătorului sunt delimitate explicit. Acest document deține ownership-ul
 și sincronizarea; [atlasul integrării](ATF_Reporting_Library_Atlas.md) deține contextul consumerului fără sursă.
 
-Adopția J15 este istorică. [Verificarea livrării](ATF_Reporting_J15_Verification.md)
-separă proba acestui increment de acceptanțele istorice J6/J7/J8/J9.
+## Current library and verification
 
-J16 introduced the current full-image viewer: [J16 verification](ATF_Reporting_J16_Verification.md).
+[Library provenance](../library-provenance.json) identifies the current Core C3 / Reporting J20 pair, source snapshot and independent consumer acceptance. Only the latest JAR/POM pairs are kept directly in `lib`; source and the permanent Reporting harness stay in J0.
 
-## Current binary — J18
+- The [inline audit contract](../../atf_j0/docs/ATF_Inline_Audit_Contract.md) owns complete PNG and assertion evidence. The [navigation contract](ATF_Large_Report_Navigation.md) owns cold readiness and unchanged deadlines.
 
-The latest flat JAR/POM pair and separate consumer rendering acceptance are
-recorded in [J18 verification](ATF_Reporting_J18_Verification.md). Core C3 is
-unchanged; no producer source or Reporting test harness is copied here.
-
-## Cold readiness acceptance
-
-[Current J18 proof](ATF_Reporting_J18_Verification.md) separates physical-JAR
-bootstrap/rendering from business execution. Core C3 and default preview 240
-are unchanged; the prior [J17 record](ATF_Reporting_J17_Verification.md) remains historical.
+- The latest release verification is retained beside the producer package, following [evidence retention](ATF_Workspace_Synchronization.md#release-evidence-retention). It is distinct from fresh application, device, broker and ASR execution.

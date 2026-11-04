@@ -39,7 +39,7 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 
 ## Index fallback — contract livrat J11
 
-[Contractul și probele J11](../ATF_Reporting_J11_Verification.md) păstrează indexul neutru, statusul separat și numele integrale; criteriul generic 66 nu mai este deschis.
+[display contract](../../../atf_j0/docs/ATF_Reporting_Display_Contract.md) păstrează indexul neutru, statusul separat și numele integrale; criteriul generic 66 nu mai este deschis.
 
 ## Contracte existente
 
@@ -47,9 +47,9 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 
 </details>
 
-## Current library adoption — J18
+## Current library adoption
 
-[The J18 record](../ATF_Reporting_J18_Verification.md) links cold readiness,
+[navigation contract](../../../atf_j0/docs/ATF_Large_Report_Navigation.md) links cold readiness,
 unchanged deadlines, source/JAR regressions and this consumer’s own acceptance.
 Generic control 141 is maintained only in J0; no duplicate open criterion is added here.
 

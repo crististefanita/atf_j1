@@ -17,3 +17,12 @@ probes, source behavior and individual/suite/rendering evidence.
 
 No resolved search ToDo remains here. Public-service unavailability still
 produces an honest FAIL; successful later probes do not rewrite earlier evidence.
+
+## AUTOEX-CATALOG-EVIDENCE-146 — bind comparison evidence to its observed exchange
+
+**Priority: 82/100.** Source-confirmed association risk in [AutoExE2eRun.apiCheckpoint](../../atf-test-auto-ex/src/main/java/atf/autoex/runtime/AutoExE2eRun.java); this review does not claim a new live application failure. Awaiting a GET uses method/path, while the subsequent assertion attachment selects exchanges by path alone.
+
+- [ ] Characterize a controlled capture containing GET and POST with the same catalog path, repeated GETs and unrelated neighbors; prove the business comparison is attached only to its selected observed exchange.
+- [ ] Select through method and captured request identity/sequence, with explicit ambiguity handling; preserve independently evaluated expectations rather than copying them to every path match.
+- [ ] Keep this application correlation in AutoEx main support and consumer tests; neutral rendering/ordinal regressions remain at J0 Reporting Tests.
+- [ ] Verify individual/suite reports with one auditable comparison owner, unchanged preview 240 and no synthetic HTTP exchange.

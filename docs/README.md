@@ -18,16 +18,12 @@ particular.
 
 ## Pe scurt
 
-[Reporting J8 — validare API colapsabilă](ATF_Reporting_J8_Verification.md) păstrează dovada livrării și limitele ei.
-
 | Pentru | Citește întâi |
 |---|---|
 | orientare între proiecte | [workspace-uri](ATF_Workspace_Synchronization.md), apoi [atlasul de context](ATF_Context_Atlas.md) |
 | contract și owner | [arhitectură](ATF_Architecture.md), POM și README-ul modulului |
 | problemă încă deschisă | [registrul feedback-urilor](feedback/README.md); contractele livrate rămân la owner |
 | Kafka/Podman în J2 | [atlasul WIP](../../atf_j2/docs/ATF_Context_Atlas.md); nu este o extensie web a J1 |
-
-
 
 J0 deține implementarea și testele Core/Reporting; J1 deține scenariile AutoEx/Shop.
 J2 a început bootstrap-ul pentru cozi și mesaje;
@@ -240,7 +236,6 @@ sunt interzise.
 - `scenario` = testul complet, cu fazele și verdictul final
 - `artifact` = raportul HTML autonom rezultat după finalizarea sesiunii
 
-
 ## Cum verifici indexul
 
 | Întrebare | Autoritate și probă |
@@ -256,5 +251,9 @@ Validitatea linkurilor nu certifică semantica unui contract. Comanda gate-ului
 
 Acest consumer are 9 module sursă. Core C1 și Reporting J6 sunt biblioteci externe, câte o pereche JAR/POM direct în lib.
 
-[Contractul Core C1](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
+[Contractul Core C3](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
+
+## Library identity and release evidence
+
+The [current library provenance](../library-provenance.json) records the delivered pair and its dated acceptance. The latest Reporting verification stays beside the producer package under [evidence retention](ATF_Workspace_Synchronization.md#release-evidence-retention); project documentation retains stable contracts.

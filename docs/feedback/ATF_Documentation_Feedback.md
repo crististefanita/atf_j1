@@ -33,3 +33,11 @@ Declarațiile de versiune se verifică din POM și proveniență; probele istori
 - J1 coordonează guvernanța comună; fiecare deployment are acceptanță proprie, fără mirror al documentelor.
 - Documentația specifică API-ului Core/Reporting rămâne la ownerul J0.
 
+## DOC-LIBRARY-CONTRACTS-147 — keep release chronology outside official contracts
+
+**Priority: 82/100.** J1 owns common documentation governance; J0 owns the Core/Reporting contracts and fixes their factual content. Official README, atlas and contract pages must describe current behavior rather than successive library improvements.
+
+- [ ] Add a permanent producer documentation control for library release narratives and release-specific verification/scorecard pages; mutation controls insert a historical improvement paragraph and a retired-release link into an otherwise valid official document.
+- [ ] Preserve legitimate workspace names, semantic configuration examples, current provenance, approved test-change controls and domain implementation journals; do not reject every number or the word incremental.
+- [ ] Keep one current verification note per library beside its package and retain original build facts in provenance; official pages link to stable owner contracts.
+- [ ] Reconcile current claims with actual POM/source boundaries; a valid link or a high editorial score does not prove the meaning of its surrounding claim.

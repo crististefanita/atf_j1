@@ -100,7 +100,6 @@ numărători, comparație sau navigare rămâne de implementat, verificat și
 <details>
 <summary><strong>Handoff J4 nou — volum J12 și proba de domeniu</strong></summary>
 
-
 ## 2026-11-02 — probă reală J4 de volum pe JAR J12: OOM la publicare
 
 Toată partida originală și replay-ul Android Whist Lab au trecut: 19 mâini,
@@ -139,7 +138,6 @@ prezentăm ca audit browser închis.
 <details>
 <summary><strong>Handoff J4 nou — ACTION/OBSERVE integral</strong></summary>
 
-
 ### J12: payload-urile ACTION/OBSERVE lungi se pierd după preview
 
 În `ExtentUiActionRenderer` expected/observed folosesc direct
@@ -165,7 +163,7 @@ compoziția de consumer și probele reale.
 
 ## J14 — lacune în publicarea individuală J4
 
-[Criteriile active au owner în J4](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#j14--criterii-active-demonstrate); J1 păstrează coordonarea.
+[Criteriile active au owner în J4](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md); J1 păstrează coordonarea.
 
 | Prioritate | Criteriu consumer |
 |---|---|
@@ -173,7 +171,7 @@ compoziția de consumer și probele reale.
 | 2 | comparații lipsă și 209 ms de publicare în locul execuției de 37,476 s |
 | 3 | trace-ul bid-grid individual nu închide un HTML |
 
-[Auditul J14](../ATF_Reporting_J14_Verification.md) fixează probele și limitele.
+The original J14 audit remains historical. The [inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md) defines current publication boundaries.
 
 ### Coordonarea probei J4 pe dispozitiv partajat — 2026-11-02, 15:33
 
@@ -198,12 +196,12 @@ Aceasta este contendență de execuție, nu un defect de randare Reporting.
 
 ## J4 — artifact autonom și ecran Android integral
 
-[Criteriile J4](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#un-singur-artifact--prototip-verificabil-migrare-încă-deschisă) cer compoziție per invocare și recepte tipizate, fără dependențe externe ori scenarii PASS de rezumat. Prototipul diagnostic nu este migrarea live și nu închide detaliile de assertions lipsă din captura legacy.
+[Criteriile J4](../../../atf_j4/docs/ATF_Android_Report_Contract.md#one-artifact-original-execution-identities) cer compoziție per invocare și recepte tipizate, fără dependențe externe ori scenarii PASS de rezumat. Prototipul diagnostic nu este migrarea live și nu închide detaliile de assertions lipsă din captura legacy.
 
-Captura integrală aparține J4; [viewer-ul 138](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-viewport-138--imagine-integrală-în-spațiul-disponibil) și regresiile neutre au owner în J0. Criteriile generice 137/138 au acum [livrarea J16](../ATF_Reporting_J16_Verification.md); constatările din incrementul documentar anterior rămân istorice.
+Captura integrală aparține J4; [viewer-ul 138](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-viewport-138--imagine-integrală-în-spațiul-disponibil) și regresiile neutre au owner în J0. Criteriile generice 137/138 au acum [inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md); constatările din incrementul documentar anterior rămân istorice.
 
 ## J16 — viewer comun și input-uri J4 separate
 
-[J16](../ATF_Reporting_J16_Verification.md) păstrează cadrul integral, caption-ul local și contextul la close, cu regresii neutre sursă/JAR. [J4-RPT-07–13](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#reader-autonomy--input-uri-pentru-implementarea-j4) și [detaliul adaptiv](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md#adaptive-game-detail--configurație-consumer-fără-pierderea-verdictului) rămân implementare consumer: scop/setup/input/oracol, grupare lizibilă și bugete configurabile, fără bypass nelimitat sau assertions pierdute.
+[inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md) păstrează cadrul integral, caption-ul local și contextul la close, cu regresii neutre sursă/JAR. [J4-RPT-07–13](../../../atf_j4/docs/ATF_Android_Report_Contract.md#reader-without-repository-access) și [detaliul adaptiv](../../../atf_j4/docs/ATF_Android_Report_Contract.md#adaptive-detail-and-evidence-budgets) rămân implementare consumer: scop/setup/input/oracol, grupare lizibilă și bugete configurabile, fără bypass nelimitat sau assertions pierdute.
 
 O copie a JAR-ului nu certifică aceste criterii și nu transformă replay-ul arhivat într-o execuție device nouă. J0 deține numai randarea comună și testele Reporting, iar J4 păstrează capturile și oracolele aplicației.

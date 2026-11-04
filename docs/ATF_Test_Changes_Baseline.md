@@ -31,7 +31,7 @@ testChanges:
 ```
 
 The POM/library pair predates the search repair and is not promoted again.
-[J18 provenance](ATF_Reporting_J18_Verification.md) remains distinct from this
+Reporting J18 acceptance (historical execution record) remains distinct from this
 consumer's fresh execution; no historical control is rebased or extended.
 
 </details>
@@ -4433,7 +4433,6 @@ testChanges:
 </details>
 
 
-
 <details>
 <summary><strong>Reporting J12 — adoption control</strong></summary>
 
@@ -4501,7 +4500,7 @@ testChanges:
       - pom.xml
 ```
 
-[Acceptanța candidatului](ATF_Reporting_J16_Verification.md) păstrează scope-ul propriu și limitele live.
+Reporting J16 acceptance (historical execution record) păstrează scope-ul propriu și limitele live.
 
 </details>
 
@@ -4546,5 +4545,24 @@ testChanges:
 The [capture contract](../atf-ui/README.md#full-context-screenshots) and
 [verification follow-up](ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up)
 retain whole-frame PNG pixels, configured scale and independent viewer acceptance.
+
+</details>
+
+<details>
+<summary><strong>Verified control — REPORT-J20-ADOPTION-J1-20261104</strong></summary>
+
+```yaml
+testChanges:
+  - id: REPORT-J20-ADOPTION-J1-20261104
+    status: VERIFIED
+    base: c22b8765fbd3828319778b51078aa1707312ef05
+    expires: 2026-11-30
+    reason: Adopt the verified J20 pair without Reporting source or harness; retain local scope and Core C3.
+    proof: mvn -B -pl atf-tests -am "-Dtest=ReportingHarnessOwnershipTest,ReportingGovernanceSurfaceTest,CoreGovernanceSurfaceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+```
+
+Reporting J20 acceptance (historical execution record).
 
 </details>

@@ -64,7 +64,7 @@ and cleanup guarantees; share proven mechanics only after contract comparison.
 ## KIT-UNICODE-PREVIEW-127 — preserve valid text at the configured boundary
 
 **Priority: 84/100** = impact 31 + gap 24 + actionable 20 + documentation 9.
-**Owner:** AssertionValueDisplay and its native Kit tests at J1; consumers
+**Owner:** AssertionValueDisplay and ValidationTable with their native Kit/Validation tests at J1; consumers
 retain their configured limit and sanitizer. Rendering regression stays in J0.
 
 A 238-character ASCII prefix followed by a supplementary Unicode character
@@ -82,8 +82,7 @@ The same configured limit is respected in both cases; the difference is fidelity
 - [ ] Characterize native Kit first, then composition in Reporting Tests and
   adoption in J2/J3. A renderer cannot reliably repair text already split upstream.
 
-Proof: unicode-preview-probe.log under TMP j0-deep-audit-1057ca2f02ed.
-No source changes or limit changes are part of this audit.
+Current controlled reproduction confirms length 240 and a failed UTF-8 round trip in both Kit and ValidationTable for the supplementary-character boundary. A separate suffix comparison remains FAIL while the two stored previews are identical; keep Unicode validity and complete-value retention as distinct obligations.
 
 ## Reuse decision matrix — producer review
 
@@ -111,3 +110,10 @@ No source changes or limit changes are part of this audit.
 - Production Core, standalone Reporting and JDK-only SQL cannot import Kit to
   share a timeout or a few cleanup lines. Similar syntax does not imply the
   same lifecycle, cancellation or publication guarantee.
+
+## Assertion retention — coordinated with Reporting
+
+RecordedAssertions retains the AssertionValueDisplay projection, and ValidationTable stores only bounded expected/actual strings. A mismatch after preview can retain an honest FAIL while losing the explanatory suffix; this is separate from the existing Unicode boundary criterion.
+
+- [ ] Coordinate with [Reporting full assertion evidence](../../../atf_j0/docs/feedback/ATF_Android_UI_Reporting_Feedback.md#report-ui-assertion-full-evidence-133--valori-lungi-capturate-înainte-de-preview): define safe retained evidence before truncation without increasing the 240 preview or comparing twice.
+- [ ] Keep original JUnit causes, sanitizer-before-preview ordering and explicit full-evidence limits; test two identical previews whose only mismatch is in the retained suffix.
