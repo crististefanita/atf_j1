@@ -40,7 +40,7 @@ J2 a început bootstrap-ul pentru cozi și mesaje;
 | practică | [README_Atf_BestPractices.md](README_Atf_BestPractices.md) | cum adăugăm cod fără drift? |
 | testare | [ATF_Testing_Guide.md](ATF_Testing_Guide.md) | ce layer, modul și proof aleg pentru un comportament? |
 | infrastructură de test | [ATF_Test_Infrastructure_Annotations.md](ATF_Test_Infrastructure_Annotations.md) | cum declar nivelul, canalul, output-ul, setup-ul și documentația? |
-| suport E2E transversal | README-urile [Test Kit](../atf-test-kit/README.md), [Practice Shop](../atf-test-practice-shop/README.md) și [Automation Exercise](../atf-test-auto-ex/README.md), împreună cu [arhitectura ATF](ATF_Architecture.md) | ce primitive neutre se reutilizează în Test Kit, iar ce harness UI rămâne la consumer? |
+| suport E2E transversal | README-urile [Test Kit](../lib/README.TestKit.md#scope-și-integrare), [Practice Shop](../atf-test-practice-shop/README.md) și [Automation Exercise](../atf-test-auto-ex/README.md), împreună cu [arhitectura ATF](ATF_Architecture.md) | ce primitive neutre se reutilizează în Test Kit, iar ce harness UI rămâne la consumer? |
 | design propus | [ATF_AI_Evaluation_Design.md](ATF_AI_Evaluation_Design.md) | ce boundary și contract țintă discutăm, fără a le declara livrate? |
 | execuție | [ATF_Build_And_Execution_Safety.md](ATF_Build_And_Execution_Safety.md) | cum lucrăm fără să oprim run-uri? |
 | feedback / guvernanță | [feedback/README.md](feedback/README.md), documentele active pe owner și [ATF_Test_Changes_Baseline.md](ATF_Test_Changes_Baseline.md) | ce gap observabil, regulă sau control tehnic de tranziție rămâne? |
@@ -90,7 +90,7 @@ Etichetele scurte păstrează următorul sens:
 |---|---|
 | Orientare și ownership | [Arhitectură](ATF_Architecture.md) · [README root](../README.md) |
 | Scriere și stratificarea testelor | [Ghid de testare](ATF_Testing_Guide.md) · [Ghid API](ATF_Api_Test_Guide.md) · [Bune practici de cod](README_Atf_CodeBestPractices.md) |
-| Adnotări reutilizabile și tag-uri | [Contractul implementat](ATF_Test_Infrastructure_Annotations.md) · [TestKit](../atf-test-kit/README.md) |
+| Adnotări reutilizabile și tag-uri | [Contractul implementat](ATF_Test_Infrastructure_Annotations.md) · [TestKit](../lib/README.TestKit.md#scope-și-integrare) |
 | Reporting și evidence | [Contract reporting](ATF_Reporting_Contract.md) · [Contract display/layout](ATF_Reporting_Display_Contract.md) · [Contract evidence](ATF_Evidence_Capture_Contract.md) · [README reporting](ATF_Reporting_Library_Atlas.md) |
 | Consumatori și guvernanță | [Practice Shop](../atf-test-practice-shop/README.md) · [AutoEx](../atf-test-auto-ex/README.md) · [ATF Tests](../atf-tests/README.md) · [registrul feedback](feedback/README.md) |
 | Design și implementare AI | [Design de referință](ATF_AI_Evaluation_Design.md) · [comparator implementat](../atf-validation/README.md#comparatorul-ai--contract-implementat) · [gap-uri active](feedback/README_AI_Evaluation.md) |
@@ -106,7 +106,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
    și modelele comune.
 3. [../atf-mock/README.md](../../atf_j0/atf-mock/README.md) — fake-ul determinist,
    catalogul YAML și transportul acceptance.
-4. [../atf-test-kit/README.md](../atf-test-kit/README.md) — contractele testelor,
+4. [Test Kit](../lib/README.TestKit.md#scope-și-integrare) — contractele testelor,
    nivelurile unit/component/integration/e2e și excepția Console `optional compile`.
 5. [../atf-reporting-tests/README.md](../../atf_j0/atf-reporting-tests/README.md) — fixture-uri
    API, composition root și lifecycle de test.

@@ -62,7 +62,7 @@ flowchart LR
 | `AtfReportPorts` | Session → Scenario → Phase → pași/request/validation | extensia JUnit și ownerul sesiunii |
 | `ExtentReportSession`, `HtmlReportSession` | două renderere peste faptele publicate | alegerea output-ului și finalizarea |
 | `UiExtentReportOptions`, `UiExtentReportSession` | checkpoint-uri și profil UI/API | [fabrica Shop](../atf-test-practice-shop/src/main/atf/shop/runtime/ShopRunReportFactory.java), [runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) |
-| `AtfAssertion`, `AssertionAuditReport` | rezultate deja evaluate | [auditul Kit](../atf-test-kit/README.md#comparații-junit-cu-dovadă-neutră) |
+| `AtfAssertion`, `AssertionAuditReport` | rezultate deja evaluate | [auditul Kit](../lib/README.TestKit.md#scope-și-integrare) |
 | `ReportRequest`, `ReportResponse`, `ReportExecutionEvidence` | exchange și execuție terminală | mapperul main al consumerului |
 | `ReportEnvironmentSnapshot`, `ReportingSettings` | metadata și limite de display | composition root și configurație |
 

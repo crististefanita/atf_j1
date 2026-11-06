@@ -447,7 +447,7 @@ punctele următoare descriu numai ce afirmă testele specifice Automation Exerci
 - directorul default și override-ul raportului API sunt specifice consumerului;
   validarea reutilizabilă a unui path relativ sub rădăcina proiectului, inclusiv
   prevenirea ieșirii prin traversal/reparse-point, aparține
-  [`atf-test-kit`](../atf-test-kit/README.md#regula-de-promovare-a-testelor-reutilizabile);
+  [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare);
 - `AutoExEvidenceProfileComponentTest` verifică numai cum consumerul aplică
   adnotarea `@AtfUiEvidence` peste configurația lui. Test Kit deține declarația
   neutră și Reporting deține profilele/lifecycle-ul generic; nu se introduce o
@@ -499,7 +499,7 @@ nu un număr de clase duplicat aici.
 Rutele, payload-urile, browser handlers, trace-ul și purchase journey-ul rămân
 specifice AutoEx. Primitivele comune se promovează numai după demonstrarea
 aceluiași contract în consumatorii relevanți și păstrarea unui API neutru;
-boundary-ul Test Kit este descris în [README-ul ownerului](../atf-test-kit/README.md)
+boundary-ul Test Kit este descris în [README-ul ownerului](../lib/README.TestKit.md#scope-și-integrare)
 și în [arhitectura ATF](../docs/ATF_Architecture.md).
 
 ### Limita disponibilității serviciului public
@@ -1248,7 +1248,7 @@ flowchart LR
   `Overview → System`, la `Assertion preview`.
 - Fiecare invocare închide numai scenariul său. Două suite au owneri separați
   chiar în același launcher.
-- [Kit](../atf-test-kit/README.md#comparații-junit-cu-dovadă-neutră) deține delegarea,
+- [Kit](../lib/README.TestKit.md#scope-și-integrare) deține delegarea,
   colectarea pe invocare și reconcilierea rezultatului; consumerul injectează redacția și configurația.
 - [Reporting](../docs/ATF_Reporting_Library_Atlas.md#verdict-și-aserțiuni) deține
   nodul, lifecycle-ul publicării și randările Extent/fallback.
@@ -1502,7 +1502,7 @@ rută interceptată local, fără limita căii Windows și fără request extern
 `artifact-expectations.json` este scris din observațiile execuției înaintea
 verificării HTML. Modul `audit <artifact-expectations.json>` reverifică acel
 raport și mutanții fără opt-in live, cont nou sau replay. Lansarea și colectarea
-neutre folosesc [ScopedAcceptanceRun](../atf-test-kit/README.md#lansarea-scoped-a-acceptanței);
+neutre folosesc [ScopedAcceptanceRun](../lib/README.TestKit.md#scope-și-integrare);
 launcherul, politica contului și oracolul AutoEx rămân în test scope la consumer.
 Auditul TAB și componentele locale rămân dovezi distincte.
 

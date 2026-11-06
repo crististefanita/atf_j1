@@ -445,7 +445,7 @@ Profilele sunt compuse pe axe distincte, nu prin schimbarea journey-ului:
 `UI_ONLY` oprește capturarea/publicarea API evidence, nu request-urile browserului.
 `@AtfUiEvidence` declară intenția clasei; consumerul rezolvă axele lăsate
 `CONFIGURED`. Modelul generic al adnotărilor este în
-[`atf-test-kit`](../atf-test-kit/README.md).
+[`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare).
 
 ### Conturile autentificate
 
@@ -494,7 +494,7 @@ autentificare.
 
 În `SETUP` sunt distincte contul nou, fixture-ul existent și contul reutilizat;
 credențialele rămân redactate. Primitiva neutră este
-[`TestRunScope`](../atf-test-kit/README.md#valori-cu-ownership-per-clasă-sau-execuție).
+[`TestRunScope`](../lib/README.TestKit.md#scope-și-integrare).
 `ShopAccountScopeComponentTest` probează adaptorul cu Jupiter real, inclusiv
 publicare eșuată și două lansări succesive; aceste probe locale nu înlocuiesc
 înregistrarea și purchase-ul prin aplicația reală.
@@ -1224,7 +1224,7 @@ flowchart LR
   `Overview → System`, la `Assertion preview`.
 - Fiecare invocare închide numai scenariul său. Două suite au owneri separați
   chiar în același launcher.
-- [Kit](../atf-test-kit/README.md#comparații-junit-cu-dovadă-neutră) deține delegarea,
+- [Kit](../lib/README.TestKit.md#scope-și-integrare) deține delegarea,
   colectarea pe invocare și reconcilierea rezultatului; consumerul injectează redacția și configurația.
 - [Reporting](../docs/ATF_Reporting_Library_Atlas.md#verdict-și-aserțiuni) deține
   nodul, lifecycle-ul publicării și randările Extent/fallback.
@@ -1403,7 +1403,7 @@ copiate aici ca reguli paralele.
 - [`atf-console`](../../atf_j0/atf-console/README.md) — politica diagnosticelor și afișarea căii raportului;
 - [`atf-ui`](../atf-ui/README.md) — contractul browserului, locatorilor și inspectorului;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — modelul și randarea raportului;
-- [`atf-test-kit`](../atf-test-kit/README.md) — adnotările și selecția testelor;
+- [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) — adnotările și selecția testelor;
 - [Bune practici de documentație](../docs/README_Atf_DocumentationBestPractices.md) — structură și guvernanța README-urilor;
 - [Registrul feedback-ului](../docs/feedback/README.md) — numai gap-urile active.
 
@@ -1455,7 +1455,7 @@ Raportul este încărcat printr-o rută locală interceptată, fără request ex
 `artifact-expectations.json` păstrează observațiile execuției înaintea auditului
 HTML. Modul `audit <artifact-expectations.json>` reverifică raportul existent
 fără opt-in E2E și fără registration nou. Partea neutră de lansare/colectare
-folosește [ScopedAcceptanceRun](../atf-test-kit/README.md#lansarea-scoped-a-acceptanței);
+folosește [ScopedAcceptanceRun](../lib/README.TestKit.md#scope-și-integrare);
 launcherul și oracolul rămân la consumer, în test scope.
 
 </details>

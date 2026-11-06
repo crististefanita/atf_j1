@@ -669,7 +669,7 @@ cererilor anterioare scope-ului nu îl pot autoriza.
 `UiRecoveryConfigurationTest`, `UiRecoveryLoopTest` și
 `UiBackendRecoveryComponentTest` verifică politica, deadline-ul și browserul.
 Operațiile aplicației sunt în main la consumeri; declarația neutră este în
-[Kit](../atf-test-kit/README.md#declarația-neutră-pentru-recuperare-be).
+[Kit](../lib/README.TestKit.md#scope-și-integrare).
 
 ## Scope-ul listener-elor de observație
 

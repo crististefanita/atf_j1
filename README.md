@@ -114,7 +114,7 @@ Etichetele scurte păstrează următorul sens:
 ## Harta modulelor
 
 Două perspective ale aceluiași reactor: consumatorii și apoi verificarea cu
-guvernanța. J1 cuprinde 7 module sursă: patru de platformă, doi consumatori,
+guvernanța. J1 cuprinde 6 module sursă: trei de platformă, doi consumatori,
 guvernanța. Reporting este consumat separat ca bibliotecă externă; harness-ul rămâne la producător.
 
 ### Consum
@@ -136,7 +136,7 @@ flowchart LR
 - `Consumers` reunește `atf-test-practice-shop` și `atf-test-auto-ex`; fiecare
   păstrează configurația, selectorii și journey-ul propriu;
 - `Reporting` este `atf-reporting`, librăria partajată folosită de consumatori;
-- `Platform` reprezintă celelalte șapte module reutilizabile, enumerate în
+- `Platform` reprezintă modulele și bibliotecile reutilizabile, enumerate în
   tabel; săgețile diferențiază reporting-ul de contractele comune.
 
 </details>
@@ -412,7 +412,7 @@ fără să parcurgă aceeași explicație în root și în fiecare modul; indexu
 
 | Zonă | Document owner | Întrebarea la care răspunde |
 |---|---|---|
-| contract transversal | [TestKit](atf-test-kit/README.md), [adnotări implementate](docs/ATF_Test_Infrastructure_Annotations.md) | cum declarăm nivelul, canalul, output-ul și setup-ul unui test? |
+| contract transversal | [TestKit](lib/README.TestKit.md#scope-și-integrare), [adnotări implementate](docs/ATF_Test_Infrastructure_Annotations.md) | cum declarăm nivelul, canalul, output-ul și setup-ul unui test? |
 | kernel reutilizabil | [`atf-core/README.md`](../atf_j0/atf-core/README.md) | ce modele, lifecycle și porturi sunt neutre? |
 | transport determinist | [`atf-mock/README.md`](../atf_j0/atf-mock/README.md) | cum obținem schimburi API reproducibile? |
 | verdict semantic | [`atf-validation/README.md`](atf-validation/README.md) | cum se transformă un response într-un verdict? |

@@ -290,7 +290,7 @@ iar `suite` trebuie declarat explicit. Numele clasei ori ID-ul textual JUnit nu 
 
 `ScopedTestValue.close()` uită valoarea, fără să închidă obiectul stocat sau să
 șteargă o resursă împrumutată. Contractul neutru și probele sunt la
-[Test Kit](../atf-test-kit/README.md#valori-cu-ownership-per-clasă-sau-execuție);
+[Test Kit](../lib/README.TestKit.md#scope-și-integrare);
 consumerul păstrează politica resursei și limitele mutațiilor externe.
 `ScopedTestResource.close()` închide obiectul achiziționat o singură dată;
 acesta este contractul potrivit pentru sesiunea de raport deținută de clasă/suită.

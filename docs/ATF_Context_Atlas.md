@@ -108,7 +108,7 @@ Urmărește ownerul resursei și adaptorul runnerului înaintea unei extracții.
 |---|---|---|
 | E2E Shop | [ShopE2eTestSupport](../atf-test-practice-shop/src/test/atf/shop/tests/support/ShopE2eTestSupport.java) → [ShopE2eContext](../atf-test-practice-shop/src/test/atf/shop/tests/support/lifecycle/ShopE2eContext.java) → [ShopBrowserRuntime](../atf-test-practice-shop/src/main/atf/shop/runtime/ShopBrowserRuntime.java) | harness JUnit în test, achiziție în main, browser per invocare și raport propriu/comun |
 | E2E AutoEx | [AutoExRunFactory](../atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExRunFactory.java) → [runtime](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) | Store/finalizare JUnit în test; browser, observații și port lifecycle în main |
-| componente auditate | [ghidul auditului](ATF_Testing_Guide.md#auditul-componentelor-consumerilor) → extensia consumerului → [Kit](../atf-test-kit/README.md#comparații-junit-cu-dovadă-neutră) | comparația JUnit se evaluează o dată; biblioteca Reporting primește dovada neutră |
+| componente auditate | [ghidul auditului](ATF_Testing_Guide.md#auditul-componentelor-consumerilor) → extensia consumerului → [Kit](../lib/README.TestKit.md#scope-și-integrare) | comparația JUnit se evaluează o dată; biblioteca Reporting primește dovada neutră |
 | browser și acțiuni | [PlaywrightUiSession](../atf-ui/src/main/java/atf/ui/playwright/PlaywrightUiSession.java) → [operații UI](../atf-ui/src/main/java/atf/ui/playwright/README.md) | sesiunea deține browser/context/page; secvența nouă are propriul jurnal de acțiuni |
 
 Suportul reutilizabil aparține main-ului ownerului; fixture-urile controlate și
@@ -155,7 +155,7 @@ negative nu intră în selecțiile canonice și nu devin componente live mascate
 | execuție HTTP, request și răspuns observat | [Core](../../atf_j0/atf-core/README.md); Reporting primește valori, fără executor | endpoint, operația și expected-ul aplicației |
 | comparație și rezultat de validare | [Validation](../atf-validation/README.md); fără renderer ori JUnit | regula business și expected-ul independent |
 | browser, deadline, captură și listener | [UI](../atf-ui/README.md); fără rute Shop/AutoEx | semnalul aplicației care confirmă acțiunea și selecția dovezii |
-| protocol runner, scope și cleanup neutru | [Test Kit](../atf-test-kit/README.md); compus la granița JUnit | Store-ul concret, conturile și ordinea proprie a resurselor |
+| protocol runner, scope și cleanup neutru | [Test Kit](../lib/README.TestKit.md#scope-și-integrare); compus la granița JUnit | Store-ul concret, conturile și ordinea proprie a resurselor |
 | proiecție typed, status, markup și publicare | [Reporting](ATF_Reporting_Library_Atlas.md); fără Core, UI sau Kit | observația, verdictul și metadata aplicației |
 | query observat și identitate | [contractul Reporting](ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate); UI calculează amprenta înaintea redactării | mapperul conservă perechile disponibile sau amprenta opacă; selecția business rămâne locală |
 | diagnostic de consolă | [Console](../../atf_j0/atf-console/README.md); bridge la compoziție | alegerea sink-ului; fără dependență Console în JAR-ul Reporting |
@@ -219,7 +219,7 @@ comportament; mutarea aceleiași clase într-un alt modul nu este această prob�
 |---|---|
 | module și direcția dependențelor | [ATF_Architecture](ATF_Architecture.md) |
 | ce rămâne în main și ce aparține testului | [ATF_Testing_Guide](ATF_Testing_Guide.md) |
-| primitive JUnit și assertion-uri auditabile | [contractele Test Kit](../atf-test-kit/README.md) |
+| primitive JUnit și assertion-uri auditabile | [contractele Test Kit](../lib/README.TestKit.md#scope-și-integrare) |
 | reguli OOP și limite de responsabilitate | [README_Atf_CodeBestPractices](README_Atf_CodeBestPractices.md) |
 | build în TMP și promovare selectivă | [ATF_Build_And_Execution_Safety](ATF_Build_And_Execution_Safety.md) |
 | criterii încă nedemonstrate | [registrul feedback-urilor](feedback/README.md) |
@@ -277,7 +277,7 @@ decide ce se mută sau se elimină după dovadă.
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 7 source modules. Core, Reporting, Console and Mock are external libraries, one JAR/POM pair each directly in lib.
+This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
 
 [Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
@@ -285,4 +285,4 @@ Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 ## Shared platform libraries
 
-The current reactor has 7 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+The current reactor has 6 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

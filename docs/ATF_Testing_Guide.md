@@ -82,7 +82,7 @@ nu au această obligație; probele rendererului rămân o categorie separată î
 
 - `AuditedAssertions` și `RecordedAssertions` păstrează evaluarea JUnit unică;
   politica de rezultat, fazele și plafonul implicit de 240 de caractere sunt la
-  [Test Kit](../atf-test-kit/README.md#comparații-junit-cu-dovadă-neutră).
+  [Test Kit](../lib/README.TestKit.md#scope-și-integrare).
 - Bugetul configurat se propagă din ownerul raportului în colector, inclusiv
   peste implicit; `Overview → System` arată valoarea efectivă. Probele consumerilor
   verifică lansarea individuală și prin suită, iar contractul comun este la
@@ -197,7 +197,7 @@ Celulele arată doar nivelurile care există în suitele executabile curente.
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumer: contracte, API, flow-uri și journey browser |
 | [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumer: purchase journey în profile UI distincte, probe component și API live opt-in |
 | [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | boundary și guvernanță whole-reactor |
-| [`atf-test-kit`](../atf-test-kit/README.md) | ✅ | ✅ | — | — | vocabularul layer-elor și contractele test-only |
+| [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | ✅ | ✅ | — | — | vocabularul layer-elor și contractele test-only |
 
 Guard-ul reflectă ownerii fără a falsifica structura reactorului:
 
@@ -224,7 +224,7 @@ invariantul, nu fixture-ul și nici testul întreg:
 | regulile aplicației, traseele UI/API, payload-ul și propagarea datelor | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#limita-dintre-testele-shop-și-testele-reporting) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suite-și-variante-de-evidence) | toate probele business, inclusiv cele cu mock; mock-ul izolează transportul, nu schimbă owner-ul |
 | traducerea contractului aplicației în portul public Reporting | consumerul care deține adaptorul | intenția/titlul business, asocierea așteptării la exchange, statusul specific și politica locală de redactare |
 | semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
-| API-uri și lifecycle-uri reutilizabile strict test-only: adnotări, resolver-e, clasificare și primitive generice | [`atf-test-kit`](../atf-test-kit/README.md#regula-de-promovare-a-testelor-reutilizabile) | aplicația păstrează fixture-ul, lifecycle-ul și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste Reporting |
+| API-uri și lifecycle-uri reutilizabile strict test-only: adnotări, resolver-e, clasificare și primitive generice | [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | aplicația păstrează fixture-ul, lifecycle-ul și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste Reporting |
 
 O probă poate rămâne consumer-owned chiar dacă publică un artifact: trebuie să
 verifice exclusiv contractul adaptorului aplicației și să folosească snapshot-ul
@@ -498,7 +498,7 @@ SETUP
   precedent pentru un port generic în Kit. Separarea sa în porturi locale mici
   este o țintă distinctă de mutarea source-set-ului deja livrată.
 - Boundary-ul AutoEx este descris în [README-ul Automation Exercise](../atf-test-auto-ex/README.md),
-  iar regula cross-consumer în [README-ul Test Kit](../atf-test-kit/README.md).
+  iar regula cross-consumer în [README-ul Test Kit](../lib/README.TestKit.md#scope-și-integrare).
 
 Forma raportului și ownership-ul fiecărei dovezi sunt normative în
 [ATF Reporting Contract](ATF_Reporting_Contract.md#dovezile-configurării-inițiale).
@@ -585,7 +585,7 @@ fiecărui exchange. Matricea contractelor și probelor aparține
 
 Regulile detaliate despre OOP, fixtures, importuri, package cohesion și
 anti-duplication sunt în [bunele practici de cod](README_Atf_CodeBestPractices.md).
-Contractele test-only și adnotările sunt în [`atf-test-kit`](../atf-test-kit/README.md).
+Contractele test-only și adnotările sunt în [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare).
 
 ## Rulare și dovada randată
 

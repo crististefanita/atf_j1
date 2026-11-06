@@ -1243,7 +1243,7 @@ Acest design nu este autorizație pentru implementarea claselor sau a modulelor 
 ATF Java:
 
 - [`atf-tests/README.md`](../atf-tests/README.md)
-- [`atf-test-kit/README.md`](../atf-test-kit/README.md)
+- [`atf-test-kit/README.md`](../lib/README.TestKit.md#scope-și-integrare)
 - [`ATF_Architecture.md`](ATF_Architecture.md)
 - [`ATF_Evidence_Capture_Contract.md`](ATF_Evidence_Capture_Contract.md)
 - [`ATF_Reporting_Contract.md`](ATF_Reporting_Contract.md)
