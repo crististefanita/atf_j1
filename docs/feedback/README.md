@@ -57,7 +57,7 @@ distribuției și probele deterministe de timeout sunt în documentația ownerul
 
 | Owner în J1 | Criterii păstrate | Limită |
 |---|---|---|
-| [Test Kit](ATF_Common_Test_Support_Feedback.md) | KIT-UNICODE-PREVIEW-127 (84), KIT-ACCEPTANCE-DIAGNOSTICS-123 (78) | surse/teste comune coordonate aici; probele consumerilor rămân distincte |
+| [Test Kit](ATF_Common_Test_Support_Feedback.md) | KIT-UNICODE-PREVIEW-127 (84), KIT-ACCEPTANCE-DIAGNOSTICS-123 (78) | cod/API/feedback la J0; adopție web și Validation la J1 |
 | [Guvernanță documentară](ATF_Documentation_Feedback.md) | DOC-CONTEXT-DEPLOYMENT-111 (81) | guard semantic rămas; corecțiile editoriale verificate nu sunt relistate |
 | [AI](README_AI_Evaluation.md) | ID-urile AI-EVAL/AI-WORKFLOW existente | design separat, fără funcționalitate nouă autorizată prin mutare |
 | [Coordonare Android](ATF_Consumer_Reporting_Handoff_Feedback.md) | responsabilități device/business și dovezi J4 | oracolele și execuția Android rămân în J4; rendererul generic rămâne J0 |

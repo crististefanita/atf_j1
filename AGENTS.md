@@ -28,7 +28,7 @@
   tests. Preserve historical build provenance; a directory rename alone does
   not require a new Reporting version or imply a fresh test execution.
 
-- Keep active J0 feedback limited to Core/Reporting/Console/Mock, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
+- Keep active J0 feedback limited to Core/Reporting/Console/Mock and Test Kit, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
 
 - Screenshot evidence preserves page context: capture the entire browser viewport
   at the configured zoom (70% for Shop/AutoEx journeys), or the whole Android
