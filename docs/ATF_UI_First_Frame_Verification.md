@@ -100,8 +100,8 @@ execution never rewrites the earlier artifact or its original cause.
 
 </details>
 
-[UI owner contract](../atf-ui/README.md#explicit-fixture-preparation) and
-[current feedback](feedback/ATF_UI_Interaction_Feedback.md) retain the execution boundary.
+The [UI owner contract](../atf-ui/README.md#explicit-fixture-preparation)
+defines the execution boundary.
 
 ## Full-context screenshot follow-up
 

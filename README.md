@@ -17,7 +17,7 @@ aici ca JAR; [ownership-ul și sincronizarea](docs/ATF_Reporting_Consumer.md) au
 | Workspace | Rol și punct de intrare |
 |---|---|
 | J0 | 12 module, sursa Reporting și regresiile native/mock/browser; [atlasul sursei](../atf_j0/docs/ATF_Context_Atlas.md) |
-| J1 | 7 module sursă, scenarii AutoEx/Shop și Core/Reporting JAR; [atlasul consumerului](../atf_j1/docs/ATF_Context_Atlas.md) |
+| J1 | 6 module sursă, scenarii AutoEx/Shop și cinci biblioteci J0 prin JAR/POM. [Atlasul consumerului](docs/ATF_Context_Atlas.md) |
 | J2 · WIP | 6 module sursă, Core/Reporting JAR, un modul de test Kafka/mesagerie și Setup PowerShell în Podman; [atlasul WIP](../atf_j2/docs/ATF_Context_Atlas.md) |
 
 Rolul proiectului și rezultatul verificat sunt distincte: un build sau un MOCK verde nu certifică serviciul extern, brokerul ori întregul ATF.
@@ -162,7 +162,7 @@ flowchart LR
 
 - `ReportingTests` este `atf-reporting-tests`: verifică `atf-reporting` și
   folosește celelalte module partajate numai în `test` scope;
-- `Governance` este `atf-tests`; `întreg reactorul` înseamnă cele 7 module sursă locale și integrarea bibliotecii externe,
+- `Governance` este `atf-tests`; `întreg reactorul` include cele 6 module sursă locale și integrarea bibliotecilor externe,
   nu doar librăriile comune;
 - săgețile sunt drepte pentru a păstra etichetele lizibile; detaliile și
   ownership-ul fiecărui modul sunt în tabel și în README-ul modulului.
@@ -447,7 +447,7 @@ ownerului și sunt protejate de testele lui.
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 7 source modules. Core, Reporting, Console and Mock are external libraries, one JAR/POM pair each directly in lib.
+This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
 
 [Contractul Core](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.

@@ -163,7 +163,7 @@ compoziția de consumer și probele reale.
 
 ## J14 — lacune în publicarea individuală J4
 
-[Criteriile active au owner în J4](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md); J1 păstrează coordonarea.
+J1 păstrează coordonarea istorică. Criteriile curente se citesc în [feedback-ul Reporting J4](../../../atf_j4/docs/feedback/ATF_Reporting.md).
 
 | Prioritate | Criteriu consumer |
 |---|---|
@@ -188,20 +188,20 @@ Aceasta este contendență de execuție, nu un defect de randare Reporting.
 
 ## Compoziție J4 fără artifacte externe — J15
 
-[Contractul J4](../../../atf_j4/docs/ATF_Android_Report_Contract.md) deține identitatea cazurilor, proiecția semantică, comparațiile capturate și PNG-urile per checkpoint. [Criteriile active](../../../atf_j4/docs/feedback/ATF_Android_Alignment_Feedback.md) includ raw dumps și acceptori globali; J1 coordonează, fără duplicarea backlog-ului. Corecția generică TEXT și regresiile neutre au owner în J0.
+[Contractul J4](../../../atf_j4/docs/reporting/ATF_Android.md) deține identitatea cazurilor, proiecția semantică, comparațiile capturate și PNG-urile per checkpoint. [Feedback-ul Reporting J4](../../../atf_j4/docs/feedback/ATF_Reporting.md) urmărește livrabilul autonom și calificarea acceptorilor. Corecția generică TEXT și regresiile neutre au owner în J0.
 
 ## J4 — audit nou al componentelor și viewer-ului
 
-[Auditul J4](../../../atf_j4/docs/ATF_J4_Report_Audit.md) leagă selecția proaspătă, reconstrucția E2E arhivată și negativele. J4 deține receipt-uri goale, SKIP, acceptorul CR, metricile și timing-ul; [Reporting 137](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-return-137--png-reutilizat-schimbă-ownerul-și-pierde-expandările) deține pierderea contextului la PNG duplicat, cu regresie neutră în J0.
+[Auditul J4](../../../atf_j4/docs/reporting/ATF_Audit.md) descrie verificarea selecției, identității și dovezilor. J4 deține receipt-urile, SKIP, acceptorii, metricile și timing-ul. [Contractul de audit J0](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md#acceptanță-permanentă) păstrează regresia pentru revenirea la ownerul corect când un PNG este reutilizat.
 
 ## J4 — artifact autonom și ecran Android integral
 
-[Criteriile J4](../../../atf_j4/docs/ATF_Android_Report_Contract.md#one-artifact-original-execution-identities) cer compoziție per invocare și recepte tipizate, fără dependențe externe ori scenarii PASS de rezumat. Prototipul diagnostic nu este migrarea live și nu închide detaliile de assertions lipsă din captura legacy.
+[Criteriile J4](../../../atf_j4/docs/feedback/ATF_Reporting.md#rpt-android-html-only--livrabilul-de-audit-fără-copii-auxiliare) cer compoziție per invocare și recepte tipizate. Migrarea păstrează expected și actual capturate, iar lipsurile din materialul istoric rămân explicite.
 
-Captura integrală aparține J4; [viewer-ul 138](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-screenshot-viewport-138--imagine-integrală-în-spațiul-disponibil) și regresiile neutre au owner în J0. Criteriile generice 137/138 au acum [inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md); constatările din incrementul documentar anterior rămân istorice.
+Captura integrală aparține J4. [Contractul viewerului din J0](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md#full-image-viewer-target) stabilește afișarea completă, păstrarea proporțiilor și accesul explicit la dimensiunea originală.
 
 ## J16 — viewer comun și input-uri J4 separate
 
-[inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md) păstrează cadrul integral, caption-ul local și contextul la close, cu regresii neutre sursă/JAR. [J4-RPT-07–13](../../../atf_j4/docs/ATF_Android_Report_Contract.md#reader-without-repository-access) și [detaliul adaptiv](../../../atf_j4/docs/ATF_Android_Report_Contract.md#adaptive-detail-and-evidence-budgets) rămân implementare consumer: scop/setup/input/oracol, grupare lizibilă și bugete configurabile, fără bypass nelimitat sau assertions pierdute.
+[Contractul de audit inline](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md) păstrează cadrul integral, caption-ul local și contextul la închidere, cu regresii neutre sursă/JAR. J4 deține [contractul de predare](../../../atf_j4/docs/reporting/ATF_Handoff.md#contractul-descriptorului) și [prezentarea adaptivă](../../../atf_j4/docs/reporting/ATF_Presentation.md#modurile-de-prezentare), inclusiv scopul, configurația, inventarul și bugetele.
 
 O copie a JAR-ului nu certifică aceste criterii și nu transformă replay-ul arhivat într-o execuție device nouă. J0 deține numai randarea comună și testele Reporting, iar J4 păstrează capturile și oracolele aplicației.

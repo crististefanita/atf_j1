@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-[Registrul J0](../../../atf_j0/docs/feedback/ATF_Common_Test_Support_Feedback.md) deține cerințele Kit, inclusiv împachetarea, diagnosticele și preview-ul Unicode. J1 deține adopția web și modificările ValidationTable; transferul nu închide aceste cerințe.
+[Registrul J0](../../../atf_j0/docs/feedback/ATF_Common_Test_Support_Feedback.md) deține criteriile deschise pentru Kit. Contractul livrat pentru preview Unicode se citește în [ghidul Test Kit](../../lib/README.TestKit.md). J1 deține adopția web și retenția valorilor în ValidationTable.
 
 Guvernanța comună și oracolele Shop/AutoEx rămân la J1. Nu copiați backlog-ul Kit în consumeri; transmiteți reproducerea, coordonata/hash-ul și dovada la J0.
 

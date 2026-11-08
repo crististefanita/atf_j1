@@ -242,4 +242,4 @@ producătorului sunt delimitate explicit. Acest document deține ownership-ul
 
 ## Shared platform libraries
 
-The current reactor has 7 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the four library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+The [platform library guide](ATF_Platform_Libraries.md) covers ownership, Maven/IntelliJ bootstrap and consumer acceptance. The [provenance manifest](../library-provenance.json) identifies the installed JAR/POM pairs.

@@ -15,7 +15,7 @@ deși reactorul avea 9/7 module și binarul era J8. Acesta este contextul istori
 guvernanța structurală nu dovedește încă respingerea contradicției semantice.
 
 - Confruntați selectiv afirmațiile curente din atlas/index cu reactorul explicit, proprietatea Reporting și proveniența țintei; versiunea așteptată se citește din deployment, fără constantă istorică în test.
-- Proba negativă schimbă numai 9 în 10, 7 în 8 sau versiunea curentă cu una istorică; fiecare contradicție trebuie refuzată la afirmația exactă.
+- Proba negativă schimbă un singur fapt: numărul modulelor cu o unitate față de POM sau versiunea curentă cu una istorică. Guard-ul indică afirmația respinsă.
 - Acceptați în continuare istoricul legitim J6/J7/J8/J9 și controalele la bazele originale; existența unei versiuni vechi în jurnal nu este singură un defect.
 - Distingeți ownerul sursei Core J0 de consumul Core prin JAR în J1–J6; catalogul nu se micșorează implicit după foldere absente.
 

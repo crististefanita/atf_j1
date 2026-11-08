@@ -27,7 +27,7 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 
 ## REPORT-PORTABLE-DOCS-46 — adopție externă și documente transportabile
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-portable-docs-46--adopție-externă-și-documente-transportabile).
+[Ghidul de distribuire și consum al bibliotecilor J0](../../../atf_j0/docs/ATF_Platform_Libraries.md).
 
 ## REPORT-FLOW-PROJECTION-36 — plan de dovezi separat de publicare
 
@@ -49,16 +49,13 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 
 ## Current library adoption
 
-[navigation contract](../../../atf_j0/docs/ATF_Large_Report_Navigation.md) links cold readiness,
-unchanged deadlines, source/JAR regressions and this consumer’s own acceptance.
-Generic control 141 is maintained only in J0; no duplicate open criterion is added here.
+See [consumer provenance](../../library-provenance.json) and the
+[large report navigation contract](../../../atf_j0/docs/ATF_Large_Report_Navigation.md).
 
 ## Verified J1 live acceptance
 
-The [2026-11-03 receipt](../ATF_J1_Live_Screenshot_Verification.md) retains four
-passing real purchase invocations and their four Extent reports. Every PNG
-reference resolves to a complete 70% viewport capture; generic J0 criteria
-retain their separate neutral source/JAR acceptance.
+The [2026-11-03 purchase and rendering receipt](../ATF_J1_Live_Screenshot_Verification.md)
+owns the historical evidence for the launch-context finding below.
 
 ## J1-LAUNCH-CONTEXT-146 — record the actual launch scope
 

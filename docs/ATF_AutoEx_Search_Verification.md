@@ -61,7 +61,7 @@ mvn -B -pl atf-test-auto-ex -am "-Dtest=AutoExSearchReadinessComponentTest,AutoE
 | Original implementation plus initial seven response cases | Five failures exposing missing classification/false PASS; original three readiness cases pass |
 | First corrected response/DOM gate | 10 passed, zero failures/errors/skips, with the original budgets |
 | Expanded first adjacency | 52 AutoEx and 5 UI passed; bounded search suite 13 passed; real cart journey 1 passed |
-| Later neutral UI fixture witness | One of three unchanged pointer cases failed before activation while waiting for stability at 698.884001 ms; retained separately as [UI-FIRST-PAINT-144](feedback/ATF_UI_Interaction_Feedback.md) |
+| Later neutral UI fixture witness | One of three unchanged pointer cases failed before activation while waiting for stability at 698.884001 ms; retained separately as [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md) |
 | Final bounded search suite | 15 passed, zero failures/errors/skips; existing three readiness cases plus twelve response cases, with one shared report |
 | Final real UI cart journey | 1 passed, zero failures/errors/skips; search, quantity recalculation and removal on the public store, action 20 s/navigation 45 s unchanged |
 | Final missing-response diagnostics | 3 passed: history-only, independent API and aborted transport; explicit unobserved HTTP, one pointer and independent request counts |
@@ -79,7 +79,7 @@ mvn -B -pl atf-test-auto-ex -am "-Dtest=AutoExSearchReadinessComponentTest,AutoE
   its existing component package; bounded acceptance exercises the same suite scope.
 - **Retained individual failures:** the intermediate 54-case adjacency retained
   one input-fill error and one pre-activation native-click failure, before the
-  search postcondition. [UI-FIRST-PAINT-144](feedback/ATF_UI_Interaction_Feedback.md)
+  search postcondition. [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md)
   preserves them with the neutral UI witness; no green individual aggregate or
   hidden action/test retry is claimed.
 - **Final diagnostic labels:** three focused cases verify `HTTP unobserved`

@@ -8,30 +8,31 @@ J1 deține testele AutoEx/Shop și integrarea Reporting JAR; implementarea și r
 
 ## Feedback pentru biblioteci
 
-Orice constatare despre Core, Reporting, Console sau Mock se înregistrează direct la ownerul J0, conform [ghidului bibliotecilor](../../lib/README.md). Aici rămân problemele domeniului și dovezile acceptanței locale, cu o trimitere la criteriul comun.
+Constatările despre Core, Reporting, Console, Mock și Test Kit merg la ownerul J0. J1 păstrează problemele domeniului și acceptanța locală. [Ghidul bibliotecilor](../../lib/README.md)
 
 
 ## Top feedback-uri active
 
 Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Formula este impact /40 + lacună /30 + lucrabil /20 + datorie documentară /10; definiția și dovada rămân la owner.
 
-| Boundary consumat | Owner canonic | Acceptanță locală |
+| Criteriu J1 | Owner local | Probă rămasă |
 |---|---|---|
-| Core | [Core J0](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) | documentul JSON complet și fidelitatea numerică sunt livrate; viitoarele schimbări cer acceptanță proprie |
-| Reporting | [Reporting J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) | verificarea hash-ului și adaptorului rămâne distinctă de defectele generice ale rendererului |
-| Launch context | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope) | P2: real suite identity in secondary audit metadata; business/rendering gates already pass |
-| AutoEx search | [consumer verification](ATF_Consumer_Business_Test_Focus_Feedback.md) | original queue-full, owned GET/DOM and permanent regressions; [stable contract](../ATF_AutoEx_Search_Verification.md) |
-| Mock comun | [Mock J0](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) | JSON strict și numeric exact sunt livrate; scenariile Eventuate rămân J2 |
+| Identitatea lansării | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope) | suita reală în metadatele de audit |
+| Dovada catalogului | [AUTOEX-CATALOG-EVIDENCE-146](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146--bind-comparison-evidence-to-its-observed-exchange) | comparația atașată exclusiv schimbului HTTP observat |
+| Lookup Shop | [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity--isolate-the-existing-uilookup-failures) | bugetul de readiness și oracolele curselor de lookup |
+| Clasificarea Playwright | [GOV-UI-NATIVE-LAYER](ATF_Code_Maintenance_Feedback.md#gov-ui-native-layer--pre-existing-classification-disagreement) | clasificarea probei native și verdictul guvernanței |
 
 [Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
 
 ## Contracte și controale verificate
 
-| Delivered UI contract | Verified boundary |
+| Contract livrat | Autoritatea verificării |
 |---|---|
-| [UI-FIRST-PAINT-144](../ATF_UI_First_Frame_Verification.md) | Explicit bounded setup, unchanged 700 ms action cap, native refusals and separate individual/suite/rendering evidence; control retained in the baseline |
+| Pregătirea UI și capturile de context | [UI-FIRST-PAINT-144](../ATF_UI_First_Frame_Verification.md) |
+| Căutare AutoEx cu GET și DOM proaspăt | [Verificarea AutoEx](../ATF_AutoEx_Search_Verification.md) |
+| JSON strict și potrivire numerică | [Core J1](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) · [Mock J0](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) |
 
-[Contractul Core C3](../ATF_Core_Consumer.md) fixează sursa și nativele în J0,
+[Contractul Core](../ATF_Core_Consumer.md) fixează sursa și probele native în J0,
 consumul prin JAR în J1/J2 și acceptanțele distincte. Criteriile rezolvate ale
 distribuției și probele deterministe de timeout sunt în documentația ownerului
 și în baseline; nu rămân defecte active în feedback.
@@ -53,13 +54,15 @@ distribuției și probele deterministe de timeout sunt în documentația ownerul
 
 [Protocolul documentar](../README_Atf_DocumentationBestPractices.md#păstrarea-și-ștergerea-feedback-ului) și [build-ul în TMP](../ATF_Build_And_Execution_Safety.md) guvernează fiecare increment. Criteriul se elimină numai după probă și promovarea contractului stabil.
 
-## Cerințe comune preluate din J0 — 2026-11-02
+<a id="cerințe-comune-preluate-din-j0--2026-11-02"></a>
+
+## Frontiere de coordonare cu J0
 
 | Owner în J1 | Criterii păstrate | Limită |
 |---|---|---|
-| [Test Kit](ATF_Common_Test_Support_Feedback.md) | KIT-UNICODE-PREVIEW-127 (84), KIT-ACCEPTANCE-DIAGNOSTICS-123 (78) | cod/API/feedback la J0; adopție web și Validation la J1 |
+| [Test Kit](ATF_Common_Test_Support_Feedback.md) | Diagnosticul adoptării în Validation | codul, API-ul și contractul preview Unicode rămân la J0 |
 | [Guvernanță documentară](ATF_Documentation_Feedback.md) | DOC-CONTEXT-DEPLOYMENT-111 (81) | guard semantic rămas; corecțiile editoriale verificate nu sunt relistate |
 | [AI](README_AI_Evaluation.md) | ID-urile AI-EVAL/AI-WORKFLOW existente | design separat, fără funcționalitate nouă autorizată prin mutare |
 | [Coordonare Android](ATF_Consumer_Reporting_Handoff_Feedback.md) | responsabilități device/business și dovezi J4 | oracolele și execuția Android rămân în J4; rendererul generic rămâne J0 |
 
-Transferul păstrează prioritățile și dovezile originale. J0 deține backlog-ul bibliotecilor Core/Reporting/Console/Mock; contractele livrate se citesc la owner și nu devin ToDo prin mutare.
+Contractul preview Unicode se citește în [ghidul Test Kit](../../lib/README.TestKit.md). Dovezile Validation rămân specifice J1.
