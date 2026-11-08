@@ -8,7 +8,7 @@ Nota editorială și trecerea linkurilor nu certifică fidelitatea tuturor afirm
 ## DOC-CONTEXT-DEPLOYMENT-111 — prioritate 81
 
 **Prioritate: 81/100** = impact 31 + lacună 24 + lucrabil 18 + documentare 8.
-**Owner:** guvernanța comună coordonată în J1; J1/J2/J3 păstrează contractele propriului deployment.
+**Owner:** guvernanța comună coordonată în J1; fiecare deployment păstrează contractele și acceptanța proprii.
 
 Reproducerea inițială avea J1 cu 10 module, J2 cu 8 și Reporting J6 în atlas,
 deși reactorul avea 9/7 module și binarul era J8. Acesta este contextul istoric al reproducerii;
@@ -17,7 +17,7 @@ guvernanța structurală nu dovedește încă respingerea contradicției semanti
 - Confruntați selectiv afirmațiile curente din atlas/index cu reactorul explicit, proprietatea Reporting și proveniența țintei; versiunea așteptată se citește din deployment, fără constantă istorică în test.
 - Proba negativă schimbă numai 9 în 10, 7 în 8 sau versiunea curentă cu una istorică; fiecare contradicție trebuie refuzată la afirmația exactă.
 - Acceptați în continuare istoricul legitim J6/J7/J8/J9 și controalele la bazele originale; existența unei versiuni vechi în jurnal nu este singură un defect.
-- Distingeți ownerul sursei Core J0 de consumul Core C2 prin JAR în J1/J2/J3; catalogul nu se micșorează implicit după foldere absente.
+- Distingeți ownerul sursei Core J0 de consumul Core prin JAR în J1–J6; catalogul nu se micșorează implicit după foldere absente.
 
 **Închidere:** documentele nominale și istorice trec, iar mutanții curenți
 sunt refuzați fără relaxarea perimetrului. [Criteriul local J2](../../../atf_j2/docs/feedback/ATF_Documentation_Feedback.md)
@@ -25,8 +25,9 @@ are acceptanță proprie; nu închide implicit guvernanța comună.
 
 ### Reconcilierea afirmațiilor curente
 
-Inventarul curent este 12 module sursă J0, 9 J1, 8 J2 și câte 7 în J3/J4.
-Declarațiile de versiune se verifică din POM și proveniență; probele istorice își păstrează coordonatele originale.
+Inventarul curent din POM-uri este J0: 12, J1: 6, J2: 5, J3: 4, J4: 3,
+J5: 2 și J6: 5 module. Declarațiile de versiune se verifică din POM și
+proveniență; probele istorice își păstrează coordonatele originale.
 
 - Contradicțiile de catalog/versiune din auditul 2026-11-01 au fost reconciliate editorial în incrementul J12.
 - Gap-ul rămas este guard-ul semantic cu mutanți, nu simpla prezență a versiunilor istorice.
@@ -41,3 +42,11 @@ Declarațiile de versiune se verifică din POM și proveniență; probele istori
 - [ ] Preserve legitimate workspace names, semantic configuration examples, current provenance, approved test-change controls and domain implementation journals; do not reject every number or the word incremental.
 - [ ] Keep one current verification note per library beside its package and retain original build facts in provenance; official pages link to stable owner contracts.
 - [ ] Reconcile current claims with actual POM/source boundaries; a valid link or a high editorial score does not prove the meaning of its surrounding claim.
+- [ ] Derive J0–J6 module counts and library-consumer roles from each live POM;
+      reject one-count and one-role mutants in the factual documentation gate.
+- [ ] Keep the Core ownership/deployment contract canonical in
+      `ATF_Core_Consumer.md`; reduce repeated explanatory blocks in the J0
+      architecture, atlas and index to short links so those facts cannot drift.
+- [ ] Keep Romanian prose consistent within J0 README/atlas/architecture and
+      library guides; retain English API identifiers and code examples, but
+      remove mid-document language switches in explanatory paragraphs.
