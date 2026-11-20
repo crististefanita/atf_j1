@@ -83,4 +83,4 @@ Contractele și probele celorlalte checkpoint-uri rămân în [contractul modulu
 Scope-ul reutilizabil are [contract la UI](../../../../../../atf-ui/README.md#scope-ul-listener-elor-de-observație).
 Lookup-ul observă traficul aplicației; nu execută un al doilea GET și nu suprascrie câmpurile generate.
 
-Continuă orientarea în [atlasul de context ATF](../../../../../../docs/ATF_Context_Atlas.md).
+Continuă orientarea în [ghidul modulului Shop](../../../../../../atf-test-practice-shop/README.md).

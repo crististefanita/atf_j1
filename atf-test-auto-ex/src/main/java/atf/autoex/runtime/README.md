@@ -60,7 +60,7 @@ Probele locale verifică boundary-ul; același purchase individual și prin suit
 restrânsă verifică integrarea live. Un FAIL nou rămâne în feedback, chiar dacă
 altă lansare trece. Detaliile normative sunt în [contractul modulului](../../../../../../README.md).
 
-Continuă orientarea în [atlasul de context ATF](../../../../../../../docs/ATF_Context_Atlas.md).
+Continuă orientarea în [ghidul modulului AutoEx](../../../../../../../atf-test-auto-ex/README.md).
 
 Mapperul folosește [contractul query Reporting](../../../../../../../docs/ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate)
 pentru identitatea sigură a agregatului. Captura browser elimină valorile și

@@ -23,8 +23,8 @@ reproducere locală.
 | Comparația catalogului AutoEx și dovezi Extent extensibile | [Închis la 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); probele component și browser ale raportului controlat au trecut |
 | Faptele documentației J1 și perimetrul bibliotecilor consumate | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); la închiderea inițială, proba focusată 65/65 și Whole-ATF 179/179 în EN și RO; edițiile sunt aliniate în 56 de documente |
 | Overview root local-first și inventarul modulelor | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); guvernanță 187/187 în EN și RO și comparație curată a edițiilor |
-| Contextul capturilor UI | [Verificarea screenshot-urilor live](../ATF_J1_Live_Screenshot_Verification.md) consemnează mediul exact și limita dovezilor |
-| Contractele consumerului | [Atlasul de context](../ATF_Context_Atlas.md), README-urile modulelor și testele executabile definesc comportamentul curent |
+| Politica dovezilor screenshot | [Contractul de captură](../ATF_Evidence_Capture_Contract.md), ghidul modulului UI și testele native de geometrie browser definesc comportamentul curent |
+| Contractele consumerului | README-urile modulelor și testele executabile definesc comportamentul curent |
 
 ## Înregistrează o observație despre bibliotecă
 

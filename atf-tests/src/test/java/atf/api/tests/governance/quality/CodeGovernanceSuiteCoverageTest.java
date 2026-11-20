@@ -7,6 +7,7 @@ import atf.api.tests.governance.AtfSourceReadabilityGovernanceTest;
 import atf.api.tests.governance.ConstantsOwnershipGovernanceTest;
 import atf.api.tests.governance.consumers.ConsumerModuleArchitectureGovernanceTest;
 import atf.api.tests.governance.WholeAtfGovernanceSuiteTest;
+import atf.api.tests.governance.documentation.structure.DocumentationContextArtifactGovernanceTest;
 import atf.api.tests.governance.layers.AtfTestLayerArchitectureTest;
 import atf.api.tests.governance.layers.ConsumerSuiteCoverageGovernanceTest;
 import atf.testkit.AtfComponentTest;
@@ -42,6 +43,14 @@ public class CodeGovernanceSuiteCoverageTest {
                 "Every code and test architecture gate must remain in the standard suite");
         assertTrue(selected.contains(CodeGovernanceSuiteCoverageTest.class),
                 "The suite-coverage guard must protect its own presence");
+    }
+
+    @Test
+    void wholeReactorSuiteRetainsProjectMapAndSnapshotGovernance() {
+        SelectClasses selection = WholeAtfGovernanceSuiteTest.class.getAnnotation(SelectClasses.class);
+        assertTrue(selection != null, "The whole-reactor governance suite must select its checks explicitly");
+        assertTrue(Arrays.asList(selection.value()).contains(DocumentationContextArtifactGovernanceTest.class),
+                "The whole-reactor suite must keep project-map and snapshot governance enabled");
     }
 
     @Test

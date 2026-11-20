@@ -28,7 +28,7 @@ POM-ul rădăcină este sursa normativă pentru reactor și versiunile dependen�
 
 | Subiect | Documente |
 |---|---|
-| Arhitectură și context | [Arhitectură](ATF_Architecture.md) · [Atlas de context](ATF_Context_Atlas.md) · [README rădăcină](../README.md) |
+| Arhitectură | [Arhitectură](ATF_Architecture.md) · [README rădăcină](../README.md) |
 | Contractele bibliotecilor | [Core](ATF_Core_Consumer.md) · [Reporting](ATF_Reporting_Library_Atlas.md) · [Console](../lib/README.Console.md) · [Mock](../lib/README.Mock.md) · [Test Kit](../lib/README.TestKit.md) |
 | Consumatori | [Practice Shop](../atf-test-practice-shop/README.md) · [AutoEx](../atf-test-auto-ex/README.md) |
 | Dovezi și rapoarte randate | [Contractul dovezilor](ATF_Evidence_Capture_Contract.md) · [Consumatorul Reporting](ATF_Reporting_Consumer.md) · [Contractul Reporting](ATF_Reporting_Contract.md) · [Contractul de afișare](ATF_Reporting_Display_Contract.md) |

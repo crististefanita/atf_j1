@@ -2,7 +2,7 @@
 
 Coordonatele curente, hash-urile și acceptanța consumerului sunt înregistrate în
 [proveniența bibliotecii](../library-provenance.json). Atlasul descrie contractul
-Reporting exercitat de J1; înregistrările de verificare datate rămân istorice.
+Reporting exercitat de J1 și limitele sale observabile de integrare.
 
 ## Pe scurt
 

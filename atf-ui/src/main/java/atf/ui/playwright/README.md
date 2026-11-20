@@ -59,5 +59,5 @@ Callback-ul verifică `active()` înaintea oricărui acces la request/response/f
 Contractul scope-ului este la [UI](../../../../../../README.md#scope-ul-listener-elor-de-observație);
 inspectorul de rețea își păstrează separat ownership-ul și ordinea de release.
 
-Continuă orientarea în [atlasul de context ATF](../../../../../../../docs/ATF_Context_Atlas.md).
+Continuă orientarea în [ghidul modulului UI](../../../../../../../atf-ui/README.md).
 

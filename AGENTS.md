@@ -36,7 +36,8 @@
   bibliotecilor, adaugă un singur link către lib/README.md în secțiunea finală;
   nu adăuga identități ale workspace-urilor surori, note de rulare sau rezultate
   datate.
-- Păstrează concisă documentația contractelor curente. Reține numai nota curentă
-  de verificare a pachetului lângă artifact, în TMP-ul deținut; înregistrează
-  locația în proveniență când este necesar. Nu acumula în docs sau `lib` fișiere
-  Markdown de verificare pentru fiecare versiune.
+- Păstrează concisă documentația contractelor curente: pune orice notă de
+  verificare a pachetului lângă artifactul său în TMP-ul deținut și noteaz-o
+  în proveniență când este necesar. Nu adăuga hărți generale ale proiectului
+  sau rapoarte de verificare/acceptanță datate ori legate de versiuni în docs
+  sau `lib`; păstrează contractele durabile la ownerii lor.

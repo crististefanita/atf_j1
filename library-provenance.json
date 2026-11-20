@@ -1835,8 +1835,7 @@
           "Reporting audit test package: 10 classes (two guards)",
           "Two existing fully qualified ATF invocations in observation tests"
         ],
-        "openReportingFinding": "REPORT-SIBLING-DISCLOSURE-114",
-        "evidence": "docs/ATF_JSON_Binary_Verification.md"
+        "openReportingFinding": "REPORT-SIBLING-DISCLOSURE-114"
       }
     },
     {
@@ -3190,7 +3189,6 @@
         "reportingSha256": "1F1B7B5502FEFEA02F500C2FC80494859D4E57E38261306B57FA7AD2D5AB38B1",
         "scope": "J12 explicit artifact intent, captured timing and disclosure indicators; producer and consumer acceptance remain distinct",
         "candidate": "Final publication; original CSS viewport precedence preserved",
-        "evidence": "docs/ATF_Reporting_J12_Verification.md",
         "producerRegression": {
           "native": 83,
           "sourceBroad": 570,
@@ -3997,7 +3995,6 @@
           "binaryIdentity": 1,
           "coreSourceIncluded": false,
           "reportingVersionUnchanged": "1.0.0-j12",
-          "consumerProof": "docs/ATF_Core_C3_Verification.md",
           "evidenceRoot": "C:/Users/Cristi/AppData/Local/Temp/ATF_ADOPTION_CORE_C3_ACTIVE_DO_NOT_CLEAN_HjeEfO"
         }
       },
@@ -4015,7 +4012,6 @@
         "evidenceRoot": "C:\\Users\\Cristi\\AppData\\Local\\Temp\\ATF_REPORTING_J13_ACTIVE_DO_NOT_CLEAN_WvBK4t",
         "consumerHead": "14b9b79ba3b97c0916d285a4b14f9d0e4d8dafa6",
         "reportingSha256": "9B501223A60EA8C3F4B44B74DC0336F101770A7C63A35DE8DB889C49B302A367",
-        "evidence": "docs/ATF_Reporting_J13_Verification.md",
         "scope": "Publication memory and complete redacted ACTION/OBSERVE cells; Core C3 unchanged",
         "producerRegression": {
           "native": 87,
@@ -4152,7 +4148,6 @@
         "evidenceRoot": "C:\\Users\\Cristi\\AppData\\Local\\Temp\\ATF_REPORTING_J14_ACTIVE_DO_NOT_CLEAN_9ptTeB",
         "consumerHead": "14b9b79ba3b97c0916d285a4b14f9d0e4d8dafa6",
         "reportingSha256": "981E99045D5F2F37FEC30E08341C4414541E79DA01E6DC237835E43A95DD9FCB",
-        "evidence": "docs/ATF_Reporting_J14_Verification.md",
         "scope": "UI row projection, exact captured whitespace and one redaction policy; Core C3 unchanged",
         "producerRegression": {
           "native": 89,
@@ -4297,7 +4292,6 @@
         "evidenceRoot": "C:\\Users\\Cristi\\AppData\\Local\\Temp\\ATF_J4_REPORT_COMPOSITION_ACTIVE_DO_NOT_CLEAN_l7tIN2",
         "consumerHead": "adc93ad42efdeca54539268cfcd5bac4f4dacd4a",
         "reportingSha256": "7B3C9DF7D22B4DD50EEFEB1E72358B4BAEC35CC3B24AC13D531BD1A101D3ADF0",
-        "evidence": "docs/ATF_Reporting_J15_Verification.md",
         "scope": "Inline observation PRE fidelity and owner-bound self-contained composition; Core C3 unchanged",
         "producerRegression": {
           "native": 91,
@@ -4437,7 +4431,6 @@
         "evidenceRoot": "C:\\Users\\Cristi\\AppData\\Local\\Temp\\ATF_J4_DISPLAY_REVIEW_ACTIVE_DO_NOT_CLEAN_eul78H",
         "consumerHead": "adc93ad42efdeca54539268cfcd5bac4f4dacd4a",
         "reportingSha256": "02B798A5848D5167FECA16A0977F4F30B7047BB49EA666200AA7D0EA11731367",
-        "evidence": "docs/ATF_Reporting_J16_Verification.md",
         "scope": "J16 source/JAR viewport and return-context contracts; candidate and fresh post-distribution consumer sanity; domain/device acceptance remains separate",
         "producerRegression": {
           "native": 91,
@@ -4583,7 +4576,6 @@
         "evidenceRoot": "C:\\Users\\Cristi\\AppData\\Local\\Temp\\ATF_REPORT_NAVIGATION_ACTIVE_DO_NOT_CLEAN_AYBvNf",
         "consumerHead": "94b88a3e4d3f9aa8ba300e16e99409d5b0da28ac",
         "reportingSha256": "B7DF32027A91F29B3662D0DE179BC329AB3018006E4894FAD594401D6FDA9F0A",
-        "evidence": "docs/ATF_Reporting_J17_Verification.md",
         "scope": "Retained-evidence navigation; targeted paths on large artifacts, bulk only on neutral fixture",
         "producerRegression": {
           "native": 91,
@@ -5423,7 +5415,6 @@
           "binaryIdentity": 1,
           "coreSourceIncluded": false,
           "reportingVersionUnchanged": "1.0.0-j12",
-          "consumerProof": "docs/ATF_Core_C3_Verification.md",
           "evidenceRoot": "C:/Users/Cristi/AppData/Local/Temp/ATF_ADOPTION_CORE_C3_ACTIVE_DO_NOT_CLEAN_HjeEfO"
         }
       },
@@ -5444,7 +5435,6 @@
       "currentAcceptance": {
         "status": "VERIFIED",
         "date": "2026-11-03",
-        "evidence": "docs/ATF_Reporting_J18_Verification.md",
         "reportingSha256": "63655536DE4EBA02A8AF6CA765D445BBCE7D89967979FF5BF9247FDC0F79AD02",
         "scope": "Single cold bootstrap, truthful readiness and bounded mutation/layout work; original evidence preserved",
         "defaultAssertionPreviewCharacters": 240,
@@ -7440,7 +7430,6 @@
           "binaryIdentity": 1,
           "coreSourceIncluded": false,
           "reportingVersionUnchanged": "1.0.0-j12",
-          "consumerProof": "docs/ATF_Core_C3_Verification.md",
           "evidenceRoot": "C:/Users/Cristi/AppData/Local/Temp/ATF_ADOPTION_CORE_C3_ACTIVE_DO_NOT_CLEAN_HjeEfO"
         }
       }

@@ -45,4 +45,4 @@ Sesiunea de browser deține pagina; inspectorul deține propriile listener-e.
 
 Condițiile de retenție și exemplele consumer sunt în [contractul modulului](../../../../../../README.md).
 
-Continuă orientarea în [atlasul de context ATF](../../../../../../../docs/ATF_Context_Atlas.md).
+Continuă orientarea în [ghidul modulului UI](../../../../../../../atf-ui/README.md).

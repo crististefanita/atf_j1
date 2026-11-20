@@ -39,6 +39,27 @@ rebazat sau extins.
 </details>
 
 <details>
+<summary><strong>Control verificat — hărți de proiect și snapshot-uri de verificare datate</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DOC-MAP-AND-SNAPSHOT-GOVERNANCE-20261120
+    status: VERIFIED
+    base: fc9ebb0c88a13368e3da3f97f36d4bde2f0d2268
+    expires: 2026-11-30
+    reason: Elimină hărțile generale ale proiectului și snapshot-urile de verificare/acceptanță datate sau legate de versiuni de bibliotecă; previne revenirea lor prin scanarea repository-ului, fixture-uri negative și selecția suitei complete.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=fc9ebb0c88a13368e3da3f97f36d4bde2f0d2268" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationTargetGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java
+```
+
+</details>
+
+<details>
 <summary><strong>Control verificat — overview-ul root și selecția guvernanței</strong></summary>
 
 ```yaml

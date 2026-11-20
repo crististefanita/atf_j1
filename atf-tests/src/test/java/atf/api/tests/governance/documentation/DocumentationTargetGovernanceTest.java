@@ -29,7 +29,6 @@ import static atf.api.tests.governance.AtfGovernanceTestSupport.locateProjectRoo
 @DocumentationTarget("atf-test-kit/README.md")
 @DocumentationTarget("docs/ATF_Api_Test_Guide.md")
 @DocumentationTarget("docs/ATF_Architecture.md")
-@DocumentationTarget("docs/ATF_Context_Atlas.md")
 @DocumentationTarget("docs/ATF_Build_And_Execution_Safety.md")
 @DocumentationTarget("docs/ATF_Evidence_Capture_Contract.md")
 @DocumentationTarget("docs/ATF_Reporting_Contract.md")

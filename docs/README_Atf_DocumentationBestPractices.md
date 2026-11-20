@@ -24,6 +24,10 @@ Regula de economie:
 - schema poartă relația principală, nu inventarul tuturor claselor;
 - explicațiile lungi, excepțiile și tabelele secundare sunt colapsabile;
 - un document nou apare numai dacă deține un boundary sau un proces real;
+- nu adăuga hărți generale ale proiectului sau rapoarte de
+  verificare/acceptanță datate ori legate de versiuni de bibliotecă;
+- păstrează dovezile rulărilor în TMP-ul deținut și identitatea
+  artefactelor în provenance;
 - informația stabilă se mută în documentul ownerului, nu rămâne în feedback.
 
 <details>
@@ -592,6 +596,7 @@ datate, istorice de rulări sau artifacte locale.
 |---|---|---|
 | Structură | [structura README-ului](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationReadmeStructureGovernanceTest.java) | primul ecran și traseul cititorului |
 | Perimetrul root-ului | [guvernanța README-ului principal](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java) | încadrare local-first și nota finală cu indexul bibliotecilor |
+| Populația documentației | [guvernanța hărților și snapshot-urilor](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java) | fără hărți generale sau rapoarte datate/versionate |
 | Linkuri și fragmente | [toate documentele guvernate](../atf-tests/src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java) și [probe negative](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) | sensul etichetei și afirmația de lângă link |
 | Stil și proză | [style](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationStyleGovernanceTest.java) și [prose](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationProseGovernanceTest.java) | formularea exactă, densitatea utilă și primul ecran |
 | Diagrame și legende | [diagram governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java) | randare, geometrie și păstrarea sensului |

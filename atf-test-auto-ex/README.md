@@ -18,8 +18,7 @@ browserul și publicarea raportului sunt furnizate de infrastructura ATF.
 | contract API direct | [suita API](#cele-trei-suite-principale) | activare explicită separată, numai pentru citire și cu un cont sintetic |
 | failure, cleanup și vecin sănătos | [acceptanță explicită](#acceptanța-failure-urilor-business) | fixture-uri E2E negative, în afara selecției canonice |
 
-**Context local:** [runtime](src/main/java/atf/autoex/runtime/README.md) ·
-[atlas ATF](../docs/ATF_Context_Atlas.md). Comenzile de mai jos pornesc dintr-un
+**Ghid local:** [runtime](src/main/java/atf/autoex/runtime/README.md). Comenzile de mai jos pornesc dintr-un
 [staging extern](../docs/ATF_Build_And_Execution_Safety.md), cu JDK 21 și Maven.
 
 ```mermaid
@@ -1903,17 +1902,13 @@ trecerea întregului modul. Contractul de componentă nu confirmă site-ul publi
 
 </details>
 
-## Contextul capturii de ecran
+## Dovezile capturilor de ecran
 
 Dovezile prin capturi de ecran folosesc întregul viewport al browserului la zoom-ul
 configurat de 70%, păstrând pagina în jurul acțiunii curente. Detaliile mărite ale
 regiunilor completează cadrul integral; raportul încadrează imaginea completă,
 păstrând proporțiile și toate marginile.
 
-The [shared capture contract](../atf-ui/README.md#capturi-de-ecran-cu-context-complet) and
-[native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
-protect context independently of the screenshot publication policy.
-
-| Latest live screenshot acceptance | Verified scope |
-|---|---|
-| [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One AutoEx purchase per launch, 70% whole-context screenshots, 49 comparison rows and 13 PNG references; rendering and physical JAR identity checked |
+Contractul comun de [captură](../atf-ui/README.md#capturi-de-ecran-cu-context-complet) și
+[regresia nativă de pixeli](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
+protejează cadrul integral independent de politica publicării capturilor.

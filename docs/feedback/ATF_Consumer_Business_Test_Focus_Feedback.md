@@ -3,8 +3,6 @@
 ## Căutarea AutoEx — contract livrat
 
 Documentul de [verificare a căutării AutoEx](../ATF_AutoEx_Search_Verification.md) păstrează contractul GET/DOM proaspăt, incidentul inițial și dovezile de regresie.
-[Dovada achiziției live](../ATF_J1_Live_Screenshot_Verification.md) înregistrează
-verificările separate de achiziție și randare pentru AutoEx și Shop.
 
 <a id="autoex-catalog-evidence-146"></a>
 ## AUTOEX-CATALOG-EVIDENCE-146 — asocierea dovezii comparației cu schimbul observat

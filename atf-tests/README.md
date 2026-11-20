@@ -117,7 +117,7 @@ src/test/java/atf/api/tests/governance/
 ├── layers/           clasificare globală și acoperirea disjunctă a suitelor consumer
 ├── documentation/
 │   ├── language/     politica ramurii și verificarea prozei vizibile
-│   ├── structure/    ierarhia README-urilor și blocurile colapsabile
+│   ├── structure/    ierarhia README-urilor, populația documentară și blocurile colapsabile
 │   ├── factual/      probe POM, workspace și configurație de consumer
 │   ├── links/        indexul heading-urilor Markdown și al ancorelor HTML
 │   ├── relationship/ limita relațiilor directe din documentația J1
@@ -309,11 +309,17 @@ cererea fixează SHA-ul rezolvat, nu un ref mobil.
 
 [DocumentationLinkGovernanceTest](src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java)
 verifică destinațiile locale și fragmentele tuturor README-urilor și documentelor
-Markdown din `docs`, inclusiv atlase, arhitectură și feedback. Output-urile
+Markdown din `docs`, inclusiv arhitectură, contracte ale ownerilor și feedback. Output-urile
 generate sunt excluse. [Probele ancorelor](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java)
 verifică inclusiv un titlu redenumit într-un document care nu se numește README.
 Ambele intră în suita whole-ATF; `@DocumentationTarget` aplică aceeași verificare
 și documentelor selectate explicit. Existența țintei nu certifică sensul etichetei.
+
+[DocumentationContextArtifactGovernanceTest](src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java)
+refuză hărțile generale ale proiectului, snapshot-urile de verificare/acceptanță
+datate ori legate de versiunile bibliotecilor și pointerii provenance către
+rapoarte de rulare comise în repository. Fixture-ul negativ scrie numai în
+directorul temporar JUnit.
 
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compară modulele și scope-ul Kit cu POM-urile reale.
@@ -482,7 +488,7 @@ urmează [convenția GitHub](https://docs.github.com/en/get-started/writing-on-g
 
 | Decizie | Sursă și limită |
 |---|---|
-| Boundary, ownership și documentație în întregul reactor | [WholeAtfGovernanceSuiteTest](src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java); [proba de limbă](src/test/java/atf/api/tests/governance/documentation/language/DocumentationLanguageGovernanceTest.java); [probe negative pentru ancore](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) |
+| Boundary, ownership și documentație în întregul reactor | [WholeAtfGovernanceSuiteTest](src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java); [proba de limbă](src/test/java/atf/api/tests/governance/documentation/language/DocumentationLanguageGovernanceTest.java); [probe negative pentru ancore](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java); [gate pentru hărți și snapshot-uri](src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java) |
 | Dependențe și source-set-uri | [POM](pom.xml); scope-ul declarat este autoritatea pentru integrare |
 | Ce nu demonstrează această probă | Gate-ul nu dovedește un journey business ori randarea artifactului. |
 
@@ -492,7 +498,7 @@ urmează [convenția GitHub](https://docs.github.com/en/get-started/writing-on-g
 Rulați din rădăcina unui [staging extern](../docs/ATF_Build_And_Execution_Safety.md), cu JDK 21 și Maven.
 
 ```powershell
-mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest,DocumentationAnchorGovernanceTest,DocumentationLanguageGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest,DocumentationContextArtifactGovernanceTest,DocumentationAnchorGovernanceTest,DocumentationLanguageGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
 node --test atf-tests/tools/documentation-editions.test.mjs
 node atf-tests/tools/documentation-editions.mjs compare $env:ATF_MAIN_STAGE $env:ATF_RO_STAGE
 ```

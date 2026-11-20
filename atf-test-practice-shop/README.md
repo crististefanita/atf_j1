@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-**Context local:** [support](src/main/atf/shop/support/README.md) · [atlas ATF](../docs/ATF_Context_Atlas.md).
+**Ghid local:** [support](src/main/atf/shop/support/README.md).
 
 `ShopApiRunReport` păstrează lifecycle-ul și verdictul business. Sumarul sigur
 al excepției este delegat către
@@ -1340,7 +1340,7 @@ mvn -pl atf-test-practice-shop -am "-Dtest=ShopE2eSuite" "-Dsurefire.failIfNoSpe
   grupare a evidence-ului; nu reprezintă un caz business nou.
 - Suita păstrează deocamdată această variantă; criteriile pentru reducerea
   rulării sale live sunt în
-  [contractul acceptanței business](../docs/ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită).
+  [Contractul acceptanței business](../docs/ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită).
 
 E2E autentificat cu cont existent necesită fixture-ul local descris mai sus.
 `ShopNewAccountPurchaseE2eTest` și `ShopE2eSuite` pot crea conturi în demo-ul
@@ -1517,9 +1517,7 @@ main. Source-set-urile din tabelul de mai sus descriu implementarea curentă.
 - Cele trei gate-uri rămân complete până la probele de echivalență; politica
   capturilor nu justifică o a doua poveste business.
 
-Deciziile de extracție și diferențele de ownership sunt în
-[atlas](../docs/ATF_Context_Atlas.md#reutilizare-fără-mutarea-politicii-aplicației);
-[contractul acceptanței business](../docs/ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită)
+[Contractul acceptanței business](../docs/ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită)
 descrie dovada cerută și review-ul separat înaintea reducerii selecției.
 
 Etapele catalog/checkout din `ShopPurchaseFlow` sunt implementate; separarea
@@ -1616,7 +1614,7 @@ verifică aliasurile, YAML-ul fără override și proiecția precondiției în `
 `en-US` și `lt-LT`. Testul restaurează toate categoriile locale și păstrează
 asserțiunile în pasul standard colapsabil `Component assertions`.
 
-## Contextul capturii de ecran
+## Dovezile capturilor de ecran
 
 Capturile de ecran folosite drept dovezi includ întregul viewport al browserului
 la zoom-ul configurat de 70%, păstrând pagina din jurul acțiunii curente.
@@ -1626,7 +1624,3 @@ imaginea completă, cu proporțiile și toate marginile originale.
 Contractul comun de [captură](../atf-ui/README.md#capturi-de-ecran-cu-context-complet)
 și [regresia pixelilor nativi](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
 protejează contextul independent de politica de publicare a capturilor.
-
-| Cea mai recentă acceptanță live pentru capturi | Domeniu verificat |
-|---|---|
-| [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One Shop purchase per launch, 70% whole-context screenshots, 150 comparison rows and 10 PNG references; rendering and physical JAR identity checked |
