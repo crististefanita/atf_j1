@@ -52,9 +52,9 @@ flowchart LR
 
 | Probă | Rezultat |
 |---|---|
-| Verificări focusate ale consumerilor și catalogului în ambele ediții | Shop 21/21, AutoEx 22/22, atf-tests 22/22; 65/65 per ediție. Verificarea de browser local AutoEx a expandat raportul Extent generat. |
-| Guvernanța Whole-ATF la închiderea inițială | 179/179 în fiecare ediție; guvernanța revizuită a overview-ului root de sus în jos consemnează acum 187/187. |
-| Edițiile documentației | Testele Node 10/10; comparația nu raportează probleme între 56 de documente Markdown. |
+| Verificări focusate ale consumerilor și catalogului la închiderea inițială | Shop 21/21, AutoEx 22/22, atf-tests 22/22; 65/65 per ediție. Verificarea de browser local AutoEx a expandat raportul Extent generat. |
+| Ultima reverificare a guvernanței întregului reactor | 190/190 în `main` la `e1504f69fdbfefe2670236024cb93f92b9f69ac5` și `main_RO` la `3520c2cae2481d1eba6d05c54559259ebd52c4e7`; fără eșecuri, erori sau teste omise. |
+| Ultima comparație a edițiilor și reverificarea ulterioară | Comparația din TMP, pe worktree-uri Git curate, raportează 0 probleme în cele 52 de documente Markdown; testele Node trec 10/10; guvernanța focusată a trecut 18/18 în fiecare ediție la 2026-11-21, după editarea feedback-ului. |
 
 Închiderea acoperă reactorul documentat J1 și contractele bibliotecilor
 consumate. Testele verifică artefactele binare selectate și integrările locale;
@@ -83,5 +83,59 @@ bibliotecilor.
 | Probă | Rezultat |
 |---|---|
 | Verificări focusate de documentație și control al schimbărilor | 37/37 în EN și RO. |
-| Guvernanța întregului reactor | 187/187 în EN și RO; fără eșecuri, erori sau teste omise. |
-| Instrumente ediții | Testele Node 10/10; structura Markdown și destinațiile linkurilor coincid în cele 56 de documente. |
+| Guvernanța întregului reactor la închiderea inițială a overview-ului | 187/187 în EN și RO; fără eșecuri, erori sau teste omise. |
+| Ultima reverificare a întregului reactor | 190/190 în EN și RO la commit-urile live de mai sus; fără eșecuri, erori sau teste omise. |
+| Instrumente ediții și validarea finală a feedback-ului | Testele Node trec 10/10; comparația din TMP, pe worktree-uri Git curate, raportează 0 probleme în toate cele 52 de documente; guvernanța focusată a trecut 18/18 în EN și RO la 2026-11-21. |
+
+<a id="doc-context-artifact-governance-20261120"></a>
+
+## DOC-CONTEXT-ARTIFACT-GOVERNANCE-20261120 — prevenirea hărților de proiect și a rapoartelor de verificare datate
+
+**Stare: Implementat și verificat la 2026-11-20 pentru tiparele definite.**
+Au fost eliminate cele patru artefacte de tip hartă/context și de verificare
+datată sau versionată după bibliotecă. `DocumentationContextArtifactGovernanceTest`
+scanează acum Markdown-ul întreținut, verifică linkurile și pointerii de
+proveniență și include fixture-uri negative pentru aceste tipare. Testul este
+selectat de `WholeAtfGovernanceSuiteTest`.
+
+Ultima rulare a întregului reactor a trecut cu 190/190 în ambele ediții.
+Următoarea constatare înregistrează întrebarea rămasă de perimetru: regula
+curentă nu respinge un document separat de verificare al cărui nume și titlu
+nu conțin dată sau versiune de bibliotecă.
+
+<a id="doc-verification-record-scope-20261120"></a>
+
+## DOC-VERIFICATION-RECORD-SCOPE-20261120 — clasificarea înregistrărilor independente de verificare rămase
+
+**Stare: Deschis.** Regula curentă respinge hărțile de proiect și rapoartele
+de verificare/acceptanță datate sau versionate după bibliotecă. Nu respinge un
+document generic de verificare fără dată. Documentele întreținute
+[`ATF_AutoEx_Search_Verification.md`](../ATF_AutoEx_Search_Verification.md) și
+[`ATF_UI_First_Frame_Verification.md`](../ATF_UI_First_Frame_Verification.md)
+combină încă regulile durabile pentru consumer cu istoricul rulărilor și
+proveniența acestora.
+
+- Stabilește ce comportament aparține README-urilor modulelor AutoEx și UI.
+- Mută dovezile temporare ale rulărilor și URL-urile locale de revizie în afara documentației întreținute.
+- Dacă înregistrările standalone de verificare sunt în afara perimetrului,
+  adaugă un fixture negativ nedatat și fă testul să respingă forma generică.
+
+Păstrează constatarea deschisă până la clasificarea înregistrărilor și
+verificarea regulii rezultate în ambele ediții; rezultatul curent 190/190
+dovedește doar tiparele mai restrânse deja implementate.
+
+<a id="doc-edition-comparator-20261120"></a>
+
+## DOC-EDITION-COMPARATOR-20261120 — separarea terminatoarelor de linie din worktree de diferențele dintre ramuri
+
+**Stare: Verificat la 2026-11-21; nu s-au găsit diferențe de conținut între ramuri.**
+Comparația directă a worktree-urilor live a semnalat cele două fișiere `.mjs`
+ale instrumentelor edițiilor. ID-urile blob Git sunt identice în `main` și
+`main_RO`, iar textul coincide după normalizarea CRLF. O comparație nouă, în
+worktree-uri Git curate din TMP, a raportat 0 probleme în cele 52 de documente
+Markdown; suita Node a trecut 10/10.
+
+Discrepanța provenea din terminatoarele de linie ale worktree-urilor existente,
+nu dintr-o diferență între ediții. Nu este necesară o corecție de cod. Dacă
+același rezultat reapare într-un stage Git curat, redeschide constatarea și
+adaugă un fixture de regresie LF/CRLF.
