@@ -18,8 +18,7 @@ the ATF infrastructure provides the browser and report publication.
 | direct API contract | [API suite](#the-three-main-suites) | separate opt-in for read-only access and a synthetic account |
 | failure, cleanup, and healthy neighbor | [explicit acceptance](#business-failure-acceptance) | negative E2E fixtures, outside canonical selection |
 
-**Local context:** [runtime](src/main/java/atf/autoex/runtime/README.md) ·
-[ATF atlas](../docs/ATF_Context_Atlas.md). Run the commands below from an
+**Local guide:** [runtime](src/main/java/atf/autoex/runtime/README.md). Run the commands below from an
 [external staging area](../docs/ATF_Build_And_Execution_Safety.md), with JDK 21 and Maven.
 
 ```mermaid
@@ -1921,7 +1920,7 @@ public site or the identity/cart after registration.
 
 </details>
 
-## Screenshot context
+## Screenshot evidence
 
 Screenshot evidence uses the whole browser viewport at the configured 70% zoom,
 retaining the page around the current action. Region close-ups supplement the
@@ -1930,7 +1929,3 @@ complete frame; the report fits the full image with its aspect ratio and all edg
 The [shared capture contract](../atf-ui/README.md#full-context-screenshots) and
 [native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
 protect context independently of the screenshot publication policy.
-
-| Latest live screenshot acceptance | Verified scope |
-|---|---|
-| [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One AutoEx purchase per launch, 70% whole-context screenshots, 49 comparison rows and 13 PNG references; rendering and physical JAR identity checked |

@@ -2,7 +2,7 @@
 
 ## At a glance
 
-**Local context:** [support](src/main/atf/shop/support/README.md) · [ATF context atlas](../docs/ATF_Context_Atlas.md).
+**Local guide:** [support](src/main/atf/shop/support/README.md).
 
 `ShopApiRunReport` owns the lifecycle and business verdict. Safe exception
 summarization is delegated to
@@ -1542,9 +1542,7 @@ main. The source sets in the table above describe the current implementation.
 - The three gates remain complete until equivalence tests are proven; screenshot
   policy does not justify a second business story.
 
-Extraction decisions and ownership differences are in the
-[context atlas](../docs/ATF_Context_Atlas.md#reuse-without-moving-application-policy);
-[business acceptance contract](../docs/ATF_Testing_Guide.md#individual-and-suite-business-acceptance)
+The [business acceptance contract](../docs/ATF_Testing_Guide.md#individual-and-suite-business-acceptance)
 describes the required evidence and separate review before reducing the selection.
 
 The catalog/checkout stages in `ShopPurchaseFlow` are implemented; separating
@@ -1644,7 +1642,7 @@ checks aliases, YAML without overrides, and precondition projection in `tr-TR`,
 `en-US`, and `lt-LT`. The test restores all locale categories and keeps its
 assertions in the standard collapsed `Component assertions` step.
 
-## Screenshot context
+## Screenshot evidence
 
 Screenshot evidence uses the whole browser viewport at the configured 70% zoom,
 retaining the page around the current action. Region close-ups supplement the
@@ -1653,7 +1651,3 @@ complete frame; the report fits the full image with its aspect ratio and all edg
 The [shared capture contract](../atf-ui/README.md#full-context-screenshots) and
 [native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
 protect context independently of the screenshot publication policy.
-
-| Latest live screenshot acceptance | Verified scope |
-|---|---|
-| [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One Shop purchase per launch, 70% whole-context screenshots, 150 comparison rows and 10 PNG references; rendering and physical JAR identity checked |

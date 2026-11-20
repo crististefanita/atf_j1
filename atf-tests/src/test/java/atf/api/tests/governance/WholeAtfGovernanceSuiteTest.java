@@ -8,6 +8,7 @@ import atf.testkit.AtfIntegrationTest;
 import atf.api.tests.governance.distribution.GovernanceDeploymentTest;
 import atf.api.tests.governance.distribution.ReportingGovernanceSurfaceTest;
 import atf.api.tests.governance.distribution.ReportingHarnessOwnershipTest;
+import atf.api.tests.governance.documentation.structure.DocumentationContextArtifactGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationDiagramGovernanceTest;
 import atf.api.tests.governance.documentation.relationship.DocumentationDirectRelationshipGovernanceTest;
 import atf.api.tests.governance.documentation.language.DocumentationLanguageGovernanceTest;
@@ -47,6 +48,7 @@ import org.junit.platform.suite.api.Suite;
         AtfSourceReadabilityGovernanceTest.class,
         ConstantsOwnershipGovernanceTest.class,
         DynamicPathDocumentationArchitectureTest.class,
+        DocumentationContextArtifactGovernanceTest.class,
         DocumentationDiagramGovernanceTest.class,
         DocumentationDirectRelationshipGovernanceTest.class,
         DocumentationLanguageGovernanceTest.class,

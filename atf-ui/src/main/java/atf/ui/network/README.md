@@ -47,4 +47,4 @@ session owns the page; the inspector owns its listeners.
 
 Retention conditions and consumer examples are in the [module contract](../../../../../../README.md).
 
-Continue in the [ATF context atlas](../../../../../../../docs/ATF_Context_Atlas.md).
+Continue in the [UI module guide](../../../../../../../atf-ui/README.md).

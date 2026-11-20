@@ -79,9 +79,9 @@ public class DocumentationAnchorGovernanceTest {
     @Test
     void nonReadmeDocumentsAndTheirRenamedFragmentsAreGoverned(@TempDir Path root) throws Exception {
         Path docs = Files.createDirectories(root.resolve("docs"));
-        Path atlas = docs.resolve("ATF_Context_Atlas.md");
+        Path guide = docs.resolve("guide.md");
         Path contract = docs.resolve("contract.md");
-        Files.writeString(atlas, "# Context\n[contract](contract.md#stable)\n");
+        Files.writeString(guide, "# Guide\n[contract](contract.md#stable)\n");
         Files.writeString(contract, "# Stable\n");
         var violations = new ArrayList<DocumentationGovernanceSupport.Violation>();
         DocumentationLinkGovernanceTest.inspect(root, violations);
@@ -90,7 +90,7 @@ public class DocumentationAnchorGovernanceTest {
         DocumentationLinkGovernanceTest.inspect(root, violations);
         assertEquals(1, violations.size(), violations::toString);
         String diagnostic = violations.getFirst().toString();
-        assertTrue(diagnostic.contains("ATF_Context_Atlas.md:2") && diagnostic.contains("DOC-README-ANCHOR"), diagnostic);
+        assertTrue(diagnostic.contains("guide.md:2") && diagnostic.contains("DOC-README-ANCHOR"), diagnostic);
         assertTrue(diagnostic.contains("restore the destination heading"), diagnostic);
     }
 

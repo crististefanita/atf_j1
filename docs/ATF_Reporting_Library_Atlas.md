@@ -1,6 +1,6 @@
 # Reporting as a library — consumer integration atlas
 
-Current coordinates, hashes, and consumer acceptance are recorded in [library provenance](../library-provenance.json). This atlas describes the Reporting contract exercised by J1; dated verification records remain historical.
+Current coordinates, hashes, and consumer acceptance are recorded in [library provenance](../library-provenance.json). This guide describes the Reporting contract exercised by J1 and its observable integration boundaries.
 
 ## At a glance
 

@@ -30,7 +30,7 @@ those dependencies are used and how local behavior is verified.
 
 | Topic | Documents |
 |---|---|
-| Architecture and context | [Architecture](ATF_Architecture.md) · [Context atlas](ATF_Context_Atlas.md) · [root README](../README.md) |
+| Architecture | [Architecture](ATF_Architecture.md) · [root README](../README.md) |
 | Library contracts | [Core](ATF_Core_Consumer.md) · [Reporting](ATF_Reporting_Library_Atlas.md) · [Console](../lib/README.Console.md) · [Mock](../lib/README.Mock.md) · [Test Kit](../lib/README.TestKit.md) |
 | Consumers | [Practice Shop](../atf-test-practice-shop/README.md) · [AutoEx](../atf-test-auto-ex/README.md) |
 | Evidence and rendered reports | [Evidence contract](ATF_Evidence_Capture_Contract.md) · [Reporting consumer](ATF_Reporting_Consumer.md) · [Reporting contract](ATF_Reporting_Contract.md) · [Display contract](ATF_Reporting_Display_Contract.md) |

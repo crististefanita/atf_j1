@@ -22,8 +22,8 @@ record library observations by coordinate, version, hash, and local reproducer.
 | AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
 | J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); at initial closure, focused proof 65/65 and Whole-ATF 179/179 in EN and RO; editions align across 56 documents |
 | Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); governance 187/187 in EN and RO and edition comparison is clean |
-| UI screenshot context | [Live screenshot verification](../ATF_J1_Live_Screenshot_Verification.md) records its exact environment and evidence boundary |
-| Consumer contracts | [Context atlas](../ATF_Context_Atlas.md), module READMEs, and executable tests define current behavior |
+| Screenshot evidence policy | [Evidence capture contract](../ATF_Evidence_Capture_Contract.md), the UI module guide, and native browser geometry tests define the current behavior |
+| Consumer contracts | Module READMEs and executable tests define current behavior |
 
 ## Record a library observation
 

@@ -118,7 +118,7 @@ src/test/java/atf/api/tests/governance/
 ├── layers/           global classification and disjoint consumer-suite coverage
 ├── documentation/
 │   ├── language/     branch policy and visible-prose checks
-│   ├── structure/    owner README hierarchy and collapsible-block checks
+│   ├── structure/    owner README hierarchy, document population, and collapsible-block checks
 │   ├── factual/      POM, workspace, and consumer-configuration evidence
 │   ├── links/        Markdown heading and HTML anchor index
 │   ├── relationship/ direct J1 documentation relationship boundary
@@ -326,12 +326,17 @@ pins the resolved SHA, not a moving ref.
 
 [DocumentationLinkGovernanceTest](src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java)
 checks local destinations and fragments in all READMEs and Markdown documents
-under `docs`, including atlases, architecture, and feedback. Generated outputs
+under `docs`, including architecture, owner contracts, and feedback. Generated outputs
 are excluded. [Anchor checks](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java)
 also check a renamed heading in a document that is not named README. Both are
 included in the whole-ATF suite; `@DocumentationTarget` applies the same check
 to explicitly selected documents. The target's existence does not certify the
 meaning of its label.
+
+[DocumentationContextArtifactGovernanceTest](src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java)
+rejects general project maps, dated or library-versioned verification/acceptance
+snapshots, and provenance pointers to committed run reports. Its negative fixture
+writes only under JUnit temporary storage.
 
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compares the modules and Kit scope with the actual POMs.
@@ -498,7 +503,7 @@ deleted heading still appears in a fenced example. The heading rule follows
 
 | Decision | Source and limit |
 |---|---|
-| whole-reactor boundaries, ownership, and documentation | [WholeAtfGovernanceSuiteTest](src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java); [language check](src/test/java/atf/api/tests/governance/documentation/language/DocumentationLanguageGovernanceTest.java); [negative anchor checks](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) |
+| whole-reactor boundaries, ownership, and documentation | [WholeAtfGovernanceSuiteTest](src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java); [language check](src/test/java/atf/api/tests/governance/documentation/language/DocumentationLanguageGovernanceTest.java); [negative anchor checks](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java); [project map and snapshot gate](src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java) |
 | dependencies and source sets | [POM](pom.xml); declared scope is authoritative for integration |
 | What this check does not demonstrate | The gate does not prove a business journey or artifact rendering. |
 
@@ -508,7 +513,7 @@ deleted heading still appears in a fenced example. The heading rule follows
 Run from the root of [external staging](../docs/ATF_Build_And_Execution_Safety.md), with JDK 21 and Maven.
 
 ```powershell
-mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest,DocumentationAnchorGovernanceTest,DocumentationLanguageGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest,DocumentationContextArtifactGovernanceTest,DocumentationAnchorGovernanceTest,DocumentationLanguageGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
 node --test atf-tests/tools/documentation-editions.test.mjs
 node atf-tests/tools/documentation-editions.mjs compare $env:ATF_MAIN_STAGE $env:ATF_RO_STAGE
 ```

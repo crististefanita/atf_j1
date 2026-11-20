@@ -7,7 +7,7 @@ product page objects.
 
 ## At a glance
 
-**Local context:** [Playwright](src/main/java/atf/ui/playwright/README.md) · [network](src/main/java/atf/ui/network/README.md) · [ATF context atlas](../docs/ATF_Context_Atlas.md).
+**Local guides:** [Playwright](src/main/java/atf/ui/playwright/README.md) · [network](src/main/java/atf/ui/network/README.md).
 
 **Quick links:** [Actions](#actions-and-locators) · [Backend policy](#backend-recovery-through-passive-observation) · [Capture and boundaries](#network-inspector--generic-responsibility-boundary) · [Local proof](#quick-verification)
 

@@ -168,7 +168,7 @@ different contracts; validation produces typed results before report projection.
 Target boundaries and probes are in the
 [testing guide](ATF_Testing_Guide.md#separating-business-flows-ui-flows-and-validations).
 
-- Reuse decisions are in the [atlas](ATF_Context_Atlas.md#reuse-without-moving-application-policy).
+- Reuse follows the ownership and dependency boundaries in [the architecture](ATF_Architecture.md) and the consumer module READMEs.
 - [Consumer business acceptance](ATF_Testing_Guide.md#individual-and-suite-business-acceptance)
   describes the proof required before reducing a selection.
 

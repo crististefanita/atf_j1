@@ -90,4 +90,4 @@ Contracts and tests for the other checkpoints remain in the [module contract](..
 The reusable scope has a [UI contract](../../../../../../atf-ui/README.md#observation-listener-scope).
 Lookup observes application traffic; it does not issue a second GET or overwrite generated fields.
 
-Continue in the [ATF context atlas](../../../../../../docs/ATF_Context_Atlas.md).
+Continue in the [Shop module guide](../../../../../../atf-test-practice-shop/README.md).

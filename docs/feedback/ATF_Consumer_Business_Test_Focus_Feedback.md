@@ -4,8 +4,6 @@
 
 The [AutoEx search record](../ATF_AutoEx_Search_Verification.md) owns the
 GET/fresh-DOM contract, the original incident and the regression evidence.
-The [live purchase receipt](../ATF_J1_Live_Screenshot_Verification.md) records
-the separate AutoEx and Shop purchase and rendering checks.
 
 <a id="autoex-catalog-evidence-146"></a>
 ## AUTOEX-CATALOG-EVIDENCE-146 — bind comparison evidence to its observed exchange

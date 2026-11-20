@@ -32,7 +32,8 @@
   evidence flow before any dependency note. If the library catalog is needed,
   link to lib/README.md once in the final section; do not add sibling
   workspace identities, run scores, or dated results.
-- Keep current contract documentation concise. Retain only the current package
-  verification note beside the artifact in owned TMP; record its location in
-  provenance when required. Do not accumulate per-release verification
-  Markdown in docs or `lib`.
+- Keep current contract documentation concise: put any package verification
+  note beside its artifact in owned TMP and record it in provenance when
+  required. Do not commit project-wide orientation maps or dated/library-
+  versioned verification and acceptance reports in docs or `lib`; maintain
+  durable contracts at their owners.

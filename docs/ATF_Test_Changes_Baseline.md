@@ -37,6 +37,27 @@ consumer's fresh execution; no historical control is rebased or extended.
 </details>
 
 <details>
+<summary><strong>Verified control — project maps and dated verification snapshots</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DOC-MAP-AND-SNAPSHOT-GOVERNANCE-20261120
+    status: VERIFIED
+    base: ac8c77578400e331c6fa572db05df3208257e9ef
+    expires: 2026-11-30
+    reason: Remove general project maps and dated/library-versioned verification or acceptance snapshots; block their return with a repository scan, negative fixtures, and whole-suite selection.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=ac8c77578400e331c6fa572db05df3208257e9ef" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationTargetGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java
+```
+
+</details>
+
+<details>
 <summary><strong>Verified control — root overview and governance selection</strong></summary>
 
 ```yaml

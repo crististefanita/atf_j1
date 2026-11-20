@@ -24,6 +24,10 @@ Concision rules:
 - the diagram shows the main relationship, not an inventory of every class;
 - long explanations, exceptions, and secondary tables are collapsible;
 - add a new document only when it owns a real boundary or process;
+- do not add project-wide orientation maps or dated/library-versioned
+  verification and acceptance reports;
+- keep run evidence in owned TMP and retain durable artifact identity
+  in provenance;
 - move stable information to the owner's document instead of leaving it in feedback.
 
 <details>
@@ -582,6 +586,7 @@ histories, or local artifacts.
 |---|---|---|
 | Structure | [README structure](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationReadmeStructureGovernanceTest.java) | first screen and reader journey |
 | Root scope | [root README governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java) | local-first framing and the final library-index note |
+| Document population | [project-map and snapshot governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java) | no general project maps or dated/versioned report snapshots |
 | Links and fragments | [all governed documents](../atf-tests/src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java) and [negative checks](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) | meaning of the label and claim next to the link |
 | Style and prose | [style](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationStyleGovernanceTest.java) and [prose](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationProseGovernanceTest.java) | exact wording, useful density, and first screen |
 | Diagrams and legends | [diagram governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java) | rendering, geometry, and preservation of meaning |

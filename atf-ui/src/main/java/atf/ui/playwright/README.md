@@ -59,4 +59,4 @@ The callback checks `active()` before accessing any request/response/frame.
 The scope contract is in the [UI README](../../../../../../README.md#observation-listener-scope);
 the network inspector keeps its ownership and release order separate.
 
-Continue with the [ATF context atlas](../../../../../../../docs/ATF_Context_Atlas.md).
+Continue with the [UI module guide](../../../../../../../atf-ui/README.md).

@@ -60,7 +60,7 @@ Local tests verify the boundary; the same purchase run individually and through
 a filtered suite verifies live integration. A new FAIL remains in feedback,
 even if a later run passes. Normative details are in the [module contract](../../../../../../README.md).
 
-Continue in the [ATF context atlas](../../../../../../../docs/ATF_Context_Atlas.md).
+Continue in the [AutoEx module guide](../../../../../../../atf-test-auto-ex/README.md).
 
 The mapper uses the [Reporting query contract](../../../../../../../docs/ATF_Reporting_Library_Atlas.md#api-exchange-and-identity)
 for safe aggregate identity. Browser capture removes values and carries only
