@@ -1,6 +1,6 @@
 # Build și execuție sigură pentru ATF
 
-Pentru sursele Core și Reporting din `atf_j0` și țintele J1/J2, aplică [protocolul workspace-ului](ATF_Workspace_Synchronization.md) înaintea sync-ului selectiv.
+Pentru sursele Core și Reporting din `atf_j0` și consumerii J1–J7, aplică [protocolul workspace-ului](ATF_Workspace_Synchronization.md) înaintea sync-ului selectiv.
 
 **Perimetru J1:** Reporting este JAR extern. Comenzile care țintesc
 `atf-reporting/pom.xml`, resursele native sau auditul sursei se execută în
@@ -42,7 +42,7 @@ Etichetele scurte păstrează următorul sens:
 | În schemă | Sens complet |
 |---|---|
 | Live | Checkout live |
-| Inspectare | inspectare read-only |
+| Inspectare | inspectare fără scriere |
 | TMP stage | staging nou în director temporar |
 | Sync surse | sincronizare surse fără output-uri |
 | Build | build și teste în staging |
@@ -335,9 +335,9 @@ Publicația pe aceeași cale finală este serializată printr-un lock per cale �
 directorul temporar al procesului; lock-ul nu este scris lângă raport și nu
 schimbă staging-ul privat al sesiunii.
 
-Fiecare staging Extent este marcat printr-un fișier versionat și ținut sub un
-lease exclusiv cât timp sesiunea este activă. După o întrerupere forțată,
-operatorul poate rula explicit sweeper-ul bounded din
+Fiecare zonă temporară Extent este marcată printr-un fișier versionat și păstrată
+sub o rezervare exclusivă cât timp sesiunea este activă. După o întrerupere forțată,
+operatorul poate rula explicit instrumentul limitat de curățare din
 `atf.reporting.publication.ReportStagingWorkspace`, de exemplu:
 
 ```java
@@ -346,12 +346,12 @@ var result = ReportStagingWorkspace.sweep(
         Duration.ofHours(1));
 ```
 
-Sweeper-ul inspectează numai directoarele `.atf-extent-session-*` marcate direct
-sub `reportDirectory`, păstrează workspace-urile fresh, active, malformate sau
-nemarcate și returnează cardinalitatea `scanned/deleted/skipped/failures`.
-Implicit procesează cel mult 256 de candidate; pentru operaționalizare se poate
-folosi overload-ul cu `maxCandidates`, iar `limitReached=true` face limitarea
-observabilă în test și în diagnostic.
+Instrumentul de curățare inspectează numai directoarele `.atf-extent-session-*`
+marcate direct în `reportDirectory`, păstrează spațiile de lucru noi, active,
+malformate sau nemarcate și returnează numărul elementelor `scanned/deleted/skipped/failures`.
+În mod implicit procesează cel mult 256 de intrări candidate; la operaționalizare
+se poate folosi varianta cu `maxCandidates`, iar `limitReached=true` face
+limitarea observabilă în test și diagnostic.
 
 <id> este unic pentru sesiunea curentă. Dacă există fișiere modificate local,
 se verifică înainte ca sincronizarea să nu le suprascrie. Orice proiect extern

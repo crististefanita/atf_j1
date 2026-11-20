@@ -41,7 +41,7 @@ public final class DocumentationGovernanceSupport {
         });
     }
 
-    static boolean isReadme(Path path) {
+    public static boolean isReadme(Path path) {
         if (!Files.isRegularFile(path)
                 || !path.getFileName().toString().equalsIgnoreCase("README.md")) {
             return false;

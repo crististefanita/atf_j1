@@ -1,6 +1,6 @@
 # Atlas de context ATF — intrări, ownership și probe
 
-[Referința J0 și sincronizarea J1/J2](ATF_Workspace_Synchronization.md) fixează ownership-ul, starea țintelor și dovada fiecărei livrări.
+[Referința J0 și sincronizarea J1–J7](ATF_Workspace_Synchronization.md) fixează ownership-ul, starea țintelor și dovada fiecărei livrări.
 
 ## Pe scurt
 
@@ -78,8 +78,8 @@ pornește investigația; nu înlocuiește verificarea sursei afectate.
 
 | Decizie inițială | Sursa de adevăr | Limita ei |
 |---|---|---|
-| ce reactor folosesc? | [workspace-uri](ATF_Workspace_Synchronization.md), apoi POM-ul țintei | J0 sursă 12, J1 JAR 9, J2 WIP 8, J3 speech 7, J4 Android 7; profilurile nu se deduc din foldere absente |
-| schimbare Reporting? | [atlasul sursei J0](../../atf_j0/atf-reporting/src/main/java/atf/reporting/README.md) și [regresiile permanente](../../atf_j0/atf-reporting-tests/README.md) | Reporting are acceptanțe distincte în J1/J2/J3/J4; documentația sursei nu certifică automat JAR-ul consumat |
+| ce reactor folosesc? | [workspace-uri](ATF_Workspace_Synchronization.md#catalogul-de-module-și-reporting), apoi POM-ul țintei | POM-uri live: J0 12, J1 6, J2 WIP 5, J3 speech 4, J4 Android 3, J5 Rentz 2, J6 Hold’em 5, J7 Chess 1; profilurile nu se deduc din foldere absente |
+| schimbare Reporting? | [atlasul sursei J0](../../atf_j0/atf-reporting/src/main/java/atf/reporting/README.md) și [regresiile permanente](../../atf_j0/atf-reporting-tests/README.md) | J1–J7 au versiuni și acceptanțe de consumer distincte; J4 păstrează j24, iar documentația sursei nu certifică automat JAR-ul consumat |
 | schimbare de aplicație? | [Shop](../../atf_j1/atf-test-practice-shop/README.md) sau [AutoEx](../../atf_j1/atf-test-auto-ex/README.md) | expected, captură și selecție business rămân în consumer |
 | schimbare Kafka/Podman? | [atlasul J2](../../atf_j2/docs/ATF_Context_Atlas.md), apoi Setup și configurația | trei componente MOCK și scripturi existente; clientul Java/brokerul real sunt WIP |
 
@@ -277,12 +277,12 @@ decide ce se mută sau se elimină după dovadă.
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
+J1 consumă Core, Reporting, Console, Mock și Test Kit ca biblioteci externe; contractele sunt în [ghidul platformei](ATF_Platform_Libraries.md).
 
-[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele consumerilor.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 
 ## Shared platform libraries
 
-The current reactor has 6 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+[Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

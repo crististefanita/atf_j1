@@ -505,7 +505,7 @@ Anti-pattern-uri interzise:
 try {
     action();
 } catch (Exception ignored) {
-    // false-green: failure-ul a dispărut
+    // false-green: the failure disappeared
 }
 ```
 
@@ -513,7 +513,7 @@ try {
 try {
     return parse(body);
 } catch (RuntimeException error) {
-    return false; // malformed input devine „nu există”
+    return false; // malformed input becomes "not present"
 }
 ```
 

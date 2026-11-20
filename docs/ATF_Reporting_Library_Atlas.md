@@ -1,6 +1,9 @@
 # Reporting ca bibliotecă — atlasul integrării consumerului
 
-Current coordinates, hashes and independent acceptance are recorded in [library provenance](../library-provenance.json). The API and ownership below describe the current integration; the explicitly dated J6/J7 inventories remain historical.
+Coordonatele curente, hash-urile și acceptanța independentă sunt înregistrate în
+[proveniența bibliotecii](../library-provenance.json). API-ul și ownership-ul de
+mai jos descriu integrarea curentă; inventarele J6/J7 marcate explicit cu date
+rămân istorice.
 
 ## Pe scurt
 
@@ -28,7 +31,7 @@ schimbările ulterioare din `atf_j0`. Diagnosticul pornește de la versiunea
 API-ul folosit poate fi inspectat din binar:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j20.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j25.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
 Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
@@ -244,4 +247,6 @@ sursa bibliotecii și fișierele din JAR nu se repară în `lib`.
 ## Profil explicit și surse temporale
 
 [Contractul J0](../../atf_j0/atf-reporting/README.md#inspecția-artifactului-cu-intenție-explicită) separă intenția callerului de inspecția artifactului; apelul legacy rămâne Extent/HTTP.
-The [current library provenance](../library-provenance.json) identifies the delivered binary and consumer acceptance; source and the Reporting harness remain in J0.
+[Proveniența curentă a bibliotecii](../library-provenance.json) identifică
+binarul livrat și acceptanța consumerilor; sursa și harness-ul Reporting rămân
+în J0.

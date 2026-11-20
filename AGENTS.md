@@ -1,39 +1,58 @@
-# ATF workspace rules
+# Reguli pentru workspace-ul ATF
 
-- Use the sibling workspace `atf_j0` (`../atf_j0`) as the current Core/Reporting/Console/Mock
-  source and test reference.
-  `demo2` is historical; do not edit or synchronize it for new work.
-- Read `docs/ATF_Workspace_Synchronization.md` and
-  `docs/ATF_Build_And_Execution_Safety.md` before changing or delivering code.
-- Keep Reporting implementation/native tests in `atf_j0/atf-reporting` and
-  permanent mock, contract and browser regressions in `atf_j0/atf-reporting-tests`.
-- After relevant J0 changes, assess both `atf_j1` and `atf_j2`. Deliver and
-  validate each initialized consumer separately. Inspect J2's current bootstrap
-  and messaging scope; do not infer its acceptance from J1's results.
-- J2 keeps its existing Git and messaging scope. Its explicit Eventuate profile includes Setup and excludes Shop, AutoEx, UI and Debug UI; do not restore those modules or Playwright in J2.
-- Keep Core implementation and native tests only in J0. Binary consumers
-  retain the latest Core, Reporting, Console, Mock and Test Kit JAR/POM pairs directly in `lib`,
-  with one root provenance file. Do not copy Reporting source or its harness
-  into the live binary consumers.
-- Reconcile common code and consumer adapters selectively in both directions.
-  Preserve local work, reactor POMs, configurations and independent Git bases.
-  A successful file promotion is not an atomic transaction across workspaces.
-- Build/test only in owned TMP staging; keep generated reports/cache/output
-  there. Preserve the 240-character default reporting preview and auditable,
-  collapsible component/E2E assertions.
-- Playwright validation must inherit the SDK-selected Node runtime by default.
-  Do not silently overwrite `PLAYWRIGHT_NODEJS_PATH` with the agent's runtime.
-  Record an explicit runtime experiment separately from SDK-default acceptance.
-- Keep owner documentation and feedback current with the actual code and
-  tests. Preserve historical build provenance; a directory rename alone does
-  not require a new Reporting version or imply a fresh test execution.
+- Folosește workspace-ul-soră `atf_j0` (`../atf_j0`) ca referință actuală pentru
+  sursele și testele Core/Reporting/Console/Mock.
+  `demo2` este istoric; nu îl edita și nu îl sincroniza pentru lucrări noi.
+- Citește `docs/ATF_Workspace_Synchronization.md` și
+  `docs/ATF_Build_And_Execution_Safety.md` înainte de a modifica sau livra cod.
+- Păstrează implementarea Reporting și testele native în `atf_j0/atf-reporting`,
+  iar regresiile permanente mock, de contract și de browser în
+  `atf_j0/atf-reporting-tests`.
+- După schimbări relevante în J0, evaluează atât `atf_j1`, cât și `atf_j2`.
+  Livrează și validează separat fiecare consumer inițializat. Inspectează
+  bootstrap-ul și scope-ul de mesagerie curente din J2; nu deduce acceptanța
+  acestuia din rezultatele J1.
+- J2 își păstrează scope-ul Git și de mesagerie existent. Profilul Eventuate
+  explicit include Setup și exclude Shop, AutoEx, UI și Debug UI; nu readăuga
+  aceste module sau Playwright în J2.
+- Păstrează implementarea Core și testele native numai în J0. Consumerii binari
+  păstrează direct în `lib` cele mai recente perechi JAR/POM pentru Core,
+  Reporting, Console, Mock și Test Kit, cu un singur fișier de proveniență la
+  rădăcină. Nu copia sursa Reporting sau harness-ul său în consumerii binari
+  activi.
+- Reconciliază selectiv codul comun și adaptoarele consumerilor în ambele
+  direcții. Păstrează lucrul local, POM-urile reactorului, configurațiile și
+  bazele Git independente. Promovarea reușită a unui fișier nu este o tranzacție
+  atomică între workspace-uri.
+- Construiește și testează numai într-un staging TMP deținut; păstrează acolo
+  rapoartele, cache-ul și output-ul generate. Păstrează preview-ul Reporting
+  implicit de 240 de caractere și aserțiunile component/E2E auditabile și
+  colapsabile.
+- Validarea Playwright trebuie să moștenească implicit runtime-ul Node selectat
+  de SDK. Nu suprascrie în tăcere `PLAYWRIGHT_NODEJS_PATH` cu runtime-ul agentului.
+  Înregistrează separat experimentul explicit de runtime față de acceptanța cu
+  runtime-ul implicit al SDK-ului.
+- Menține documentația ownerilor și feedback-ul la zi cu codul și testele reale.
+  Păstrează proveniența istorică a build-urilor; o redenumire de director, de una
+  singură, nu cere o versiune Reporting nouă și nu presupune o execuție nouă a
+  testelor.
 
-- Keep active J0 feedback limited to Core/Reporting/Console/Mock and Test Kit, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
+- Limitează feedback-ul activ din J0 la Core/Reporting/Console/Mock și Test Kit,
+  inclusiv testele Reporting generice. J1 coordonează celelalte criterii ale
+  modulelor comune și handoff-urile către consumeri; păstrează ownership-ul de
+  domeniu și acceptanța independentă în J2/J3/J4. Rutele de compatibilitate pot
+  rămâne în J0 fără TODO-uri duplicate.
 
-- Screenshot evidence preserves page context: capture the entire browser viewport
-  at the configured zoom (70% for Shop/AutoEx journeys), or the whole Android
-  display. Region crops may supplement the original frame, never replace it.
-  The report viewer fits the complete image to the screen with its aspect ratio
-  and all edges intact. Explicit geometry tests retain their independent scales.
+- Dovezile screenshot păstrează contextul paginii: capturează întregul viewport
+  al browserului la zoom-ul configurat (70% pentru journey-urile Shop/AutoEx)
+  sau întregul ecran Android. Decupajele regionale pot completa cadrul original,
+  dar nu îl înlocuiesc. Vizualizatorul raportului adaptează imaginea completă la
+  ecran, păstrând proporțiile și toate marginile. Testele explicite de geometrie
+  își păstrează scările independente.
 
-- Keep project README files and docs focused on current contracts. Retain only the current Reporting verification note beside its producer package in owned TMP; record its location in current consumer provenance. Do not accumulate per-release verification Markdown in docs or consumer lib. Preserve historical build/test provenance.
+- Păstrează README-urile și documentele proiectului concentrate pe contractele
+  curente. Reține lângă pachetul producător doar nota curentă de verificare
+  Reporting, în TMP-ul deținut; înregistrează locația ei în proveniența curentă
+  a consumerului. Nu acumula fișiere Markdown de verificare pentru fiecare
+  versiune în docs sau în `lib`-ul consumerului. Păstrează proveniența istorică a
+  build-urilor și testelor.

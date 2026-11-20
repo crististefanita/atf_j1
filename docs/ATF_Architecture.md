@@ -6,9 +6,10 @@ cunoaște rutele sau intenția unui test de produs.
 
 ## Pe scurt
 
-Reactorul păstrează exact cele 6 module existente.
-Core, Reporting, Console, Mock și Test Kit sunt consumate prin JAR/POM.
-[POM-ul J1](../pom.xml) fixează inventarul și versiunile. [Ghidul bibliotecilor](../lib/README.md) arată cum se consumă și unde se raportează defectele.
+- Reactorul păstrează exact cele 6 module existente.
+- Core, Reporting, Console, Mock și Test Kit sunt consumate prin JAR/POM.
+- [POM-ul J1](../pom.xml) fixează inventarul și versiunile.
+- [Ghidul bibliotecilor](../lib/README.md) arată cum se consumă și unde se raportează defectele.
 
 | Boundary | Owner | Contract stabil | Gate executabil |
 |---|---|---|---|
@@ -131,7 +132,7 @@ dedusă din poziția nodurilor:
 `atf-test-kit` expune vocabularul unit/component/integration/e2e și adnotările
 transversale pentru testare. Boundary-urile actuale sunt:
 
-- consumul din aplicațiile testate rămâne test-only; adapter-ele de infrastructură
+- consumul din aplicațiile testate rămâne limitat la scope-ul testelor; adaptoarele de infrastructură
   pot necesita compile scope pentru integrarea JUnit, iar excepțiile se verifică
   în POM-ul fiecărui modul;
 - Practice Shop și AutoEx consumă Test Kit în `test` scope; harness-urile și
@@ -140,7 +141,7 @@ transversale pentru testare. Boundary-urile actuale sunt:
   evenimentului extern către fabrica neutră `AtfConsoleEvent.fromExternalEnums`
   din Core, iar Reporting Tests verifică vocabularele reale;
 - `atf-mock` depinde numai de `atf-core`, iar `atf-debug-ui` este un launcher
-  read-only; pornirea sa din teste sau IntelliJ nu îl transformă într-o
+  doar în citire; pornirea sa din teste sau IntelliJ nu îl transformă într-o
   dependență a rendererului.
 
 ### Platforma reutilizabilă față de punctul de compunere
@@ -163,9 +164,9 @@ flowchart LR
 <details>
 <summary><strong>Legendă — separarea production și composition</strong></summary>
 
-- core expune selecția typed, iar catalogul concret aparține consumerului;
-- API artifactul este input read-only pentru inspectorul UI;
-- validatorul UI aparține librăriei reporting, iar browserul rămâne în test scope;
+- Core expune selecția tipizată, iar catalogul concret aparține consumatorului;
+- artefactul API este o intrare fără scriere pentru inspectorul UI;
+- validatorul UI aparține bibliotecii de raportare, iar browserul rămâne în domeniul testelor;
 - niciun `Page`, `Locator` sau JUnit nu intră în production reporting.
 
 Etichetele scurte păstrează următorul sens:
@@ -200,7 +201,7 @@ Limitele de compoziție și ownership sunt:
 | atf-console | formatter pentru evenimentele de consolă, `ConsoleSettings`, YAML, nesting, statusuri, fallback ASCII/UTF-8 și ownership-ul exclusiv al stdout/stderr | HTML, Extent, apeluri HTTP, verdicturi inventate |
 | atf-reporting | sesiune, arbore Extent, theme, finalizare HTML, audit kernel renderer-neutral, planuri de audit, contracte API renderer-neutral, metadata failure surfaces, motorul pur `api.contract`, auditul static al artifactului API, auditorul JSON static, contractul pur al raportului UI și lifecycle-ul generic de evidence | apeluri HTTP/transport, consolă concretă, acceptance scenarios, browser/Playwright și fixture-uri de test; nu depinde runtime de `atf-mock` |
 | atf-ui | configurație browser și adaptor Java Playwright pentru verificări UI automate | generarea HTML-ului și testele executabile |
-| atf-debug-ui | publică read-only un HTML existent pe loopback și furnizează target-ul pentru TAB MCP | renderer, modificarea artifactului, verdicturi și teste executabile |
+| atf-debug-ui | publică fără modificări un HTML existent pe loopback și furnizează ținta pentru TAB MCP | randare, modificarea artefactului, verdicte și teste executabile |
 | atf-test-kit | adnotări, resolvere și primitive test-only de achiziție/rollback/cleanup; [contract](../lib/README.TestKit.md#scope-și-integrare) | cod production, renderer, browser și reguli business |
 | atf-reporting-tests | contracte component/integration API/mock și E2E UI care verifică exclusiv `atf-reporting`; fixture-uri și adaptoare ale raportului | nu devine suita unei aplicații și nu mută aceste responsabilități în production |
 | atf-test-practice-shop | testele aplicației, runtime, pagini, flow-uri și mapping-ul dovezilor business | rendererul/publisherul generic și guvernanța whole-ATF |
@@ -897,9 +898,9 @@ helper nu autorizează un apel remote și nu transformă un fixture în dovadă 
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
+J1 consumes Core, Reporting, Console, Mock and Test Kit as external libraries.
 
-[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele consumerilor.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 

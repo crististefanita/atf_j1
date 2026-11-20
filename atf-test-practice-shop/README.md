@@ -38,10 +38,10 @@ flowchart LR
 - `YAML + fixture` conține valori și profile specifice aplicației;
 - `Shop flow` compune paginile și checkpoint-urile; paginile cunosc rutele și
   controalele Practice Shop;
-- săgeata punctată este numai observarea opțională `UI_API`; UI-only continuă să
-  trimită traficul normal al aplicației, dar nu publică API evidence;
-- journal-ul păstrează traficul observat, iar mapper-ul promovează doar
-  exchange-urile selectate pentru checkpoint-uri;
+- săgeata punctată reprezintă numai observarea opțională `UI_API`; testele doar UI continuă să
+  trimită traficul normal al aplicației, dar nu publică dovezi API;
+- jurnalul păstrează traficul observat, iar maparea promovează doar
+  schimburile selectate pentru punctele de verificare;
 - `atf-reporting` și `atf-console` rămân ownerii generici ai output-ului; Shop
   deține mapping-ul și semantica business.
 Etichetele scurte păstrează următorul sens:
@@ -279,7 +279,7 @@ flowchart LR
   Fără răspuns HTTP, statusul este `unavailable`, separat de eroarea de transport.
 - Listener-ele se închid înainte de gate-urile de business. Acest protocol
   explicit al încărcării home este separat de controllerul BE pasiv de mai jos;
-  nu îi schimbă opt-in-ul și nu activează retry global ori un client API în UI-only.
+  nu îi schimbă alegerea explicită și nu activează reluări generale ale testului ori un client API în rularea doar UI.
 
 `ShopCatalogReadinessComponentTest` verifică GET și QUERY pe HTTP loopback real:
 succes întârziat, 503→200, conexiune resetată, epuizare, 200 fără produse,
@@ -1564,6 +1564,8 @@ standalone din tabel. Rezolvarea configurației nu creează directoarele.
 `ShopConfigurationLoader` reutilizează căutarea de fișier din Core, fără
 dependență runtime către Kit. [ShopConfigurationTest](src/test/atf/shop/tests/component/configuration/ShopConfigurationTest.java)
 verifică API-ul public în ambele layout-uri și păstrează izolarea `user.dir`.
+Raportul componentă publică verificările fiecărei invocări în pasul colapsabil
+`Component assertions`.
 
 ## Geometria YAML livrată
 
@@ -1613,16 +1615,17 @@ verifică aliasurile, YAML-ul fără override și proiecția precondiției în `
 `en-US` și `lt-LT`. Testul restaurează toate categoriile locale și păstrează
 asserțiunile în pasul standard colapsabil `Component assertions`.
 
-## Screenshot context
+## Contextul capturii de ecran
 
-Screenshot evidence uses the whole browser viewport at the configured 70% zoom,
-retaining the page around the current action. Region close-ups supplement the
-complete frame; the report fits the full image with its aspect ratio and all edges.
+Capturile de ecran folosite drept dovezi includ întregul viewport al browserului
+la zoom-ul configurat de 70%, păstrând pagina din jurul acțiunii curente.
+Prim-planurile unei regiuni completează cadrul întreg; raportul încadrează
+imaginea completă, cu proporțiile și toate marginile originale.
 
-The [shared capture contract](../atf-ui/README.md#full-context-screenshots) and
-[native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
-protect context independently of the screenshot publication policy.
+Contractul comun de [captură](../atf-ui/README.md#capturi-de-ecran-cu-context-complet)
+și [regresia pixelilor nativi](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
+protejează contextul independent de politica de publicare a capturilor.
 
-| Latest live screenshot acceptance | Verified scope |
+| Cea mai recentă acceptanță live pentru capturi | Domeniu verificat |
 |---|---|
 | [2026-11-03 individual and canonical suite](../docs/ATF_J1_Live_Screenshot_Verification.md) | One Shop purchase per launch, 70% whole-context screenshots, 150 comparison rows and 10 PNG references; rendering and physical JAR identity checked |

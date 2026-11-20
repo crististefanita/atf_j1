@@ -8,19 +8,27 @@
 Implementările Core/Reporting/Console/Mock/Test Kit și toate testele lor native rămân aici; fiecare destinație
 primește și verifică livrarea potrivită propriului deployment.
 
-| Workspace | Rol | Suprafață existentă |
-|---|---|---|
-| `atf_j0` | sursă Core/Reporting/Console/Mock/Test Kit, teste native și `atf-reporting-tests`; referință pentru contractele comune | 12 module sursă; Core și guvernanța comune reconciliate |
-| `atf_j1` | testarea AutoEx și Shop | 6 module sursă, 5 biblioteci J0 și acceptanță proprie. [Proveniență](../library-provenance.json) |
-| `atf_j2` | WIP pentru Kafka/mesagerie, fără module browser ori Shop/AutoEx | Observer probat pe broker real. Aplicația Eventuate completă rămâne `NOT RUN`. [Scopul J2](../../atf_j2/docs/ATF_J2_Scope.md) |
-| `atf_j3` | consumer speech, patru module sursă; Core și Reporting prin JAR | C3/J20 în lib și acceptanță proprie, fără module web ori mesagerie |
-| `atf_j4` | Android consumer, four source modules; Core / Reporting flat pairs | separate component, archived rendering and device acceptance |
-| `demo2` | origine istorică a livrării J6 existente | nu mai este destinație activă de mentenanță sau sync |
+## Catalogul de module și Reporting
+
+| Workspace | Boundary ATF | Module Maven | Reporting | POM |
+|---|---|---:|---|---|
+| `atf_j0` | producer | 12 | source | [POM](../../atf_j0/pom.xml) |
+| `atf_j1` | consumer | 6 | 1.0.0-j25 | [POM](../pom.xml) |
+| `atf_j2` | consumer · WIP Kafka/mesagerie | 5 | 1.0.0-j25 | [POM](../../atf_j2/pom.xml) |
+| `atf_j3` | consumer · speech | 4 | 1.0.0-j25 | [POM](../../atf_j3/pom.xml) |
+| `atf_j4` | consumer · Android/Whist | 3 | 1.0.0-j24 | [POM](../../atf_j4/pom.xml) |
+| `atf_j5` | consumer · Rentz | 2 | 1.0.0-j25 | [POM](../../atf_j5/pom.xml) |
+| `atf_j6` | consumer · Hold’em Lab | 5 | 1.0.0-j25 | [POM](../../atf_j6/pom.xml) |
+| `atf_j7` | consumer · Chess Lab | 1 | 1.0.0-j25 | [POM](../../atf_j7/pom.xml) |
+
+J4 este excepția de versiune: POM-ul și perechea distribuită păstrează Reporting j24. `demo2` rămâne originea istorică a livrării J6 și nu este o destinație activă de mentenanță.
 
 J1 poate avea schimbări comune în lucru. Referința J0 nu autorizează
 suprascrierea lor: reconcilierea compară baza, diferența și proba fiecărui owner.
 
 ## Direcția livrării
+
+Tabelul anterior arată starea curentă din POM-uri; schema arată fluxul unui candidat comun.
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
@@ -29,7 +37,10 @@ flowchart LR
     Candidate -->|livrează| J1["J1<br/>consumer existent"]
     Candidate -->|livrează| J2["J2<br/>consumer inițializat"]
     Candidate -->|livrează| J3["J3<br/>consumer speech"]
-    Candidate -->|livrează| J4["J4<br/>consumer Android"]
+    Candidate -.->|adopție j25 în așteptare| J4["J4<br/>curent j24"]
+    Candidate -->|livrează| J5["J5<br/>consumer Rentz"]
+    Candidate -->|livrează| J6["J6<br/>consumer Hold’em"]
+    Candidate -->|livrează| J7["J7<br/>consumer Chess"]
 ```
 
 <details>
@@ -40,6 +51,7 @@ flowchart LR
   JAR/POM este oferită destinațiilor, fără rebuild separat sub aceeași versiune.
 - Fiecare muchie de livrare cere propria acceptanță. J2 are un Git separat,
   păstrat la baza sa existentă; profilul Eventuate exclude explicit Shop/AutoEx, UI și Debug UI, iar configurațiile lui evoluează separat.
+- Muchia punctată spre J4 indică versiunea j25 în așteptarea adoptării; POM-ul lui rămâne pe j24.
 - J3 primește aceleași perechi Core/Reporting, cu acceptanță proprie; nu păstrează surse Core ori harness Reporting.
 - Muchiile sunt livrări și probe, nu dependențe Maven ori module suplimentare.
 
@@ -63,7 +75,7 @@ rămân distincte; infrastructura copiată nu le demonstrează.
 | Schimbare în referință | Livrare către fiecare consumer | Dovadă necesară |
 |---|---|---|
 | Reporting Java, assets, API sau POM | versiune nouă, JAR/POM și proveniență; documentele de adopție | native, regresii permanente și gate pe JAR-ul fizic |
-| Core Java, API sau POM | versiune Core nouă, pereche JAR/POM și proveniență; sursa și nativele rămân în J0 | native și contracte pe JAR, guvernanță și acceptanță distinctă J1/J2 |
+| Core Java, API sau POM | versiune Core nouă, pereche JAR/POM și proveniență; sursa și nativele rămân în J0 | native în J0 și acceptanțe pe JAR separate la fiecare consumer; domeniul și proba locală sunt definite în contractele deployment-ului |
 | numai regresii Reporting | testele rămân în J0; se verifică relevanța pentru versiunea consumată | reproducere negativă și acceptanță pe binarul afectat; fără copierea harness-ului în live |
 | other shared source modules (Kit, Validation, UI) or Shop/AutoEx adapters | numai sursele și probele selectate pentru același comportament | comparație cu schimbările locale și testele ownerului; un JAR Reporting nou nu este implicit necesar |
 | documentație ori mutarea referinței | contracte și linkuri adaptate deployment-ului | guvernanță documentară; fără versiune binară nouă numai pentru redenumirea directorului |
@@ -131,17 +143,18 @@ selectiv, iar backlog-ul Reporting și cel web rămân la ownerii J0/J1.
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
+J1 consumă Core, Reporting, Console, Mock și Test Kit ca biblioteci externe;
+inventarul modulelor este în catalogul de mai sus.
 
-[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele consumerilor.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 
-## Release evidence retention
+## Păstrarea dovezilor de publicare
 
-- Project README files, atlases and `docs` describe current contracts and ownership; they do not accumulate per-release Reporting verification notes.
-- Keep only `ATF_Reporting_Verification.md` for the current Reporting JAR in its producer packaging stage, beside the effective publication POM. Builds, logs and HTML evidence stay in owned TMP.
-- Consumer `library-provenance.json` records the current coordinate, hashes, original `buildStage` and `currentAcceptance.evidence` location. Consumer `lib` retains the latest Core, Reporting, Console, Mock and Test Kit JAR/POM pairs plus its dedicated README; no release notes are stored there.
-- Superseded notes are retired after their durable contracts have been reconciled. Historical build/test facts and original evidence paths remain provenance, explicitly marked as retired; they are not current document targets or fresh acceptance.
+- Fișierele README ale proiectelor, atlasele și `docs` descriu contractele și responsabilitățile curente; nu acumulează note de verificare Reporting pentru fiecare versiune.
+- Păstrează numai `ATF_Reporting_Verification.md` pentru JAR-ul Reporting curent, în etapa de împachetare a producătorului, alături de POM-ul efectiv de publicare. Compilările, jurnalele și dovezile HTML rămân în spațiul TMP deținut.
+- `library-provenance.json` al consumatorului înregistrează coordonatele curente, hash-urile, `buildStage` original și locația `currentAcceptance.evidence`. Directorul `lib` al consumatorului păstrează cele mai recente perechi JAR/POM Core, Reporting, Console, Mock și Test Kit, împreună cu README-ul dedicat; notele de versiune nu se stochează acolo.
+- Notele înlocuite se arhivează după reconcilierea contractelor lor durabile. Faptele istorice despre compilări/teste și căile originale ale dovezilor rămân în proveniență, marcate explicit ca retrase; ele nu sunt ținte curente ale documentației și nici dovezi ale unei acceptări noi.
 
 The verification note in the producer packaging stage identifies the distributed coordinate and matching JAR/POM hashes. [Consumer provenance](../library-provenance.json)

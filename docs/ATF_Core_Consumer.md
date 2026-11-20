@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-J0 păstrează implementarea și toate testele native Core. J1–J5 consumă
+J0 păstrează implementarea și toate testele native Core. J1–J7 consumă
 aceeași bibliotecă `atf.api:atf-core`, cu versiunea declarată în POM-ul consumerului, fără modul sursă ori teste
 native copiate în live. Reporting are publicare și acceptanță separate.
 
@@ -38,7 +38,7 @@ consumerilor folosesc `atf.core.version` din POM-ul rădăcină.
 1. Reconciliază schimbarea și probele la ownerul J0; păstrează codul și testele locale.
 2. Construiește în TMP cu POM parentless; transformarea de publicare schimbă numai versiunea proiectului, nu versiunea Test Kit de test.
 3. Rulează nativele și apoi aceleași teste pe JAR în harness TMP fără surse Core. Kit/JUnit rămân dependențe de test.
-4. Verifică separat J1–J5: compile, contracte afectate, guvernanță, CodeSource/hash și rapoarte; J2 MOCK nu certifică un broker Kafka.
+4. Verifică separat J1–J7: compile, contracte afectate, guvernanță, CodeSource/hash și rapoarte; J2 MOCK nu certifică un broker Kafka.
 5. Livrează o singură pereche nouă per bibliotecă și proveniența verificată; retrage perechea anterioară fără versiuni paralele.
 
 Guvernanța verifică coordonata, POM-ul inclus byte cu byte, hash-urile,
@@ -58,11 +58,13 @@ Procedura completă este în [sincronizare](ATF_Workspace_Synchronization.md)
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Owner["J0<br/>sursă + native"] -->|verifică| Binary["Core<br/>JAR + POM"]
-    Binary -->|adoptă| J1["J1<br/>6 module sursă"]
-    Binary -->|adoptă| J2["J2 WIP<br/>5 module sursă"]
-    Binary -->|adoptă| J3["J3 speech<br/>4 module sursă"]
-    Binary -->|adoptă| J4["J4 Android<br/>3 module sursă"]
-    Binary -->|adoptă| J5["J5 WIP<br/>2 module sursă"]
+    Binary -->|adoptă| J1["J1<br/>Shop și AutoEx"]
+    Binary -->|adoptă| J2["J2 WIP<br/>cozi și mesaje"]
+    Binary -->|adoptă| J3["J3<br/>speech"]
+    Binary -->|adoptă| J4["J4<br/>Android"]
+    Binary -->|adoptă| J5["J5<br/>Rentz"]
+    Binary -->|adoptă| J6["J6<br/>Hold’em"]
+    Binary -->|adoptă| J7["J7<br/>Chess"]
 ```
 
 <details>
@@ -70,7 +72,7 @@ flowchart LR
 
 - Muchiile descriu publicarea și adoptarea, nu dependențe Maven între workspace-uri.
 - J0 păstrează implementarea și toate nativele; testele pe JAR se copiază numai într-un harness TMP.
-- J1 verifică integrarea web; J2 verifică MOCK fără browser; J3 verifică speech fără descărcare de modele. Aceste probe nu certifică un broker sau ASR real.
+- Exemple de acceptanță: J1 verifică integrarea web; J2 verifică MOCK fără browser; J3 verifică speech fără descărcare de modele. Aceste probe nu certifică un broker sau ASR real.
 - Reporting are propria versiune și proveniență; Core și Reporting nu au dependență de producție între ele.
 
 </details>
@@ -110,4 +112,4 @@ Lifecycle-ul complet și string-urile JSON publice folosesc politica de redactar
 
 ## Shared platform libraries
 
-The current reactor has 6 source modules. [Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+[Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.

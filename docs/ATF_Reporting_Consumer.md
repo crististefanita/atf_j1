@@ -2,9 +2,11 @@
 
 ## Pe scurt
 
-`atf_j1` și `atf_j2` consumă `atf.api:atf-reporting:1.0.0-j20` prin Maven. Modulele și configurațiile aparțin consumerului; journeys include Shop/AutoEx,
-iar Eventuate din J2 exclude și modulele UI/Debug UI. Implementarea,
-assets și regresiile generice Reporting au owner în `atf_j0`.
+Consumerii J1–J7 folosesc Reporting prin JAR/POM-ul fixat în propriul POM; catalogul
+workspace-urilor păstrează coordonatele live și excepția de versiune J4. Modulele
+și configurațiile aparțin fiecărui consumer; J1 deține journey-urile Shop/AutoEx,
+iar Eventuate din J2 exclude modulele UI/Debug UI. Implementarea, assets și
+regresiile generice Reporting au owner în `atf_j0`.
 
 **Trasee rapide:** [atlasul integrării fără sursă](ATF_Reporting_Library_Atlas.md) ·
 [ownership și sync](#ownership-și-direcția-sincronizării) ·
@@ -13,12 +15,12 @@ assets și regresiile generice Reporting au owner în `atf_j0`.
 | Suprafață | În această copie | Owner |
 |---|---|---|
 | Reporting producție | JAR și POM în `lib`; fără modul sursă în reactor | producătorul păstrează codul și reconstruiește biblioteca |
-| consumatori | J1: 7 module sursă journeys; J2: 6 module sursă Eventuate WIP; dependențele Reporting folosesc `atf.reporting.version` | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
+| consumatori | J1–J7 au POM-uri, scope-uri și acceptanțe proprii; inventarul și versiunile curente sunt în [catalogul live](ATF_Workspace_Synchronization.md#catalogul-de-module-și-reporting) | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
 | Reporting Tests | gate extern, adăugat explicit numai în TMP | `atf_j0` păstrează toate regresiile; acceptarea verifică JAR-ul înaintea distribuției |
 | proveniență | un singur `library-provenance.json`, cu hash-uri și amprenta surselor | identifică exact binarul inclus |
 | build și rapoarte | copie de verificare în TMP | [procesul de execuție](ATF_Build_And_Execution_Safety.md) |
 
-Protocolul comun pentru ambele ținte este [sincronizarea J0/J1/J2](ATF_Workspace_Synchronization.md). Fiecare consumer are bootstrap, bază Git și acceptanță proprii; verificarea unuia nu îl certifică pe celălalt.
+Protocolul comun pentru consumerii J1–J7 este [sincronizarea workspace-urilor](ATF_Workspace_Synchronization.md). Fiecare consumer are bootstrap, bază Git și acceptanță proprii; verificarea unuia nu îl certifică pe celelalte.
 
 J1 deține scenariile web AutoEx/Shop; J2 este destinat cozilor și mesajelor.
 J2 are Setup PowerShell/Podman și trei componente MOCK; clientul Kafka Java și acceptanța brokerului rămân WIP.
@@ -29,7 +31,7 @@ Un profil foundation istoric nu descrie automat J2 curent. Catalogul Eventuate �
 
 | Schimbare | Sursa de adevăr | Livrare către celălalt proiect |
 |---|---|---|
-| implementare, API, CSS/JS și publicare Reporting | `atf_j0/atf-reporting` | JAR/POM versionate, proveniență și documentație de adopție către J1/J2 |
+| implementare, API, CSS/JS și publicare Reporting | `atf_j0/atf-reporting` | JAR/POM versionate, proveniență și documentație de adopție către J1–J7 |
 | regresii și fixture-uri generice Reporting | `atf_j0/atf-reporting-tests` | gate extern pe JAR în TMP, fără copie păstrată în consumer |
 | infrastructură comună | ownerul comportamentului în J0/J1 | reconciliere selectivă în ambele sensuri; J2 primește numai modulele declarate în profilul său |
 | Shop/AutoEx și adaptoarele lor | `atf_j1` | schimbări de aplicație și probe, cu scope-urile producătorului păstrate |
@@ -46,7 +48,7 @@ intră în sincronizarea obișnuită a surselor; build-ul și verificarea ruleaz
 flowchart LR
     Source["atf_j0<br/>sursa Reporting"] -->|pachetează| Library["lib · JAR + POM<br/>versiune fixată"]
     Library -->|validate| Repository["Cache Maven<br/>bootstrap nativ"]
-    Repository -->|rezolvă| Consumer["J1 / J2<br/>consumatori"]
+    Repository -->|rezolvă| Consumer["J1–J7<br/>consumatori"]
     Consumer -->|verifică| Tests["Gate extern în TMP<br/>contracte și HTML"]
     Consumer -->|surse comune| Mirror["atf_j0<br/>restul ATF"]
 ```
@@ -162,9 +164,10 @@ mvn -B test-compile
 certifică suita whole-ATF copiată. Pentru regresiile aplicațiilor folosește
 [Shop](../atf-test-practice-shop/README.md) și [AutoEx](../atf-test-auto-ex/README.md).
 
-Aceeași suită whole-ATF verifică sursa cu 12 module și consumerul binar cu
-7 sau 9 module sursă, prin [suprafața declarată](../atf-tests/README.md#guvernanța-deployment-ului-sursă-sau-binar).
-Inventarul temporar cu harness extern are 9 sau 11 module și păstrează toate controalele.
+Aceeași suită whole-ATF verifică declarațiile Maven ale sursei și ale
+consumerului binar, prin [suprafața declarată](../atf-tests/README.md#guvernanța-deployment-ului-sursă-sau-binar).
+Harness-ul extern Reporting se adaugă numai în staging-ul TMP pentru această
+acceptanță și nu schimbă inventarul permanent al consumerului.
 
 <details>
 <summary><strong>Layout TMP pentru guvernanța linkurilor</strong></summary>
@@ -215,7 +218,9 @@ mvn -B -pl atf-reporting-tests -am "-Dtest=atf.reporting.**.*Test,atf.reporting.
 
 Launcherele canonice unit/component/integration/E2E pot fi folosite în consumerul
 TMP; aliasurile nu se numără ca gate-uri disjuncte. Logurile, XML-urile și HTML-ul
-rămân dovezi ale execuției în TMP. La încheiere, Fiecare consumer publicat păstrează modulele propriului profil (J1: 9, J2: 8) și distribuția plată; nu primește harness-ul ori output-urile validării.
+rămân dovezi ale execuției în TMP. La încheiere, fiecare consumer păstrează
+modulele și distribuția plată ale profilului său; nu primește harness-ul ori
+output-urile validării.
 
 ## Actualizarea bibliotecii
 
@@ -231,15 +236,25 @@ Documentația descrie consumerul și snapshot-ul său; regulile sursei standalon
 producătorului sunt delimitate explicit. Acest document deține ownership-ul
 și sincronizarea; [atlasul integrării](ATF_Reporting_Library_Atlas.md) deține contextul consumerului fără sursă.
 
-## Current library and verification
+## Biblioteca și verificarea curente
 
-[Library provenance](../library-provenance.json) identifies the current Core / Reporting pair, source snapshot and independent consumer acceptance. Only the latest JAR/POM pairs are kept directly in `lib`; source and the permanent Reporting harness stay in J0.
+[Proveniența bibliotecii](../library-provenance.json) identifică perechea
+curentă Core/Reporting, snapshot-ul sursei și acceptanța independentă a
+consumerului. În `lib` se păstrează direct numai cele mai recente perechi
+JAR/POM; sursa și harness-ul permanent Reporting rămân în J0.
 
-- The [inline audit contract](../../atf_j0/docs/ATF_Inline_Audit_Contract.md) owns complete PNG and assertion evidence. The [navigation contract](ATF_Large_Report_Navigation.md) owns cold readiness and unchanged deadlines.
+- [Contractul de audit inline](../../atf_j0/docs/ATF_Inline_Audit_Contract.md)
+  deține dovezile PNG complete și cele de aserțiuni. [Contractul de navigare](ATF_Large_Report_Navigation.md)
+  deține readiness-ul la pornire la rece și deadline-urile neschimbate.
 
-- The latest release verification is retained beside the producer package, following [evidence retention](ATF_Workspace_Synchronization.md#release-evidence-retention). It is distinct from fresh application, device, broker and ASR execution.
+- Verificarea celei mai recente livrări se păstrează lângă pachetul producător,
+  conform [regulii de păstrare a dovezilor](ATF_Workspace_Synchronization.md#păstrarea-dovezilor-de-publicare).
+  Este distinctă de execuțiile noi ale aplicației, dispozitivului, brokerului
+  și ASR.
 
 
-## Shared platform libraries
+## Biblioteci comune ale platformei
 
-The [platform library guide](ATF_Platform_Libraries.md) covers ownership, Maven/IntelliJ bootstrap and consumer acceptance. The [provenance manifest](../library-provenance.json) identifies the installed JAR/POM pairs.
+Ghidul pentru [bibliotecile platformei](ATF_Platform_Libraries.md) descrie
+ownership-ul, bootstrap-ul Maven/IntelliJ și acceptanța consumerilor. [Manifestul
+de proveniență](../library-provenance.json) identifică perechile JAR/POM instalate.

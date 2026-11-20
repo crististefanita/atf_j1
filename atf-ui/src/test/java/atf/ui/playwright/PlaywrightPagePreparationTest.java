@@ -1,6 +1,6 @@
 package atf.ui.playwright;
 
-import atf.testkit.AtfUnitTest;
+import atf.testkit.AtfComponentTest;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.ScreenshotAnimations;
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.junit.jupiter.api.Assertions.*;
 
 /** Native entry points borrow one setup deadline; no wall-clock timing assertion or browser scheduling is involved. */
-@AtfUnitTest
+@AtfComponentTest
 class PlaywrightPagePreparationTest {
     @Test void navigationAttachmentAndCaptureBorrowOneDeadline() {
         var probe = new Probe(4000, 500, 499);

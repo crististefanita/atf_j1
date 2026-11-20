@@ -1,6 +1,8 @@
-package atf.api.tests.governance.documentation;
+package atf.api.tests.governance.documentation.structure;
 
+import atf.api.tests.governance.documentation.DocumentationGovernanceSupport;
 import atf.api.tests.governance.documentation.links.DocumentationLocalLinks;
+import atf.api.tests.governance.documentation.language.DocumentationLanguagePolicy;
 
 import atf.testkit.AtfComponentTest;
 import org.junit.jupiter.api.Test;
@@ -13,20 +15,28 @@ import java.util.Deque;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static atf.api.tests.governance.AtfGovernanceTestSupport.locateProjectRoot;
 
 /** Checks the minimum readable shape shared by every owner README. */
 @AtfComponentTest
 public class DocumentationReadmeStructureGovernanceTest {
     private static final Pattern H1 = Pattern.compile("^#\\s+[^#].*$");
-    private static final Pattern H2_ORIENTATION = Pattern.compile("^##\\s+Pe scurt\\b.*$",
-            Pattern.CASE_INSENSITIVE);
     private static final Pattern DETAILS_OPEN = Pattern.compile("^\\s*<details(?:\\s|>)",
             Pattern.CASE_INSENSITIVE);
     private static final Pattern DETAILS_CLOSE = Pattern.compile("^\\s*</details>\\s*$",
             Pattern.CASE_INSENSITIVE);
     private static final Pattern SUMMARY = Pattern.compile("^\\s*<summary(?:\\s|>)",
             Pattern.CASE_INSENSITIVE);
+
+    @Test
+    void acceptsTheOrientationHeadingInBothDocumentationLocales() {
+        assertTrue(isOrientationHeading("## Pe scurt", "ro"));
+        assertTrue(isOrientationHeading("## At a glance", "en"));
+        assertFalse(isOrientationHeading("## At a glance", "ro"));
+        assertFalse(isOrientationHeading("## Purpose", "en"));
+    }
 
     @Test
     void ownerReadmesKeepAReadableStableShape() throws Exception {
@@ -39,13 +49,13 @@ public class DocumentationReadmeStructureGovernanceTest {
         DocumentationGovernanceSupport.assertNoViolations("README structure governance", violations);
     }
 
-    static void validate(Path path, Path root,
+    public static void validate(Path path, Path root,
                          List<DocumentationGovernanceSupport.Violation> violations) {
         try {
             List<String> lines = Files.readAllLines(path);
-            inspectTitleAndOrientation(path, root, lines, violations);
+            inspectTitleAndOrientation(path, root, lines, DocumentationLanguagePolicy.read(root), violations);
             inspectDetails(path, root, lines, violations);
-            inspectLocalLinks(path, root, lines, violations);
+            DocumentationLocalLinks.validate(path, root, lines, violations);
         } catch (Exception error) {
             violations.add(DocumentationGovernanceSupport.violation(
                     "DOC-READ", root, path, 1,
@@ -56,6 +66,7 @@ public class DocumentationReadmeStructureGovernanceTest {
     }
 
     private static void inspectTitleAndOrientation(Path path, Path root, List<String> lines,
+                                                   String language,
                                                    List<DocumentationGovernanceSupport.Violation> violations) {
         List<Integer> titles = matchingLines(lines, H1);
         if (titles.size() != 1) {
@@ -66,13 +77,20 @@ public class DocumentationReadmeStructureGovernanceTest {
                     "keep one `# ...` title and convert additional top-level titles to `## ...`"));
         }
         if (!path.equals(root.resolve("README.md").toAbsolutePath().normalize())
-                && matchingLines(lines, H2_ORIENTATION).isEmpty()) {
+                && lines.stream().noneMatch(line -> isOrientationHeading(line, language))) {
+            String heading = DocumentationLanguagePolicy.orientationHeading(language);
             violations.add(DocumentationGovernanceSupport.violation(
                     "DOC-README-OVERALL", root, path, 1,
-                    "README-ul nu are secțiunea de orientare `## Pe scurt`",
-                    "README-urile modulelor și ale documentației prezintă scopul, proprietarul și limitele înaintea detaliilor",
-                    "adaugă o secțiune concisă `## Pe scurt` înaintea diagramelor, tabelelor sau detaliilor de implementare"));
+                    "README has no branch-local orientation heading (`## " + heading + ")",
+                    "module and documentation READMEs present purpose, owner and limits before details",
+                    "add a concise `## " + heading + "` heading before diagrams, tables or implementation details"));
         }
+    }
+
+    private static boolean isOrientationHeading(String line, String language) {
+        String expected = DocumentationLanguagePolicy.orientationHeading(language);
+        return Pattern.compile("^##\\s+" + Pattern.quote(expected) + "\\b.*$", Pattern.CASE_INSENSITIVE)
+                .matcher(line).matches();
     }
 
     private static List<Integer> matchingLines(List<String> lines, Pattern pattern) {
@@ -125,8 +143,4 @@ public class DocumentationReadmeStructureGovernanceTest {
         }
     }
 
-    static void inspectLocalLinks(Path path, Path root, List<String> lines,
-                                  List<DocumentationGovernanceSupport.Violation> violations) {
-        DocumentationLocalLinks.validate(path, root, lines, violations);
-    }
 }

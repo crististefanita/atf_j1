@@ -1,6 +1,6 @@
 # Documentația ATF Java
 
-Documentația descrie deployment-ul J1: 10 module sursă și Reporting extern.
+Documentația descrie deployment-ul J1, scenariile Shop/AutoEx și consumul binar al bibliotecilor.
 Începe cu [ownership-ul J1](ATF_Reporting_Consumer.md), apoi cu [atlasul general](ATF_Context_Atlas.md)
 sau [atlasul Reporting fără sursă](ATF_Reporting_Library_Atlas.md).
 
@@ -127,7 +127,7 @@ Ordinea completă de lectură este păstrată colapsată mai jos:
    — contractul stabil pentru selecția API, mock-backed expected projection,
    secțiuni Extent și validarea UI reutilizabilă.
 14. [../atf-debug-ui/README.md](../atf-debug-ui/README.md) — publicarea
-   read-only a unui HTML pentru investigație manuală în Playwright/TAB MCP.
+   unui HTML fără modificări, pentru investigație manuală în Playwright/TAB MCP.
 15. [ATF_Api_Test_Guide.md](ATF_Api_Test_Guide.md) — pașii minimali pentru un test API nou.
 16. [ATF_Evidence_Capture_Contract.md](ATF_Evidence_Capture_Contract.md) — contractul
     transversal pentru flow mode, screenshot policy, source și testare pe niveluri.
@@ -240,7 +240,7 @@ sunt interzise.
 
 | Întrebare | Autoritate și probă |
 |---|---|
-| Documentul există și fragmentul este navigabil? | [guard-ul README](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationReadmeStructureGovernanceTest.java) și [regresiile ancorelor](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) |
+| Documentul există și fragmentul este navigabil? | [guard-ul README](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationReadmeStructureGovernanceTest.java) și [regresiile ancorelor](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) |
 | Cine deține contractul? | [Arhitectura](ATF_Architecture.md) și POM-ul ownerului; linkul din index nu transferă responsabilitatea |
 | Este regula livrată? | Codul și proba ownerului; [feedback-ul](feedback/README.md) separă restanța de contract |
 
@@ -249,11 +249,12 @@ Validitatea linkurilor nu certifică semantica unui contract. Comanda gate-ului
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
+J1 consumă Core, Reporting, Console, Mock și Test Kit prin JAR/POM. [Contractul Core](ATF_Core_Consumer.md)
+separă sursa, publicarea și acceptanțele consumerilor; testele native rămân în J0.
 
-[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2.
-Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
+## Identitatea bibliotecilor și dovezile versiunii
 
-## Library identity and release evidence
-
-The [current library provenance](../library-provenance.json) records the delivered pair and its dated acceptance. The latest Reporting verification stays beside the producer package under [evidence retention](ATF_Workspace_Synchronization.md#release-evidence-retention); project documentation retains stable contracts.
+[Proveniența curentă a bibliotecilor](../library-provenance.json) înregistrează
+perechea livrată și acceptarea ei datată. Cea mai recentă verificare Reporting
+rămâne lângă pachetul producătorului, conform regulii de [păstrare a dovezilor](ATF_Workspace_Synchronization.md#păstrarea-dovezilor-de-publicare);
+documentația proiectului păstrează contractele stabile.

@@ -77,11 +77,11 @@ Modulul UI nu publică Extent și nu emite assertions de secțiune.
 
 ## Traseul de integrare
 
-| Intenție | Owner și intrare | Dovadă |
+| Intenție | Responsabil și intrare | Dovadă |
 |---|---|---|
 | deschide browserul și contextul | [PlaywrightUiSession](src/main/java/atf/ui/playwright/PlaywrightUiSession.java) | [scală nativă și configurare](src/test/java/atf/ui/playwright/PlaywrightUiSessionTest.java) |
 | activează un control o dată | [click cu postcondiție](#click-unic-cu-postcondiție-explicită) | deadline comun și refuzul replay-ului |
-| observă backend-ul fără mutație | [recuperare BE](#recuperare-be-prin-observație-pasivă) | trace typed și operație read-only declarată |
+| observă backend-ul fără modificări | [recuperare BE](#recuperare-be-prin-observație-pasivă) | urmărit tipizat și operație declarată numai pentru citire |
 | colectează trafic sau capturi | [inspector](#inspectorul-de-rețea--limită-generică-de-responsabilitate) / [audit ecran](#audit-comun-al-ecranului) | observație bounded, fără verdict business |
 
 Rezultatul aplicației aparține consumerului, iar HTML-ul aparține Reporting.
@@ -127,7 +127,7 @@ consumerul compune politicile generice și publică artifactul prin
 
 `atf-ui` expune doar valori care descriu execuția browserului și capturarea
 generică. Nu este owner pentru `report.directory`, `apiSetup`, `audit` sau
-`filePrefix`; aceste valori sunt test-only și aparțin configurației interne a
+`filePrefix`; aceste valori sunt destinate exclusiv testelor și aparțin configurației interne a
 modulului `atf-reporting`:
 
 [`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../../atf_j0/atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
@@ -995,27 +995,28 @@ trecerea întregului modul. Retenția completă nu probează livrarea tuturor su
 
 </details>
 
-## Full-context screenshots
+## Capturi de ecran cu context complet
 
-Every screenshot used as test evidence preserves the surrounding page context.
-Shop and AutoEx journeys use their configured 70% zoom and complete browser
-viewport; Android retains its entire physical display and orientation.
+Fiecare captură de ecran folosită drept dovadă a unui test păstrează contextul
+din jurul paginii. Parcursurile Shop și AutoEx folosesc zoom-ul configurat de
+70% și viewport-ul complet al browserului; Android păstrează întregul ecran fizic
+și orientarea acestuia.
 
-| Boundary | Required behavior |
+| Limită | Comportament cerut |
 |---|---|
-| Capture | Use the complete page viewport; preserve navigation, surrounding content and every frame edge |
-| Zoom | Keep the configured browser-context scale; Shop/AutoEx use 70% to expose more page context |
-| Additional detail | A region or element close-up may supplement the original context image, never replace it |
+| Captură | Folosește viewport-ul complet al paginii; păstrează navigarea, conținutul din jur și toate marginile cadrului |
+| Zoom | Păstrează scara configurată în contextul browserului; Shop/AutoEx folosesc 70% pentru a expune mai mult context |
+| Detalii suplimentare | Un prim-plan al unei regiuni sau al unui element poate completa imaginea cu contextul original, dar nu o poate înlocui |
 | Report viewer | Fit the complete source image to the available screen, preserving aspect ratio and every edge |
 | Full document | Explicit full-page capture preserves document height; the configured output height does not crop it |
 | Test coverage | Pixel oracles verify all four corners at 70/100% and extra lower-page context at 70%; independent geometry-scale tests keep their own scales |
 
 The [native geometry regression](src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
 checks captured PNG pixels rather than configuration alone. The
-[verification record](../docs/ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up)
+[verification record](../docs/ATF_UI_First_Frame_Verification.md#urmărirea-capturilor-cu-context-complet)
 separates capture, viewer and consumer acceptance.
 
-## Explicit fixture preparation
+## Pregătirea explicită a fixture-ului
 
 [`PlaywrightPagePreparation`](src/main/java/atf/ui/playwright/PlaywrightPagePreparation.java)
 prepares a document before a measured native operation. Callers choose it

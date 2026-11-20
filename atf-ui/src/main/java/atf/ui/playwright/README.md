@@ -15,7 +15,7 @@ Pachetul este adaptorul browser generic. Primește configurație și sink explic
 | vocabularul acțiunii | [PlaywrightActionSequence](PlaywrightActionSequence.java) | fațadă publică, nu implementarea tuturor operațiilor |
 | download și cleanup-ul observației | [PlaywrightBrowserActions](PlaywrightBrowserActions.java) | listener armat înainte de click, deadline comun și eveniment real |
 | readiness și buget | [PlaywrightBrowserActions](PlaywrightBrowserActions.java) | așteptări browser și observație în buget |
-| explicit fixture preparation | [PlaywrightPagePreparation](PlaywrightPagePreparation.java) | load, current root attachment and native PNG share the existing navigation budget; target actionability remains native |
+| pregătirea explicită a fixture-ului | [PlaywrightPagePreparation](PlaywrightPagePreparation.java) | încărcarea, atașarea rădăcinii curente și captura PNG nativă folosesc același buget de navigare existent; acționabilitatea țintei rămâne nativă |
 | locator și interacțiune | [PlaywrightLocatorActions](PlaywrightLocatorActions.java) | operații asupra locatorului |
 | select înlocuit în timpul așteptării | [PlaywrightSelectAction](selection/PlaywrightSelectAction.java) | observație read-only înaintea unicului apel nativ, fără replay |
 | observația BE pasivă și dezabonarea | [UiBackendRecovery](recovery/UiBackendRecovery.java) și [UiRecoveryObserver](recovery/UiRecoveryObserver.java) | metadata scoped; fără dispatch, replay sau body capturat |

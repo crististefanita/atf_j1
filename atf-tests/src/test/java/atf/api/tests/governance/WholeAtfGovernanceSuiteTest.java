@@ -9,13 +9,15 @@ import atf.api.tests.governance.distribution.GovernanceDeploymentTest;
 import atf.api.tests.governance.distribution.ReportingGovernanceSurfaceTest;
 import atf.api.tests.governance.distribution.ReportingHarnessOwnershipTest;
 import atf.api.tests.governance.documentation.DocumentationDiagramGovernanceTest;
+import atf.api.tests.governance.documentation.language.DocumentationLanguageGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationProseGovernanceTest;
-import atf.api.tests.governance.documentation.DocumentationReadmeStructureGovernanceTest;
+import atf.api.tests.governance.documentation.structure.DocumentationReadmeStructureGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationStyleGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationTargetGovernanceTest;
 import atf.api.tests.governance.documentation.links.DocumentationLinkGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationAnchorGovernanceTest;
 import atf.api.tests.governance.documentation.factual.DocumentedBuildContractTest;
+import atf.api.tests.governance.documentation.factual.DocumentedWorkspaceCatalogTest;
 import atf.api.tests.governance.documentation.factual.DocumentedUiGeometryContractTest;
 import atf.api.tests.governance.documentation.DynamicPathDocumentationArchitectureTest;
 import atf.api.tests.governance.consumers.ConsumerModuleArchitectureGovernanceTest;
@@ -43,6 +45,7 @@ import org.junit.platform.suite.api.Suite;
         ConstantsOwnershipGovernanceTest.class,
         DynamicPathDocumentationArchitectureTest.class,
         DocumentationDiagramGovernanceTest.class,
+        DocumentationLanguageGovernanceTest.class,
         DocumentationProseGovernanceTest.class,
         DocumentationReadmeStructureGovernanceTest.class,
         DocumentationStyleGovernanceTest.class,
@@ -50,6 +53,7 @@ import org.junit.platform.suite.api.Suite;
         DocumentationLinkGovernanceTest.class,
         DocumentationAnchorGovernanceTest.class,
         DocumentedBuildContractTest.class,
+        DocumentedWorkspaceCatalogTest.class,
         DocumentedUiGeometryContractTest.class,
         ConsumerModuleArchitectureGovernanceTest.class,
         AtfTestLayerArchitectureTest.class,

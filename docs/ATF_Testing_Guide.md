@@ -184,20 +184,20 @@ TAB rămân dovezi distincte. Matricea nu măsoară stabilitatea în multe repet
 Celulele arată doar nivelurile care există în suitele executabile curente.
 `—` nu cere crearea unei suite sau a unui director artificial.
 
-| Modul | Unit | Component | Integration | E2E | Owner și scopul principal |
+| Modul | Unitate | Componentă | Integrare | E2E | Responsabil și scop principal |
 |---|:---:|:---:|:---:|:---:|---|
 | [`atf-core`](../../atf_j0/atf-core/README.md) | ✅ | — | — | — | contracte neutre și politici reutilizabile |
-| [`atf-validation`](../atf-validation/README.md) | ✅ | ✅ | — | — | reguli de validare și rezultate typed |
-| [`atf-console`](../../atf_j0/atf-console/README.md) | ✅ | — | ✅ | — | policy/formatter unitare; integrarea extension-ului cu Jupiter real |
-| [`atf-mock`](../../atf_j0/atf-mock/README.md) | — | ✅ | — | — | transport fake și comportament determinist |
-| [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | policy și adapter Playwright generic |
-| [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și launcher read-only pentru inspecție |
-| [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | excepție: suite standalone fără adnotări sau dependențe ATF |
-| [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | composition și proof pentru librăria reporting |
-| [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumer: contracte, API, flow-uri și journey browser |
-| [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumer: purchase journey în profile UI distincte, probe component și API live opt-in |
-| [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | boundary și guvernanță whole-reactor |
-| [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | ✅ | ✅ | — | — | vocabularul layer-elor și contractele test-only |
+| [`atf-validation`](../atf-validation/README.md) | ✅ | ✅ | — | — | reguli de validare și rezultate tipizate |
+| [`atf-console`](../../atf_j0/atf-console/README.md) | ✅ | — | ✅ | — | politici/formatări unitare; integrarea extensiei cu Jupiter real |
+| [`atf-mock`](../../atf_j0/atf-mock/README.md) | — | ✅ | — | — | transport simulat și comportament determinist |
+| [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | politici și adaptor Playwright generic |
+| [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și lansator pentru inspecție fără scriere |
+| [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | excepție: suită autonomă fără adnotări sau dependențe ATF |
+| [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | compoziție și probă pentru biblioteca Reporting |
+| [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumator: contracte, API, fluxuri și parcurs în browser |
+| [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumator: parcurs de achiziție în profiluri UI distincte, probe componentă și API live cu opt-in |
+| [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | limită și guvernanța întregului reactor |
+| [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | ✅ | ✅ | — | — | vocabularul straturilor și contractele numai pentru teste |
 
 Guard-ul reflectă ownerii fără a falsifica structura reactorului:
 
@@ -219,12 +219,12 @@ Suitele API live sunt opt-in; nu se includ ca precondiție pentru rularea UI obi
 Numele clasei și faptul că un test produce HTML nu stabilesc owner-ul. Se mută
 invariantul, nu fixture-ul și nici testul întreg:
 
-| Ce afirmă testul | Owner | Ce rămâne local în consumer |
+| Ce afirmă testul | Responsabil | Ce rămâne local la consumator |
 |---|---|---|
 | regulile aplicației, traseele UI/API, payload-ul și propagarea datelor | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#limita-dintre-testele-shop-și-testele-reporting) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suite-și-variante-de-evidence) | toate probele business, inclusiv cele cu mock; mock-ul izolează transportul, nu schimbă owner-ul |
 | traducerea contractului aplicației în portul public Reporting | consumerul care deține adaptorul | intenția/titlul business, asocierea așteptării la exchange, statusul specific și politica locală de redactare |
 | semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
-| API-uri și lifecycle-uri reutilizabile strict test-only: adnotări, resolver-e, clasificare și primitive generice | [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | aplicația păstrează fixture-ul, lifecycle-ul și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste Reporting |
+| API-uri și cicluri de viață reutilizabile, exclusiv pentru teste: adnotări, rezolvoare, clasificare și primitive generice | [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | aplicația păstrează fixture-ul, ciclul de viață și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste de raportare |
 
 O probă poate rămâne consumer-owned chiar dacă publică un artifact: trebuie să
 verifice exclusiv contractul adaptorului aplicației și să folosească snapshot-ul
@@ -262,11 +262,11 @@ extinde matricea ownerului existent.
 
 ### Reducerea suitei fără pierdere de acoperire
 
-| Gate principal per consumer | Selecție |
+| Poartă principală per consumator | Selecție |
 |---|---|
-| Component/local | toate testele locale, inclusiv cele din pachete de suport pentru acces package-private |
-| UI E2E | toate clasele UI păstrate; o clasă intră o singură dată |
-| API live | contractele HTTP reale, cu opt-in read-only/mutații independente |
+| Componentă/local | toate testele locale, inclusiv cele din pachete de suport pentru acces package-private |
+| E2E UI | toate clasele UI păstrate; o clasă intră o singură dată |
+| API live | contractele HTTP reale, cu activare explicită separată pentru citire și mutații |
 
 `ConsumerSuiteCoverageGovernanceTest` verifică inventarul real față de aceste
 trei selecții. Suitele redundante se elimină, nu testele care arată un gap.

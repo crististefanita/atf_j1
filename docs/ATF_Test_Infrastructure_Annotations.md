@@ -100,7 +100,7 @@ import static atf.testkit.channel.TestChannel.UI;
 @AtfTestChannel(UI)
 @ProjectRelativeUiReportDirectory("artifacts/reports/ui/e2e")
 class ReportAuditTest {
-    // Composition root-ul consumatorului aplică selecțiile înaintea execuției.
+    // The consumer composition root applies the selections before execution.
 }
 ```
 

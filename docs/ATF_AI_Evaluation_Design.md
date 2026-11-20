@@ -613,53 +613,53 @@ Reguli:
 
 - toate comparison modes;
 - normalizare deterministă;
-- allowed variants;
-- required/critical semantics;
-- missing information;
-- grounding reason codes;
-- score calculation;
-- hard-fail și verdict precedence;
-- regression delta.
+- variante acceptate;
+- semantică obligatorie/critică;
+- informații lipsă;
+- coduri de motivare a fundamentării;
+- calculul scorului;
+- eșec fatal și precedența verdictului;
+- diferența față de baseline-ul de regresie.
 
-### Component
+### Componentă
 
-- case + expected + observed → snapshot;
-- output inventat → hard-fail;
-- review omis → hard-fail;
-- source unsupported → grounding failure;
-- unknown invocation → evidence failure;
-- mock model → non-quality verdict;
-- fallback explicit → evidence-only;
-- snapshot immutable după complete.
+- caz + valoare așteptată + valoare observată → snapshot;
+- output inventat → eșec fatal;
+- review omis → eșec fatal;
+- sursă neacceptată → eșec de fundamentare;
+- invocare necunoscută → eșec de dovezi;
+- model mock → verdict în afara evaluării calității;
+- fallback explicit → numai dovezi;
+- snapshot imuabil după finalizare.
 
-### Integration
+### Integrare
 
-- provider/mock exchange + invocation evidence;
-- correlation request/output/validation;
-- phase/checkpoint attachment;
-- Extent/fallback snapshot parity;
-- regression baseline și delta;
-- multi-field, multi-exchange case.
+- schimb provider/mock și dovezi de invocare;
+- corelare request/output/validation;
+- atașarea la fază/checkpoint;
+- paritate snapshot Extent/fallback;
+- baseline și diferență de regresie;
+- caz cu mai multe câmpuri și schimburi.
 
 ### E2E
 
 Numai când există comportament vizibil:
 
-- review UI afișează verdictul;
+- interfața de review afișează verdictul;
 - câmpurile corectate sunt vizibile;
-- state-ul final este observabil;
-- AI validation este în checkpoint-ul corect;
-- evidence disclosure-urile sunt navigabile;
-- nu există duplicare UI/API/AI validation.
+- starea finală poate fi observată;
+- validarea AI este atașată la checkpoint-ul corect;
+- secțiunile expandabile cu dovezi pot fi navigate;
+- validarea UI/API/AI nu este duplicată.
 
 ### Arhitectură
 
 - evaluatorul nu importă rendererul;
 - rendererul nu importă providerul AI;
-- consumerul nu duplică scoring logic;
+- consumerul nu dublează logica de scor;
 - fixture/support nu devine test implicit;
-- fiecare public seam are proof class;
-- snapshot-ul este renderer-neutral.
+- fiecare interfață publică are o clasă de probă;
+- snapshot-ul nu depinde de renderer.
 
 ## 17. Taxonomia eșecurilor
 

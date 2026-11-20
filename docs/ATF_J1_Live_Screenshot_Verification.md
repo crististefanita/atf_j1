@@ -1,97 +1,101 @@
-# J1 live screenshot acceptance — 2026-11-03
+# Acceptanța capturilor live J1 — 2026-11-03
 
-## Scope and outcome
+## Domeniu și rezultat
 
-One real AutoEx UI purchase and one real Shop guest UI/API purchase run
-individually and through their existing canonical suites. All four invocations
-pass; each execution produces one new Extent artifact.
+O achiziție UI reală AutoEx și o achiziție UI/API reală Shop ca vizitator au
+rulat individual și prin suitele canonice existente. Toate cele patru invocări
+trec; fiecare execuție produce un artifact Extent nou.
 
-| Application and launch | Selected case | Result | Assertions | PNG references | Review |
+| Aplicație și lansare | Caz selectat | Rezultat | Aserțiuni | Referințe PNG | Revizuire |
 |---|---|---|---:|---:|---|
-| AutoEx individual | AutoExPurchaseUiE2eTest | 1 PASS | 49 | 13 | [individual report](http://127.0.0.1:53827/autoex-individual.html#test-view) |
-| AutoExE2eSuite, filtered | same class | 1 PASS | 49 | 13 | [suite report](http://127.0.0.1:53827/autoex-suite.html#test-view) |
-| Shop individual | ShopPurchaseE2eTest | 1 PASS | 150 | 10 | [individual report](http://127.0.0.1:53827/shop-individual.html#test-view) |
-| ShopE2eSuite, filtered | same class | 1 PASS | 150 | 10 | [suite report](http://127.0.0.1:53827/shop-suite.html#test-view) |
+| AutoEx individual | AutoExPurchaseUiE2eTest | 1 PASS | 49 | 13 | [raport individual](http://127.0.0.1:53827/autoex-individual.html#test-view) |
+| AutoExE2eSuite, filtrată | aceeași clasă | 1 PASS | 49 | 13 | [raport de suită](http://127.0.0.1:53827/autoex-suite.html#test-view) |
+| Shop individual | ShopPurchaseE2eTest | 1 PASS | 150 | 10 | [raport individual](http://127.0.0.1:53827/shop-individual.html#test-view) |
+| ShopE2eSuite, filtrată | aceeași clasă | 1 PASS | 150 | 10 | [raport de suită](http://127.0.0.1:53827/shop-suite.html#test-view) |
 
-AutoEx registers during checkout, completes its demo order and removes the
-disposable account. Shop completes a guest purchase with observed UI/API evidence.
-The counts distinguish JUnit invocations, comparison rows and screenshot references.
+AutoEx se înregistrează la checkout, finalizează comanda demo și șterge contul
+temporar. Shop finalizează o achiziție ca vizitator cu dovezi UI/API observate.
+Numărătorile disting invocările JUnit, rândurile comparațiilor și referințele
+la capturi.
 
-## Exact suite selection
+## Selectarea exactă a suitei
 
-The external launcher selects the actual AutoExE2eSuite or ShopE2eSuite and
-uses a post-discovery filter for the requested purchase class. It verifies
-exactly one discovered case before any execution and requires one success,
-zero skips/aborts and no container failure afterward.
+Launcherul extern selectează AutoExE2eSuite sau ShopE2eSuite reală și folosește
+un filtru post-discovery pentru clasa de achiziție cerută. Verifică existența
+exact a unui caz descoperit înainte de execuție și cere un succes, zero teste
+sărite/anulate și nicio eroare de container după rulare.
 
-| Boundary | Preserved behavior |
+| Limită | Comportament păstrat |
 |---|---|
-| Canonical code | Existing suite classes, annotations and production selectors remain unchanged |
-| External selector | Lives only in TMP; discovery IDs retain the suite engine and actual canonical class |
-| Execution | The filtered discovered plan is executed serially; unrelated suite cases are excluded |
-| Evidence | Same business class and assertion population individually and through suite scope |
-| Limit | These four runs do not certify every case in either complete suite |
+| Cod canonic | Clasele suitei, adnotările și selectorii de producție existenți rămân neschimbați |
+| Selector extern | Rămâne numai în TMP; ID-urile discovery păstrează motorul suitei și clasa canonică reală |
+| Execuție | Planul descoperit și filtrat se execută serial; cazurile fără legătură din suită sunt excluse |
+| Dovezi | Aceeași clasă business și aceeași populație de aserțiuni, individual și în scope-ul suitei |
+| Limită | Aceste patru rulări nu certifică toate cazurile din niciuna dintre suitele complete |
 
-## Complete context at 70 percent
+## Context complet la zoom de 70 la sută
 
-All 46 screenshot references resolve to valid native PNGs with complete
-1440 × 1000 viewport geometry, within the existing one-pixel engine rounding.
-Overview records 2057 × 1429 CSS layout and DPR 0.70; no region capture or
-after-capture crop is used.
+Toate cele 46 de referințe la capturi duc la fișiere PNG native valide, cu
+geometria completă a viewport-ului de 1440 × 1000, în marja de rotunjire de un
+pixel deja existentă în motor. Overview înregistrează layout-ul CSS de
+2057 × 1429 și DPR 0.70; nu se folosește captură regională sau decupare după
+captură.
 
-| Browser inspection | Observed result |
+| Inspectare în browser | Rezultat observat |
 |---|---|
-| Assertions | Same 49/150 rows per application in both modes; comparisons initially collapsed and targeted paths open correctly |
-| UI actions | Native ordered action tables expand with the existing dynamic column layout |
-| Screenshots | Every reference decodes; first/middle/last viewer selections preserve the exact original PNG and every edge |
-| Viewer context | Fit uses the available screen and original aspect ratio; Escape retains owner, disclosures and keyboard focus |
-| Navigation | Tests, Category, Fails and Overview work without JavaScript errors |
-| Visual review | Captures inspected from all four artifacts: AutoEx cart/store and Shop checkout/order context |
-| Preview | The default remains 240; no assertion or action deadline is changed |
+| Aserțiuni | Aceleași 49/150 rânduri per aplicație în ambele moduri; comparațiile sunt inițial colapsate, iar căile vizate se deschid corect |
+| Acțiuni UI | Tabelele native cu acțiuni ordonate se extind folosind layout-ul dinamic existent al coloanelor |
+| Capturi | Toate referințele se decodează; selecțiile inițială/intermediară/finală din vizualizator păstrează exact PNG-ul original și fiecare margine |
+| Contextul vizualizatorului | Încadrarea folosește ecranul disponibil și proporțiile originale; Escape păstrează ownerul, disclosure-urile și focusul tastaturii |
+| Navigare | Tests, Category, Fails și Overview funcționează fără erori JavaScript |
+| Revizuire vizuală | Capturi inspectate din toate cele patru artifacte: coșul/magazinul AutoEx și contextul checkout/comandă Shop |
+| Preview | Valoarea implicită rămâne 240; nicio aserțiune sau limită de timp a acțiunii nu se schimbă |
 
-## Phase timing and execution limits
+## Timpii fazelor și limitele execuției
 
-| Test body | Execution ms | Capture ms | Publication ms |
+| Corpul testului | Execuție ms | Captură ms | Publicare ms |
 |---|---:|---:|---:|
 | AutoEx individual | 31766 | 19038 | 375 |
 | AutoEx suite | 32994 | 6399 | 269 |
 | Shop individual | 15073 | 1560 | 860 |
 | Shop suite | 10303 | 1397 | 505 |
 
-These are captured phase axes, with final HTML flush excluded. JUnit duration
-also covers resource acquisition and lifecycle work; it is not substituted for
-the test-body execution axis. UI action/navigation limits retain 20 s/45 s.
+Aceștia sunt timpi capturați pe faze, fără flush-ul HTML final. Durata JUnit
+include și achiziția resurselor și lucrul lifecycle-ului; nu o folosim în locul
+duratei corpului testului. Limitele pentru acțiunile/navigarea UI rămân 20 s/45 s.
 
-Shop uses a temporary YAML copy changing only headless=false to true. Both
-modules retain configured 70% zoom, demo inputs and native browser behavior;
-the SDK-selected Node runtime is inherited without an agent override.
+Shop folosește o copie YAML temporară în care doar `headless=false` devine
+`true`. Ambele module păstrează zoom-ul configurat de 70%, inputurile demo și
+comportamentul nativ al browserului; runtime-ul Node selectat de SDK este
+moștenit fără suprascriere din partea agentului.
 
-## Remaining improvement
+## Îmbunătățire rămasă
 
-The business and rendering acceptance above passes. The HTML does not retain
-the actual canonical suite identity for these filtered runs; the AutoEx filename
-also contains purchase-suite for an individual launch. The scoped
-[J1 launch-context criterion](feedback/ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope)
-keeps this auditability improvement separate from generic renderer defects.
+Acceptanța business și de randare de mai sus trece. HTML-ul nu păstrează
+identitatea canonică reală a suitei pentru aceste rulări filtrate; numele
+fișierului AutoEx conține și `purchase-suite` la o lansare individuală.
+[Criteriul J1 pentru contextul lansării](feedback/ATF_Reporting_Feedback.md#j1-launch-context-146--înregistrarea-domeniului-real-al-lansării)
+izolează această îmbunătățire de auditabilitate de defectele generice ale
+rendererului.
 
 <details>
-<summary><strong>Execution, binary and cleanup provenance</strong></summary>
+<summary><strong>Proveniența execuției, binarului și curățării</strong></summary>
 
-| Item | Retained evidence |
+| Element | Dovadă păstrată |
 |---|---|
-| Owned TMP root | ATF_LIVE_SCREEN_AUDIT_ACTIVE_DO_NOT_CLEAN_85211735 |
-| J1 captured base | f2aaa41e1f0939b93ccdab509492f862c09d18cc; existing local work retained |
-| J0 documentation base | 6bef40515954acd121c93a66e1bf544db14e97b5 |
-| Individual runs | live-autoex-individual-atf_j1.log and live-shop-individual-atf_j1.log; Surefire XML retained |
-| Canonical suite runs | suite-autoex.log, suite-shop.log and their discovery/metrics JSON receipts |
-| Browser verification | render-audit.log, render-captures/audit.json and inspected PNG captures |
-| Runtime launch context | run-context-probe.log; no actual canonical suite name in either suite artifact |
-| Reporting | physical J18 JAR SHA-256 63655536DE4EBA02A8AF6CA765D445BBCE7D89967979FF5BF9247FDC0F79AD02 |
-| Core | physical C3 JAR SHA-256 605407B9D40E67C9C352EE6E94DA758E50BD3CFB14CC0D7A0DE3359C71088447 |
-| Document changes | Source/runtime/JAR bytes remain unchanged; only reviewed documentation is promoted |
+| Rădăcina TMP deținută | ATF_LIVE_SCREEN_AUDIT_ACTIVE_DO_NOT_CLEAN_85211735 |
+| Baza capturată J1 | f2aaa41e1f0939b93ccdab509492f862c09d18cc; lucrul local existent este păstrat |
+| Baza documentației J0 | 6bef40515954acd121c93a66e1bf544db14e97b5 |
+| Rulări individuale | live-autoex-individual-atf_j1.log și live-shop-individual-atf_j1.log; XML-urile Surefire sunt păstrate |
+| Rulări din suite canonice | suite-autoex.log, suite-shop.log și recipisele JSON pentru discovery/metrici |
+| Verificare browser | render-audit.log, render-captures/audit.json și capturile PNG inspectate |
+| Contextul lansării runtime | run-context-probe.log; numele canonic real al suitei lipsește din ambele artifacte de suită |
+| Reporting | SHA-256 pentru JAR-ul fizic J18: 63655536DE4EBA02A8AF6CA765D445BBCE7D89967979FF5BF9247FDC0F79AD02 |
+| Core | SHA-256 pentru JAR-ul fizic C3: 605407B9D40E67C9C352EE6E94DA758E50BD3CFB14CC0D7A0DE3359C71088447 |
+| Modificări documentare | Octeții sursei/runtime/JAR rămân neschimbați; se promovează numai documentația revizuită |
 
-Review URLs require the retained loopback server. Builds, reports and captures
-remain in owned TMP; Chromium with inspected captures uses the previously
-approved alternative to unavailable TAB MCP.
+URL-urile de revizuire necesită serverul loopback păstrat. Build-urile,
+rapoartele și capturile rămân în TMP-ul deținut; Chromium și capturile inspectate
+folosesc alternativa aprobată anterior la TAB MCP, indisponibil.
 
 </details>

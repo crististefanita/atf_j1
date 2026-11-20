@@ -1,10 +1,10 @@
-# Reporting Tests — owner și criterii în J0
+# Reporting Tests — responsabilul și criteriile din J0
 
 ## Pe scurt
 
-Acest consumer folosește Reporting JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a backlog-ului.
+Acest consumator folosește biblioteca Reporting din JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a restanțelor.
 
-Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumerul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
+Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumatorul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
 
 <details>
 <summary><strong>Trimiteri stabile către criteriile ownerului</strong></summary>

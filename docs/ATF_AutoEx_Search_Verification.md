@@ -1,134 +1,139 @@
-# AutoEx search — owned response and fresh DOM
+# Căutarea AutoEx — răspuns deținut și DOM nou
 
-## Scope and cause
+## Domeniu și cauză
 
-J1 owns this consumer fix. Core C3 and Reporting J18 remain unchanged;
-the source/test owners and independent consumers retain their existing boundaries.
+J1 deține această corecție a consumatorului. Core C3 și Reporting J18 rămân
+neschimbate; responsabilitățile producătorilor de sursă/teste și ale
+consumatorilor independenți își păstrează limitele existente.
 
-| Observation | Evidence and limit |
+| Observație | Dovadă și limită |
 |---|---|
-| Original retained UI failure | The final PNG shows `This website is under heavy load (queue full)` at `/products?search=Blue%20Top` |
-| Original HTTP status | Not captured in that UI-only receipt; no status is inferred from later successful calls |
-| Real Search handler | `#submit_search` sets `window.location='/products?search='+search`; the result is a main-frame GET HTML document |
-| Later HTML probe | HTTP 200; 12,976 characters; first product Blue Top |
-| Later catalog API probe | `/api/productsList`: HTTP 200, responseCode 200, 34 products; Blue Top id 1, Rs. 500 |
-| Later direct search API probe | POST `/api/searchProduct`, `search_product=Blue+Top`: HTTP 200, responseCode 200, one Blue Top result |
-| Causal separation | Those healthy probes are separate observations and cannot certify the earlier failed search document |
+| Eșec UI inițial păstrat | PNG-ul final arată `This website is under heavy load (queue full)` la `/products?search=Blue%20Top` |
+| Starea HTTP inițială | Nu a fost capturată în acea dovadă exclusiv UI; starea nu este dedusă din apeluri reușite ulterioare |
+| Handlerul real de căutare | `#submit_search` setează `window.location='/products?search='+search`; rezultatul este un document HTML GET în cadrul principal |
+| Verificare HTML ulterioară | HTTP 200; 12.976 de caractere; primul produs este Blue Top |
+| Verificare ulterioară a catalogului API | `/api/productsList`: HTTP 200, responseCode 200, 34 de produse; Blue Top id 1, Rs. 500 |
+| Verificare ulterioară a API-ului de căutare directă | POST `/api/searchProduct`, `search_product=Blue+Top`: HTTP 200, responseCode 200, un rezultat Blue Top |
+| Separarea cauzelor | Aceste verificări reușite sunt observații distincte și nu pot certifica documentul de căutare eșuat anterior |
 
-The previous implementation waited for the product after URL commit, so a
-terminal queue-full page exhausted the locator budget. Independent local
-fixtures also exposed false PASS for HTTP 525 with a product, history-only URL
-change with stale DOM, and a visible busy marker beside the product.
+Implementarea anterioară aștepta produsul după confirmarea URL-ului, astfel că
+pagina terminală „queue full” consuma tot bugetul locatorului. Fixture-uri locale
+independente au mai expus rezultate PASS false pentru HTTP 525 în prezența unui
+produs, schimbarea URL-ului numai în istoric cu DOM învechit și un indicator
+vizibil de încărcare simultan cu produsul.
 
-## Preserved execution contract
+## Contractul de execuție păstrat
 
-| Boundary | Current behavior |
+| Limită | Comportament curent |
 |---|---|
-| Activation | One native pointer; no test retry, pointer replay or recovery GET |
-| Response | Main-frame Request identity owns method, URL and HTTP outcome; XHR and subframes are excluded |
-| Destination | Same configured origin/path and exactly one decoded configured search parameter |
-| DOM | New `performance.timeOrigin`, parsed document and visible configured first product |
-| Terminal result | Non-2xx or visible queue-full remains FAIL with an explicit cause |
-| Budget | Existing 700 ms component action budget and 20 s live action budget; no relaxed thresholds |
-| Evidence | INFO response receipt, timed Click verdict, original exception chain and configured PNG policy |
-| Missing response | Explicit `HTTP unobserved`; the request URL is identified as a request, without inventing response metadata |
-| Ownership | `AutoExSearchDocument` scopes passive listeners through the existing UI `UiListenerScope`; no generic library change |
-| Reporting | Existing collapsible assertions and default 240-character preview; complete evidence remains available |
+| Activare | Un singur pointer nativ; fără reîncercare de test, repetarea pointerului sau cerere GET de recuperare |
+| Răspuns | Identitatea cererii din cadrul principal deține metoda, URL-ul și rezultatul HTTP; XHR și cadrele secundare sunt excluse |
+| Destinație | Aceeași origine/cale configurată și exact un parametru de căutare configurat, decodificat |
+| DOM | `performance.timeOrigin` nou, document pars-at și primul produs configurat vizibil |
+| Rezultat terminal | Un răspuns non-2xx sau pagina vizibilă „queue full” rămâne FAIL, cu o cauză explicită |
+| Buget | Bugetul existent de 700 ms pentru acțiunea componentei și 20 s pentru acțiunea live; pragurile nu sunt relaxate |
+| Dovezi | Dovada răspunsului INFO, verdictul temporizat al clickului, lanțul original al excepțiilor și politica PNG configurată |
+| Răspuns absent | `HTTP neobservat` explicit; URL-ul cererii este identificat ca atare, fără a inventa metadate despre răspuns |
+| Responsabilitate | `AutoExSearchDocument` gestionează listener-ele pasive prin `UiListenerScope` UI existent; fără modificări în bibliotecile generice |
+| Raportare | Aserțiunile colapsabile existente și previzualizarea implicită de 240 de caractere; dovezile complete rămân disponibile |
 
-The `queue full` fix improves classification and auditability; it cannot make
-an unavailable public server healthy. A rejected response stops the journey
-before downstream cart/account/payment operations.
+Corecția „queue full” îmbunătățește clasificarea și auditabilitatea; nu poate
+face disponibil un server public indisponibil. Un răspuns respins oprește
+parcursul înaintea operațiilor ulterioare de coș, cont sau plată.
 
-## Permanent regressions
+## Regresii permanente
 
-| Cases | Owner |
+| Cazuri | Responsabil |
 |---|---|
-| delayed first product, replaced document, wrong product/query, one click | [existing readiness contracts](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java) |
-| queue-full HTTP 200/503; HTTP 525 with matching product | [owned response contracts](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java) |
-| history-only stale DOM; visible busy marker precedence; hidden marker; successful GET | same response contracts |
-| healthy independent API with absent/failed document; transport failure | same response contracts |
+| produs inițial întârziat, document înlocuit, produs/interogare greșite, un singur click | [contractele existente de pregătire](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java) |
+| HTTP 200/503 cu „queue full”; HTTP 525 cu produsul așteptat | [contractele de răspuns deținute](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java) |
+| DOM învechit după schimbare doar în istoric; prioritatea indicatorului vizibil de încărcare; indicator ascuns; GET reușit | aceleași contracte de răspuns |
+| API independent sănătos cu document absent/eșuat; eroare de transport | aceleași contracte de răspuns |
 
-Run in an [owned TMP stage](ATF_Build_And_Execution_Safety.md), never in live:
+Rulează într-o [etapă TMP deținută](ATF_Build_And_Execution_Safety.md), niciodată în mediul live:
 
 ```powershell
 mvn -B -pl atf-test-auto-ex -am "-Dtest=AutoExSearchReadinessComponentTest,AutoExSearchResponseComponentTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
 ```
 
-## Verification record
+## Registrul verificărilor
 
-| Gate | Result |
+| Poartă | Rezultat |
 |---|---|
-| Original implementation plus initial seven response cases | Five failures exposing missing classification/false PASS; original three readiness cases pass |
-| First corrected response/DOM gate | 10 passed, zero failures/errors/skips, with the original budgets |
-| Expanded first adjacency | 52 AutoEx and 5 UI passed; bounded search suite 13 passed; real cart journey 1 passed |
-| Later neutral UI fixture witness | One of three unchanged pointer cases failed before activation while waiting for stability at 698.884001 ms; retained separately as [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md) |
-| Final bounded search suite | 15 passed, zero failures/errors/skips; existing three readiness cases plus twelve response cases, with one shared report |
-| Final real UI cart journey | 1 passed, zero failures/errors/skips; search, quantity recalculation and removal on the public store, action 20 s/navigation 45 s unchanged |
-| Final missing-response diagnostics | 3 passed: history-only, independent API and aborted transport; explicit unobserved HTTP, one pointer and independent request counts |
-| Controlled runtime artifact | Two scenarios: healthy owned GET is PASS; HTTP 200 queue-full is FAIL with original cause/PNG; one GET each, no replay |
-| Chromium rendering | Four artifacts checked offline: controlled, real UI, component and suite; comparisons initially collapsed, disclosure/table layout, four tabs, failure deep link and PNG viewer pass without JavaScript errors |
-| Visual review | Actual browser captures inspected: failed Click, INFO HTTP/DOM receipt, queue-full PNG and separate phase execution/publication timing |
-| Final governance | 42 passed, zero failures/errors/skips: test-change controls, readability, consumer architecture and physical Core/Reporting surfaces |
-| Current documentation | All seven changed Markdown files pass current source validators for links/anchors, prose, structure, diagrams and dynamic paths |
-| Final rendered artifacts | Four fresh artifact selections pass Chromium inspection; retained captures in `render-final-captures`, outcomes in `render-final.log` |
-| Live reconciliation | Eleven guarded files promoted; all 372 relevant source/resource/POM/library inputs match the verified stage after the concurrent live commit |
-| Fresh post-sync build | 4 browser component cases plus current-HEAD test-change governance passed from the new live snapshot, with zero failures/errors/skips |
+| Implementarea inițială și primele șapte cazuri de răspuns | Cinci eșecuri au expus clasificarea lipsă și rezultatele PASS false; cele trei cazuri inițiale de pregătire trec |
+| Prima verificare corectată a răspunsului/DOM-ului | 10 trecute, zero eșecuri/erori/teste sărite, cu bugetele originale |
+| Prima verificare extinsă a testelor adiacente | 52 AutoEx și 5 UI trecute; 13 teste în suita de căutare limitată; un parcurs real de coș trecut |
+| Observație ulterioară cu fixture UI neutru | Unul dintre cele trei cazuri neschimbate cu pointer a eșuat înainte de activare, în așteptarea stabilității la 698.884001 ms; păstrat separat în [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md) |
+| Suita finală limitată de căutare | 15 trecute, zero eșecuri/erori/teste sărite; cele trei cazuri existente de pregătire și încă douăsprezece cazuri de răspuns, cu un singur raport comun |
+| Parcursul final real de coș prin UI | 1 trecut, zero eșecuri/erori/teste sărite; căutare, recalcularea cantității și eliminarea produsului din magazinul public, acțiune 20 s/navigare 45 s neschimbate |
+| Diagnosticele finale pentru răspuns absent | 3 trecute: numai istoric, API independent și transport întrerupt; HTTP neobservat explicit, un pointer și numărători independente ale cererilor |
+| Artefactul cu runtime controlat | Două scenarii: GET-ul deținut sănătos este PASS; HTTP 200 cu „queue full” este FAIL, cu cauza/PNG-ul original; un singur GET pentru fiecare, fără repetare |
+| Randare Chromium | Patru artefacte verificate offline: controlat, UI real, componentă și suită; comparațiile inițial colapsate, aspectul secțiunilor/tabelelor, patru file, legătura directă spre eșec și vizualizatorul PNG trec fără erori JavaScript |
+| Revizuire vizuală | Capturi reale din browser inspectate: Click eșuat, dovada INFO HTTP/DOM, PNG-ul „queue full” și timpi separați pentru execuția/publicarea etapelor |
+| Guvernanța finală | 42 trecute, zero eșecuri/erori/teste sărite: controale pentru schimbările de teste, lizibilitate, arhitectura consumatorului și suprafețele fizice Core/Reporting |
+| Documentația curentă | Toate cele șapte fișiere Markdown modificate trec validatorii actuali ai sursei pentru linkuri/ancore, proză, structură, diagrame și căi dinamice |
+| Artefacte randate finale | Patru selecții noi de artefacte trec inspecția Chromium; capturile păstrate în `render-final-captures`, rezultatele în `render-final.log` |
+| Reconcilierea mediului live | Unsprezece fișiere protejate au fost promovate; toate cele 372 de intrări relevante sursă/resursă/POM/bibliotecă corespund etapei verificate după commitul live concurent |
+| Compilare nouă după sincronizare | Patru cazuri de componentă în browser și guvernanța schimbărilor de teste pentru HEAD-ul curent au trecut din noul instantaneu live, fără eșecuri/erori/teste sărite |
 
-- **Suite scope:** the bounded selector exists only in TMP and is not delivered.
-  Canonical `AutoExComponentSuite` already selects both permanent classes through
-  its existing component package; bounded acceptance exercises the same suite scope.
-- **Retained individual failures:** the intermediate 54-case adjacency retained
-  one input-fill error and one pre-activation native-click failure, before the
-  search postcondition. [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md)
-  preserves them with the neutral UI witness; no green individual aggregate or
-  hidden action/test retry is claimed.
-- **Final diagnostic labels:** three focused cases verify `HTTP unobserved`
-  and request-URL wording after the 15-case suite and live execution; action,
-  route, DOM and deadlines are unchanged.
+- **Domeniul suitei:** selectorul limitat există numai în TMP și nu este livrat.
+  `AutoExComponentSuite` canonică selectează deja ambele clase permanente prin
+  pachetul său de componente existent; acceptanța limitată exercită același domeniu.
+- **Eșecuri individuale păstrate:** verificarea intermediară cu 54 de cazuri
+  adiacente a păstrat o eroare la completarea inputului și un eșec al clickului
+  nativ înainte de activare, anterior postcondiției căutării.
+  [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md) le păstrează împreună
+  cu observația UI neutră; nu se afirmă un rezultat agregat individual complet
+  reușit și nici vreo reîncercare ascunsă a acțiunii/testului.
+- **Etichete diagnostice finale:** trei cazuri concentrate verifică formularea
+  `HTTP neobservat` și URL-ul cererii după suita de 15 cazuri și execuția live;
+  acțiunea, ruta, DOM-ul și termenele-limită rămân neschimbate.
 
-## Follow-up — initial viewport preparation
+## Continuare — pregătirea inițială a viewport-ului
 
-The later [UI-FIRST-PAINT-144 verification](ATF_UI_First_Frame_Verification.md)
-resolves the adjacent initial-fixture boundary and corrects the validation
-runner's silent Node override. With the SDK-default environment, all fifteen
-AutoEx cases pass individually and through suite scope at the original limits.
+Verificarea ulterioară [UI-FIRST-PAINT-144](ATF_UI_First_Frame_Verification.md)
+rezolvă limita adiacentă a fixture-ului inițial și corectează suprascrierea
+tăcută a versiunii Node de către executorul de validare. În mediul implicit al
+SDK-ului, toate cele cincisprezece cazuri AutoEx trec individual și în suită, cu
+limitele originale.
 
-The initial document now shares one 5 s preparation deadline across load,
-native attachment and PNG capture. Search-owned response/DOM observation retains
-its existing action deadline, request counts and independent negative oracles;
-this follow-up does not rewrite the historical results above.
+Documentul inițial folosește acum un singur termen-limită de pregătire de 5 s
+pentru încărcare, atașarea nativă și captura PNG. Observarea răspunsului/DOM-ului
+deținută de căutare păstrează termenul-limită existent al acțiunii, numărul
+cererilor și verificările negative independente; această continuare nu rescrie
+rezultatele istorice de mai sus.
 
 <details>
-<summary><strong>Execution location and retained outputs</strong></summary>
+<summary><strong>Locația execuției și rezultatele păstrate</strong></summary>
 
-All builds and artifacts belong to the owned TMP workspace
+Toate compilările și artefactele aparțin spațiului de lucru TMP deținut
 `ATF_AUTOEX_SEARCH_ACTIVE_DO_NOT_CLEAN_WYOHyf`; the captured J1 review base is
 `94b88a3e4d3f9aa8ba300e16e99409d5b0da28ac`.
 
-Live subsequently advanced to `f2aaa41e1f0939b93ccdab509492f862c09d18cc`.
-A fresh `post-sync/atf_j1` snapshot retains that independent Git state;
-the technical baseline adds a separate control without rebasing old records.
+Mediul live a avansat ulterior la `f2aaa41e1f0939b93ccdab509492f862c09d18cc`.
+Un instantaneu nou `post-sync/atf_j1` păstrează acea stare Git independentă;
+baseline-ul tehnic adaugă un control separat, fără rebazarea înregistrărilor vechi.
 
-| Evidence | Retained entry |
+| Dovadă | Element păstrat |
 |---|---|
-| Initial independent failures | `search-component-baseline-atf_j1.log` |
-| First full successful adjacency | `search-regression-fixed-oracle-atf_j1.log` |
-| Final suite / public journey | `search-suite-owner-final-atf_j1.log` / `search-live-owner-final-atf_j1.log` |
-| Missing-response label | `search-unobserved-atf_j1.log` |
-| Unhidden preparation failures | `search-regression-final-atf_j1.log` / `search-regression-owner-final-atf_j1.log` |
-| Actual browser audit | `render.log` and `render-captures` |
-| Controlled artifact | [one healthy and one queue-full scenario](http://127.0.0.1:55726/autoex-search-controlled.html#test-view) |
-| Real UI artifact | [public cart journey](http://127.0.0.1:55726/autoex-search-live.html#test-view) |
-| Promotion | `delivery-plan.json` and Core guard manifest; source/document allowlist only, libraries unchanged |
-| Fresh live snapshot | `post-sync-snapshot.json` and `search-post-sync-atf_j1.log`; current Git control is separate from the initial review |
+| Eșecuri inițiale independente | `search-component-baseline-atf_j1.log` |
+| Prima verificare completă, cu teste adiacente, reușită | `search-regression-fixed-oracle-atf_j1.log` |
+| Suita finală / parcurs public | `search-suite-owner-final-atf_j1.log` / `search-live-owner-final-atf_j1.log` |
+| Etichetă pentru răspuns absent | `search-unobserved-atf_j1.log` |
+| Eșecuri de pregătire păstrate vizibile | `search-regression-final-atf_j1.log` / `search-regression-owner-final-atf_j1.log` |
+| Audit real în browser | `render.log` și `render-captures` |
+| Artefact controlat | [un scenariu sănătos și unul „queue full”](http://127.0.0.1:55726/autoex-search-controlled.html#test-view) |
+| Artefact UI real | [parcurs public de coș](http://127.0.0.1:55726/autoex-search-live.html#test-view) |
+| Promovare | `delivery-plan.json` și manifestul de protecție Core; numai lista permisă de surse/documente, biblioteci neschimbate |
+| Instantaneu live nou | `post-sync-snapshot.json` și `search-post-sync-atf_j1.log`; controlul Git curent este separat de revizuirea inițială |
 
-Local review URLs require that retained review server; their unavailability
-later does not remove the timestamped HTML or convert it into a new execution.
+URL-urile locale de revizuire necesită serverul păstrat; indisponibilitatea lor
+ulterioară nu șterge HTML-ul cu marcaj temporal și nu îl transformă într-o execuție nouă.
 
 </details>
 
-The original failure artifact remains immutable. Fresh outputs, logs and
-captures are kept outside live; a later healthy journey does not rewrite it.
+Artefactul eșecului inițial rămâne imuabil. Rezultatele, jurnalele și capturile
+noi se păstrează în afara mediului live; un parcurs reușit ulterior nu îl rescrie.
 
 [Owner contract](../atf-test-auto-ex/README.md#confirmarea-căutării-în-catalog)
 and [current feedback](feedback/ATF_Consumer_Business_Test_Focus_Feedback.md)

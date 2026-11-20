@@ -58,6 +58,53 @@ fonturi injectate în fiecare document:
   README-urile și documentele normative Markdown desemnate, precum
   `docs/ATF_Architecture.md`; explică dinamic fișierul, linia, regula și remedierea.
 
+## Edițiile lingvistice și ramurile de documentație
+
+`main` este ediția în engleză, iar `main_RO` este ediția în română. Câmpul
+`documentationLanguage` din `config/atf-governance-policy.json` declară limba
+ramurii și este citit de guvernanța documentației.
+
+- cele 56 de căi Markdown au aceiași corespondenți în ambele ediții;
+- proza vizibilă, titlurile și etichetele diagramelor se traduc, în timp ce
+  identificatorii API, comenzile, blocurile de cod și destinațiile linkurilor
+  rămân aceleași;
+- README-urile de module folosesc `## At a glance` pe `main` și `## Pe scurt` pe
+  `main_RO`;
+- ancorele interne urmează titlurile traduse și se verifică în fiecare ediție;
+- înainte de livrare se compară inventarul, nivelurile și ordinea titlurilor,
+  listele, rândurile tabelelor, fence-urile și structura Mermaid;
+- o schimbare de contract trebuie să aibă același sens în ambele ediții; traducerea
+  nu introduce o regulă nouă și nu lasă o cerință veche numai într-o limbă.
+
+`DocumentationLanguageGovernanceTest` verifică limba declarată pentru proza
+Markdown vizibilă și pentru etichetele diagramelor. Testele de ediție compară
+structura Markdown și destinațiile linkurilor dintre worktree-urile `main` și
+`main_RO` prin `atf-tests/tools/documentation-editions.mjs`; diferențele de ancoră
+sunt permise numai când provin din titlul localizat. Probează instrumentul cu
+`node --test atf-tests/tools/documentation-editions.test.mjs`.
+
+<details>
+<summary><strong>Revizuirea edițiilor legată de commit</strong></summary>
+
+După commit-urile perechii de documente, publică commit-ul conținutului în română
+și descarcă-l în checkout-ul în engleză. Inspectează perechea, apoi înregistrează
+obiectul `review` rezultat, identic în `config/documentation-editions.json`, pe
+ambele ramuri. Înregistrarea fixează inventarul și hash-urile Markdown, împreună
+cu commit-ul românesc revizuit.
+
+```powershell
+git fetch origin main_RO
+node atf-tests/tools/documentation-editions.mjs inspect . HEAD origin/main_RO
+node atf-tests/tools/documentation-editions.mjs verify . HEAD
+```
+
+Rulează `verify` după publicarea înregistrării review. Verifică commit-ul în
+engleză, documentația română publicată curent și faptul că revizia românească
+rămâne în istoricul ramurii. Orice drift ulterior al documentelor cere o nouă
+revizuire a perechii.
+
+</details>
+
 ## Responsabilitatea documentelor și promovarea feedback-ului
 
 Documentația stabilă și feedback-ul au ritmuri diferite. README-ul ownerului
@@ -527,7 +574,7 @@ datate, istorice de rulări sau artifacte locale.
 
 | Dimensiune | Probă nativă | Ce mai cere review manual |
 |---|---|---|
-| Structură | [README structure](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationReadmeStructureGovernanceTest.java) | primul ecran și traseul cititorului |
+| Structură | [structura README-ului](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationReadmeStructureGovernanceTest.java) | primul ecran și traseul cititorului |
 | Linkuri și fragmente | [toate documentele guvernate](../atf-tests/src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java) și [probe negative](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) | sensul etichetei și afirmația de lângă link |
 | Stil și proză | [style](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationStyleGovernanceTest.java) și [prose](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationProseGovernanceTest.java) | formularea exactă, densitatea utilă și primul ecran |
 | Diagrame și legende | [diagram governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java) | randare, geometrie și păstrarea sensului |

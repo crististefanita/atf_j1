@@ -1,10 +1,10 @@
-# Reporting — owner și criterii în J0
+# Reporting — responsabilul și criteriile din J0
 
 ## Pe scurt
 
-Acest consumer folosește Reporting JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a backlog-ului.
+Acest consumator folosește biblioteca Reporting din JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a restanțelor.
 
-Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumerul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
+Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumatorul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
 
 <details>
 <summary><strong>Trimiteri stabile către criteriile ownerului</strong></summary>
@@ -47,34 +47,37 @@ Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul ex
 
 </details>
 
-## Current library adoption
+## Adoptarea curentă a bibliotecii
 
-See [consumer provenance](../../library-provenance.json) and the
-[large report navigation contract](../../../atf_j0/docs/ATF_Large_Report_Navigation.md).
+Consultați [proveniența consumerului](../../library-provenance.json) și
+[contractul de navigare a rapoartelor mari](../../../atf_j0/docs/ATF_Large_Report_Navigation.md).
 
-## Verified J1 live acceptance
+## Acceptanța live verificată în J1
 
-The [2026-11-03 purchase and rendering receipt](../ATF_J1_Live_Screenshot_Verification.md)
-owns the historical evidence for the launch-context finding below.
+Documentul de verificare pentru [achiziție și randare din 2026-11-03](../ATF_J1_Live_Screenshot_Verification.md)
+păstrează dovezile istorice pentru constatarea despre contextul lansării de mai jos.
 
-## J1-LAUNCH-CONTEXT-146 — record the actual launch scope
+<a id="j1-launch-context-146"></a>
+<a id="j1-launch-context-146--record-the-actual-launch-scope"></a>
+## J1-LAUNCH-CONTEXT-146 — înregistrarea domeniului real al lansării
 
-**Priority: P2. Owner:** J1 launch metadata and consumer composition; reusable
-JUnit context capture belongs in Kit. This is an audit-context gap, with all
-four business and rendering gates passing.
+**Prioritate: P2. Responsabil:** metadatele lansării și compoziția consumerului
+în J1; capturarea reutilizabilă a contextului JUnit aparține Kit-ului. Este o
+lacună de context de audit, iar toate cele patru porți de business și randare au trecut.
 
-| Witness | Observed fact |
+| Verificare | Fapt observat |
 |---|---|
-| Actual launch | The retained discovery plan executes one purchase through AutoExE2eSuite or ShopE2eSuite |
-| Published identity | Neither suite HTML contains its actual canonical suite name; secondary execution metadata does not supply it |
-| Ambiguous filename | AutoEx uses purchase-suite in both individual and suite report names |
-| Existing boundary | ReportEnvironmentField.SUITE is intentionally hidden from operational System; launch facts belong in secondary Tests/trace metadata |
+| Lansarea efectivă | Planul de descoperire păstrat execută o achiziție prin AutoExE2eSuite sau ShopE2eSuite |
+| Identitatea publicată | Niciun HTML al suitei nu conține numele canonic real al suitei; metadatele secundare de execuție nu îl furnizează |
+| Nume de fișier ambiguu | AutoEx folosește purchase-suite atât pentru raportul individual, cât și pentru cel al suitei |
+| Limita existentă | ReportEnvironmentField.SUITE este ascuns intenționat din System operațional; faptele despre lansare aparțin metadatelor secundare Tests/trace |
 
-- [ ] Capture immutable launch scope, real suite root when known, selected class/method and effective selection count at the JUnit boundary; preserve an explicit unknown state when unavailable.
-- [ ] Supply those safe facts through existing neutral metadata/observation APIs; retain the business step titles, one report per suite and preview 240.
-- [ ] Add permanent component contracts for direct and filtered canonical-suite launches, including same-title classes and a misleading filename; never derive scope from artifact text.
-- [ ] Keep browser acquisition and application behavior out of this metadata change; generic rendering regressions belong in J0 only if an actual publication defect is reproduced.
+- [ ] Capturați la limita JUnit domeniul imuabil al lansării, rădăcina reală a suitei când este cunoscută, clasa/metoda selectată și numărul efectiv de selecții; păstrați explicit starea necunoscută când valoarea nu este disponibilă.
+- [ ] Furnizați aceste fapte sigure prin API-urile neutre existente pentru metadate/observații; păstrați titlurile pașilor de business, câte un raport per suită și preview-ul de 240 de caractere.
+- [ ] Adăugați contracte permanente de componentă pentru lansări directe și filtrate ale suitei canonice, inclusiv clase cu același titlu și un nume de fișier înșelător; nu deduceți domeniul din textul artifactului.
+- [ ] Nu includeți achiziția browserului sau comportamentul aplicației în această schimbare de metadate; regresiile generice de randare aparțin J0 numai dacă se reproduce un defect real de publicare.
 
-**Closure:** a standalone reader identifies the real launch context from each
-HTML without the source checkout or external launcher log. These passing live
-artifacts are the baseline, not a substitute for the permanent negative oracle.
+**Închidere:** un cititor poate identifica contextul real al lansării direct
+din fiecare HTML, fără checkout-ul sursă sau logul launcherului extern.
+Artifactele live care au trecut sunt baseline-ul, nu înlocuitorul oracolului
+negativ permanent.

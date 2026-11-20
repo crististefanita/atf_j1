@@ -8,11 +8,11 @@ artifactul ales și tipărește URL-ul care trebuie deschis în Playwright/TAB M
 
 ## Pe scurt
 
-| Pas | Owner | Rezultat |
+| Pas | Responsabil | Rezultat |
 |---:|---|---|
-| 1 | launcher | validează path-ul și root-ul |
-| 2 | loopback server | servește read-only HTML/CSS/JS |
-| 3 | Playwright/TAB MCP | verifică DOM, click, screenshot și consolă |
+| 1 | lansator | validează calea și rădăcina |
+| 2 | server local | servește HTML/CSS/JS fără scriere |
+| 3 | Playwright/TAB MCP | verifică DOM-ul, clickul, captura de ecran și consola |
 
 Nu este browser de produs și nu înlocuiește gate-ul E2E.
 
@@ -30,7 +30,7 @@ sequenceDiagram
     D->>D: validează fișierul și root-ul
     D-->>A: afișează URL loopback
     A->>P: navighează la URL-ul afișat
-    P->>H: GET HTML/CSS/JS/read-only
+    P->>H: GET HTML/CSS/JS/doar-citire
     P-->>A: snapshot, click, screenshot, console, network
 ```
 

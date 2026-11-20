@@ -1,11 +1,11 @@
-# UI interaction — verification references
+# Interacțiuni UI — referințe de verificare
 
-## Verified contract — UI-FIRST-PAINT-144
+## Contract verificat — UI-FIRST-PAINT-144
 
-The [verification record](../ATF_UI_First_Frame_Verification.md) owns the
-bounded setup, original failure, runtime comparison and acceptance evidence.
+Documentul de [verificare](../ATF_UI_First_Frame_Verification.md) păstrează
+configurarea limitată, eșecul inițial, comparația runtime și dovezile de acceptanță.
 
-## Verified screenshot context
+## Context verificat al capturilor de ecran
 
-See the [capture contract](../../atf-ui/README.md#full-context-screenshots)
-and the [rendering and regression evidence](../ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up).
+Consultați [contractul de captură](../../atf-ui/README.md#capturi-de-ecran-cu-context-complet)
+și [dovezile de randare și regresie](../ATF_UI_First_Frame_Verification.md#urmărirea-capturilor-cu-context-complet).

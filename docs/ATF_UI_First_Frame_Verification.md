@@ -1,142 +1,147 @@
-# UI first frame — preparation, runtime identity and native input
+# Primul cadru UI — pregătire, identitate runtime și input nativ
 
-## Scope
+## Domeniu
 
-J1 owns the UI helper and AutoEx fixture integration. Core C3 and Reporting
-J18 retain their existing physical pairs; this increment does not alter
-business actions, reporting assets or the default 240-character preview.
+J1 deține helper-ul UI și integrarea fixture-urilor AutoEx. Core C3 și Reporting
+J18 își păstrează perechile fizice existente; acest increment nu schimbă
+acțiunile business, asset-urile de raportare sau preview-ul implicit de 240 de
+caractere.
 
-| Observation | Meaning and limit |
+| Observație | Semnificație și limită |
 |---|---|
-| Retained UI-FIRST-PAINT-144 logs | Native Fill/Click expired at 700 ms before their postcondition; the exact historic host/GPU scheduling cannot be reconstructed |
-| Controlled renderer work after LOAD | A 1200 ms fixture-only initialization reproduces both refusals, with zero trusted events |
-| Prepared viewport comparison | Same input cap; native click/fill complete in 187/57 ms after an explicit viewport preparation |
-| Native PNG oracle | Current-document lime pixels after controlled initialization, expected viewport size at 70/100%, and fresh red/blue replacements |
-| Actionability oracle | Disabled, covered, moving and readonly targets remain refused; preparation neither changes a target nor pre-dispatches input |
-| Validation runner discrepancy | The external runner silently forced Codex Node 24.22.1; the published Playwright Java 1.49.0 driver contains Node 22.11.0 |
-| Runtime A/B, same candidate and 384 MiB heap | Forced agent Node: 34/39; SDK default: 39/39; no deadline, assertion or source change between these executions |
-| Interpretation | Restore the actual SDK environment for acceptance; the comparison is not a universal claim that every Node 24 installation is incompatible |
+| Loguri UI-FIRST-PAINT-144 păstrate | Fill/Click nativ au expirat la 700 ms înaintea postcondiției; planificarea istorică exactă host/GPU nu poate fi reconstituită |
+| Lucru controlat al rendererului după LOAD | O inițializare de 1200 ms, numai în fixture, reproduce ambele refuzuri fără evenimente trusted |
+| Comparație cu viewport pregătit | Aceeași limită de input; click/fill native se termină în 187/57 ms după pregătirea explicită a viewport-ului |
+| Oracol PNG nativ | Pixeli lime în documentul curent după inițializarea controlată, dimensiunea viewport-ului așteptată la 70/100% și înlocuiri noi roșii/albastre |
+| Oracol de acționabilitate | Țintele dezactivate, acoperite, în mișcare și readonly rămân refuzate; pregătirea nu schimbă ținta și nu expediază input înainte de acțiune |
+| Discrepanță în runnerul de validare | Runnerul extern a forțat în tăcere Codex Node 24.22.1; driverul Playwright Java 1.49.0 publicat conține Node 22.11.0 |
+| Runtime A/B, același candidat și heap de 384 MiB | Node-ul agentului forțat: 34/39; implicitul SDK: 39/39; fără schimbare de deadline, aserțiune sau sursă între execuții |
+| Interpretare | Restabilește mediul real al SDK-ului pentru acceptanță; comparația nu afirmă universal că orice instalare Node 24 este incompatibilă |
 
-The source fix and runner correction address separate boundaries. A document
-LOAD is not evidence of a rendered viewport; a validation environment override
-is not evidence that the IDE's default driver behaves the same way.
+Corecția sursei și cea a runnerului tratează limite separate. Evenimentul LOAD
+al unui document nu dovedește randarea viewport-ului; suprascrierea mediului de
+validare nu dovedește că driverul implicit al IDE-ului se comportă la fel.
 
-## Execution contract
+## Contractul execuției
 
-| Stage | Owner | Limit |
+| Etapă | Owner | Limită |
 |---|---|---|
-| Load or replace the fixture document | `PlaywrightPagePreparation` | existing navigation deadline starts once |
-| Attach the native root and capture viewport PNG | same preparation scope | borrow the remaining deadline; animations remain allowed |
-| Return a receipt | same scope | late capture or capture failure cannot authorize input; PNG bytes are defensive copies |
-| Fill/Click plus declared observation | existing native action recorder | unchanged 700 ms fixture cap; one trusted activation and no replay |
-| Search-produced document | AutoEx runtime | retains the original shared action deadline; initial preparation grants no extra time |
+| Încarcă sau înlocuiește documentul fixture | `PlaywrightPagePreparation` | deadline-ul de navigare existent pornește o singură dată |
+| Atașează rădăcina nativă și capturează PNG-ul viewport-ului | același scope de pregătire | folosește deadline-ul rămas; animațiile rămân permise |
+| Returnează o recipisă | același scope | captura întârziată sau eșuată nu autorizează inputul; octeții PNG sunt copii defensive |
+| Fill/Click și observația declarată | recorderul nativ existent pentru acțiuni | limita fixture-ului rămâne 700 ms; o activare trusted, fără replay |
+| Document produs de căutare | runtime-ul AutoEx | păstrează deadline-ul comun original al acțiunii; pregătirea inițială nu adaugă timp |
 
-Preparation is explicit and does not inspect a business target. It returns
-current pixels and URL, with no fabricated recorder PASS; native visibility,
-stability, hit testing, readonly state and postconditions remain independent.
+Pregătirea este explicită și nu inspectează o țintă business. Returnează
+pixelii și URL-ul curente, fără un PASS inventat în recorder; vizibilitatea,
+stabilitatea, hit testing-ul, starea readonly și postcondițiile native rămân
+independente.
 
-## Permanent tests
+## Teste permanente
 
-| Owner | Independent oracle |
+| Responsabil | Oracol independent |
 |---|---|
-| [Preparation clock tests](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightPagePreparationTest.java) | one budget across load/attachment/capture, exact expiry, original failure identity and defensive bytes |
-| [Preparation browser tests](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightPagePreparationComponentTest.java) | actual PNG pixels, cold initialization, trusted events, unchanged document mode and refused targets |
-| [Native postcondition tests](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightClickPostconditionComponentTest.java) | one pointer, false observation, missing/ambiguous target and genuinely uncommitted child response |
-| [Existing action clock tests](../atf-ui/src/test/java/atf/ui/playwright/ObservationBudgetComponentTest.java) | pointer and successive confirmations never renew the measured deadline |
-| [AutoEx readiness](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java) | fixture URL/PNG, delayed product, wrong route/product and repeated document replacement |
-| [AutoEx response contracts](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java) | owned response, terminal outcomes, missing response, one GET and one trusted click |
+| [Teste pentru bugetul temporizării pregătirii](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightPagePreparationTest.java) | un singur buget pentru încărcare/atașare/captură, expirare exactă, identitatea erorii originale și octeți defensivi |
+| [Teste de browser pentru pregătire](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightPagePreparationComponentTest.java) | pixeli PNG reali, inițializare la rece, evenimente autentice, mod de document neschimbat și ținte refuzate |
+| [Teste pentru postcondițiile native](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightClickPostconditionComponentTest.java) | un singur pointer, observație falsă, țintă absentă/ambiguă și răspuns copil realmente neconfirmat |
+| [Teste existente pentru temporizarea acțiunii](../atf-ui/src/test/java/atf/ui/playwright/ObservationBudgetComponentTest.java) | pointerul și confirmările succesive nu reînnoiesc termenul-limită măsurat |
+| [Pregătire AutoEx](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchReadinessComponentTest.java) | URL/PNG fixture, produs întârziat, rută/produs greșit și înlocuirea repetată a documentului |
+| [Contracte de răspuns AutoEx](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/pages/AutoExSearchResponseComponentTest.java) | răspuns deținut, rezultate terminale, răspuns absent, o cerere GET și un click autentic |
 
-Run only in an [owned TMP stage](ATF_Build_And_Execution_Safety.md):
+Rulează numai într-un [staging TMP deținut](ATF_Build_And_Execution_Safety.md):
 
 ```powershell
 mvn -B -pl atf-ui -am "-Dtest=PlaywrightPagePreparationTest,PlaywrightPagePreparationComponentTest,PlaywrightClickPostconditionComponentTest,ObservationBudgetComponentTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
 ```
 
-## Verification status
+## Starea verificării
 
-| Gate | Observed result |
+| Poartă | Rezultat observat |
 |---|---|
-| Initial individual native UI gate | 24 passed, zero failures/errors/skips |
-| Initial individual AutoEx gate with forced agent Node | 12 passed, three failures after activation/transport observation; retained as an environment witness |
-| Same-code bounded suites with forced agent Node | 34/39; five failures, no skips or container failures |
-| Same-code bounded suites with SDK Node | 39/39; no skips or container failures, unchanged 700 ms/5 s and heap |
-| Final individual, strengthened trusted-event/frame cleanup | UI 24/24 and AutoEx 15/15; no failures/errors/skips |
-| Final suite, latest source | 39/39, fifteen successful containers; no failures/skips |
-| Adjacent governance | 42/42: test changes, readability, consumer architecture and physical Core/Reporting surfaces |
-| Verified-control follow-up | Current test-change governance passes after moving UI-FIRST-PAINT-144 to the baseline |
-| Chromium artifact audit | Four fresh artifacts: controlled UI, both individual AutoEx classes and their one shared suite report; no JavaScript errors |
-| Visual acceptance | Actual browser captures inspected: preparation/action tables, native refusal PNG and individual/suite comparisons |
+| Gate UI nativ individual inițial | 24 trecute, zero eșecuri/erori/teste sărite |
+| Poartă AutoEx individuală inițială cu Node-ul agentului impus | 12 trecute, trei eșecuri la activare/observarea transportului; păstrată ca dovadă despre mediu |
+| Suite limitate cu aceeași sursă și Node-ul agentului forțat | 34/39; cinci eșecuri, fără teste sărite sau erori de container |
+| Suite limitate cu aceeași sursă și Node-ul SDK-ului | 39/39; fără teste sărite sau erori de container, limitele de 700 ms/5 s și heap-ul neschimbate |
+| Rulări individuale finale, cleanup consolidat pentru evenimente/cadru trusted | UI 24/24 și AutoEx 15/15; fără eșecuri/erori/teste sărite |
+| Suita finală, ultima versiune a sursei | 39/39, cincisprezece containere reușite; fără eșecuri/teste sărite |
+| Guvernanță adiacentă | 42/42: schimbări de teste, lizibilitate, arhitectura consumerului și suprafețele fizice Core/Reporting |
+| Urmărirea controlului verificat | Guvernanța curentă a schimbărilor de teste trece după mutarea UI-FIRST-PAINT-144 în baseline |
+| Auditul artifactelor Chromium | Patru artefacte noi: UI controlat, ambele clase AutoEx individuale și raportul comun al suitei; fără erori JavaScript |
+| Acceptare vizuală | Capturi reale din browser inspectate: tabelele de pregătire/acțiuni, PNG-ul refuzului nativ și comparațiile individuale/de suită |
 
-The SDK-default suite produced one new shared AutoEx artifact for its fifteen
-consumer cases. Unit tests remain a separate category; native UI library
-contracts are not given consumer E2E reporting semantics.
+Suita cu setările implicite ale SDK-ului a produs un artefact AutoEx comun nou
+pentru cele cincisprezece cazuri consumatoare. Testele unitare rămân o categorie
+separată; contractelor native ale bibliotecii UI nu li se atribuie semantica de
+raportare E2E a consumatorului.
 
 <details>
-<summary><strong>Retained build and diagnostic provenance</strong></summary>
+<summary><strong>Proveniența compilării și a diagnosticului păstrată</strong></summary>
 
-Owned TMP workspace: `ATF_UI_FIRST_PAINT_ACTIVE_DO_NOT_CLEAN_3182723c`.
-Captured J1 review base: `f2aaa41e1f0939b93ccdab509492f862c09d18cc`.
+Workspace TMP deținut: `ATF_UI_FIRST_PAINT_ACTIVE_DO_NOT_CLEAN_3182723c`.
+Baza de revizuire J1 capturată: `f2aaa41e1f0939b93ccdab509492f862c09d18cc`.
 
-| Evidence | Retained entry |
+| Dovadă | Element păstrat |
 |---|---|
-| Native startup observations | `observations/all.json` and per-case JSON/native PNG files |
-| Initial source gates | `ui-preparation-first-atf_j1.log`, `ui-preparation-individual-atf_j1.log` |
-| Agent-runtime suite | `suites.log`, `suite-codex-node24-metrics.json`, `suite-gc.log` |
-| SDK-runtime suite | `suites-sdk.log`, `suite-sdk-metrics.json`, `suite-sdk-gc.log` |
-| Final individual gate | `ui-preparation-sdk-individual-atf_j1.log` |
-| Final suite | `suites-final.log`, `suite-final-metrics.json`, `suite-final-gc.log` |
-| Governance | `ui-preparation-governance-atf_j1.log`; verified-control follow-up retained separately |
-| Rendering | `render-audit.log` and `render-captures`; targeted disclosure paths, no global Expand all |
-| Controlled UI | [one healthy case and one intentional native refusal](http://127.0.0.1:52278/first-frame-ui.html#test-view) |
-| Individual AutoEx | [readiness](http://127.0.0.1:52278/first-frame-readiness.html#test-view), [owned responses](http://127.0.0.1:52278/first-frame-response.html#test-view) |
-| Suite AutoEx | [one shared artifact for fifteen cases](http://127.0.0.1:52278/first-frame-suite.html#test-view) |
+| Observații native la pornire | `observations/all.json` și fișierele JSON/PNG native pentru fiecare caz |
+| Porți inițiale pentru sursă | `ui-preparation-first-atf_j1.log`, `ui-preparation-individual-atf_j1.log` |
+| Suită cu runtime-ul agentului | `suites.log`, `suite-codex-node24-metrics.json`, `suite-gc.log` |
+| Suită cu runtime-ul SDK-ului | `suites-sdk.log`, `suite-sdk-metrics.json`, `suite-sdk-gc.log` |
+| Poartă individuală finală | `ui-preparation-sdk-individual-atf_j1.log` |
+| Suită finală | `suites-final.log`, `suite-final-metrics.json`, `suite-final-gc.log` |
+| Guvernanță | `ui-preparation-governance-atf_j1.log`; urmărirea controlului verificat este păstrată separat |
+| Randare | `render-audit.log` și `render-captures`; căi precise pentru extinderea secțiunilor, fără extinderea globală a tuturor |
+| UI controlat | [un caz sănătos și un refuz nativ intenționat](http://127.0.0.1:52278/first-frame-ui.html#test-view) |
+| AutoEx individual | [readiness](http://127.0.0.1:52278/first-frame-readiness.html#test-view), [răspunsuri deținute](http://127.0.0.1:52278/first-frame-response.html#test-view) |
+| Suită AutoEx | [un artifact comun pentru cincisprezece cazuri](http://127.0.0.1:52278/first-frame-suite.html#test-view) |
 
-Review URLs require the retained loopback server; timestamped HTML remains
-inside the owned TMP workspace. Chromium and inspected captures use the user-approved
-alternative to unavailable TAB MCP.
+URL-urile de revizuire necesită serverul local păstrat; HTML-ul cu marcaj temporal
+rămâne în spațiul de lucru TMP deținut. Chromium și capturile inspectate folosesc
+alternativa aprobată de utilizator la TAB MCP, care nu este disponibilă.
 
-Browser captures and full failed logs remain outside live. A later successful
-execution never rewrites the earlier artifact or its original cause.
+Capturile browserului și jurnalele complete ale eșecurilor rămân în afara
+spațiului de lucru activ. O execuție reușită ulterioară nu rescrie artefactul
+anterior sau cauza sa inițială.
 
 </details>
 
-The [UI owner contract](../atf-ui/README.md#explicit-fixture-preparation)
-defines the execution boundary.
+Contractul UI al responsabilului din [README-ul UI](../atf-ui/README.md#pregătirea-explicită-a-fixture-ului)
+definește limita execuției.
 
-## Full-context screenshot follow-up
+## Urmărirea capturilor cu context complet
 
-Screenshots retain the full page viewport and surrounding context at the configured
-scale; Shop/AutoEx journeys use 70%. Android retains its whole display, while
-the report viewer fits the complete source image with every edge and its original aspect ratio.
+Capturile păstrează viewport-ul complet al paginii și contextul înconjurător la
+scara configurată; journey-urile Shop/AutoEx folosesc 70%. Android păstrează
+întregul ecran, iar vizualizatorul raportului încadrează imaginea-sursă completă,
+cu toate marginile și proporțiile originale.
 
-| Gate | Status |
+| Poartă | Stare |
 |---|---|
-| Capture-path audit | Shop/AutoEx use page capture without a region clip; Android uses full-display ADB screencap |
-| Permanent pixel oracle | Both 70/100% cases pass, with every corner and additional lower-page context at 70% |
-| Existing full-document contract | 1/1 passes; explicit full-page output retains document height |
-| Consumer sanity | AutoEx 2/2 and Shop 2/2 pass; configuration, native geometry and complete PNG dimensions |
-| Governance | 8/8 passes; verified-control follow-up is recorded separately |
-| Chromium rendering | Three fresh artifacts pass, with no JavaScript errors; comparisons, tabs, timing, failure link and whole-image fit checked |
-| Visual review | Actual healthy/refused viewer captures and Shop assertions inspected; all four frame edges remain visible |
-| Deployment | Test/document increment only; Core C3 and Reporting J18 bytes retain their existing provenance |
+| Auditul căii de captură | Shop/AutoEx folosesc captură de pagină fără decupaj regional; Android folosește ADB pentru capturarea întregului ecran |
+| Oracol permanent de pixeli | Ambele cazuri 70/100% trec, cu fiecare colț și context suplimentar din partea de jos a paginii la 70% |
+| Contractul existent pentru întregul document | 1/1 trece; rezultatul explicit al întregii pagini păstrează înălțimea documentului |
+| Verificare pentru consumatori | AutoEx 2/2 și Shop 2/2 trec; configurație, geometrie nativă și dimensiuni PNG complete |
+| Guvernanță | 8/8 trec; urmărirea controlului verificat este înregistrată separat |
+| Randare Chromium | Trei artefacte noi trec, fără erori JavaScript; comparațiile, filele, timpii, legătura către eșec și încadrarea imaginii complete sunt verificate |
+| Revizuire vizuală | Capturile reale ale vizualizatorului în starea reușită/refuzată și verificările Shop sunt inspectate; toate cele patru margini ale cadrului rămân vizibile |
+| Livrare | Increment numai pentru teste și documentație; octeții Core C3 și Reporting J18 își păstrează proveniența existentă |
 
 <details>
-<summary><strong>Follow-up provenance</strong></summary>
+<summary><strong>Proveniența urmăririi</strong></summary>
 
-Owned TMP workspace: `ATF_SCREEN_CONTEXT_ACTIVE_DO_NOT_CLEAN_838c4418`.
-The captured J1 Git base remains `f2aaa41e1f0939b93ccdab509492f862c09d18cc`;
-prior UI-FIRST-PAINT-144 evidence above is retained unchanged.
+Workspace TMP deținut: `ATF_SCREEN_CONTEXT_ACTIVE_DO_NOT_CLEAN_838c4418`.
+Baza Git J1 capturată rămâne `f2aaa41e1f0939b93ccdab509492f862c09d18cc`;
+dovezile anterioare UI-FIRST-PAINT-144 de mai sus se păstrează neschimbate.
 
-| Evidence | Retained entry |
+| Dovadă | Element păstrat |
 |---|---|
-| Components and governance | `screen-components.log`, `screen-governance.log`, `screen-context-atf_j1.status.json` |
-| Pixel and viewer artifacts | `controlled-report-final`, `render-audit.log`, `render-captures` |
-| Whole-context UI report | [70% complete viewport and intentional native refusal](http://127.0.0.1:64792/screen-context.html#test-view) |
-| Consumer artifacts | [AutoEx geometry](http://127.0.0.1:64792/screen-context-autoex.html#test-view), [Shop geometry](http://127.0.0.1:64792/screen-context-shop.html#test-view) |
-| Retained TMP probe correction | Initial external probe compared native DPR `0.699999988079071` as a decimal string; final probe uses the existing independent geometry precision `1e-6`, with no source threshold or deadline change |
+| Componente și guvernanță | `screen-components.log`, `screen-governance.log`, `screen-context-atf_j1.status.json` |
+| Artifacte cu pixeli și vizualizator | `controlled-report-final`, `render-audit.log`, `render-captures` |
+| Raport UI cu tot contextul | [Viewport complet la 70% și refuz nativ intenționat](http://127.0.0.1:64792/screen-context.html#test-view) |
+| Artifacte consumer | [Geometrie AutoEx](http://127.0.0.1:64792/screen-context-autoex.html#test-view), [geometrie Shop](http://127.0.0.1:64792/screen-context-shop.html#test-view) |
+| Corecția păstrată a probei TMP | Proba externă inițială compara DPR-ul nativ `0.699999988079071` ca șir zecimal; proba finală folosește precizia independentă existentă a geometriei `1e-6`, fără schimbarea pragului din sursă sau a deadline-ului |
 
-Review links require the retained loopback server. Chromium and inspected captures
-use the approved alternative to unavailable TAB MCP; Android capture was inspected
-in source, without claiming a new device execution.
+Linkurile de revizuire necesită serverul local păstrat. Chromium și capturile
+inspectate folosesc alternativa aprobată la TAB MCP, indisponibil; captura
+Android a fost inspectată în sursă, fără a pretinde o execuție nouă pe dispozitiv.
 
 </details>

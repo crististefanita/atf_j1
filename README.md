@@ -2,7 +2,11 @@
 
 [Bibliotecile comune](lib/README.md) au codul și feedback-ul în J0; aici păstrăm adaptoarele și acceptanța domeniului.
 
-Referința surselor Core/Reporting/Console/Mock și a regresiilor este `atf_j0`; distribuția către J1 și J2 urmează [protocolul de sincronizare](docs/ATF_Workspace_Synchronization.md).
+`main` conține ediția documentației în engleză, iar `main_RO` ediția în română.
+Ambele păstrează același inventar și aceeași structură Markdown; guvernanța
+declară limba ramurii în `config/atf-governance-policy.json`.
+
+Referința surselor Core/Reporting/Console/Mock și a regresiilor este `atf_j0`; distribuția către consumerii J1–J7 urmează [protocolul de sincronizare](docs/ATF_Workspace_Synchronization.md).
 
 J1 este proiectul principal pentru testele AutoEx/Shop și integrarea lor.
 Infrastructura comună se reconciliază cu ownerii afectați; J2 este rezervat
@@ -18,7 +22,7 @@ aici ca JAR; [ownership-ul și sincronizarea](docs/ATF_Reporting_Consumer.md) au
 |---|---|
 | J0 | 12 module, sursa Reporting și regresiile native/mock/browser; [atlasul sursei](../atf_j0/docs/ATF_Context_Atlas.md) |
 | J1 | 6 module sursă, scenarii AutoEx/Shop și cinci biblioteci J0 prin JAR/POM. [Atlasul consumerului](docs/ATF_Context_Atlas.md) |
-| J2 · WIP | 6 module sursă, Core/Reporting JAR, un modul de test Kafka/mesagerie și Setup PowerShell în Podman; [atlasul WIP](../atf_j2/docs/ATF_Context_Atlas.md) |
+| J2 · WIP | 5 module sursă, Core/Reporting JAR, un modul de test Kafka/mesagerie și Setup PowerShell în Podman; [atlasul WIP](../atf_j2/docs/ATF_Context_Atlas.md) |
 
 Rolul proiectului și rezultatul verificat sunt distincte: un build sau un MOCK verde nu certifică serviciul extern, brokerul ori întregul ATF.
 
@@ -29,11 +33,11 @@ nu enumerate ca un inventar Maven:
 
 | Zonă | Module live | Responsabilitate | Întrebarea cititorului |
 |---|---|---|---|
-| **Contract & foundation** | `atf-test-kit`, Core JAR C3 | adnotări de test, resolvere neutre, lifecycle, transport ports | ce poate fi reutilizat fără reporting sau business? |
-| **Execution & verdict** | `atf-mock`, `atf-validation`, `atf-console` | schimb determinist, verdict semantic și diagnostic | cum devine un test reproductibil și explicabil? |
-| **Reporting & UI audit** | Reporting JAR, `atf-ui`, `atf-debug-ui` | artifact standalone, browser audit și publicare read-only | cum devine rezultatul observabil și verificabil? |
-| **Composition + consumers** | `atf-test-practice-shop`, `atf-test-auto-ex` | Shop și AutoEx compun journey-uri; Reporting Tests verifică binarul într-un gate extern TMP | cine verifică librăriile și cine le folosește într-un produs? |
-| **Governance** | `atf-tests` | graph-ul reactorului și boundary gates | cine protejează separarea modulelor? |
+| **Contract și fundație** | `atf-test-kit`, Core JAR C3 | adnotări de test, rezolvoare neutre, ciclu de viață, porturi de transport | ce poate fi reutilizat fără raportare sau logică de business? |
+| **Execuție și verdict** | `atf-mock`, `atf-validation`, `atf-console` | schimb determinist, verdict semantic și diagnostic | cum devine un test reproductibil și explicabil? |
+| **Raportare și audit UI** | Reporting JAR, `atf-ui`, `atf-debug-ui` | artefact autonom, audit în browser și publicare fără modificări | cum devine rezultatul observabil și verificabil? |
+| **Compoziție și consumatori** | `atf-test-practice-shop`, `atf-test-auto-ex` | Shop și AutoEx compun parcursuri; Reporting Tests verifică binarul într-o poartă TMP externă | cine verifică bibliotecile și cine le folosește într-un produs? |
+| **Guvernanță** | `atf-tests` | graful reactorului și porțile de responsabilitate | cine protejează separarea modulelor? |
 
 ## Diagramă de bază
 
@@ -91,12 +95,12 @@ a aceleiași legende.
 | transport determinist | `atf-mock` | rute și răspunsuri fake configurabile | component |
 | verdict | `atf-validation` | contracte response, evaluare și evidence | unit |
 | diagnostic | `atf-console` | proiecție de consolă și formatter | unit |
-| reporting library externă | `atf-reporting` din `lib` | renderer Extent/HTML; sursa și regresiile au owner în `atf_j0` | acceptanță binară J1; standalone la producător |
+| bibliotecă externă de raportare | `atf-reporting` din `lib` | randare Extent/HTML; sursa și regresiile au responsabil în `atf_j0` | acceptanță binară J1; verificare autonomă la producător |
 | browser runtime | `atf-ui` | sesiune Playwright și politici generice | component |
-| debug inspector | `atf-debug-ui` | servește read-only un HTML pe loopback | component |
-| reporting test harness extern | `atf_j0/atf-reporting-tests`, numai în TMP | component/API mock → publisher și UI/E2E pentru librăria reporting | component/integration/E2E |
-| aplicații consumatoare | `atf-test-practice-shop`, `atf-test-auto-ex` | config, locatori, pages și journey-uri independente | component/E2E |
-| whole-ATF governance | `atf-tests` | module graph și boundary-uri ale reactorului | component/architecture |
+| inspector de depanare | `atf-debug-ui` | servește fără modificări un HTML pe loopback | componentă |
+| harness extern pentru testele de raportare | `atf_j0/atf-reporting-tests`, numai în TMP | componentă/API mock → publisher și UI/E2E pentru biblioteca de raportare | componentă/integrare/E2E |
+| aplicații consumatoare | `atf-test-practice-shop`, `atf-test-auto-ex` | configurație, locatori, pagini și parcursuri independente | componentă/E2E |
+| guvernanță whole-ATF | `atf-tests` | graful modulelor și limitele reactorului | componentă/arhitectură |
 Etichetele scurte păstrează următorul sens:
 
 | În schemă | Sens complet |
@@ -447,9 +451,9 @@ ownerului și sunt protejate de testele lui.
 
 ## Core ca bibliotecă — owner și deployment
 
-This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
+J1 consumă Core, Reporting, Console, Mock și Test Kit ca biblioteci externe; inventarul modulelor este în tabelul de mai sus.
 
-[Contractul Core](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
+[Contractul Core](docs/ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele consumerilor.
 Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 [Acceptanța JSON C2/J9](docs/ATF_JSON_Binary_Verification.md) separă sursa, JAR-ul, rendererele și limitele rămase.
@@ -458,7 +462,7 @@ Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 
 [Verificarea Core](docs/ATF_Core_C3_Verification.md) leagă noua pereche JAR/POM de nativele sursă/JAR și de acceptanța fiecărui consumer. Acceptanța C3 a folosit Reporting; livrarea curentă Reporting este consemnată separat mai jos, cu preview 240 și oracole independente.
 
-## Reporting library and audit contracts
+## Biblioteca Reporting și contracte de audit
 
 [Library provenance](library-provenance.json) records the delivered Core / Reporting pair and each consumer's independent acceptance. J0 owns Reporting source and permanent mock, contract and browser regressions.
 
@@ -467,7 +471,7 @@ Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
 | neutral ACTION/OBSERVE, failures and assertion ownership | [Reporting API](../atf_j0/atf-reporting/README.md#neutral-ui-attribution-and-failure-ownership) |
 | complete PNG, redacted inline evidence and preview 240 | [Inline audit](../atf_j0/docs/ATF_Inline_Audit_Contract.md) |
 | incremental navigation, cold readiness and original deadlines | [Navigation](docs/ATF_Large_Report_Navigation.md) |
-| latest verification note beside the producer package | [Evidence retention](docs/ATF_Workspace_Synchronization.md#release-evidence-retention) |
+| latest verification note beside the producer package | [Evidence retention](docs/ATF_Workspace_Synchronization.md#păstrarea-dovezilor-de-publicare) |
 
 Library publication/rendering acceptance is separate from new business, device, broker or acoustic ASR execution. Release notes are not stored in project documentation or consumer `lib`.
 

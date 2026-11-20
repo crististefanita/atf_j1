@@ -11,11 +11,11 @@ browserul și publicarea raportului sunt furnizate de infrastructura ATF.
 [API și UI_API](#api-direct-și-limita-evidence-ului-uiapi) ·
 [Acceptanță negativă](#acceptanța-failure-urilor-business) · [Probă locală](#verificare-rapidă).
 
-| Vreau să verific | Intrare | Boundary |
+| Vreau să verific | Intrare | Limită |
 |---|---|---|
 | reguli și adaptoare offline | [componente](#suite-și-variante-de-evidence) | fixture controlat; fără serviciul public |
 | rezultat business pe site | [journey E2E](#journey-ul-de-cumpărare) | UI/UI_API și cont deținut per execuție |
-| contract API direct | [suite API](#cele-trei-suite-principale) | opt-in distinct pentru read-only și cont sintetic |
+| contract API direct | [suita API](#cele-trei-suite-principale) | activare explicită separată, numai pentru citire și cu un cont sintetic |
 | failure, cleanup și vecin sănătos | [acceptanță explicită](#acceptanța-failure-urilor-business) | fixture-uri E2E negative, în afara selecției canonice |
 
 **Context local:** [runtime](src/main/java/atf/autoex/runtime/README.md) ·
@@ -37,7 +37,7 @@ flowchart LR
 <details>
 <summary><strong>Legendă — scope-ul consumerului</strong></summary>
 
-- `YAML + selecție` fixează configurația și opt-in-ul; API read-only și API cu
+- `YAML + selecție` fixează configurația și activarea explicită; API doar pentru citire și API cu
   cont sintetic au selecții distincte.
 - `Consumer AutoEx` deține datele și regulile site-ului; browserul este oferit de
   UI, iar publicarea este oferită de Reporting.
@@ -318,7 +318,7 @@ Etichetele scurte păstrează următorul sens:
 |---|---|
 | `AutoExCartFlowComponentTest` | ordinea observație/gate/publicare/checkout; câmp greșit, lipsă, timeout și cauză primară păstrată |
 | `AutoExCartDomComponentTest` | portul folosește pagina și recorderul real; prețul greșit blochează click-ul și produce un singur failure corelat în Extent |
-| `AutoExRuntimeBoundaryComponentTest` | răspunsul 2xx, 503, `requestFailed` și lipsa schimbului; vecini de rută/metodă/resursă, un click și corelarea transport/modal sub `CART_ADD` |
+| `AutoExRuntimeBoundaryComponentTest` | răspunsul 2xx, 503, `requestFailed` și lipsa schimbului; vecini de rută/metodă/resursă, corelarea transport/modal și ownership-ul assertions API |
 | `AutoExAccountLifecycleComponentTest` | owner comun paginilor, create incert, identitate diferită și delete început fără confirmare |
 
 Raportul componentei DOM conține intenționat un scenariu PASS și unul FAIL.
@@ -420,8 +420,14 @@ Nu se rulează toate pentru a demonstra mai mult business și nu se adaugă o
 variantă de purchase pentru fiecare combinație de captură sau layout. Testele
 formatării, navigării și redării raportului aparțin `atf-reporting-tests`.
 
-`AutoExE2eSuite` este unicul gate UI complet: include cele opt clase E2E,
-cu poveștile de cont nou/existent, coș/sesiune și cele trei profile de purchase păstrate.
+`AutoExE2eSuite` include:
+
+- cele opt journey-uri E2E ale site-ului;
+- [auditul UI al raportului Extent local](src/test/java/atf/autoex/tests/e2e/reporting/AutoExCatalogReportPresentationE2eTest.java).
+
+Testul de raport deschide numai artifactul generat din observații controlate și
+nu navighează către site-ul public. Poveștile pentru cont nou/existent,
+coș/sesiune și profilele de purchase rămân aceleași.
 Clasele concrete rămân selecția pentru un singur flow, fără suite suprapuse.
 
 `AutoExComponentSuite` verifică local fără a deschide site-ul public:
@@ -1279,26 +1285,29 @@ atât prin suită, cât și la rularea unei metode individuale.
 `ProductsPage` cere activarea prin `AutoExCatalogPagePort`; portul nu expune
 browserul sau jurnalul API. Runtime-ul main compune `AutoExCatalogSearch`.
 
-- One native click owns one main-frame GET response. Its origin, path and
-  single decoded search parameter must match the configured term; HTTP must be 2xx.
-- A fresh parsed document must show the configured first product, with native
-  polling inside the original shared action budget. URL-only history changes,
-  stale DOM and a separately healthy JSON API cannot certify that click.
-- A visible exact queue-full message or unsuccessful HTTP response fails
-  explicitly, without spending the remaining budget waiting for a product.
-  There is no search replay, recovery GET or timeout increase.
-- `Catalog search response` is an INFO action carrying owned method/status/URL,
-  navigation count, the awaited gate and observed DOM state. The timed Click
-  retains PASS/FAIL; response metadata does not fabricate a business assertion.
+- Un singur click nativ deține un răspuns GET în cadrul principal. Originea,
+  calea și parametrul de căutare decodificat trebuie să corespundă termenului
+  configurat; răspunsul HTTP trebuie să fie 2xx.
+- Un document nou, parsat, trebuie să afișeze primul produs configurat, prin
+  interogare nativă în bugetul comun original al acțiunii. Schimbările URL-ului
+  doar în istoric, DOM-ul învechit și un API JSON sănătos separat nu pot certifica acel click.
+- Un mesaj vizibil exact „queue full” sau un răspuns HTTP nereușit produce un
+  eșec explicit, fără a consuma bugetul rămas așteptând produsul. Nu există
+  repetarea căutării, cerere GET de recuperare sau creștere a timeout-ului.
+- `Catalog search response` este o acțiune INFO care conține metoda/statusul/URL-ul
+  deținute, numărul navigărilor, poarta așteptată și starea DOM observată.
+  Clickul temporizat își păstrează PASS/FAIL; metadatele răspunsului nu inventează
+  o aserțiune business.
 - The passive observer uses `UiListenerScope` and detaches on success or failure.
   It ignores XHR/subframes and rejects a second main-frame request in its scope.
 - `AutoExSearchReadinessComponentTest` retains delayed product, replaced
   document, wrong-query/product and one-click oracles at the original 700 ms.
   `AutoExSearchResponseComponentTest` adds terminal HTTP/DOM, stale-DOM,
   independent API and transport-failure regressions.
-- Both browser fixtures explicitly prepare their initial native viewport in
-  the existing 5 s navigation budget before starting the 700 ms action. Decoded
-  PNG dimensions, fixture URL and trusted activation remain auditable comparisons.
+- Ambele fixture-uri de browser pregătesc explicit viewportul nativ inițial în
+  bugetul de navigare existent de 5 s, înainte de pornirea acțiunii de 700 ms.
+  Dimensiunile PNG decodificate, URL-ul fixture-ului și activarea trusted rămân
+  comparații auditabile.
 - Preparation does not grant time to the document produced by Search; that
   transition still shares the original action deadline. Driver/runtime
   identity is recorded in [first-frame verification](../docs/ATF_UI_First_Frame_Verification.md).
@@ -1357,6 +1366,17 @@ Diagrama comună pentru captură, baseline și publicare este în
 - Validarea API folosește exclusiv `UiApiValidationEvidence`, același contract
   ca Shop. Precondiția catalogului își publică checks sub exchange-ul propriu,
   nu în `UI validation`; verdictul UI nu este copiat pe request-uri.
+- `apiCheckpoint` leagă assertions de exchange-ul GET selectat prin secvența
+  capturii, metoda și calea. Un POST vecin sau un al doilea GET pe aceeași cale
+  nu primește comparația; dacă exchange-ul selectat nu este capturat unic,
+  raportul publică un check de corelare eșuat în validarea API.
+- În Extent, pasul AutoEx conține un nod colapsabil `API validation`, iar GET-ul
+  selectat are propriul grup colapsabil `API assertions`. Componenta
+  [AutoExRuntimeBoundaryComponentTest](src/test/java/atf/autoex/tests/component/lifecycle/AutoExRuntimeBoundaryComponentTest.java)
+  verifică ownership-ul, cardinalitatea și absența unui exchange sintetic.
+  [AutoExCatalogReportPresentationE2eTest](src/test/java/atf/autoex/tests/e2e/reporting/AutoExCatalogReportPresentationE2eTest.java)
+  deschide HTML-ul local în Playwright și verifică expandarea assertions și a
+  requestului selectat.
 - Numărul pașilor UI nu este un oracol pentru numărul de request-uri observate.
   `@AutoExNetworkDocuments({"/"})` selectează toate rutele DOCUMENT first-party
   pentru un profil UI+API, fără a activa documentele global pentru profilurile
@@ -1882,13 +1902,14 @@ trecerea întregului modul. Contractul de componentă nu confirmă site-ul publi
 
 </details>
 
-## Screenshot context
+## Contextul capturii de ecran
 
-Screenshot evidence uses the whole browser viewport at the configured 70% zoom,
-retaining the page around the current action. Region close-ups supplement the
-complete frame; the report fits the full image with its aspect ratio and all edges.
+Dovezile prin capturi de ecran folosesc întregul viewport al browserului la zoom-ul
+configurat de 70%, păstrând pagina în jurul acțiunii curente. Detaliile mărite ale
+regiunilor completează cadrul integral; raportul încadrează imaginea completă,
+păstrând proporțiile și toate marginile.
 
-The [shared capture contract](../atf-ui/README.md#full-context-screenshots) and
+The [shared capture contract](../atf-ui/README.md#capturi-de-ecran-cu-context-complet) and
 [native pixel regression](../atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
 protect context independently of the screenshot publication policy.
 

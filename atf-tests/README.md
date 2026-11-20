@@ -68,9 +68,9 @@ consumerilor înaintea oricărei mutări de teste.
 
 | Deployment | Module live | Cu harness Reporting în TMP |
 |---|---:|---:|
-| sursă canonică | 12 | inclus |
-| binar journeys, implicit | 10 | 11 |
-| binar foundation, explicit | 8 | 9 |
+| J0 source canonical | 12 | inclus |
+| J1 binary consumer | 6 | 7 |
+| J2 binary consumer | 5 | 6 |
 
 Un modul declarat lipsă este eroare; profilele nu sunt deduse din directoare.
 
@@ -80,7 +80,7 @@ selectează dovada după declarația Maven, fără a deduce excepții din fișie
 
 | Regulă | Reporting sursă | Reporting binar |
 |---|---|---|
-| reactor | catalogul canonic de 12 module, cu POM-uri existente | 10 module, versiune explicită și JAR/POM direct în `lib`; gate-ul extern poate adăuga explicit Reporting Tests în TMP, cu 11 module. Sursa shadow și harness-ul nedeclarat sunt refuzate. |
+| reactor | POM-ul live definește inventarul modulelor | modulele J1/J2 și perechea Reporting sunt explicite în `lib`; gate-ul extern adaugă numai modulul Reporting Tests în TMP. Sursa shadow și harness-ul nedeclarat sunt refuzate. |
 | documentație | README Reporting | atlas JAR și ghidul consumerului; aceleași controale de structură/link/proză |
 | ownership | fișierul Java exact și interdicțiile de package | clasa exactă din JAR și absența duplicatelor interzise |
 | independență | importuri sursă și POM standalone | POM fără parent/dependențe ATF și referințe de bytecode prin JDK `jdeps` |
@@ -116,17 +116,25 @@ src/test/java/atf/api/tests/governance/
 ├── console/          default-uri și composition root-uri UI/API
 ├── layers/           clasificare globală și acoperirea disjunctă a suitelor consumer
 ├── documentation/
+│   ├── language/     politica ramurii și verificarea prozei vizibile
+│   ├── structure/    ierarhia README-urilor și blocurile colapsabile
+│   ├── factual/      probe POM, workspace și configurație de consumer
+│   ├── links/        indexul heading-urilor Markdown și al ancorelor HTML
 │   ├── DocumentationDiagramGovernanceTest.java
 │   ├── DocumentationProseGovernanceTest.java
-│   ├── DocumentationReadmeStructureGovernanceTest.java
 │   ├── DocumentationAnchorGovernanceTest.java
-│   ├── links/        indexul heading-urilor și al ancorelor HTML
 │   ├── DocumentationStyleGovernanceTest.java
 │   ├── DocumentationTargetGovernanceTest.java
 │   ├── DocumentationGovernanceSupport.java
 │   └── DynamicPathDocumentationArchitectureTest.java
 └── WholeAtfGovernanceSuiteTest.java
 ```
+
+`config/atf-governance-policy.json` declară `documentationLanguage` pentru
+ramura curentă. Instrumentul `tools/documentation-editions.mjs` compară
+worktree-urile `main` și `main_RO`, inclusiv inventarul Markdown, structura
+listelor/tabelelor/diagramelor, destinațiile linkurilor și paritatea fișierelor
+non-Markdown. Testul Node.js este `tools/documentation-editions.test.mjs`.
 
 `WholeAtfGovernanceSuiteTest` este entry point-ul explicit pentru verificarea
 întregului reactor. El grupează verificările fără să mute responsabilitatea
@@ -150,9 +158,13 @@ testelor de reporting în acest modul:
   boundary-ul reporting standalone;
 - `governance.documentation.DynamicPathDocumentationArchitectureTest` — documentație
   relocabilă, fără căi de mașină sau nume de artifact generate concret;
-- `governance.documentation.DocumentationReadmeStructureGovernanceTest` — un titlu,
-  secțiune de orientare `Pe scurt`, `<details>` echilibrate și linkuri locale rezolvabile în
-  toate README-urile și în `docs/ATF_Architecture.md`;
+- `governance.documentation.structure.DocumentationReadmeStructureGovernanceTest` — un titlu,
+  secțiune de orientare potrivită politicii (`At a glance` pe `main`, `Pe scurt`
+  pe `main_RO`), `<details>` echilibrate și linkuri locale rezolvabile în toate
+  README-urile și în `docs/ATF_Architecture.md`;
+- `governance.documentation.language.DocumentationLanguageGovernanceTest` — verifică limba
+  prozei Markdown vizibile și a etichetelor Mermaid pentru toate documentele,
+  păstrând identificatorii, comenzile și exemplele de cod;
 - `governance.documentation.DocumentationStyleGovernanceTest` — stil semantic ATF:
   fence-uri tipizate, headings fără salturi, bullets `-` și fără font/CSS/HTML
   prezentational în README-uri și în documentul arhitectural canonic;
@@ -299,13 +311,21 @@ Ambele intră în suita whole-ATF; `@DocumentationTarget` aplică aceeași verif
 
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compară modulele și scope-ul Kit cu POM-urile reale.
+[DocumentedWorkspaceCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalogTest.java)
+citește POM-urile live J0–J7 și compară numărul modulelor, rolul producer/consumer
+și versiunea Reporting cu tabelul de sincronizare; verifică numerele selectate
+din Atlas, README-ul executiv J1 și matricea de deployment de aici, inclusiv
+modulul temporar de Reporting Tests. Mutanții de număr, rol și versiune trebuie
+respinși. Rularea cere checkouturile surori J0–J7 lângă J1, conform tabelului de
+staging grupat din [siguranța build-ului](../docs/ATF_Build_And_Execution_Safety.md).
 [DocumentedUiGeometryContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedUiGeometryContractTest.java)
 extinde aceeași limită factuală la geometria numerică selectată, fără surse Reporting.
-Ambele probe sunt selectate explicit de `WholeAtfGovernanceSuiteTest`.
+Aceste probe sunt selectate explicit de `WholeAtfGovernanceSuiteTest`.
 
 | Afirmație delimitată | Sursă executabilă | Refuz observabil |
 |---|---|---|
 | numărul modulelor din arhitectură | declarațiile directe `modules/module` din POM | număr diferit, afirmație absentă ori duplicată |
+| catalog J0–J7 | POM-urile live ale checkouturilor surori | count, rol producer/consumer sau versiune Reporting discordantă |
 | Kit în matricea consumerului | dependența directă din POM; scope omis înseamnă `compile` | scope diferit, Kit absent ori prezent în ambele coloane |
 | zoom generic versus exemplu configurat | `UiBrowserConfiguration.defaults()` | un exemplu particular nu redefinește implicitul runtime |
 | CSS și DPR din exemplul UI | `UiViewportScale` pentru intrările declarate | geometria derivată nu concordă cu modelul executabil |
@@ -459,7 +479,7 @@ urmează [convenția GitHub](https://docs.github.com/en/get-started/writing-on-g
 
 | Decizie | Sursă și limită |
 |---|---|
-| Boundary, ownership și documentație în întregul reactor | [WholeAtfGovernanceSuiteTest](src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java); [probe negative pentru ancore](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) |
+| Boundary, ownership și documentație în întregul reactor | [WholeAtfGovernanceSuiteTest](src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java); [proba de limbă](src/test/java/atf/api/tests/governance/documentation/language/DocumentationLanguageGovernanceTest.java); [probe negative pentru ancore](src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) |
 | Dependențe și source-set-uri | [POM](pom.xml); scope-ul declarat este autoritatea pentru integrare |
 | Ce nu demonstrează această probă | Gate-ul nu dovedește un journey business ori randarea artifactului. |
 
@@ -469,11 +489,15 @@ urmează [convenția GitHub](https://docs.github.com/en/get-started/writing-on-g
 Rulați din rădăcina unui [staging extern](../docs/ATF_Build_And_Execution_Safety.md), cu JDK 21 și Maven.
 
 ```powershell
-mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest,DocumentationAnchorGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest,DocumentationAnchorGovernanceTest,DocumentationLanguageGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+node --test atf-tests/tools/documentation-editions.test.mjs
+node atf-tests/tools/documentation-editions.mjs compare $env:ATF_MAIN_STAGE $env:ATF_RO_STAGE
 ```
 
 Comanda selectează proba numită și construiește dependențele; nu declară
 trecerea întregului modul. Gate-ul nu dovedește un journey business ori randarea artifactului.
+Comparația Node.js rulează după staging-ul ambelor ediții și eșuează dacă diferă
+inventarul, structura Markdown, destinațiile linkurilor ori fișierele non-Markdown.
 
 </details>
 
