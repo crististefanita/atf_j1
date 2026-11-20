@@ -130,6 +130,6 @@ later does not remove the timestamped HTML or convert it into a new execution.
 The original failure artifact remains immutable. Fresh outputs, logs and
 captures are kept outside live; a later healthy journey does not rewrite it.
 
-[Owner contract](../atf-test-auto-ex/README.md#confirmarea-căutării-în-catalog)
+[Owner contract](../atf-test-auto-ex/README.md#catalog-search-confirmation)
 and [current feedback](feedback/ATF_Consumer_Business_Test_Focus_Feedback.md)
 track this consumer increment separately from library acceptance.

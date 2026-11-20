@@ -1,207 +1,248 @@
-# Coordonare consumer Android — J1 către J4
+# Android consumer coordination — J1 to J4
 
-## Pe scurt
+## At a glance
 
-J1 păstrează coordonarea cerințelor nonbibliotecă transferate din J0 la 2026-11-02.
-J4 deține ADB, modelul, oracolele și execuția device; [J0 Reporting](../../../atf_j0/docs/feedback/ATF_Android_UI_Reporting_Feedback.md) păstrează numai contractele generice de renderer și proba sursă/JAR.
+J1 retains coordination of non-library requirements transferred from J0 on
+2026-11-02. J4 owns ADB, the model, oracles, and device execution; [J0 Reporting](../../../atf_j0/docs/feedback/ATF_Android_UI_Reporting_Feedback.md)
+retains only generic renderer contracts and source/JAR evidence.
 
-Înregistrările de mai jos sunt handoff-uri datate, nu afirmații despre release-ul curent.
-Detaliile deja demonstrate sunt context pentru acceptanța consumerului; nu se recalculează verdictul sau numărul testelor dintr-un checkpoint.
+The records below are dated handoffs, not claims about the current release.
+Details already demonstrated provide context for consumer acceptance; neither
+the verdict nor the test count is recalculated from a checkpoint.
 
 <details>
-<summary><strong>Handoff-uri consumer păstrate integral</strong></summary>
+<summary><strong>Consumer handoffs retained in full</strong></summary>
 
-## 2026-11-01 — partidă completă și dovezi de stare, consumator J11
+## 2026-11-01 — complete match and state evidence, J11 consumer
 
-- J4 a primit perechea fizică J11.
-- Proba producerului cu PNG sintetic nu închide acceptanța Android a consumatorului.
-- Ținta live este 19 mâini, 109 levate și 436 cărți, apoi aceleași distribuții/oferte/mutări în Whist Lab cu rezultate calculate de motorul local.
-- Rularea este în curs: prima mână are 40 de cărți contabilizate și scoruri observate `[10,15,2,3]`, reconciliate independent.
-- Scenariul complet nu este încă acceptat.
+- J4 received the physical J11 pair.
+- The producer's synthetic-PNG test does not close Android consumer acceptance.
+- The live target is 19 hands, 109 tricks, and 436 cards, followed by the same
+  deals/bids/moves in Whist Lab with results calculated by the local engine.
+- The run is in progress: hand one has 40 cards accounted for and observed
+  scores `[10,15,2,3]`, reconciled independently.
+- The full scenario is not yet accepted.
 
-**Cerințe ferme pentru contract și probă, fără logică Whist în Reporting:**
+**Firm contract and evidence requirements, with no Whist logic in Reporting:**
 
-1. **Proveniență per afirmație.** OBSERVE poate descrie starea produsului și
-   calculul independent, pe lângă captura UI. XML UI vechi, pixel schimbat și
-   stare salvată proaspătă sunt dovezi diferite. Nu transformați OBSERVE în
-   ACTION sau interpretarea într-un fapt citit automat din PNG. Parsarea stării
-   și oracolul rămân în J4; modelul Reporting rămâne neutru.
-2. **Reproducere din raport.** Inputul, condiția regulii, expected/actual,
-   verdictul, captura inline exactă și artifact-ul sursă cu SHA-256 rămân
-   corelate cu pasul/scenariul lor. Preview-ul rămâne 240 de caractere;
-   comparația integrală trebuie să poată fi deschisă și citită. Listele de
-   valori legale nu pot dispărea din HTML.
-3. **Numărători stabile.** Testele JUnit, scenariile live, checkpoint-urile,
-   assertions, mutările și capturile au populații diferite. Sute de assertions
-   nu devin sute de teste în Overview. Un FAIL de regulă/scor rămâne FAIL și
-   când acceptanța vizuală este WARNING.
-4. **Probă de volum.** Cele două aplicații produc sute de checkpoint-uri cu
-   PNG 1080×1920 inline Base64. Măsurați publish/close, dimensiunea HTML,
-   memoria și navigarea în browser cu o probă sintetică echivalentă. Verificați
-   media și assertions din ultimul pas. Dacă imaginile ascunse sunt decodate
-   toate la deschidere, propuneți încărcare la nevoie păstrând HTML-ul autonom
-   și payload-urile complete.
-5. **Timing neinstrumentat.** Diferențiați observația/calculul fără timing
-   instrumentat de o acțiune măsurată ca 0 ms. Dacă suprafața actuală permite
-   metadata/observations, documentați folosirea ei înainte de a extinde API-ul.
-6. **Continuare auditabilă.** Eșecul harness-ului păstrează trace-ul și cauza.
-   Continuarea revalidează checkpoint-urile reținute și păstrează logul inițial.
-   Nu asociați capturi după simplul nume de fișier și nu ascundeți proveniența
-   fazelor la publicarea verdictului final.
+1. **Per-claim provenance.** OBSERVE can describe product state and independent
+   calculation in addition to the UI capture. Old UI XML, a changed pixel, and
+   freshly saved state are different evidence. Do not turn OBSERVE into ACTION
+   or interpretation into a fact automatically read from a PNG. State parsing
+   and the oracle remain in J4; the Reporting model remains neutral.
+2. **Reproduction from the report.** Input, rule condition, expected/actual,
+   verdict, exact inline capture, and source artifact with SHA-256 remain
+   correlated with their step/scenario. Preview remains 240 characters; the
+   full comparison must be openable and readable. Lists of legal values must
+   not disappear from HTML.
+3. **Stable counts.** JUnit tests, live scenarios, checkpoints, assertions,
+   moves, and captures have different populations. Hundreds of assertions do
+   not become hundreds of tests in Overview. A rule/score FAIL remains FAIL
+   even when visual acceptance is WARNING.
+4. **Volume test.** The two applications produce hundreds of checkpoints with
+   inline Base64 PNGs at 1080×1920. Measure publish/close, HTML size, memory,
+   and browser navigation with an equivalent synthetic test. Verify the final
+   step's media and assertions. If all hidden images are decoded on open,
+   propose on-demand loading while keeping HTML standalone and payloads complete.
+5. **Uninstrumented timing.** Distinguish observation/calculation without
+   instrumented timing from an action measured at 0 ms. If the current surface
+   supports metadata/observations, document its use before extending the API.
+6. **Auditable continuation.** A harness failure retains the trace and cause.
+   Continuation revalidates retained checkpoints and preserves the original
+   log. Do not match captures by filename alone or hide phase provenance when
+   publishing the final verdict.
 
-- J4 folosește API-ul existent J11.
-- Dacă cerințele sunt acoperite, livrați proba pe JAR și instrucțiuni concrete de consum.
-- Dacă apare un gol, numai J0 modifică, testează și împachetează biblioteca.
-- Backup-urile `.ab` brute pot conține preferințe ale aplicației; J4 atașează în raport numai starea jocului și dovezile necesare, fără arhivele brute.
+- J4 uses the existing J11 API.
+- If the requirements are covered, deliver evidence against the JAR and
+  concrete consumption instructions.
+- If a gap is found, only J0 changes, tests, and packages the library.
+- Raw `.ab` backups can contain application preferences; J4 attaches only
+  game state and required evidence to the report, not raw archives.
 
-## 2026-11-02 — J4: reguli românești, componente și AI înainte de Android
+## 2026-11-02 — J4: Romanian rules, components, and AI before Android
 
-Consumerul J4 adaugă raportul nativ `RuleComponentExtentReportTest`, fără
-renderer HTML privat. Profilul românesc este separat de Oh Hell; testele JVM
-produc intrări, stări și expected/actual la fiecare carte, fără emulator.
-Contractele Reporting necesare pentru acest consum sunt concrete:
+The J4 consumer adds the native `RuleComponentExtentReportTest` report without
+a private HTML renderer. The Romanian profile is separate from Oh Hell; JVM
+tests produce inputs, state, and expected/actual for every card, without an
+emulator. The Reporting contracts required for this consumption are concrete:
 
-1. Overview trebuie să distingă cazuri JUnit, partide model, comparații AI,
-   mutări și ramuri JaCoCo. 6.375 configurații dintr-un test nu sunt 6.375
-   cazuri JUnit. Nici un pas al unei partide nu devine automat un test nou.
-2. Un flow de componentă are SETUP/TEST BODY/TEARDOWN și stări de domeniu, fără
-   screenshot. Lipsa unei capturi UI aici este normală, nu warning de produs.
-   Când revenim la Android, pozele rămân PNG reale inline Base64.
-3. Expected/Actual trebuie să păstreze integral mâna, lista cărților legale,
-   atuul, actorul, câștigătorul, levatele și totalurile. Pentru profilul românesc
-   scorurile negative sunt valide; formatarea nu trebuie să ascundă semnul.
-4. Verdictul AI are două dimensiuni: legalitate și performanță măsurată.
-   Eșantionul pereche, seed-ul, locul, adversarii și scorurile trebuie să poată
-   fi citite. Un scor mai bun în 32 de perechi nu înseamnă AI optim global.
-5. Raportul offline și raportul Android au acceptanțe distincte. Nu completați
-   automat cu PASS o execuție Android lipsă pe baza componentelor verzi.
+1. Overview must distinguish JUnit cases, model matches, AI comparisons,
+   moves, and JaCoCo branches. 6,375 configurations from one test are not
+   6,375 JUnit cases. No match step automatically becomes a new test.
+2. A component flow has SETUP/TEST BODY/TEARDOWN and domain state, without a
+   screenshot. The absence of a UI capture here is normal, not a product
+   warning. When returning to Android, images remain real inline Base64 PNGs.
+3. Expected/Actual must retain the full hand, legal-card list, trump, actor,
+   winner, tricks, and totals. Negative scores are valid for the Romanian
+   profile; formatting must not hide the sign.
+4. The AI verdict has two dimensions: legality and measured performance. The
+   paired sample, seed, seat, opponents, and scores must be readable. A better
+   score in 32 pairs does not mean globally optimal AI.
+5. The offline report and Android report have distinct acceptance. Do not
+   automatically fill a missing Android run with PASS based on green components.
 
-J4 consumă numai JAR-ul J11 livrat de J0. Orice schimbare generică de layout,
-numărători, comparație sau navigare rămâne de implementat, verificat și
-împachetat în J0. Rularea curentă și verificarea HTML sunt păstrate sub
+J4 consumes only the J11 JAR delivered by J0. Any generic change to layout,
+counts, comparison, or navigation remains to be implemented, verified, and
+packaged in J0. The current run and HTML verification are retained under
 `../../../../whist_back/rules-components/20261102-final/`.
 
-### Reproducere concretă: observation.fields este doar preview
+### Concrete reproduction: observation.fields is preview only
 
-- Verificarea strictă a consumerului a eșuat în `../../../../whist_back/rules-components/20261102-acceptance/extent-publisher.log`: `Report omitted complete component evidence`, distribuția mâinii 5.
-- În HTML, `INPUTS / HAND / LEGAL CHOICES` se termină cu elipsă după 240 caractere; valoarea integrală nu era în raport deoarece consumerul folosise numai ReportField.
-- Corecția J4 folosește `ReportObservation.Body(..., Format.TEXT)` pentru intrări/expected/actual complete și păstrează câmpul ca preview.
-- Nu ridicăm plafonul global și nu copiem rendererul.
-- J0: documentați explicit această semnificație a câmpurilor și adăugați o probă binară pentru corp TEXT de peste 240 caractere, cu semne negative, cărți Unicode și ultimul element vizibil.
+- Strict consumer verification failed in
+  `../../../../whist_back/rules-components/20261102-acceptance/extent-publisher.log`:
+  `Report omitted complete component evidence`, hand 5 deal.
+- In HTML, `INPUTS / HAND / LEGAL CHOICES` ends with an ellipsis after 240
+  characters; the full value was absent because the consumer used only
+  ReportField.
+- The J4 correction uses `ReportObservation.Body(..., Format.TEXT)` for full
+  input/expected/actual and keeps the field as preview.
+- We do not raise the global limit or copy the renderer.
+- J0: document this field semantics explicitly and add a binary test for a
+  TEXT body over 240 characters, with negative signs, Unicode cards, and the
+  final visible element.
 
-- Corecție de configurare confirmată prin proba binară J11: și Body TEXT are un plafon implicit separat de 100 de caractere.
-- Consumerul trebuie să ceară `new ReportingSettings(240, ReportingSettings.DISABLE_BODY_DISPLAY_LIMIT)` pentru dovezi complete.
-- J4 a făcut asta numai în publisherul său offline; preview-ul rămâne 240.
-- Verificarea tuturor valorilor a trecut: `../../../../whist_back/rules-components/20261102-complete/component-report-verification.properties`, 184 cazuri, 88 partide model, 40.304 mutări, HTML 4.604.237 bytes.
-- Benchmarkul final are 144 perechi la 3–6 locuri, nu doar proba inițială de 32.
-- Această configurare trebuie documentată clar de J0 pentru consumerii cu dovezi lungi; nu este nevoie de un renderer privat sau de modificarea JAR-ului în J4.
+- A configuration correction was confirmed by the J11 binary test: TEXT Body
+  also has a separate default limit of 100 characters.
+- The consumer must request
+  `new ReportingSettings(240, ReportingSettings.DISABLE_BODY_DISPLAY_LIMIT)`
+  for complete evidence.
+- J4 did this only in its offline publisher; preview remains 240.
+- Verification of all values passed:
+  `../../../../whist_back/rules-components/20261102-complete/component-report-verification.properties`,
+  184 cases, 88 model matches, 40,304 moves, HTML 4,604,237 bytes.
+- The final benchmark has 144 pairs at 3–6 seats, not only the initial 32-case test.
+- J0 should document this configuration clearly for consumers with long
+  evidence; a private renderer or JAR change in J4 is not needed.
 </details>
 
 <details>
-<summary><strong>Handoff J4 nou — volum J12 și proba de domeniu</strong></summary>
+<summary><strong>New J4 handoff — J12 volume and domain test</strong></summary>
 
-## 2026-11-02 — probă reală J4 de volum pe JAR J12: OOM la publicare
+## 2026-11-02 — real J4 volume test on J12 JAR: OOM during publication
 
-Toată partida originală și replay-ul Android Whist Lab au trecut: 19 mâini,
-109 levate, 436 intrări per aplicație; totaluri finale [89,126,145,119].
-Publisherul native J12 primește 321 checkpoint-uri cu PNG inline, 77.114.418
-bytes PNG, 6.634 assertions și 577 înregistrări ACTION/OBSERVE.
+The full original match and Android Whist Lab replay passed: 19 hands, 109
+tricks, 436 entries per application; final totals [89,126,145,119]. The native
+J12 publisher receives 321 checkpoints with inline PNGs, 77,114,418 PNG bytes,
+6,634 assertions, and 577 ACTION/OBSERVE records.
 
-La heap de 1 GB, închiderea Extent eșuează cu OutOfMemoryError înainte de HTML:
+With a 1 GB heap, Extent close fails with OutOfMemoryError before HTML:
 `StringUTF16.replace -> String.replace -> ExtentReportAssets.inlineFontAsset:195
 -> inlineSparkAssets:94 -> ExtentReportPublicationPipeline.publish:66`.
-Diagnosticul complet este în
+The full diagnostic is in
 `whist_back/deep-app-test/runs/20261101-231857-full-match/diagnostics/publisher-1g-oom/`.
 
-Cu heap dedicat de 3 GB, rendererul produce HTML de circa 105 MB. Aceasta este
-mitigare în consumer, nu dovada că publicarea are consum acceptabil. J0: adăugați
-un gate permanent pe JAR cu această clasă de volum și măsurați alocările din
-înlocuirile asset-urilor pe întregul HTML UTF-16. Reduceți copiile integrale;
-păstrați toate PNG-urile originale Base64. Nu rezolvați prin eliminarea pozelor,
-trunchierea assertions sau mutarea lor în linkuri externe.
+With a dedicated 3 GB heap, the renderer produces HTML of about 105 MB. This is
+consumer-side mitigation, not proof that publication uses an acceptable amount
+of memory. J0: add a permanent JAR gate with this volume class and measure
+allocations from asset replacement across the full UTF-16 HTML. Reduce full
+copies; retain all original Base64 PNGs. Do not solve this by removing images,
+truncating assertions, or moving them to external links.
 
-Verificarea consumerului a mai identificat normalizarea JSON: native afișează
-`[14,24,23,15]` pentru inputul `[14, 24, 23, 15]`. Datele sunt păstrate;
-comparatorul J4 acceptă numai JSON valid normalizat, cu aceleași valori și
-ordine. Controalele pentru ultimul element lipsă, ordine schimbată, element
-suplimentar și text trunchiat trec. Aceasta nu cere schimbarea formatterului.
+Consumer verification also found JSON normalization: native output shows
+`[14,24,23,15]` for input `[14, 24, 23, 15]`. Data is preserved; the J4
+comparator accepts only valid normalized JSON with the same values and order.
+Checks for a missing final element, changed order, extra element, and truncated
+text pass. This does not require a formatter change.
 
-Componentele curente ale jocului: 187 PASS, 88 partide model / 40.304 mutări,
-GameRules 100% linii/ramuri, game-core 97,22% linii / 91,07% ramuri. Benchmarkul
-AI are 144 perechi la 3–6 locuri: Expert 14.604 vs Hard 7.689 puncte.
-Raportul componentelor a trecut publisherul pe J12. Auditul vizual al HTML-ului
-local prin MCP rămâne neefectuat: politica browserului refuză file://. Nu îl
-prezentăm ca audit browser închis.
+Current game components: 187 PASS, 88 model matches / 40,304 moves, GameRules
+100% line/branch coverage, game-core 97.22% lines / 91.07% branches. The AI
+benchmark has 144 pairs at 3–6 seats: Expert 14,604 vs Hard 7,689 points. The
+component report passed the J12 publisher. Visual audit of local HTML through
+MCP remains undone: browser policy rejects file://. We do not present it as a
+completed browser audit.
 
 </details>
 
 <details>
-<summary><strong>Handoff J4 nou — ACTION/OBSERVE integral</strong></summary>
+<summary><strong>New J4 handoff — complete ACTION/OBSERVE payloads</strong></summary>
 
-### J12: payload-urile ACTION/OBSERVE lungi se pierd după preview
+### J12: long ACTION/OBSERVE payloads are lost after preview
 
-În `ExtentUiActionRenderer` expected/observed folosesc direct
-`ExtentReportNodeSupport.display(..., settings)`. La 240 caractere, restul
-stării nu există în HTML, chiar cu bodyMaxDisplayCharacters=0. Reproducere:
-`full-match-extent-publisher-j12-final.log`, starea originală a mâinii 18,
-33 de cărți jucate. Aceasta este pierdere de date, diferită de JSON compact.
+In `ExtentUiActionRenderer`, expected/observed directly use
+`ExtentReportNodeSupport.display(..., settings)`. At 240 characters, the rest
+of the state is absent from HTML even with bodyMaxDisplayCharacters=0.
+Reproduction: `full-match-extent-publisher-j12-final.log`, original state of
+hand 18, 33 cards played. This is data loss, distinct from compact JSON.
 
-J4 consumă API-ul existent: păstrează tabelul scurt și publică payload-urile
-complete, corelate prin checkpoint, sursă și număr de acțiune, ca native
-ReportObservation.Body(TEXT) în faza deja existentă de metadata. Nu inventează
-assertions PASS pentru a transporta observații. Verificarea tuturor celor
-6.634 assertions și 577 ACTION/OBSERVE a trecut după această completare.
+J4 uses the existing API: it retains the short table and publishes complete
+payloads correlated by checkpoint, source, and action number as native
+ReportObservation.Body(TEXT) in the existing metadata phase. It does not invent
+PASS assertions to carry observations. Verification of all 6,634 assertions
+and 577 ACTION/OBSERVE records passed after this addition.
 
-J0: cerința generică este expansiune expected/observed integrală, păstrând
-preview-ul de 240. Adăugați controale care elimină numai ultimul scalar dintr-un
-payload lung și cer FAIL al inspecției. UiPhase ar beneficia și de seam-ul
-neutru observation deja existent pe AtfReportPorts.Phase, cu owner-ul fazei
-păstrat. Numai J0 modifică și împachetează aceste extensii; J4 păstrează
-compoziția de consumer și probele reale.
+J0: the generic requirement is full expected/observed expansion while keeping
+the 240-character preview. Add checks that remove only the final scalar from a
+long payload and require inspection to FAIL. UiPhase would also benefit from
+the neutral observation seam already present on AtfReportPorts.Phase, while
+retaining phase ownership. Only J0 changes and packages these extensions; J4
+retains consumer composition and real evidence.
 
 </details>
 
-## J14 — lacune în publicarea individuală J4
+## J14 — gaps in individual J4 publication
 
-J1 păstrează coordonarea istorică. Criteriile curente se citesc în [feedback-ul Reporting J4](../../../atf_j4/docs/feedback/ATF_Reporting.md).
+J1 retains historical coordination. Current criteria are in [J4 Reporting feedback](../../../atf_j4/docs/feedback/ATF_Reporting.md).
 
-| Prioritate | Criteriu consumer |
+| Priority | Consumer criterion |
 |---|---|
-| 1 | false PASS resume: meniul cu buton disabled trece pragul de pixeli |
-| 2 | comparații lipsă și 209 ms de publicare în locul execuției de 37,476 s |
-| 3 | trace-ul bid-grid individual nu închide un HTML |
+| 1 | false PASS resume: a menu with a disabled button passes the pixel threshold |
+| 2 | missing comparisons and 209 ms of publication instead of the 37.476 s execution |
+| 3 | the individual bid-grid trace does not close an HTML report |
 
 The original J14 audit remains historical. The [inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md) defines current publication boundaries.
 
-### Coordonarea probei J4 pe dispozitiv partajat — 2026-11-02, 15:33
+### J4 test coordination on a shared device — 2026-11-02, 15:33
 
-Probele live de consumer din `ATF_REPORTING_J14_ACTIVE_DO_NOT_CLEAN_9ptTeB` și
-rularea J4 AI training folosesc simultan `127.0.0.1:5555` prin serverul ADB
-`tcp:192.168.56.1:5038`. O probă externă a schimbat Instructions în meniul
-principal în timpul capturării J4; validarea strictă a refuzat dovada incompletă.
-Aceasta este contendență de execuție, nu un defect de randare Reporting.
+Live consumer tests in `ATF_REPORTING_J14_ACTIVE_DO_NOT_CLEAN_9ptTeB` and the J4
+AI training run simultaneously use `127.0.0.1:5555` through the ADB server
+`tcp:192.168.56.1:5038`. An external test changed Instructions in the main
+menu during J4 capture; strict validation rejected the incomplete evidence.
+This is execution contention, not a Reporting rendering defect.
 
-- Nu suprapuneți noi journeys Android cu o rulare J4 activă. Finalizați procesul curent fără oprire forțată.
-- J4 așteaptă acces exclusiv pentru lectura completă și duelul AI. Avizul este în `../../../../whist_back/android-ui-lease.json`.
-- Diagnosticul este în `../../../../whist_back/ai-training/20261102-143525/device-contention.json`.
-- Gate-urile generice Reporting nu folosesc ADB. Captura altui journey nu devine dovadă validă prin simpla prezență în HTML.
+- Do not overlap new Android journeys with an active J4 run. Let the current
+  process finish without force-stopping it.
+- J4 is waiting for exclusive access for the full read and AI duel. The lease
+  is in `../../../../whist_back/android-ui-lease.json`.
+- The diagnostic is in
+  `../../../../whist_back/ai-training/20261102-143525/device-contention.json`.
+- Generic Reporting gates do not use ADB. A capture from another journey does
+  not become valid evidence merely by appearing in HTML.
 
-## Compoziție J4 fără artifacte externe — J15
+## J4 composition without external artifacts — J15
 
-[Contractul J4](../../../atf_j4/docs/reporting/ATF_Android.md) deține identitatea cazurilor, proiecția semantică, comparațiile capturate și PNG-urile per checkpoint. [Feedback-ul Reporting J4](../../../atf_j4/docs/feedback/ATF_Reporting.md) urmărește livrabilul autonom și calificarea acceptorilor. Corecția generică TEXT și regresiile neutre au owner în J0.
+The [J4 contract](../../../atf_j4/docs/reporting/ATF_Android.md) owns case
+identity, semantic projection, captured comparisons, and PNGs per checkpoint.
+[J4 Reporting feedback](../../../atf_j4/docs/feedback/ATF_Reporting.md) tracks
+the standalone deliverable and acceptor qualification. Generic TEXT correction
+and neutral regressions are owned by J0.
 
-## J4 — audit nou al componentelor și viewer-ului
+## J4 — new component and viewer audit
 
-[Auditul J4](../../../atf_j4/docs/reporting/ATF_Audit.md) descrie verificarea selecției, identității și dovezilor. J4 deține receipt-urile, SKIP, acceptorii, metricile și timing-ul. [Contractul de audit J0](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md#acceptanță-permanentă) păstrează regresia pentru revenirea la ownerul corect când un PNG este reutilizat.
+The [J4 audit](../../../atf_j4/docs/reporting/ATF_Audit.md) describes checks for
+selection, identity, and evidence. J4 owns receipts, SKIP, acceptors, metrics,
+and timing. The [J0 audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md#acceptanță-permanentă)
+retains the regression that returns ownership to the correct test when a PNG
+is reused.
 
-## J4 — artifact autonom și ecran Android integral
+## J4 — standalone artifact and full Android screen
 
-[Criteriile J4](../../../atf_j4/docs/feedback/ATF_Reporting.md#rpt-android-html-only--livrabilul-de-audit-fără-copii-auxiliare) cer compoziție per invocare și recepte tipizate. Migrarea păstrează expected și actual capturate, iar lipsurile din materialul istoric rămân explicite.
+The [J4 criteria](../../../atf_j4/docs/feedback/ATF_Reporting.md#rpt-android-html-only---audit-delivery-without-auxiliary-copies)
+require per-invocation composition and typed receipts. The migration retains
+captured expected and actual values, while gaps in historical material remain
+explicit.
 
-Captura integrală aparține J4. [Contractul viewerului din J0](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md#full-image-viewer-target) stabilește afișarea completă, păstrarea proporțiilor și accesul explicit la dimensiunea originală.
+Full-screen capture belongs to J4. The [J0 viewer contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md#full-image-viewer-target)
+defines full display, aspect-ratio preservation, and explicit access to the
+original dimensions.
 
-## J16 — viewer comun și input-uri J4 separate
+## J16 — shared viewer and separate J4 inputs
 
-[Contractul de audit inline](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md) păstrează cadrul integral, caption-ul local și contextul la închidere, cu regresii neutre sursă/JAR. J4 deține [contractul de predare](../../../atf_j4/docs/reporting/ATF_Handoff.md#contractul-descriptorului) și [prezentarea adaptivă](../../../atf_j4/docs/reporting/ATF_Presentation.md#modurile-de-prezentare), inclusiv scopul, configurația, inventarul și bugetele.
+The [inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md)
+retains the full frame, local caption, and context on close, with neutral
+source/JAR regressions. J4 owns the [handoff contract](../../../atf_j4/docs/reporting/ATF_Handoff.md#the-contract-of-the-descriptor)
+and [adaptive presentation](../../../atf_j4/docs/reporting/ATF_Presentation.md#modes-of-presentation),
+including purpose, configuration, inventory, and budgets.
 
-O copie a JAR-ului nu certifică aceste criterii și nu transformă replay-ul arhivat într-o execuție device nouă. J0 deține numai randarea comună și testele Reporting, iar J4 păstrează capturile și oracolele aplicației.
+A JAR copy does not certify these criteria or turn an archived replay into a
+new device execution. J0 owns only shared rendering and Reporting tests, while
+J4 retains application captures and oracles.

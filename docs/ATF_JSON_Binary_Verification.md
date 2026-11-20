@@ -1,55 +1,55 @@
-# JSON și biblioteci Core C2 / Reporting J9 — acceptanță
+# JSON and Core C2 / Reporting J9 Libraries — Acceptance
 
-## Pe scurt
+## At a glance
 
 Historical C2/J9 evidence. The current disclosure and governance contract is
 described by the [current Reporting contract](../../atf_j0/atf-reporting/README.md). These C2/J9 results remain historical.
 
-J0 păstrează sursele și nativele; J1/J2/J3 consumă aceiași bytes C2/J9.
-Perechile JAR/POM sunt direct în lib, câte o versiune per bibliotecă; J3 are
-șapte module și nu mai păstrează Core sursă.
+J0 retains the sources and native tests; J1/J2/J3 consume the same C2/J9 bytes.
+JAR/POM pairs are stored directly in `lib`, with one version per library; J3
+has seven modules and no longer retains Core source.
 
-| Bibliotecă | SHA-256 JAR |
+| Library | JAR SHA-256 |
 |---|---|
 | atf.api:atf-core:1.0.0-c2 | 91080FE996CCB358B7E42B8F147322B3D4468D84C364DFD259371EEEF9AFD5DB |
 | atf.api:atf-reporting:1.0.0-j9 | 2B58E5B871CCB78AF53C5BF77F1A21B6F6EAE92D18EF5F66CAC6FF9CCA154322 |
 
-## Contract și dovadă
+## Contract and evidence
 
-| Suprafață | Rezultat și limită |
+| Surface | Result and boundary |
 |---|---|
-| Core sursă și JAR C2 | 276 native PASS pe fiecare; document complet, duplicate, null/write, redacție exactă și factory înainte de submission |
-| control Core C1 | 37 cazuri noi, 20 FAIL așteptate; aceeași regresie pe sursa veche și JAR fizic |
-| Mock și Validation | suite complete pe sursă și separat în J1/J2/J3; route fallback independent, scalar YAML exact, tipuri și raw body păstrate |
-| Reporting nativ | 64 PASS per build; redactor și formatter probate separat, cu numere și duplicate |
-| control Reporting J8 fizic | 16 cazuri, 15 FAIL așteptate; eroarea numerică și pierderea multiplicității sunt reproduse |
-| Reporting J9 fizic | 39 PASS: native JSON, browser JSON, disclosure API și CodeSource; fără implementare Reporting în harness |
-| unit-uri Reporting pe sursă | 486 PASS; distinct de cele opt componente JSON și cele 22 API disclosure |
-| Kit | 133 PASS separat în fiecare workspace; cele două probe requirement sunt separate semantic, fără prag relaxat |
-| J1 | guvernanță completă și câte un component Shop/AutoEx; nu declară o nouă execuție de journey extern |
-| J2 | MOCK individual/suită, Extent/fallback, plus noua suită SQL embedded; fără certificare Kafka remote |
-| J3 | guvernanță și Speech component suite fără model; nu reprezintă reexecuție ASR ori microfon |
-| publicare | două build-uri curate identice pentru fiecare JAR; comparația API nu elimină simboluri publice |
+| Core source and C2 JAR | 276 native PASS each; complete document, duplicates, null/write, exact redaction, and factory before submission |
+| Core C1 control | 37 new cases, 20 expected FAIL results; the same regression on old source and physical JAR |
+| Mock and Validation | full suites on source and separately in J1/J2/J3; independent route fallback, exact YAML scalar, types, and raw body retained |
+| Native Reporting | 64 PASS per build; redactor and formatter proved separately, including counts and duplicates |
+| Physical Reporting J8 control | 16 cases, 15 expected FAIL results; numeric precision error and multiplicity loss reproduced |
+| Physical Reporting J9 | 39 PASS: native JSON, browser JSON, API disclosure, and CodeSource; no Reporting implementation in the harness |
+| Reporting source unit tests | 486 PASS; separate from the eight JSON component tests and 22 API disclosure cases |
+| Kit | 133 PASS separately in each workspace; the two requirement proofs are semantically distinct, with no relaxed threshold |
+| J1 | full governance and one Shop/AutoEx component test each; no new external journey run is claimed |
+| J2 | individual/suite MOCK, Extent/fallback, and the new embedded SQL suite; no remote Kafka certification |
+| J3 | governance and Speech component suite without a model; not an ASR or microphone rerun |
+| publication | two identical clean builds for each JAR; API comparison removes no public symbols |
 
-## Randare și limite rămase
+## Rendering and remaining limits
 
-- Browserul automat verifică Extent/fallback, individual/agregat, ownerul activ, tokenurile numerice și toate aparițiile duplicate.
-- Mouse, Enter și Space păstrează disclosure-ul auditat; ultimul rând și verdicturile FAIL/FAIL/PASS sunt accesibile.
-- Assertions păstrează default 240; fixture-ul numeric declară body 240, fără schimbarea default-ului standalone 100.
-- Oracolul refuză rotunjirea ori eliminarea unui duplicat chiar când statusurile rămân identice.
-- TAB MCP confirmă valorile și fallback keyboard; închiderea unui vecin după Expand all expune separat REPORT-SIBLING-DISCLOSURE-114.
+- The automated browser verifies Extent/fallback, individual/aggregate views, active ownership, numeric tokens, and every duplicate occurrence.
+- Mouse, Enter, and Space preserve the audited disclosure; the final row and FAIL/FAIL/PASS verdicts remain accessible.
+- Assertions retain the default of 240; the numeric fixture declares a 240-character body without changing the standalone default of 100.
+- The oracle rejects rounding or removing a duplicate even when statuses remain identical.
+- TAB MCP confirms values and keyboard fallback; closing a neighbor after Expand all exposes REPORT-SIBLING-DISCLOSURE-114 separately.
 
-Cele patru criterii Reporting preexistente de coeziune/importuri rămân la J0.
-Timing-ul capturat/publicare, profilul inspectorului, contrastul și lățimea
-fallback păstrează criteriile lor; fidelitatea JSON nu le închide implicit.
+The four pre-existing Reporting cohesion/import criteria remain with J0.
+Capture/publication timing, inspector profile, contrast, and fallback width
+retain their own criteria; JSON fidelity does not close them implicitly.
 
-## Reproducere și sincronizare
+## Reproduction and synchronization
 
-[Core Consumer](ATF_Core_Consumer.md) descrie contractul, bootstrap-ul Maven/IDE
-și păstrarea istoricului. [Sincronizarea](ATF_Workspace_Synchronization.md)
-cere manifest explicit, verificarea drift-ului și promovare selectivă.
+[Core Consumer](ATF_Core_Consumer.md) describes the contract, Maven/IDE bootstrap,
+and history retention. [Synchronization](ATF_Workspace_Synchronization.md)
+requires an explicit manifest, drift verification, and selective promotion.
 
-Dovezile acestui increment sunt în staging-ul extern
-ATF_JSON_C2_J9_ACTIVE_DO_NOT_CLEAN_f8f75e12: acceptance-evidence.json, logurile,
-manifestele publicațiilor și cele patru HTML-uri din publication. Sursa retrasă
-și perechile vechi se arhivează recuperabil; output-urile nu intră în live.
+Evidence for this increment is in external staging
+ATF_JSON_C2_J9_ACTIVE_DO_NOT_CLEAN_f8f75e12: `acceptance-evidence.json`, logs,
+publication manifests, and the four HTML files in `publication`. Retired source
+and old pairs are archived recoverably; outputs do not enter the live checkout.

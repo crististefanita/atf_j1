@@ -1,6 +1,7 @@
 package atf.api.tests.governance.documentation;
 
 import atf.api.tests.governance.documentation.links.DocumentationLinkGovernanceTest;
+import atf.api.tests.governance.documentation.links.DocumentationLocalLinks;
 
 import atf.api.tests.governance.documentation.links.MarkdownAnchorIndex;
 import atf.testkit.AtfComponentTest;
@@ -42,7 +43,7 @@ public class DocumentationAnchorGovernanceTest {
                 "```md", "[example](missing.md#missing)", "```", "~~~md", "[example](#missing)", "~~~");
         Files.write(source, lines);
         var violations = new ArrayList<DocumentationGovernanceSupport.Violation>();
-        DocumentationReadmeStructureGovernanceTest.inspectLocalLinks(source, root, lines, violations);
+        DocumentationLocalLinks.validate(source, root, lines, violations);
         assertTrue(violations.isEmpty(), violations::toString);
     }
 
@@ -54,10 +55,10 @@ public class DocumentationAnchorGovernanceTest {
         Files.write(source, lines);
         Files.writeString(target, "## Stable heading\n");
         var violations = new ArrayList<DocumentationGovernanceSupport.Violation>();
-        DocumentationReadmeStructureGovernanceTest.inspectLocalLinks(source, root, lines, violations);
+        DocumentationLocalLinks.validate(source, root, lines, violations);
         assertTrue(violations.isEmpty());
         Files.writeString(target, "```md\n## Stable heading\n```\n## Renamed heading\n");
-        DocumentationReadmeStructureGovernanceTest.inspectLocalLinks(source, root, lines, violations);
+        DocumentationLocalLinks.validate(source, root, lines, violations);
         assertEquals(1, violations.size());
         String diagnostic = violations.getFirst().toString();
         assertTrue(diagnostic.contains("DOC-README-ANCHOR"), diagnostic);
@@ -71,7 +72,7 @@ public class DocumentationAnchorGovernanceTest {
         var lines = List.of("# Owner", "[missing](absent.md#heading)", "[bad](#%xx)", "[case](#Owner)");
         Files.write(source, lines);
         var violations = new ArrayList<DocumentationGovernanceSupport.Violation>();
-        DocumentationReadmeStructureGovernanceTest.inspectLocalLinks(source, root, lines, violations);
+        DocumentationLocalLinks.validate(source, root, lines, violations);
         assertEquals(3, violations.size(), violations::toString);
     }
 

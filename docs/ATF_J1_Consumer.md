@@ -1,44 +1,44 @@
-# ATF J1 — ghidul de consum Reporting
+# ATF J1 — Reporting Consumer Guide
 
-Ghidul comun pentru J1 și J2 este [consumul bibliotecii Reporting](ATF_Reporting_Consumer.md).
-Această intrare păstrează destinațiile istorice ale linkurilor J1.
+The shared J1 and J2 guide is [consuming the Reporting library](ATF_Reporting_Consumer.md).
+This entry retains historical destinations for J1 links.
 
 <a id="pe-scurt"></a>
 
-- [Pe scurt](ATF_Reporting_Consumer.md#pe-scurt)
+- [At a glance](ATF_Reporting_Consumer.md#at-a-glance)
 
 <a id="ownership-și-direcția-sincronizării"></a>
 
-- [Ownership și direcția sincronizării](ATF_Reporting_Consumer.md#ownership-și-direcția-sincronizării)
+- [Ownership and synchronization direction](ATF_Reporting_Consumer.md#ownership-and-synchronization-direction)
 
 <a id="traseul-bibliotecii"></a>
 
-- [Traseul bibliotecii](ATF_Reporting_Consumer.md#traseul-bibliotecii)
+- [Library path](ATF_Reporting_Consumer.md#library-path)
 
 <a id="contractul-unui-modul-împachetat"></a>
 
-- [Contractul unui modul împachetat](ATF_Reporting_Consumer.md#contractul-unui-modul-împachetat)
+- [Packaged module contract](ATF_Reporting_Consumer.md#packaged-module-contract)
 
 <a id="deschiderea-proiectului"></a>
 
-- [Deschiderea proiectului](ATF_Reporting_Consumer.md#deschiderea-proiectului)
+- [Opening the project](ATF_Reporting_Consumer.md#opening-the-project)
 
 <a id="compatibilitatea-acestui-increment"></a>
 
-- [Compatibilitatea acestui increment](ATF_Reporting_Consumer.md#compatibilitatea-acestui-increment)
+- [Compatibility of this increment](ATF_Reporting_Consumer.md#compatibility-for-this-increment)
 
 <a id="reporting-tests-la-producător"></a>
 
-- [Reporting Tests la producător](ATF_Reporting_Consumer.md#reporting-tests-la-producător)
+- [Producer Reporting Tests](ATF_Reporting_Consumer.md#reporting-tests-at-the-producer)
 
 <a id="validarea-consumerului"></a>
 
-- [Validarea consumerului](ATF_Reporting_Consumer.md#validarea-consumerului)
+- [Consumer validation](ATF_Reporting_Consumer.md#consumer-validation)
 
 <a id="gate-ul-extern-reporting"></a>
 
-- [Gate-ul extern Reporting](ATF_Reporting_Consumer.md#gate-ul-extern-reporting)
+- [External Reporting gate](ATF_Reporting_Consumer.md#external-reporting-gate)
 
 <a id="actualizarea-bibliotecii"></a>
 
-- [Actualizarea bibliotecii](ATF_Reporting_Consumer.md#actualizarea-bibliotecii)
+- [Updating the library](ATF_Reporting_Consumer.md#updating-the-library)

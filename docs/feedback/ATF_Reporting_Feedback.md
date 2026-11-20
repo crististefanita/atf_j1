@@ -1,49 +1,49 @@
-# Reporting — owner și criterii în J0
+# Reporting — J0 owner and criteria
 
-## Pe scurt
+## At a glance
 
-Acest consumer folosește Reporting JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a backlog-ului.
+This consumer uses the Reporting JAR. The [canonical J0 register](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) owns the current criteria and priorities; we do not keep a competing copy of the backlog.
 
-Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumerul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
+Local reproductions are tied to the JAR version/hash and the exact scenario. Implementation and permanent mock/contract regression are verified in J0; the consumer then accepts the delivered binary according to the [protocol](../ATF_Reporting_Consumer.md).
 
 <details>
-<summary><strong>Trimiteri stabile către criteriile ownerului</strong></summary>
+<summary><strong>Stable links to owner criteria</strong></summary>
 
-## Criterii rămase pentru consolidare
+## Criteria remaining for consolidation
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#criterii-rămase-pentru-consolidare).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#criterii-rămase-pentru-consolidare).
 
-## Ordinea pregătirii
+## Preparation order
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ordinea-pregătirii).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ordinea-pregătirii).
 
-## REPORT-PUBLIC-API-43 — suprafață susținută și ownership
+## REPORT-PUBLIC-API-43 — supported surface and ownership
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-public-api-43--suprafață-susținută-și-ownership).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-public-api-43--suprafață-susținută-și-ownership).
 
-## REPORT-RELEASE-CONTRACT-45 — ce conține și ce promite pachetul
+## REPORT-RELEASE-CONTRACT-45 — package contents and promises
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-release-contract-45--ce-conține-și-ce-promite-pachetul).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-release-contract-45--ce-conține-și-ce-promite-pachetul).
 
-## REPORT-PORTABLE-DOCS-46 — adopție externă și documente transportabile
+## REPORT-PORTABLE-DOCS-46 — external adoption and portable documentation
 
-[Ghidul de distribuire și consum al bibliotecilor J0](../../../atf_j0/docs/ATF_Platform_Libraries.md).
+[J0 library distribution and consumption guide](../../../atf_j0/docs/ATF_Platform_Libraries.md).
 
-## REPORT-FLOW-PROJECTION-36 — plan de dovezi separat de publicare
+## REPORT-FLOW-PROJECTION-36 — evidence plan separate from publication
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-flow-projection-36--plan-de-dovezi-separat-de-publicare).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-flow-projection-36--plan-de-dovezi-separat-de-publicare).
 
-## UI-RECOVERY-AUDIT-01 — încercări inspectabile în Extent
+## UI-RECOVERY-AUDIT-01 — inspectable attempts in Extent
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
 
-## Index fallback — contract livrat J11
+## Index fallback — J11 delivered contract
 
-[display contract](../../../atf_j0/docs/ATF_Reporting_Display_Contract.md) păstrează indexul neutru, statusul separat și numele integrale; criteriul generic 66 nu mai este deschis.
+The [display contract](../../../atf_j0/docs/ATF_Reporting_Display_Contract.md) preserves the neutral index, separate status, and full names; generic criterion 66 is no longer open.
 
-## Contracte existente
+## Existing contracts
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#contracte-existente).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#contracte-existente).
 
 </details>
 
@@ -57,6 +57,7 @@ See [consumer provenance](../../library-provenance.json) and the
 The [2026-11-03 purchase and rendering receipt](../ATF_J1_Live_Screenshot_Verification.md)
 owns the historical evidence for the launch-context finding below.
 
+<a id="j1-launch-context-146"></a>
 ## J1-LAUNCH-CONTEXT-146 — record the actual launch scope
 
 **Priority: P2. Owner:** J1 launch metadata and consumer composition; reusable

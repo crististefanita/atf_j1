@@ -1,20 +1,20 @@
-# Reporting Tests — owner și criterii în J0
+# Reporting Tests — J0 owner and criteria
 
-## Pe scurt
+## At a glance
 
-Acest consumer folosește Reporting JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a backlog-ului.
+This consumer uses the Reporting JAR. The [canonical J0 register](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md) owns the current criteria and priorities; we do not keep a competing copy of the backlog.
 
-Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumerul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
+Local reproductions are tied to the JAR version/hash and the exact scenario. Implementation and permanent mock/contract regression are verified in J0; the consumer then accepts the delivered binary according to the [protocol](../ATF_Reporting_Consumer.md).
 
 <details>
-<summary><strong>Trimiteri stabile către criteriile ownerului</strong></summary>
+<summary><strong>Stable links to owner criteria</strong></summary>
 
-## REPORT-TEST-AUDIT-60 — o dovadă identificabilă pentru fiecare scenariu
+## REPORT-TEST-AUDIT-60 — identifiable evidence for every scenario
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md#report-test-audit-60--o-dovadă-identificabilă-pentru-fiecare-scenariu).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md#report-test-audit-60--o-dovadă-identificabilă-pentru-fiecare-scenariu).
 
-## Dovada cerută pentru handoff
+## Evidence required for handoff
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md#dovada-cerută-pentru-handoff).
+[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md#dovada-cerută-pentru-handoff).
 
 </details>

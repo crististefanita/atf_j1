@@ -1,59 +1,77 @@
-# Core C3 și profilurile consumer J2 — verificare 2026-11-02
+# Core C3 and J2 Consumer Profiles — Verification 2026-11-02
 
-## Pe scurt
+## At a glance
 
-J0 păstrează sursa Core și Reporting și testele lor permanente.
-J1–J4 consumă aceeași pereche Core C3; Reporting rămâne J12, fără release artificial pentru adopția unui API existent.
+J0 retains Core and Reporting source and their permanent tests. J1–J4 consume
+the same Core C3 pair; Reporting remains at J12, with no artificial release to
+adopt an existing API.
 
 | Artifact | Identitate |
 |---|---|
 | Core | atf.api:atf-core:1.0.0-c3 |
-| SHA-256 JAR Core | 605407B9D40E67C9C352EE6E94DA758E50BD3CFB14CC0D7A0DE3359C71088447 |
-| SHA-256 POM Core | 7853373300E588B2EA25F6A07C927ECAC1FB06044073AD75FDA8D6B7CFF275E0 |
-| Reporting neschimbat | atf.api:atf-reporting:1.0.0-j12 |
-| SHA-256 JAR Reporting | 1F1B7B5502FEFEA02F500C2FC80494859D4E57E38261306B57FA7AD2D5AB38B1 |
+| Core JAR SHA-256 | 605407B9D40E67C9C352EE6E94DA758E50BD3CFB14CC0D7A0DE3359C71088447 |
+| Core POM SHA-256 | 7853373300E588B2EA25F6A07C927ECAC1FB06044073AD75FDA8D6B7CFF275E0 |
+| Reporting unchanged | atf.api:atf-reporting:1.0.0-j12 |
+| Reporting JAR SHA-256 | 1F1B7B5502FEFEA02F500C2FC80494859D4E57E38261306B57FA7AD2D5AB38B1 |
 
-## Contracte probate
+## Proven contracts
 
-- Core redactează numele START/COMPLETE și string-urile JSON publice decodate folosind politica configurată; request-ul și response-ul originale rămân intacte.
-- HttpClientTransport transmite best effort anularea către upstream, o dată pentru caller, cu interrupt flag păstrat; completarea concurentă nu înlocuiește verdictul terminal.
-- Eșecul cleanup este suppressed pe anularea primară. GET-ul local blocat păstrează un singur dispatch, CANCELLED și absența unui răspuns inventat.
-- Profilurile J2 sunt declarate de autor, înaintea citirii HTML; oracolele de identitate, efecte business, SQL typed și valori complete rămân independente.
+- Core redacts decoded public START/COMPLETE names and JSON strings according to
+  the configured policy; the original request and response remain intact.
+- `HttpClientTransport` makes a best-effort cancellation call upstream, once for
+  the caller, while preserving the interrupt flag; concurrent completion does
+  not replace the terminal verdict.
+- Cleanup failure is suppressed on the primary cancellation. A blocked local
+  GET retains one dispatch, `CANCELLED`, and no invented response.
+- J2 profiles are declared by the owner before reading HTML; identity, business
+  effect, typed SQL, and complete-value oracles remain independent.
 
-## Matricea executată
+## Executed matrix
 
-| Probă | Rezultat / limită |
+| Proof | Result / boundary |
 |---|---|
-| Core sursă | 286 native, zero fail/error/skip |
-| Core parentless | două build-uri noi independente, 286 native fiecare, JAR byte-identic |
-| Core JAR fizic | aceleași 286 native plus un control CodeSource; fără surse Core |
-| API C2 → C3 | zero simboluri public/protected eliminate |
-| Reporting pe Core C3 | 16 cazuri sursă, 43 cazuri JAR și un control de identitate; zero fail/error/skip în gate-urile acceptate |
-| J2 Eventuate | 14 rapoarte, 18 invocări, șase FAIL-uri JUnit controlate |
-| J2 Mock | 14 rapoarte, comparații și verdicturi din probele independente; fără HTTP fictiv |
-| J2 SQL | 12 rapoarte, 36 invocări, patru excepții JDBC controlate |
-| Profiluri J2 | 40/40 conforme; fiecare mutant ACTUAL refuzat; cinci contracte unitare suplimentare |
-| Browser | Extent suită/FAIL, Mock combinat și mesaje/SQL fallback; mouse, Enter/Space, ultimul rând și backlink exact |
+| Core source | 286 native tests, zero failures/errors/skips |
+| Parentless Core | two independent fresh builds, 286 native tests each, byte-identical JAR |
+| Physical Core JAR | the same 286 native tests plus one CodeSource control; no Core source |
+| API C2 → C3 | zero public/protected symbols removed |
+| Reporting on Core C3 | 16 source cases, 43 JAR cases, and one identity control; zero failures/errors/skips in accepted gates |
+| J2 Eventuate | 14 reports, 18 invocations, six controlled JUnit FAIL results |
+| J2 Mock | 14 reports, comparisons and verdicts from independent proofs; no fake HTTP |
+| J2 SQL | 12 reports, 36 invocations, four controlled JDBC exceptions |
+| J2 profiles | 40/40 conform; every ACTUAL mutant rejected; five additional unit contracts |
+| Browser | Extent suite/FAIL, combined Mock and message/SQL fallback; mouse, Enter/Space, final row, and exact backlink |
 
-## Limite și documentație
+## Limits and documentation
 
-SQL nu are dependență runtime Core sau Reporting. Eventuate încarcă Core C3, iar ambele module consumă Reporting J12 fizic.
-Anularea unui future nu dovedește rollback server-side; aceste probe nu certifică aplicația Kafka, ASR sau Android.
+SQL has no runtime Core or Reporting dependency. Eventuate loads Core C3, and
+both modules consume the physical Reporting J12 artifact. Cancelling a future
+does not prove server-side rollback; these proofs do not certify the Kafka, ASR,
+or Android applications.
 
-- Feedback-ul activ J0 păstrează numai Core/Reporting. Test Kit, guvernanța comună, AI și coordonarea consumerilor sunt transferate în registrul J1.
-- Istoricul auditului rămâne document datat; contractele probate se citesc la owner. Transferul nu închide criteriile fără implementare și probă.
+- Active J0 feedback retains only Core/Reporting. Test Kit, shared governance,
+  AI, and consumer coordination are tracked in the J1 register.
+- The audit history remains a dated document; read proven contracts at their
+  owner. The transfer does not close criteria without implementation and proof.
 
-Dovezi TMP: ATF_ADOPTION_CORE_C3_ACTIVE_DO_NOT_CLEAN_HjeEfO — gate-uri, XML, core-binary-api.json, matricile C3, inventar și promovare guarded.
-Regresiile Reporting pe sursă/JAR și guvernanța finală sunt consemnate în receiptele incrementului.
+TMP evidence: ATF_ADOPTION_CORE_C3_ACTIVE_DO_NOT_CLEAN_HjeEfO — gates, XML,
+core-binary-api.json, C3 matrices, inventory, and guarded promotion. Reporting
+source/JAR regressions and final governance are recorded in the increment receipts.
 
 
 <details>
-<summary><strong>Rulări excluse și limitele acceptanței</strong></summary>
+<summary><strong>Excluded runs and acceptance limits</strong></summary>
 
-- Un replay sursă a atins limita DOM de 5 s la JsonEvidenceFidelityComponentTest în context concurent. Repetarea izolată are 16/16 verzi, cu același prag; logul inițial este păstrat.
-- Două gate-uri documentare au țintit alt staging și sunt excluse în invalid-documentation-gates.json. Gate-urile corecte verifică explicit identitatea proiectului; runnerul refuză nepotrivirea nume/workdir.
-- Cache-ul TMP J4 copiat conținea POM/JAR invalide; verificarea acceptată folosește cache nou și două contracte Core/Reporting verzi.
-- Publisherul Core intermediar a fost înlocuit înaintea livrării. Numai publisher-3/4 produc candidatul final, byte-identic, cu toate cele 149 intrări fixate.
-- Cerințele Reporting noi de memorie la volum mare și ACTION/OBSERVE integral rămân deschise în J0; mitigările J4 și Core C3 nu le închid.
+- A source replay hit the 5 s DOM limit in `JsonEvidenceFidelityComponentTest`
+  under concurrent load. An isolated repeat passed 16/16 with the same threshold;
+  the original log is retained.
+- Two documentation gates targeted another staging area and are excluded in
+  `invalid-documentation-gates.json`. Correct gates verify project identity
+  explicitly; the runner rejects a name/workdir mismatch.
+- The copied J4 TMP cache contained invalid POM/JAR files; accepted verification
+  uses a fresh cache and two passing Core/Reporting contracts.
+- The intermediate Core publisher was replaced before delivery. Only
+  publisher-3/4 produce the final byte-identical candidate with all 149 inputs pinned.
+- New Reporting requirements for high-volume memory and full ACTION/OBSERVE
+  remain open in J0; J4 mitigations and Core C3 do not close them.
 
 </details>

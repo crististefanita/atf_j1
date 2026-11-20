@@ -34,6 +34,8 @@ public class ArchitectureOwnershipBoundaryTest {
         Path root = locateProjectRoot();
         Path testModule = root.resolve(AtfModuleIds.TESTS);
         Path reportingTests = modulePath(root, AtfModuleIds.REPORTING_TESTS, TEST_JAVA);
+        Path producerMockTests = root.toAbsolutePath().normalize().getParent()
+                .resolve("atf_j0").resolve(AtfModuleIds.MOCK).resolve(TEST_JAVA);
 
         assertAll(
                 () -> assertFalse(containsJavaFileNamed(testModule.resolve("src/main"), ".java"),
@@ -121,11 +123,9 @@ public class ArchitectureOwnershipBoundaryTest {
                 () -> requireFile(reportingTests.resolve(REPORTING_UI_TESTS_PACKAGE)
                                 .resolve("support/section/fixtures/MissingApiSetupDeclaration.java"),
                         "invalid source declarations belong to an explicit fixtures namespace"),
-                () -> requireFile(modulePath(root, AtfModuleIds.MOCK, TEST_JAVA,
-                                "atf/mock/fixtures/MockTransportTestFixtures.java"),
+                () -> requireFile(producerMockTests.resolve("atf/mock/fixtures/MockTransportTestFixtures.java"),
                         "mock transport vocabulary belongs to an explicit test fixtures namespace"),
-                () -> assertFalse(Files.isRegularFile(modulePath(root, AtfModuleIds.MOCK, TEST_JAVA,
-                                "atf/mock/MockTransportTestFixtures.java")),
+                () -> assertFalse(Files.isRegularFile(producerMockTests.resolve("atf/mock/MockTransportTestFixtures.java")),
                         "mock transport fixtures must not be mixed with production-package tests"));
     }
 

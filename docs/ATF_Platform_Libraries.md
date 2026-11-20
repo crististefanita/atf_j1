@@ -1,18 +1,15 @@
 # ATF — platform library consumption
 
-[Owner, feedback și sincronizare](../lib/README.md) descrie fluxul comun cu J0; această pagină detaliază integrarea tehnică.
+[Ownership, feedback, and synchronization](../lib/README.md) describes the shared J0 workflow; this page details the technical integration.
 
-## Pe scurt
+## At a glance
 
-This workspace is a 7-module binary consumer. J0 owns Core, Reporting, Console, Mock and Test Kit implementation and native tests. J1–J5 consume exactly one current JAR/POM pair per library directly in `lib`; their application adapters, configuration and acceptance remain local.
-
-| Workspace | Source modules | Domain |
-|---|---|---|
-| J0 | 12 | Producer and native library contracts |
-| J1 | 6 | Shop and AutoEx browser/API journeys |
-| J2 | 5 | SQL, Setup and Eventuate messaging WIP; no browser modules |
-| J3 | 4 | Speech framework and acceptance |
-| J4 | 3 | Android framework and acceptance |
+J1 consumes Core, Reporting, Console, Mock and Test Kit as external libraries;
+J0 owns their implementation and native tests. Consumer adapters, configuration
+and acceptance stay with each deployment. The live module counts, consumer roles
+and Reporting versions are maintained in the
+[workspace catalog](ATF_Workspace_Synchronization.md#module-and-reporting-catalog)
+instead of being copied into this library guide.
 
 ## Console and Mock boundaries
 
@@ -32,7 +29,7 @@ Console and Mock do not depend on Reporting, Validation or application modules. 
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Source["J0<br/>source + native tests"] -->|package| Pair["One candidate<br/>JAR + standalone POM"]
-    Pair -->|adopt| Lib["J1–J5<br/>flat lib"]
+    Pair -->|adopt| Lib["J1<br/>flat lib"]
     Lib -->|validate| Acceptance["Per-consumer<br/>contracts + components"]
 ```
 
@@ -41,7 +38,7 @@ flowchart LR
 
 - Arrows describe publication and acceptance, not extra Maven modules.
 - J0 keeps all native test classes; binary acceptance reuses them only in an owned TMP harness, with no production source on its classpath.
-- Every consumer retains its own Git base and domain scope; a passing J1 gate is not J2/J3/J4 evidence.
+- Every consumer retains its own Git base and domain scope; a passing gate in one consumer does not prove another consumer.
 - Root POM properties select the current coordinates. The publication POM pins the tested Core dependency; its version is independent of the consumer reactor version.
 
 </details>

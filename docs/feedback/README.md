@@ -1,68 +1,72 @@
-# ATF J1 — registrul lacunelor active
+# ATF J1 — register of active gaps
 
-## Pe scurt
+## At a glance
 
-J1 deține testele AutoEx/Shop și integrarea Reporting JAR; implementarea și regresiile generice Reporting au owner în J0. Contractele livrate sunt la [ownerii documentați](../ATF_Context_Atlas.md), iar aici rămân numai lacunele și traseele de închidere.
+J1 owns the AutoEx/Shop tests and Reporting JAR integration; Reporting implementation and generic regressions are owned by J0. Delivered contracts are documented under [their owners](../ATF_Context_Atlas.md); this register retains only the gaps and closure paths.
 
-[Workspace-urile](../ATF_Workspace_Synchronization.md) separă J0 sursă, J1 consumer web și J2 WIP pentru Kafka/mesagerie cu Setup în Podman. Un rezultat sau o prioritate nu se transferă automat între ele.
+The [synchronization protocol](../ATF_Workspace_Synchronization.md) inventories J0–J7: J0 owns the sources, J1 the web tests, and J2 remains WIP for Kafka/messaging with setup in Podman. Results and priorities do not transfer between them automatically.
 
-## Feedback pentru biblioteci
+## Library feedback
 
-Constatările despre Core, Reporting, Console, Mock și Test Kit merg la ownerul J0. J1 păstrează problemele domeniului și acceptanța locală. [Ghidul bibliotecilor](../../lib/README.md)
+Findings about Core, Reporting, Console, Mock, and Test Kit go to their J0 owner. J1 retains domain issues and local acceptance. See the [library guide](../../lib/README.md).
 
 
-## Top feedback-uri active
+## Top active feedback
 
-Scorurile sunt priorități, nu note de calitate sau procente de acoperire. Formula este impact /40 + lacună /30 + lucrabil /20 + datorie documentară /10; definiția și dovada rămân la owner.
+Scores are priorities, not quality grades or coverage percentages. The formula is impact /40 + gap /30 + feasibility /20 + documentation debt /10; definitions and evidence remain with the owner.
 
-| Criteriu J1 | Owner local | Probă rămasă |
+| J1 criterion | Local owner | Remaining evidence |
 |---|---|---|
-| Identitatea lansării | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146--record-the-actual-launch-scope) | suita reală în metadatele de audit |
-| Dovada catalogului | [AUTOEX-CATALOG-EVIDENCE-146](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146--bind-comparison-evidence-to-its-observed-exchange) | comparația atașată exclusiv schimbului HTTP observat |
-| Lookup Shop | [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity--isolate-the-existing-uilookup-failures) | bugetul de readiness și oracolele curselor de lookup |
-| Clasificarea Playwright | [GOV-UI-NATIVE-LAYER](ATF_Code_Maintenance_Feedback.md#gov-ui-native-layer--pre-existing-classification-disagreement) | clasificarea probei native și verdictul guvernanței |
+| Launch identity | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | real suite identity in audit metadata |
+| Suite-scoped artifact catalog | [AUTOEX-CATALOG-EVIDENCE-146](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146) | component and local browser checks passed; inspect comparison ownership in the artifact from a controlled suite run |
+| AutoEx cart confirmation | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | reproduce the timeout and observe cart state after the click |
+| Shop lookup | [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity) | readiness budget and lookup-race oracles |
+| Documentation contract fidelity | [DOC-LIBRARY-CONTRACTS-147](ATF_Documentation_Feedback.md#doc-library-contracts-147) | J1 prose, link and factual gates pass; producer chronology controls and the two J0 cross-workspace findings remain open |
 
-[Reporting](ATF_Reporting_Feedback.md) și [Reporting Tests](ATF_Reporting_Tests_Feedback.md) trimit la backlog-ul canonic J0, cu prioritățile sale actuale. J1 păstrează reproducerea și acceptanța propriului JAR, fără o copie concurentă a criteriilor.
+[Reporting](ATF_Reporting_Feedback.md) and [Reporting Tests](ATF_Reporting_Tests_Feedback.md) point to the canonical J0 backlog and its current priorities. J1 retains reproduction and acceptance for its own JAR without a competing copy of the criteria.
 
-## Contracte și controale verificate
+## Verified contracts and controls
 
-| Contract livrat | Autoritatea verificării |
+| Delivered contract | Verification authority |
 |---|---|
-| Pregătirea UI și capturile de context | [UI-FIRST-PAINT-144](../ATF_UI_First_Frame_Verification.md) |
-| Căutare AutoEx cu GET și DOM proaspăt | [Verificarea AutoEx](../ATF_AutoEx_Search_Verification.md) |
-| JSON strict și potrivire numerică | [Core J1](../ATF_Core_Consumer.md#document-json-complet-și-evidence-fidel) · [Mock J0](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) |
+| UI preparation and contextual screenshots | [UI-FIRST-PAINT-144](../ATF_UI_First_Frame_Verification.md) |
+| AutoEx search with GET and fresh DOM | [AutoEx verification](../ATF_AutoEx_Search_Verification.md) |
+| Strict JSON and exact numeric matching | [J1 Core](../ATF_Core_Consumer.md#complete-json-documents-and-faithful-evidence) · [J0 Mock](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) |
+| Package cohesion | [GOV-PACKAGE-COHESION-2026-11-19](ATF_Code_Maintenance_Feedback.md#gov-package-cohesion-2026-11-19) | whole-ATF 171/171; one package split and one bounded, reviewed Playwright exception |
 
-[Contractul Core](../ATF_Core_Consumer.md) fixează sursa și probele native în J0,
-consumul prin JAR în J1/J2 și acceptanțele distincte. Criteriile rezolvate ale
-distribuției și probele deterministe de timeout sunt în documentația ownerului
-și în baseline; nu rămân defecte active în feedback.
+The [Core contract](../ATF_Core_Consumer.md) defines the source and native
+evidence in J0, JAR consumption in J1–J7, and separate acceptance. Resolved
+distribution criteria and deterministic timeout evidence are in the owner's
+documentation and baseline; no active Core defects remain in feedback.
 
-[Atlasul](../ATF_Context_Atlas.md), [arhitectura](../ATF_Architecture.md) și [ghidul de testare](../ATF_Testing_Guide.md) dețin contractele stabile și probele de pornire. Controalele tehnice sunt în [baseline](../ATF_Test_Changes_Baseline.md#controale-tehnice-verificate), cu bazele reale ale proiectului.
+The [atlas](../ATF_Context_Atlas.md), [architecture](../ATF_Architecture.md),
+and [testing guide](../ATF_Testing_Guide.md) own the stable contracts and
+starting evidence. Technical controls are in the [baseline](../ATF_Test_Changes_Baseline.md#verified-technical-controls), using the project's actual bases.
 
-## Design AI — evaluare separată
+## AI design — separate assessment
 
-[Evaluarea AI](README_AI_Evaluation.md) separă comparatorul existent de designul agentic propus. Backlog-ul de design nu extinde incrementul de mentenanță, iar [nota editorială](../README_Atf_DocumentationBestPractices.md#rubrica-reviziei-editoriale) nu certifică readiness-ul implementării.
+[AI evaluation](README_AI_Evaluation.md) separates the existing comparator from the proposed agentic design. The design backlog does not expand the maintenance increment, and the [editorial note](../README_Atf_DocumentationBestPractices.md#editorial-review-rubric) does not certify implementation readiness.
 
-## Păstrare, promovare și verificare
+## Retention, promotion, and verification
 
-| Situație | Acțiune și autoritate |
+| Situation | Action and authority |
 |---|---|
-| contract deja implementat | păstrează regula la README-ul ownerului; indexul trimite la ea prin [atlas](../ATF_Context_Atlas.md) |
-| lacună reală | trigger, observație, owner, prioritate și criteriu de închidere în feedback-ul domeniului |
-| rezultat parțial | precizează limita și restanța; un guard verde nu închide alt scenariu |
-| control Git verificat | [baseline](../ATF_Test_Changes_Baseline.md); nu se rebazează ori prelungește implicit |
+| contract already implemented | keep the rule in the owner's README; the index points to it through the [atlas](../ATF_Context_Atlas.md) |
+| real gap | trigger, observation, owner, priority, and closure criterion in domain feedback |
+| partial result | state the limit and remaining work; a passing guard does not close another scenario |
+| verified Git control | [baseline](../ATF_Test_Changes_Baseline.md); do not rebase or extend it implicitly |
 
-[Protocolul documentar](../README_Atf_DocumentationBestPractices.md#păstrarea-și-ștergerea-feedback-ului) și [build-ul în TMP](../ATF_Build_And_Execution_Safety.md) guvernează fiecare increment. Criteriul se elimină numai după probă și promovarea contractului stabil.
+The [documentation protocol](../README_Atf_DocumentationBestPractices.md#retaining-and-deleting-feedback) and [TMP build guidance](../ATF_Build_And_Execution_Safety.md) govern each increment. Remove a criterion only after evidence and promotion of the stable contract.
 
 <a id="cerințe-comune-preluate-din-j0--2026-11-02"></a>
 
-## Frontiere de coordonare cu J0
+## Coordination boundaries with J0
 
-| Owner în J1 | Criterii păstrate | Limită |
+| J1 owner | Retained criteria | Boundary |
 |---|---|---|
-| [Test Kit](ATF_Common_Test_Support_Feedback.md) | Diagnosticul adoptării în Validation | codul, API-ul și contractul preview Unicode rămân la J0 |
-| [Guvernanță documentară](ATF_Documentation_Feedback.md) | DOC-CONTEXT-DEPLOYMENT-111 (81) | guard semantic rămas; corecțiile editoriale verificate nu sunt relistate |
-| [AI](README_AI_Evaluation.md) | ID-urile AI-EVAL/AI-WORKFLOW existente | design separat, fără funcționalitate nouă autorizată prin mutare |
-| [Coordonare Android](ATF_Consumer_Reporting_Handoff_Feedback.md) | responsabilități device/business și dovezi J4 | oracolele și execuția Android rămân în J4; rendererul generic rămâne J0 |
+| [Test Kit](ATF_Common_Test_Support_Feedback.md) | Validation adoption diagnostics | code, API, and Unicode preview contract remain in J0 |
+| [Documentation governance](ATF_Documentation_Feedback.md) | DOC-CONTEXT-DEPLOYMENT-111 (81) | J1 documentation gates pass; the J0 README inventory, retired J4 anchor, and producer chronology controls remain open |
+| [AI](README_AI_Evaluation.md) | existing AI-EVAL/AI-WORKFLOW IDs | separate design; moving it does not authorize new functionality |
+| [Android coordination](ATF_Consumer_Reporting_Handoff_Feedback.md) | J4 device/business responsibilities and evidence | J4 retains oracles and Android execution; J0 retains the generic renderer |
 
-Contractul preview Unicode se citește în [ghidul Test Kit](../../lib/README.TestKit.md). Dovezile Validation rămân specifice J1.
+The Unicode preview contract is documented in the [Test Kit guide](../../lib/README.TestKit.md). Validation evidence remains specific to J1.

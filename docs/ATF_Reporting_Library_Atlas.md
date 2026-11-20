@@ -1,83 +1,83 @@
-# Reporting ca bibliotecă — atlasul integrării consumerului
+# Reporting as a library — consumer integration atlas
 
 Current coordinates, hashes and independent acceptance are recorded in [library provenance](../library-provenance.json). The API and ownership below describe the current integration; the explicitly dated J6/J7 inventories remain historical.
 
-## Pe scurt
+## At a glance
 
-Acest atlas permite integrarea Reporting fără sursa bibliotecii. Pornește de
-la contractele consumate, callerul local și JAR-ul încărcat; implementarea,
-regresiile generice și documentația bibliotecii au owner în `atf_j0`.
+This atlas supports Reporting integration without the library source. It starts
+from the consumed contracts, local caller, and loaded JAR; implementation,
+generic regressions, and library documentation are owned by `atf_j0`.
 
-| Intenție | Intrare | Verifică la caller |
+| Intent | Entry point | Verify at the caller |
 |---|---|---|
-| publică un rezultat | [API și arbore](#api-consumat-și-ownerul-adaptorului) | observație și expected independente |
-| finalizează artifactul | [lifecycle](#lifecycle-și-publicare) | close al resursei proprii/comune și notificarea căii |
-| explică un failure | [diagnostic](#diagnostice-și-navigare) | cauza, faza, ordinalul și captura originală |
-| alege versiunea | [identitate binară](#identitatea-bibliotecii) | proprietatea Maven, hash, POM și CodeSource |
+| publish a result | [API and tree](#consumed-api-and-adapter-ownership) | independent observation and expected value |
+| finalize the artifact | [lifecycle](#lifecycle-and-publication) | close of the owned/shared resource and path notification |
+| explain a failure | [diagnostics](#diagnostics-and-navigation) | cause, phase, ordinal, and original capture |
+| choose a version | [binary identity](#library-identity) | Maven ownership, hash, POM, and CodeSource |
 
-## Identitatea bibliotecii
+## Library identity
 
-Versiunea este declarată în [POM-ul J1](../pom.xml); [lib](../lib) conține
-perechile Core și Reporting JAR/POM, direct în folder. [Proveniența](../library-provenance.json) păstrează
-hash-urile binarului/POM-ului, amprenta intrărilor și catalogul probelor native.
+The version is declared in the [J1 POM](../pom.xml); [lib](../lib) contains
+the Core and Reporting JAR/POM pairs directly in the folder. [Provenance](../library-provenance.json) records
+the binary/POM hashes, input fingerprint, and catalog of native checks.
 
-Amprenta identifică snapshot-ul producătorului, fără a transporta sursa ori
-schimbările ulterioare din `atf_j0`. Diagnosticul pornește de la versiunea
-încărcată; numele unei clase din stack trace nu implică sursă disponibilă în J1.
+The fingerprint identifies the producer snapshot without carrying source or
+subsequent changes from `atf_j0`. Diagnostics start from the loaded version;
+a class name in a stack trace does not imply that source is available in J1.
 
-API-ul folosit poate fi inspectat din binar:
+The API in use can be inspected from the binary:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j20.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j25.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
-Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
-din POM. Clasele `public` nu reprezintă automat suprafață stabilă pentru orice
-release; compatibilitatea se verifică pentru utilizările reale.
+The example uses the included version; after an upgrade, use the coordinate
+from the POM. `public` classes are not automatically a stable surface for every
+release; verify compatibility for actual usages.
 
-## API consumat și ownerul adaptorului
+## Consumed API and adapter ownership
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Caller["J1<br/>execuție + comparație"] -->|adaptează| DTO["Modele Reporting<br/>fapte + verdict"]
-    DTO -->|publică| Jar["JAR<br/>Extent / fallback"]
-    Jar -->|produce| Html["HTML auditabil"]
-    Html -->|verifică| Proof["Probă consumer"]
+    Caller["J1<br/>execution + comparison"] -->|adapts| DTO["Reporting models<br/>facts + verdict"]
+    DTO -->|publishes| Jar["JAR<br/>Extent / fallback"]
+    Jar -->|produces| Html["Auditable HTML"]
+    Html -->|verifies| Proof["Consumer check"]
 ```
 
 <details>
-<summary><strong>Legendă — contract binar și integrare locală</strong></summary>
+<summary><strong>Legend — binary contract and local integration</strong></summary>
 
-- Callerul deține HTTP-ul, browserul, expected-ul și politica business.
-- Modelele sunt ale bibliotecii; adaptorul conservă identitatea și valorile,
-  fără obiecte Playwright sau Core ca protocol implicit.
-- JAR-ul deține proiecția; schimbarea rendererului se livrează din producător.
-- Muchiile exprimă date și verificare, nu module sursă suplimentare.
+- The caller owns HTTP, the browser, expected values, and business policy.
+- The models belong to the library; the adapter preserves identity and values,
+  without Playwright or Core objects as the default protocol.
+- The JAR owns the projection; renderer changes are delivered by the producer.
+- Edges represent data and verification, not additional source modules.
 
 </details>
 
-| Intrare binară | Rol | Caller local |
+| Binary entry point | Role | Local caller |
 |---|---|---|
-| `AtfReportPorts` | Session → Scenario → Phase → pași/request/validation | extensia JUnit și ownerul sesiunii |
-| `ExtentReportSession`, `HtmlReportSession` | două renderere peste faptele publicate | alegerea output-ului și finalizarea |
-| `UiExtentReportOptions`, `UiExtentReportSession` | checkpoint-uri și profil UI/API | [fabrica Shop](../atf-test-practice-shop/src/main/atf/shop/runtime/ShopRunReportFactory.java), [runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) |
-| `AtfAssertion`, `AssertionAuditReport` | rezultate deja evaluate | [auditul Kit](../lib/README.TestKit.md#scope-și-integrare) |
-| `ReportRequest`, `ReportResponse`, `ReportExecutionEvidence` | exchange și execuție terminală | mapperul main al consumerului |
-| `ReportEnvironmentSnapshot`, `ReportingSettings` | metadata și limite de display | composition root și configurație |
+| `AtfReportPorts` | Session → Scenario → Phase → steps/request/validation | JUnit extension and session owner |
+| `ExtentReportSession`, `HtmlReportSession` | two renderers over published facts | output selection and finalization |
+| `UiExtentReportOptions`, `UiExtentReportSession` | checkpoints and UI/API profile | [Shop factory](../atf-test-practice-shop/src/main/atf/shop/runtime/ShopRunReportFactory.java), [AutoEx runtime](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) |
+| `AtfAssertion`, `AssertionAuditReport` | already evaluated results | [Kit audit](../lib/README.TestKit.md#scope-and-integration) |
+| `ReportRequest`, `ReportResponse`, `ReportExecutionEvidence` | exchange and terminal execution | consumer's main mapper |
+| `ReportEnvironmentSnapshot`, `ReportingSettings` | metadata and display limits | composition root and configuration |
 
-## Arbore și scope-uri
+## Tree and scopes
 
-`SETUP`, `TEST BODY` și `TEARDOWN` descriu fazele existente ale testului.
-Assertion-step, request, validation și captură aparțin fazei lor; nu se inventează
-evidence pentru a umple arborele. Copilul se finalizează înaintea părintelui.
+`SETUP`, `TEST BODY`, and `TEARDOWN` describe the test's existing phases.
+Assertion steps, requests, validation, and captures belong to their phase; do not invent
+evidence to fill the tree. Complete each child before its parent.
 
-Un scope gol poate rămâne terminal; dovezile existente trebuie să poată fi
-expandate până la comparație. Refuzul unei tranziții nu autorizează replay-ul.
-[Contractul semantic](ATF_Reporting_Contract.md) descrie rezultatul cerut de ATF.
+A scope with no children may remain terminal; existing evidence must be
+expandable down to the comparison. A rejected transition does not authorize replay.
+The [semantic contract](ATF_Reporting_Contract.md) describes the result ATF requires.
 
 <details>
-<summary><strong>Exemplu executabil — comparație furnizată de consumer</strong></summary>
+<summary><strong>Runnable example — consumer-provided comparison</strong></summary>
 
 ```java
 import atf.reporting.configuration.ReportingSettings;
@@ -109,139 +109,139 @@ public final class LibraryConsumerExample {
 }
 ```
 
-Programul primește output-ul și observația; `ready` este controlul nominal.
-Altă valoare produce artifact FAIL și refuz Java, după închiderea scope-urilor.
-Compilarea folosește JAR-ul și tranzitivele din POM, fără module ATF suplimentare.
+The program accepts an output path and an observation; `ready` is the nominal control.
+Any other value produces a FAIL artifact and a Java exception after scopes close.
+Compilation uses the JAR and transitive dependencies from the POM, without extra ATF modules.
 
 </details>
 
-## Lifecycle și publicare
+## Lifecycle and publication
 
-| Boundary | Extent | Fallback HTML |
+| Boundary | Extent | HTML fallback |
 |---|---|---|
-| path | absolut și normalizat | path-ul primit de constructor |
-| `flush()` | finalizează în workspace; nu promite fișierul final | scrie destinația finală |
-| `close()` | închide și publică din workspace | flush final și închidere |
-| thread | sesiune confinată ownerului | fără același guard; nu se deduce thread safety |
+| path | absolute and normalized | path passed to the constructor |
+| `flush()` | finalizes in the workspace; does not promise the final file | writes the final destination |
+| `close()` | closes and publishes from the workspace | final flush and close |
+| thread | session confined to its owner | no equivalent guard; thread safety is not implied |
 
-Callerul include close-ul în rezultat și anunță calea numai după publicare
-reușită. Hook-ul JUnit aparține resursei proprii/comune; un refuz nu justifică
-retry implicit. Cauza primară și erorile secundare de cleanup rămân distincte.
+The caller includes close in the result and reports the path only after successful
+publication. The JUnit hook belongs to the owned/shared resource; a rejection does not justify
+an implicit retry. The primary cause and secondary cleanup errors remain distinct.
 
-## Verdict și aserțiuni
+## Verdict and assertions
 
-Callerul evaluează comparația o singură dată, din expected independent și
-actual observat. Rendererul conservă FAIL/SKIP și nu reevaluează egalitatea
-din textul scurtat; un părinte PASS ori cleanup-ul reușit nu șterg un FAIL.
+The caller evaluates the comparison once, from an independent expected value and
+the observed actual value. The renderer preserves FAIL/SKIP and does not reevaluate
+equality from shortened text; a PASS parent or successful cleanup does not erase a FAIL.
 
-[Auditul componentelor](ATF_Testing_Guide.md#auditul-componentelor-consumerilor)
-păstrează comparația și pasul standard colapsabil. Unit tests au propriul
-contract, fără pași E2E artificiali.
+The [component audit](ATF_Testing_Guide.md#consumer-component-audit)
+preserves the comparison and standard collapsible step. Unit tests have their own
+contract, without artificial E2E steps.
 
-## Metadata și configurație
+## Metadata and configuration
 
-`ReportingSettings.defaults()` păstrează preview-ul assertion-urilor la 240.
-Override-ul este configurația efectivă; plafonul privește display-ul, nu
-comparația, lungimea sursei Java ori un prompt.
+`ReportingSettings.defaults()` keeps the assertion preview at 240.
+An override is the effective configuration; the limit applies to display, not
+the comparison, Java source length, or a prompt.
 
-`ReportEnvironmentSnapshot` furnizează System din câmpuri permise. Viewport-ul
-cerut și zoom-ul configurat nu substituie măsurarea CSS/DPR a browserului;
-consumerul adaptează [configurația sa](ATF_Test_Infrastructure_Annotations.md).
+`ReportEnvironmentSnapshot` supplies System from allowed fields. The requested viewport
+and configured zoom do not replace browser CSS/DPR measurement;
+the consumer adapts [its configuration](ATF_Test_Infrastructure_Annotations.md).
 
-## Schimb API și identitate
+## API exchange and identity
 
-`ReportRequest` și `ReportResponse` descriu schimbul observat; query-ul poate
-avea perechi duplicate și valori goale. Mapperul conservă datele disponibile
-ori amprenta opacă; URL-ul afișat nu autorizează selecția business.
+`ReportRequest` and `ReportResponse` describe the observed exchange; the query may
+contain duplicate pairs and empty values. The mapper preserves available data
+or the opaque fingerprint; the displayed URL does not authorize business selection.
 
-La execuție fără răspuns, `ReportExecutionEvidence` păstrează attempts,
-termination, provenance și cauza terminală. Nu inventa status HTTP ori durată
-zero pentru o valoare necapturată; lipsa dovezii este distinctă de succes.
+When execution ends without a response, `ReportExecutionEvidence` preserves attempts,
+termination, provenance, and the terminal cause. Do not invent an HTTP status or zero duration
+for an uncaptured value; missing evidence is distinct from success.
 
-## Capturi și profiluri
+## Captures and profiles
 
-Browserul și captura sunt ale UI/consumerului. `ReportScreenshotPolicy` și
-profilul aleg ce se publică; rendererul primește captura originală, fără
-navigare ori recapturare pentru îmbunătățirea retrospectivă a raportului.
+The browser and capture belong to the UI/consumer. `ReportScreenshotPolicy` and
+the profile select what is published; the renderer receives the original capture, without
+navigating or recapturing to improve the report after the fact.
 
-UI și UI_API nu schimbă verdictul business sau politica mutației.
-[Contractul capturilor](ATF_Evidence_Capture_Contract.md) descrie selecția,
-starea necapturată și checkpoint-ul care deține dovada.
+UI and UI_API do not change the business verdict or mutation policy.
+The [capture contract](ATF_Evidence_Capture_Contract.md) describes selection,
+the uncaptured state, and the checkpoint that owns the evidence.
 
-## Timing măsurat de caller
+## Timing measured by the caller
 
-Măsoară execuția, capturile și publicarea la ownerii lor; agregarea request-urilor
-nu este automat durata E2E. Transportă timing-ul typed, păstrând necunoscutul
-distinct de zero; modelele și randarea lui rămân la producător.
+Measure execution, captures, and publication at their respective owners; aggregating requests
+does not automatically give the E2E duration. Carry typed timing, keeping unknown
+distinct from zero; its models and rendering remain with the producer.
 
 [Runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md)
-și [suportul Shop](../atf-test-practice-shop/src/main/atf/shop/support/README.md)
-arată adaptoarele locale.
+and [Shop support](../atf-test-practice-shop/src/main/atf/shop/support/README.md)
+show the local adapters.
 
-## Diagnostice și navigare
+## Diagnostics and navigation
 
-Eroarea înaintea checkpoint-ului păstrează faza și cauza terminală; eroarea
-după PASS are diagnostic distinct. Cleanup-ul nu o înlocuiește, iar ownerul
-business/comparație/execuție nu se deduce din titlu.
+An error before a checkpoint preserves the phase and terminal cause; an error
+after PASS has a distinct diagnostic. Cleanup does not replace it, and the owner
+of business/comparison/execution is not inferred from the title.
 
-`Fails → Tests` deschide scenariul, faza și ordinalul dovezii originale.
-Două grupuri omonime cer identitate typed; tabul vizibil singur nu certifică
-expandarea. Regresia neutră aparține Reporting Tests din producător.
+`Fails → Tests` opens the scenario, phase, and ordinal of the original evidence.
+Two same-named groups require typed identity; the visible tab alone does not certify
+expansion. Generic regression coverage belongs to the producer's Reporting Tests.
 
-## Tabele și randare
+## Tables and rendering
 
-[Contractul de display](ATF_Reporting_Display_Contract.md) definește coloanele,
-spațiul disponibil, wrapping-ul, scroll-ul local și disclosure-urile pentru
-toate tabelele: setup, assertions, Playwright actions și API.
+The [display contract](ATF_Reporting_Display_Contract.md) defines columns,
+available space, wrapping, local scrolling, and disclosures for
+all tables: setup, assertions, Playwright actions, and API.
 
-Snapshot-ul semantic nu probează stilul calculat ori tastatura. Consumerul
-verifică raportul său, iar producătorul matricea generică Extent/fallback;
-harness-ul aplicației nu injectează CSS sau JavaScript de corecție.
+The semantic snapshot does not test computed style or keyboard behavior. The consumer
+checks its report, while the producer checks the generic Extent/fallback matrix;
+the application harness does not inject corrective CSS or JavaScript.
 
-## Redactare și previzualizare
+## Redaction and preview
 
-Comparația integrală precede redacția și bugetul de display. Un mismatch după
-240 rămâne FAIL fără expunerea integrală a secretului; JSON valid, input invalid
-și canary-uri sensibile cer probe separate.
+Full comparison precedes redaction and the display budget. A mismatch after
+240 characters remains FAIL without exposing the full secret; valid JSON, invalid input,
+and sensitive canaries require separate checks.
 
-Eticheta redactată nu este cheia selecției request-ului. Rezultatul unui fixture
-nu declară protecție universală pentru orice format sensibil; problema de
-redactor ori renderer revine la producător.
+The redacted label is not the request-selection key. A fixture result
+does not claim universal protection for every sensitive format; redactor or
+renderer issues belong to the producer.
 
-## Observație și recuperare BE
+## Observation and backend recovery
 
-UI/consumerul execută observația read-only și deține deadline-ul și politica.
-Reporting primește faptele typed ori rândurile INFO adaptate; succesul observației
-nu rescrie un FAIL și nu autorizează replay-ul mutației.
+The UI/consumer performs the read-only observation and owns the deadline and policy.
+Reporting receives typed facts or adapted INFO rows; a successful observation
+does not rewrite a FAIL or authorize mutation replay.
 
-Operația, încercarea, cauza, bugetul și corelarea se conservă la adaptor.
-Proiecția neutră are [owner Reporting](feedback/ATF_Reporting_Feedback.md);
-J1 repară pierderea produsă de callerul său.
+The adapter preserves the operation, attempt, cause, budget, and correlation.
+The neutral projection is owned by [Reporting](feedback/ATF_Reporting_Feedback.md);
+J1 fixes losses caused by its caller.
 
-## Componente și raport comun
+## Components and shared report
 
-Kit deține evaluarea JUnit și reconcilierea rezultatului; extensia aplicației
-deține resursa raportului. Un raport comun nu înseamnă browser, cont, captură
-ori verdict partajate între invocări.
+Kit owns JUnit evaluation and result reconciliation; the application extension
+owns the report resource. A shared report does not mean that browser, account, capture,
+or verdict is shared across invocations.
 
-Verifică individual/prin suită pasul colapsabil, expected/actual, FAIL/SKIP,
-finalizarea unică și calea absolută după close reușit. Probele integrației
-Shop/AutoEx rămân la consumer dacă modulul generic de teste este retras.
+For individual and suite runs, verify the collapsible step, expected/actual, FAIL/SKIP,
+single finalization, and absolute path after successful close. Shop/AutoEx integration checks
+remain with the consumer if the generic test module is retired.
 
-## Diagnostic și handoff
+## Diagnostics and handoff
 
-| Observație | Verifică întâi în J1 | Ownerul corecției |
+| Observation | Check first in J1 | Fix owner |
 |---|---|---|
-| clasă sau metodă absentă | versiune, POM, CodeSource și apelul compilat | adaptor J1 ori compatibilitate Reporting în `atf_j0` |
-| raport absent | opt-in, Store JUnit, cauza close-ului și output-ul | caller J1; publisher defect la producător |
-| verdict/captură greșite | expected, mapper și identitatea invocării | consumer pentru input; Reporting pentru proiecție |
-| coloane ori backlink defecte | același HTML, fază/ordinal, viewport și tastatură | Reporting și regresia sa în `atf_j0` |
+| missing class or method | version, POM, CodeSource, and compiled call | J1 adapter or Reporting compatibility in `atf_j0` |
+| missing report | opt-in, JUnit Store, close cause, and output | J1 caller; producer if publisher is defective |
+| wrong verdict/capture | expected value, mapper, and invocation identity | consumer for input; Reporting for projection |
+| broken columns or backlink | same HTML, phase/ordinal, viewport, and keyboard | Reporting and its regressions in `atf_j0` |
 
-Handoff-ul include coordonata/hash-ul, input minim fără secrete, cauza,
-expected/actual și reproducerea. [Procesul J1](ATF_Reporting_Consumer.md) fixează livrarea;
-sursa bibliotecii și fișierele din JAR nu se repară în `lib`.
+The handoff includes the coordinate/hash, minimal input without secrets, cause,
+expected/actual, and reproduction. The [J1 process](ATF_Reporting_Consumer.md) defines delivery;
+do not patch library source or JAR contents in `lib`.
 
-## Profil explicit și surse temporale
+## Explicit profile and temporal sources
 
-[Contractul J0](../../atf_j0/atf-reporting/README.md#inspecția-artifactului-cu-intenție-explicită) separă intenția callerului de inspecția artifactului; apelul legacy rămâne Extent/HTTP.
+[The J0 contract](../../atf_j0/atf-reporting/README.md#inspecția-artifactului-cu-intenție-explicită) separates caller intent from artifact inspection; the legacy call remains Extent/HTTP.
 The [current library provenance](../library-provenance.json) identifies the delivered binary and consumer acceptance; source and the Reporting harness remain in J0.

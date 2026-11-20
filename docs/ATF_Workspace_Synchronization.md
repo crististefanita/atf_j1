@@ -1,140 +1,151 @@
-# ATF — referința J0 și sincronizarea consumerilor
+# ATF — J0 reference and consumer synchronization
 
-[Owner, feedback și sincronizare](../lib/README.md) descrie contractul celor cinci biblioteci; această pagină păstrează protocolul workspace-urilor.
+[Ownership, feedback, and synchronization](../lib/README.md) describes the contract for the five libraries; this page defines the workspace protocol.
 
-## Pe scurt
+## At a glance
 
-`atf_j0` înlocuiește `demo2` ca referință de mentenanță Core și Reporting.
-Implementările Core/Reporting/Console/Mock/Test Kit și toate testele lor native rămân aici; fiecare destinație
-primește și verifică livrarea potrivită propriului deployment.
+`atf_j0` replaces `demo2` as the maintenance reference for Core and Reporting.
+The Core/Reporting/Console/Mock/Test Kit implementations and all their native tests remain there; each destination
+receives and verifies the release appropriate to its deployment.
 
-| Workspace | Rol | Suprafață existentă |
-|---|---|---|
-| `atf_j0` | sursă Core/Reporting/Console/Mock/Test Kit, teste native și `atf-reporting-tests`; referință pentru contractele comune | 12 module sursă; Core și guvernanța comune reconciliate |
-| `atf_j1` | testarea AutoEx și Shop | 6 module sursă, 5 biblioteci J0 și acceptanță proprie. [Proveniență](../library-provenance.json) |
-| `atf_j2` | WIP pentru Kafka/mesagerie, fără module browser ori Shop/AutoEx | Observer probat pe broker real. Aplicația Eventuate completă rămâne `NOT RUN`. [Scopul J2](../../atf_j2/docs/ATF_J2_Scope.md) |
-| `atf_j3` | consumer speech, patru module sursă; Core și Reporting prin JAR | C3/J20 în lib și acceptanță proprie, fără module web ori mesagerie |
-| `atf_j4` | Android consumer, four source modules; Core / Reporting flat pairs | separate component, archived rendering and device acceptance |
-| `demo2` | origine istorică a livrării J6 existente | nu mai este destinație activă de mentenanță sau sync |
+## Module and Reporting catalog
 
-J1 poate avea schimbări comune în lucru. Referința J0 nu autorizează
-suprascrierea lor: reconcilierea compară baza, diferența și proba fiecărui owner.
+| Workspace | ATF boundary | Maven modules | Reporting | POM |
+|---|---|---:|---|---|
+| `atf_j0` | producer | 12 | source | [POM](../../atf_j0/pom.xml) |
+| `atf_j1` | consumer | 6 | 1.0.0-j25 | [POM](../pom.xml) |
+| `atf_j2` | consumer · WIP Kafka/messaging | 5 | 1.0.0-j25 | [POM](../../atf_j2/pom.xml) |
+| `atf_j3` | consumer · speech | 4 | 1.0.0-j25 | [POM](../../atf_j3/pom.xml) |
+| `atf_j4` | consumer · Android/Whist | 3 | 1.0.0-j24 | [POM](../../atf_j4/pom.xml) |
+| `atf_j5` | consumer · Rentz | 2 | 1.0.0-j25 | [POM](../../atf_j5/pom.xml) |
+| `atf_j6` | consumer · Hold’em Lab | 5 | 1.0.0-j25 | [POM](../../atf_j6/pom.xml) |
+| `atf_j7` | consumer · Chess Lab | 1 | 1.0.0-j25 | [POM](../../atf_j7/pom.xml) |
 
-## Direcția livrării
+J4 is the version exception: its POM and distributed pair retain Reporting j24. `demo2` remains the historical origin of the J6 release and is not an active maintenance destination.
+
+J1 may have shared changes in progress. The J0 reference does not authorize
+overwriting them: reconciliation compares the baseline, diff, and proof for each owner.
+
+## Release direction
+
+The preceding table shows the current state from the POMs; the diagram shows the flow of a shared candidate.
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Source["J0<br/>Core + Reporting"] -->|verifică| Candidate["Candidat unic<br/>JAR + POM + dovadă"]
-    Candidate -->|livrează| J1["J1<br/>consumer existent"]
-    Candidate -->|livrează| J2["J2<br/>consumer inițializat"]
-    Candidate -->|livrează| J3["J3<br/>consumer speech"]
-    Candidate -->|livrează| J4["J4<br/>consumer Android"]
+    Source["J0<br/>Core + Reporting"] -->|verifies| Candidate["Single candidate<br/>JAR + POM + evidence"]
+    Candidate -->|delivers to| J1["J1<br/>existing consumer"]
+    Candidate -->|delivers to| J2["J2<br/>bootstrapped consumer"]
+    Candidate -->|delivers to| J3["J3<br/>speech consumer"]
+    Candidate -.->|j25 adoption pending| J4["J4<br/>currently j24"]
+    Candidate -->|delivers to| J5["J5<br/>Rentz consumer"]
+    Candidate -->|delivers to| J6["J6<br/>Hold’em consumer"]
+    Candidate -->|delivers to| J7["J7<br/>Chess consumer"]
 ```
 
 <details>
-<summary><strong>Legendă — un candidat, acceptanțe distincte</strong></summary>
+<summary><strong>Legend — one candidate, separate acceptance per consumer</strong></summary>
 
-- Sursa include implementarea, assets, probele native și regresiile cu mock/browser.
-- Candidatul este construit o dată din snapshot-ul verificat; aceeași pereche
-  JAR/POM este oferită destinațiilor, fără rebuild separat sub aceeași versiune.
-- Fiecare muchie de livrare cere propria acceptanță. J2 are un Git separat,
-  păstrat la baza sa existentă; profilul Eventuate exclude explicit Shop/AutoEx, UI și Debug UI, iar configurațiile lui evoluează separat.
-- J3 primește aceleași perechi Core/Reporting, cu acceptanță proprie; nu păstrează surse Core ori harness Reporting.
-- Muchiile sunt livrări și probe, nu dependențe Maven ori module suplimentare.
+- The source includes the implementation, assets, native probes, and mock/browser regressions.
+- The candidate is built once from the verified snapshot; the same JAR/POM
+  pair is offered to destinations, without a separate rebuild under the same version.
+- Each release edge requires its own acceptance. J2 has a separate Git repository,
+  preserved at its existing baseline; the Eventuate profile explicitly excludes Shop/AutoEx, UI, and Debug UI, while its configurations evolve separately.
+- The dotted edge to J4 indicates that adoption of version j25 is pending; its POM remains on j24.
+- J3 receives the same Core/Reporting pairs, with its own acceptance; it does not retain Core sources or the Reporting harness.
+- The edges represent releases and proofs, not Maven dependencies or additional modules.
 
 </details>
 
-## Alegerea workspace-ului
+## Choosing a workspace
 
-| Schimbare | Owner și limită |
+| Change | Owner and boundary |
 |---|---|
-| renderer, assets și regresii generice Reporting | J0; probele native și harness-ul rămân lângă implementare |
-| scenarii, fixture-uri și adaptoare AutoEx/Shop | J1; copiile din reactorul J0 rămân consumatori ai sursei, fără owner concurent |
-| contracte pentru cozi și mesaje | J2, cu propriul catalog și bootstrap; nu moștenește automat scenariile web din J1 |
-| infrastructură comună | ownerul comportamentului și consumatorii afectați; reconciliere selectivă, fără mirror sau proprietate exclusivă asupra întregului ATF |
+| renderer, assets, and generic Reporting regressions | J0; native probes and harness remain with the implementation |
+| AutoEx/Shop scenarios, fixtures, and adapters | J1; copies in the J0 reactor remain source consumers, with no competing owner |
+| queue and message contracts | J2, with its own catalog and bootstrap; it does not automatically inherit J1 web scenarios |
+| shared infrastructure | the behavior's owner and affected consumers; selective reconciliation, without mirroring or claiming exclusive ownership of all ATF |
 
-J2 este WIP: trei componente verifică oracole MOCK, iar Setup configurează
-Kafka în Podman prin scripturi. Clientul Kafka Java și acceptanța reală
-rămân distincte; infrastructura copiată nu le demonstrează.
+J2 is WIP: three components verify MOCK oracles, and Setup configures
+Kafka in Podman through scripts. The Java Kafka client and real acceptance
+remain separate; copied infrastructure does not demonstrate them.
 
-## Ce se propagă
+## What gets propagated
 
-| Schimbare în referință | Livrare către fiecare consumer | Dovadă necesară |
+| Change in reference | Release to each consumer | Required proof |
 |---|---|---|
-| Reporting Java, assets, API sau POM | versiune nouă, JAR/POM și proveniență; documentele de adopție | native, regresii permanente și gate pe JAR-ul fizic |
-| Core Java, API sau POM | versiune Core nouă, pereche JAR/POM și proveniență; sursa și nativele rămân în J0 | native și contracte pe JAR, guvernanță și acceptanță distinctă J1/J2 |
-| numai regresii Reporting | testele rămân în J0; se verifică relevanța pentru versiunea consumată | reproducere negativă și acceptanță pe binarul afectat; fără copierea harness-ului în live |
-| other shared source modules (Kit, Validation, UI) or Shop/AutoEx adapters | numai sursele și probele selectate pentru același comportament | comparație cu schimbările locale și testele ownerului; un JAR Reporting nou nu este implicit necesar |
-| documentație ori mutarea referinței | contracte și linkuri adaptate deployment-ului | guvernanță documentară; fără versiune binară nouă numai pentru redenumirea directorului |
+| Reporting Java, assets, API, or POM | new version, JAR/POM and provenance; adoption documents | native tests, permanent regressions, and gate against the physical JAR |
+| Core Java, API, or POM | new Core version, JAR/POM pair, and provenance; source and native tests remain in J0 | native tests in J0 and separate JAR acceptance in each consumer; scope and local proof are defined in deployment contracts |
+| Reporting regressions only | tests stay in J0; relevance to the consumed version is checked | negative reproduction and acceptance against the affected binary; do not copy the harness into the live workspace |
+| other shared source modules (Kit, Validation, UI) or Shop/AutoEx adapters | only the sources and probes selected for the same behavior | compare with local changes and owner tests; a new Reporting JAR is not automatically required |
+| documentation or reference relocation | contracts and links adapted to the deployment | documentation governance; no new binary version solely because a directory was renamed |
 
-- `lib` păstrează o singură versiune per bibliotecă: câte un JAR/POM direct în folder.
-  Hash-urile și catalogul native sunt în `library-provenance.json`, la rădăcină.
-- POM-urile reactorului, `.git`, bazele `testChanges`, configurațiile locale,
-  cache-urile, output-urile și rapoartele nu se copiază prin mirror.
-- Feedback-ul Reporting are owner în J0. Feedback-ul unei implementări comune
-  se închide în alt deployment numai după sincronizarea și proba codului său.
+- `lib` retains one version per library: one JAR/POM pair directly in the folder.
+  Hashes and the native catalog are in the root `library-provenance.json`.
+- Reactor POMs, `.git`, `testChanges` baselines, local configurations,
+  caches, outputs, and reports are not copied through a mirror.
+- Reporting feedback is owned by J0. Feedback for a shared implementation
+  closes in another deployment only after that code is synchronized and verified.
 
-## Protocolul fiecărui increment
+## Protocol for each increment
 
-1. Capturează snapshot-ul J0 și bazele fiecărei destinații; inventariază separat
-   schimbările locale. Declarația unei ținte nu dovedește că ea există ca proiect.
-2. Creează staging propriu în TMP. Pentru linkurile între checkout-uri, păstrează
-   numele surorilor `atf_j0`, `atf_j1` și `atf_j2`. Folosește câte un cache Maven TMP per consumer binar pentru execuții paralele.
-3. Repară la owner și păstrează regresia permanentă. O problemă generică de
-   randare, verdict ori expandare primește probă în `atf-reporting-tests`.
-4. Pentru un candidat Reporting, construiește și verifică snapshot-ul fixat;
-   rulează harness-ul pe JAR-ul real în consumerul TMP. Nu construi din nou
-   sursa vecină pentru a satisface contractul binar.
-5. Verifică separat fiecare consumer: bootstrap Maven/IDE, tranzitive,
-   CodeSource/hash, guvernanță și adaptoarele afectate. Schimbările de raport
-   cer Extent/fallback, timing, assertions colapsabile, expandări și limita 240.
-6. Promovează numai fișierele reconciliate prin [guard-ul Core](../../atf_j0/atf-core/README.md#manifest-și-promovare-guarded).
-   Dacă o țintă diferă de baseline, oprește acea promovare și revalidează diferența.
-7. Recitește livrabilele live și consemnează starea fiecărei ținte. Un J1 verde
-   nu devine dovadă pentru J2, iar promovarea per fișier nu este o tranzacție
-   atomică distribuită între proiecte.
+1. Capture the J0 snapshot and each destination baseline; inventory local
+   changes separately. Declaring a target does not prove it exists as a project.
+2. Create dedicated staging in TMP. For links between checkouts, preserve
+   the sibling names `atf_j0`, `atf_j1`, and `atf_j2`. Use a separate TMP Maven cache per binary consumer for parallel runs.
+3. Fix the issue at its owner and retain the permanent regression. A generic
+   rendering, verdict, or expansion issue gets a probe in `atf-reporting-tests`.
+4. For a Reporting candidate, build and verify the pinned snapshot;
+   run the harness against the real JAR in the TMP consumer. Do not rebuild
+   the neighboring source to satisfy the binary contract.
+5. Verify each consumer separately: Maven/IDE bootstrap, transitive dependencies,
+   CodeSource/hash, governance, and affected adapters. Report changes require Extent/fallback, timing, collapsible assertions, expansions, and the limit of 240.
+6. Promote only reconciled files through the [Core guard](../../atf_j0/atf-core/README.md#manifest-și-promovare-guarded).
+   If a target differs from its baseline, stop that promotion and revalidate the difference.
+7. Re-read live deliverables and record each target's status. A green J1
+   is not evidence for J2, and per-file promotion is not a distributed
+   atomic transaction across projects.
 
-## Proveniență și relocare
+## Provenance and relocation
 
-| Informație | Regula de păstrare |
+| Information | Retention rule |
 |---|---|
-| owner curent | `maintenanceReference` indică J0 și țintele de mentenanță |
-| build J6 existent | `producerDirectory`, commit-ul, hash-urile și acceptanța descriu execuția originală; nu se rescriu ca și cum ar fi rulat în J0 |
-| următorul build | înregistrează snapshot-ul efectiv din J0 și acceptanțele executate, fără moștenirea automată a rezultatelor J6 |
-| diferențe CRLF/LF | se explică separat; echivalența textuală nu substituie hash-ul byte cu byte al unui artifact sau al intrărilor publicate |
-| controale Git | baze reale per checkout; controalele istorice nu se rebazează prin înlocuire de text |
+| current owner | `maintenanceReference` identifies J0 and the maintenance targets |
+| existing J6 build | `producerDirectory`, commit, hashes, and acceptance describe the original run; do not rewrite them as if they had run in J0 |
+| next build | records the actual J0 snapshot and executed acceptances, without automatically inheriting J6 results |
+| CRLF/LF differences | explain separately; textual equivalence does not replace the byte-for-byte hash of an artifact or published inputs |
+| Git controls | real baselines per checkout; historical controls are not rebased through text replacement |
 
-Build-ul și promovarea urmează [procesul izolat](ATF_Build_And_Execution_Safety.md).
-Contractul inventarului este la [ownerul guvernanței](../atf-tests/README.md#inventarul-comun-al-surselor-java).
+Build and promotion follow the [isolated process](ATF_Build_And_Execution_Safety.md).
+The inventory contract is documented by the [governance owner](../atf-tests/README.md#shared-java-source-inventory).
 
-| Boundary comun | Contract și limită |
+| Shared boundary | Contract and limitation |
 |---|---|
-| Core | mască literală și diagnostic Authorization quoted/trunchiat; comparația integrală precede redacția și preview-ul |
-| MIME și headere | negative distincte, o singură expediere; fiecare destinație verifică snapshot-ul propriu |
-| sursă versus binar | acceptanța Core nu rescrie proveniența Reporting și nu certifică brokerul real |
+| Core | literal mask and quoted/truncated Authorization diagnostic; full comparison precedes redaction and preview |
+| MIME and headers | distinct negatives, one send; each destination verifies its own snapshot |
+| source versus binary | Core acceptance does not rewrite Reporting provenance or certify a real broker |
 
-Domeniile consumerilor sunt distincte: J1 deține scenariile web AutoEx/Shop,
-iar J2 este destinat cozilor și mesajelor. Acceptanța MOCK verifică integrarea ATF și Reporting; scenariile de broker au contracte și probe proprii.
+Consumer domains are distinct: J1 owns the AutoEx/Shop web scenarios,
+and J2 is for queues and messages. MOCK acceptance verifies ATF and Reporting integration; broker scenarios have their own contracts and probes.
 
-Acceptanța J2 Eventuate și limita hostului sunt în [dovada consumerului](../../atf_j2/docs/ATF_J2_Verification.md); instalarea prerequisites nu certifică engine ori broker.
+J2 Eventuate acceptance and the host limitation are documented in [consumer evidence](../../atf_j2/docs/ATF_J2_Verification.md); installing prerequisites does not certify the engine or broker.
 
-## J2 fără module browser — perimetru distinct
+## J2 without browser modules — separate scope
 
-J2 declară cinci module sursă, inclusiv SQL; Core și Reporting sunt biblioteci externe.
-[Scope-ul J2](../../atf_j2/docs/ATF_J2_Scope.md) delimitează contractul fără
-UI/Debug sau Playwright; retragerea este implementată în checkout-ul J2.
+J2 declares five source modules, including SQL; Core and Reporting are external libraries.
+[J2 scope](../../atf_j2/docs/ATF_J2_Scope.md) defines the contract without
+UI/Debug or Playwright; the removal is implemented in the J2 checkout.
 
-Nu restaurați modulele browser prin sync. Atlasele, README-urile și feedback-urile
-rămân adaptate domeniului fiecărui deployment; contractele comune se reconciliază
-selectiv, iar backlog-ul Reporting și cel web rămân la ownerii J0/J1.
+Do not restore browser modules through synchronization. Atlases, READMEs, and feedback
+remain adapted to each deployment's domain; shared contracts are reconciled
+selectively, while the Reporting and web backlogs remain with the J0/J1 owners.
 
-## Core ca bibliotecă — owner și deployment
+## Core as a library — owner and deployment
 
-This consumer has 6 source modules. Core, Reporting, Console, Mock and Test Kit are external libraries, one JAR/POM pair each directly in lib.
+J1 consumes Core, Reporting, Console, Mock and Test Kit as external libraries; the module inventory is in the catalog above.
 
-[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele J1/J2/J3.
-Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
+[The Core contract](ATF_Core_Consumer.md) separates source, publication, and consumer acceptance.
+Native tests remain in J0, while binary acceptance runs in TMP.
 
 
 ## Release evidence retention

@@ -56,11 +56,9 @@ The producer owns permanent source/JAR regressions. Consumer provenance records 
 | dynamic content | retain observers, revision invalidation and scheduled normalization for later mutations |
 | deadlines | readiness/action 10,000 ms; navigation 45,000 ms; existing API matrices retain 5,000 ms |
 
-J0 maintains ColdStartReadinessComponentTest, documented in
-[The producer contract](../../atf_j0/docs/ATF_Large_Report_Navigation.md) defines the same source/JAR boundaries; dated execution evidence remains with the packaged release.
-The permanent test checks five initial destinations, startup scenario deep links, native link
-repair, repeated load and failure/recovery. An external atf.cold.input runs
-three fresh Chromium processes against the same complete artifact.
+- `ColdStartReadinessComponentTest` is maintained in J0; it covers five initial destinations, startup scenario deep links, native link repair, repeated loads, and failure/recovery.
+- The [producer contract](../../atf_j0/docs/ATF_Large_Report_Navigation.md) defines the same source/JAR boundaries; dated execution evidence remains beside the packaged release.
+- An external `atf.cold.input` run starts three fresh Chromium processes against the same complete artifact.
 
 ## Native timeline labels
 
