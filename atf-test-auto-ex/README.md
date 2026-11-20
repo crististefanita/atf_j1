@@ -55,9 +55,10 @@ flowchart LR
 
 Diagnosticul generic al excepției folosește
 [formatterul Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare).
-AutoEx păstrează asocierea cu API-ul și faza, plus probele adaptorului real;
-grafurile ciclice, redactarea și randarea neutră au
-[probe la Reporting Tests](../../atf_j0/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+AutoEx păstrează asocierea cu API-ul și faza, plus probele adaptorului real.
+Gestionarea grafurilor ciclice, redactarea și randarea neutră sunt descrise de
+[contractul bibliotecii Reporting selectate](../docs/ATF_Reporting_Library_Atlas.md);
+testele locale verifică doar comportamentul folosit de scenariile lor.
 
 - Acest modul deține journey-ul E2E și suportul specific site-ului AutoEx.
 - Gate-ul uzual selectează direct `AutoExPurchaseUiE2eTest` și execută cumpărarea o singură dată.
@@ -150,11 +151,9 @@ redactează câmpurile de înregistrare și plată din reprezentarea textuală.
 
   declarațiile JUnit și dețin achiziția resurselor.
 
-- `AutoExConsoleBridge` transmite câmpurile Reporting fabricii neutre
-
-  `AtfConsoleEvent.fromExternalEnums(...)` din Core; Console rămâne independent
-
-  de Reporting, iar compatibilitatea lor este probată în Reporting Tests.
+- `AutoExConsoleBridge` mapează câmpurile Reporting prin
+  `AtfConsoleEvent.fromExternalEnums(...)`; adaptorul folosește contractele
+  bibliotecilor selectate fără a adăuga aici un modul-sursă de teste pentru biblioteci.
 
 - Separarea păstrează suportul specific site-ului testabil, fără ca sursele de
 
@@ -415,10 +414,11 @@ pentru a-l provoca.
   suitei este protejată de guvernanță; criteriile sunt în
   [contractul acceptanței business](../docs/ATF_Testing_Guide.md#acceptanța-business-individual-și-prin-suită).
 
-Aceste trei selecții consumă aceeași implementare `AutoExPurchaseJourney`.
-Nu se rulează toate pentru a demonstra mai mult business și nu se adaugă o
-variantă de purchase pentru fiecare combinație de captură sau layout. Testele
-formatării, navigării și redării raportului aparțin `atf-reporting-tests`.
+Aceste trei selecții folosesc aceeași implementare `AutoExPurchaseJourney`;
+variantele de purchase pentru combinații de captură sau layout nu ar demonstra
+mai mult business. Biblioteca Reporting selectată deține formatarea, navigarea
+și redarea generică, iar testele AutoEx care publică rapoarte verifică dovezile
+scenariilor lor locale.
 
 `AutoExE2eSuite` include:
 
@@ -445,11 +445,10 @@ punctele următoare descriu numai ce afirmă testele specifice Automation Exerci
   Cazurile negative resping JSON invalid, cod/mesaj diferit și HTTP nereușit
   chiar când body-ul declară succes; DTO-ul păstrează form-encoding și MIME-ul
   upstream. Artifactele Extent și fallback sunt verificate pentru lipsa parolei,
-  iar formatarea și redactarea comune se probează în
-  [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md);
-- replay-ul form-encoded fără adaptor este probat prin
-  `ApiManualReplayProjectionTest` în Reporting Tests; aici rămâne verificarea
-  că artifactul efectiv AutoEx nu expune parola;
+  iar formatarea și redactarea comune sunt furnizate de biblioteca Reporting
+  selectată;
+- această verificare locală se limitează la absența parolei din artifactul
+  AutoEx real; nu pretinde acoperirea generică a proiecției replay;
 - directorul default și override-ul raportului API sunt specifice consumerului;
   validarea reutilizabilă a unui path relativ sub rădăcina proiectului, inclusiv
   prevenirea ieșirii prin traversal/reparse-point, aparține
@@ -461,7 +460,7 @@ punctele următoare descriu numai ce afirmă testele specifice Automation Exerci
 - factory-urile și rollback-ul neutru sunt implementate și probate în Test Kit;
   AutoEx păstrează alegerea browserului, crearea scenariului și marcarea FAIL.
   Guvernanța verifică folosirea primitivei comune și absența copiei locale;
-- ownership-ul cross-consumer este definit în [arhitectura ATF](../docs/ATF_Architecture.md)
+- ownership-ul cross-consumer este definit în [arhitectura ATF](../docs/ATF_Architecture.md#ui-traffic-capture-and-selection)
   și în [ghidul de testare](../docs/ATF_Testing_Guide.md);
 - limita de opt clase per pachet este definită în
   [bunele practici de cod](../docs/README_Atf_CodeBestPractices.md#coeziunea-pachetelor--pragul-de-opt-clase).
@@ -1131,8 +1130,9 @@ clasă/suită, diagnosticul și închiderea raportului.
 - Aserțiunile componente rămân în pasul standard colapsat; bugetul configurat și
   redactarea textului complet înaintea plafonului rămân obligatorii.
 
-Contractul producerului este la [Core](../../atf_j0/atf-core/README.md#istoric-la-eroare-terminală),
-iar proiecția la [Reporting](../docs/ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate).
+Contractul bibliotecii Core consumate ([ghid](../lib/README.Core.md)) definește
+tipurile request/response; [contractul Reporting](../docs/ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate)
+descrie proiecția lor în raport.
 
 ### De ce raportul API nu arată ca raportul UI
 
@@ -1423,9 +1423,9 @@ Diagrama comună pentru captură, baseline și publicare este în
   demo rămân vizibile în body/cURL, conform politicii acceptate pentru această
   probă; acțiunile UI păstrează mascarea existentă.
 
-Probele de selecție/buget/cursor aparțin `atf-ui`; prezentarea și snapshot-ul
-aparțin `atf-reporting-tests`. AutoEx verifică YAML-ul, ruta reală a coșului,
-precondiția catalogului și journey-ul business, fără teste generice de renderer.
+Probele de selecție, buget și cursor aparțin adaptorului local `atf-ui`.
+Biblioteca Reporting selectată furnizează prezentarea și snapshot-urile; AutoEx
+verifică local YAML-ul, ruta reală a coșului, precondiția catalogului și journey-ul business.
 
 - `awaitCartExchange` așteaptă pasiv un GET XHR/FETCH pentru calea exactă a
   produsului. Query-ul de cantitate nu intră în egalitatea căii; produsul
@@ -1683,12 +1683,13 @@ necunoscute sunt refuzate înaintea browserului.
 
 Aserțiunile acestor componente rămân în pasul standard `Component assertions`,
 colapsat implicit, cu redactare înaintea plafonului configurat, implicit 240 de caractere.
-Unit și probele renderer din Reporting Tests își păstrează categoriile separate.
+Aceste verificări locale rămân separate de randarea generică furnizată de
+biblioteca Reporting selectată.
 
 </details>
 
 Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă);
-indicatorul agregat de recuperare rămâne în [feedback-ul auditului](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
+indicatorul agregat de recuperare rămâne în [feedback-ul auditului](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent).
 
 ## Rulare
 

@@ -1,260 +1,91 @@
-# ATF — consumatori ai bibliotecii Reporting
+# ATF J1 — consumul bibliotecii Reporting
+
+<a id="at-a-glance"></a>
 
 ## Pe scurt
 
-Consumerii J1–J7 folosesc Reporting prin JAR/POM-ul fixat în propriul POM; catalogul
-workspace-urilor păstrează coordonatele live și excepția de versiune J4. Modulele
-și configurațiile aparțin fiecărui consumer; J1 deține journey-urile Shop/AutoEx,
-iar Eventuate din J2 exclude modulele UI/Debug UI. Implementarea, assets și
-regresiile generice Reporting au owner în `atf_j0`.
+J1 selectează Reporting prin POM-ul rădăcină și consumă perechea JAR/POM
+versionată din `lib`. Ghidul descrie contractul publicat, integrarea locală și
+dovezile pe care J1 le poate verifica față de octeții selectați.
 
-**Trasee rapide:** [atlasul integrării fără sursă](ATF_Reporting_Library_Atlas.md) ·
-[ownership și sync](#ownership-și-direcția-sincronizării) ·
-[atlasul ATF](ATF_Context_Atlas.md).
+**Legături rapide:** [ghidul bibliotecii Reporting](../lib/README.Reporting.md) ·
+[catalogul artefactelor](ATF_Workspace_Synchronization.md#consumed-library-catalog) ·
+[verificări component ale raportului](#component-report-acceptance).
 
-| Suprafață | În această copie | Owner |
+| Aspect | Regula J1 |
+|---|---|
+| Selectarea bibliotecii | POM-ul rădăcină fixează o coordonată Reporting; perechea JAR/POM corespunzătoare este păstrată în `lib`. |
+| Comportament local | Adaptoarele Shop/AutoEx, configurația, așteptările business și testele consumerului rămân în modulele J1. |
+| Dovezi de raport | Testele consumerului verifică raportul generat față de biblioteca selectată și scenariile locale. |
+| Execuție | Testele, rapoartele generate și copiile de revizuire rămân în staging TMP deținut. |
+
+<a id="consumed-libraries"></a>
+
+## Biblioteci consumate
+
+| Bibliotecă | Coordonata selectată de POM-ul rădăcină | Contract folosit în J1 |
 |---|---|---|
-| Reporting producție | JAR și POM în `lib`; fără modul sursă în reactor | producătorul păstrează codul și reconstruiește biblioteca |
-| consumatori | J1–J7 au POM-uri, scope-uri și acceptanțe proprii; inventarul și versiunile curente sunt în [catalogul live](ATF_Workspace_Synchronization.md#catalogul-de-module-și-reporting) | schimbările comune se reconciliază cu referința J0 și cu fiecare consumer |
-| Reporting Tests | gate extern, adăugat explicit numai în TMP | `atf_j0` păstrează toate regresiile; acceptarea verifică JAR-ul înaintea distribuției |
-| proveniență | un singur `library-provenance.json`, cu hash-uri și amprenta surselor | identifică exact binarul inclus |
-| build și rapoarte | copie de verificare în TMP | [procesul de execuție](ATF_Build_And_Execution_Safety.md) |
+| Core | `atf.api:atf-core:1.0.0-c4` | Primitive HTTP, configurație, JSON și lifecycle |
+| Reporting | `atf.api:atf-reporting:1.0.0-j25` | Publicare Extent/fallback și dovezi auditabile de raport |
+| Console | `atf.api:atf-console:1.0.0-c2` | Formatare neutră a evenimentelor și diagnostice |
+| Mock | `atf.api:atf-mock:1.0.0-m2` | Înlocuitor determinist al portului HTTP |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k2` | Clasificare JUnit, comparații și suport lifecycle |
 
-Protocolul comun pentru consumerii J1–J7 este [sincronizarea workspace-urilor](ATF_Workspace_Synchronization.md). Fiecare consumer are bootstrap, bază Git și acceptanță proprii; verificarea unuia nu îl certifică pe celelalte.
+Acestea sunt dependențe binare ale reactorului J1, nu module sursă din el.
+Descrie o dependență prin coordonată, versiune și contract observabil. Păstrează
+locale adaptoarele aplicației, fixture-urile și valorile business așteptate.
 
-J1 deține scenariile web AutoEx/Shop; J2 este destinat cozilor și mesajelor.
-J2 are Setup PowerShell/Podman și trei componente MOCK; clientul Kafka Java și acceptanța brokerului rămân WIP.
+<a id="resolve-and-accept"></a>
 
-## Ownership și direcția sincronizării
+## Rezolvare și acceptanță
 
-Un profil foundation istoric nu descrie automat J2 curent. Catalogul Eventuate și integrarea WIP se citesc în [POM-ul J2](../../atf_j2/pom.xml) și [atlasul J2](../../atf_j2/docs/ATF_Context_Atlas.md).
-
-| Schimbare | Sursa de adevăr | Livrare către celălalt proiect |
-|---|---|---|
-| implementare, API, CSS/JS și publicare Reporting | `atf_j0/atf-reporting` | JAR/POM versionate, proveniență și documentație de adopție către J1–J7 |
-| regresii și fixture-uri generice Reporting | `atf_j0/atf-reporting-tests` | gate extern pe JAR în TMP, fără copie păstrată în consumer |
-| infrastructură comună | ownerul comportamentului în J0/J1 | reconciliere selectivă în ambele sensuri; J2 primește numai modulele declarate în profilul său |
-| Shop/AutoEx și adaptoarele lor | `atf_j1` | schimbări de aplicație și probe, cu scope-urile producătorului păstrate |
-| reactor, README principal, arhitectură și atlase | proiectul descris | ediții reconciliate; POM-ul cu JAR nu înlocuiește reactorul producătorului |
-
-Nu se face mirror recursiv. `.git`, output-urile, cache-ul Maven și `lib` nu
-intră în sincronizarea obișnuită a surselor; build-ul și verificarea rulează
-în TMP, iar promovarea este selectivă și protejată față de drift.
-
-## Traseul bibliotecii
-
-```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+~~~mermaid
 flowchart LR
-    Source["atf_j0<br/>sursa Reporting"] -->|pachetează| Library["lib · JAR + POM<br/>versiune fixată"]
-    Library -->|validate| Repository["Cache Maven<br/>bootstrap nativ"]
-    Repository -->|rezolvă| Consumer["J1–J7<br/>consumatori"]
-    Consumer -->|verifică| Tests["Gate extern în TMP<br/>contracte și HTML"]
-    Consumer -->|surse comune| Mirror["atf_j0<br/>restul ATF"]
-```
+    Pin["POM rădăcină<br/>coordonată selectată"] -->|selectează| Pair["lib/<br/>JAR + POM versionate"]
+    Pair -->|validate instalează| Repo["Repository Maven"]
+    Repo -->|rezolvă pentru| Modules["Module J1"]
+    Modules -->|exercită| Contract["adaptor local + scenariu"]
+    Contract -->|produce| Evidence["aserțiuni + raport Extent"]
+~~~
 
 <details>
-<summary><strong>Legendă — sursă întreținută și consum binar</strong></summary>
+<summary><strong>Legendă — dependență și dovezi ale consumerului</strong></summary>
 
-- `atf_j0` păstrează implementarea completă, resursele și probele native ale bibliotecii.
-- Folderul plat conține artifactul thin și POM-ul; bootstrap-ul rădăcinii instalează perechea în cache-ul Maven configurat.
-- Consumerii compilează împotriva JAR-ului. Nu folosesc sursa Reporting dintr-un director vecin.
-- Acceptanța fiecărui consumer verifică binarul și integrarea sa. Regresiile generice și
-  verificările structurii sursei au owner în producător.
-- Muchia inversă transferă schimbările comune non-Reporting, nu configurația
-  reactorului consumerului. Muchiile exprimă livrare, nu dependențe Maven.
+- POM-ul rădăcină selectează coordonata și versiunea folosite de reactorul local.
+- `mvn validate` instalează perechea JAR/POM alăturată în repository-ul Maven
+  selectat; consumerul rezolvă acei octeți.
+- Acceptanța consumerului acoperă doar modulele și scenariile alese de acea
+  rulare. Nu implică executarea unor teste din afara acestui reactor.
 
 </details>
 
-## Contractul unui modul împachetat
+<a id="component-report-acceptance"></a>
 
-Modulul logic nu implică sursă în fiecare consumer. Reporting este primul
-boundary livrat binar; alte module pot urma numai după delimitarea API-ului,
-a configurației, a lifecycle-ului și a probelor lor.
+## Acceptanța raportului component
 
-| Livrabil | Ce poate verifica independent consumerul |
-|---|---|
-| JAR thin și POM | coordonată, Java minim și dependențe tranzitive efective |
-| documentație de adopție | intrări, erori, ownership, exemplu executabil și linkuri fără sursă obligatorie |
-| proveniență | hash binar/POM, intrări ale producătorului și versiune coerentă |
-| compatibilitate | suprafață susținută și migrare; accesul Java `public` nu este singur o promisiune |
-| acceptanță | CodeSource și artifacte efective; probele native rămân la producător |
+Pentru o verificare component de reporting, inspectează atât rezultatul testului,
+cât și HTML-ul generat. Acceptanța Extent locală trebuie să afișeze scenariul,
+pașii încheiați și dovezile aserțiunilor în secțiuni extensibile separat.
 
-[Atlasul local Reporting](ATF_Reporting_Library_Atlas.md) explică integrarea
-existentă. Completitudinea documentelor livrate și API-ul susținut au
-[owner Reporting](feedback/ATF_Reporting_Feedback.md), fără a fi declarate închise prin această hartă.
+Confirmă că **Expand all** afișează fiecare pas și aserțiune imbricată, că
+restrângerea unui element-soră păstrează celelalte ramuri deschise și că raportul
+randat păstrează statusul, valorile și legăturile de navigare așteptate. Notează
+coordonata exactă a bibliotecii și calea raportului la orice nepotrivire
+reproductibilă.
 
-## Deschiderea proiectului
+<a id="change-a-library-version"></a>
 
-Folderul `lib` păstrează numai distribuția inclusă în proiect:
+## Schimbarea versiunii unei biblioteci
 
-```text
-lib/
-  atf-reporting-<version>.jar
-  atf-reporting-<version>.pom
-```
+1. Consultă coordonata selectată în POM-ul rădăcină și perechea corespunzătoare
+   din `lib`.
+2. Rulează cel mai mic test component sau de integrare J1 afectat dintr-o copie
+   TMP deținută, cu setările și repository-ul Maven vizate.
+3. Pentru Reporting, deschide HTML-ul generat și verifică nodurile extensibile
+   ale testului, pașilor și aserțiunilor relevante în vizualizator.
+4. Înregistrează scenariul, comportamentul așteptat și observat, coordonata și
+   hash-urile JAR/POM relevante în feedback-ul local.
 
-Se păstrează numai ultima versiune. Hash-urile SHA-256, amprenta snapshot-ului
-producătorului și catalogul probelor native sunt în
-[proveniența unică](../library-provenance.json), la rădăcina proiectului.
-
-| Bootstrap Maven | Contract |
-|---|---|
-| [POM-ul rădăcină](../pom.xml) | Install Plugin fixat; `install-file` în `validate`, o singură dată, cu `inherited=false` |
-| dependențe | modulele folosesc dependența Maven și `atf.reporting.version`; POM integral, cu `generatePom=false`, pentru tranzitive |
-| folderul plat | distribuție locală; nu este declarat repository Maven |
-
-Primul import folosește Maven 3.6.3+ și JDK 21. Din rădăcina proiectului:
-
-```powershell
-mvn -B -N validate
-```
-
-1. Rulează bootstrap-ul cu același Maven, settings și repository local pe care
-   le configurezi în IntelliJ: Settings → Build Tools → Maven.
-2. Deschide POM-ul rădăcină drept proiect Maven și folosește Reload All Maven Projects.
-3. Selectează JDK 21 pentru proiect și Maven importer/runner; lansează testul
-   cu classpath-ul modulului său. Nu adăuga o dependență manuală către JAR.
-
-Un build cu `-pl atf-test-auto-ex -am` include rădăcina și execută bootstrap-ul
-înaintea modulelor. Pentru o lansare Maven direct dintr-un submodul, pregătește
-cache-ul prin comanda de mai sus. Schimbarea versiunii ori a repository-ului
-local cere repetarea bootstrap-ului și reload în IDE.
-
-Maven folosește repository-ul configurat în settings. Pentru izolare în TMP,
-transmite același `-Dmaven.repo.local=<cale>` atât la bootstrap, cât și la teste;
-IDE-ul trebuie să folosească același repository dacă validezi acel cache.
-
-- Pentru rulări paralele folosește câte un cache TMP per consumer. Pe Windows,
-  reinstalarea JAR-ului poate fi refuzată când alt JVM îl ține încărcat; păstrează
-  procesele existente și separă cache-urile înaintea bootstrap-ului.
-Structura cu groupId/artifactId/versiune există în cache, în afara folderului `lib`.
-
-- În gate-ul temporar, fixture-urile identifică rădăcina prin propriul POM și
-  resursa din classpath; working directory-ul extern nu cere sursa bibliotecii.
-- Lipsa JAR-ului sau POM-ului local refuză bootstrap-ul chiar dacă versiunea
-  există deja în cache. Un fișier omis nu se substituie printr-un artifact vechi.
-- Verifică SHA-256 față de [proveniență](../library-provenance.json)
-  înaintea actualizării distribuției; bootstrap-ul standard nu este un gate de semnare.
-
-## Compatibilitatea acestui increment
-
-`ReportAuditSnapshot.Failures` distinge cauzele de scenariile eșuate.
-Constructorul cu patru argumente și simbolurile binare anterioare sunt păstrate;
-un record pattern Java folosește acum cinci componente la recompilare.
-Această migrare explicită nu declară compatibilitatea întregului API public.
-
-## Reporting Tests la producător
-
-Reporting Tests nu este modul în consumerii live. Regresiile generice, mock-urile și
-contractele rămân în [producător](../../atf_j0/atf-reporting-tests/README.md#regresia-permanentă-a-fiecărui-defect-reporting).
-Fiecare JAR candidat trece gate-ul integral într-un consumer TMP cu harness-ul
-adăugat explicit; probele adaptoarelor Shop/AutoEx rămân în modulele lor.
-
-## Validarea consumerului
-
-Comenzile se execută într-o copie TMP a acestui proiect. Bootstrap-ul și
-compilarea main/test pentru modulele declarate se verifică prin:
-
-```powershell
-mvn -B test-compile
-```
-
-`test-compile` verifică rezolvarea și compilarea; nu execută testele și nu
-certifică suita whole-ATF copiată. Pentru regresiile aplicațiilor folosește
-[Shop](../atf-test-practice-shop/README.md) și [AutoEx](../atf-test-auto-ex/README.md).
-
-Aceeași suită whole-ATF verifică declarațiile Maven ale sursei și ale
-consumerului binar, prin [suprafața declarată](../atf-tests/README.md#guvernanța-deployment-ului-sursă-sau-binar).
-Harness-ul extern Reporting se adaugă numai în staging-ul TMP pentru această
-acceptanță și nu schimbă inventarul permanent al consumerului.
-
-<details>
-<summary><strong>Layout TMP pentru guvernanța linkurilor</strong></summary>
-
-Păstrați perechea de directoare sub aceeași rădăcină TMP proprie:
-
-```text
-<TMP increment>/
-  atf_j1/   sau atf_j2/ — consumerul verificat
-  atf_j0/    snapshot-ul producătorului pentru destinațiile documentare
-```
-
-- Linkurile relative spre testele și documentele Reporting se verifică din
-  același layout ca proiectele live; un consumer fără acel vecin nu certifică linkurile.
-- Snapshot-ul vecin nu intră în reactor, classpath sau folderul `lib` al
-  consumerului. Reporting continuă să fie încărcat din JAR-ul verificat.
-- Gate-ul extern runtime al bibliotecii rămâne independent de această probă
-  documentară; nu primește sursa de producție pentru a satisface fixture-urile.
-
-</details>
-
-## Gate-ul extern Reporting
-
-[Reporting Tests din producător](../../atf_j0/atf-reporting-tests/README.md) păstrează
-probele runtime și browser. Testele native și auditul sursei rămân la producător;
-gate-ul consumerului trebuie să încarce JAR-ul fizic, cu POM-ul și tranzitivele lui.
-
-Pentru fiecare versiune nouă, pregătește un consumer temporar:
-
-1. Copiază consumerul verificat în TMP, fără output-uri ori cache-uri.
-2. Copiază numai modulul Reporting Tests din producător în acel consumer și
-   adaugă-l temporar în lista `modules` a POM-ului rădăcină.
-3. În POM-ul modulului temporar folosește `${atf.reporting.version}` pentru
-   dependența Reporting; păstrează celelalte dependențe și toate testele.
-4. Rulează gate-ul integral, cu același repository local ca bootstrap-ul:
-
-```powershell
-mvn -B -pl atf-reporting-tests -am "-Dtest=atf.reporting.**.*Test,atf.reporting.**.*Tests,atf.ui.tests.extent.**.*Test,atf.ui.tests.extent.**.*Tests" "-Dsurefire.failIfNoSpecifiedTests=false" test
-```
-
-| Tip de verificare | Interpretare |
-|---|---|
-| inventar complet | clasele `Test` și `Tests` din ambele namespace-uri; identitățile Surefire se reconciliază cu sursele |
-| API, modele, proiecții, renderer și browser | regresii de consum ale JAR-ului, fără omiterea failure-path-urilor |
-| distribuție externă | CodeSource și SHA-256 identifică binarul; POM-ul inclus și refuzul assets lipsă sunt probate separat |
-| working directory extern | fixture-ul nu cere POM-ul sau sursa producției Reporting |
-| artifact și limite | audit în TAB MCP, cu timing, assertions, expandări, backlink și preview implicit 240 |
-
-Launcherele canonice unit/component/integration/E2E pot fi folosite în consumerul
-TMP; aliasurile nu se numără ca gate-uri disjuncte. Logurile, XML-urile și HTML-ul
-rămân dovezi ale execuției în TMP. La încheiere, fiecare consumer păstrează
-modulele și distribuția plată ale profilului său; nu primește harness-ul ori
-output-urile validării.
-
-## Actualizarea bibliotecii
-
-1. Corectează și verifică Reporting în proiectul producător, cu build în TMP.
-2. În copia TMP, setează versiunea POM-ului bibliotecii înaintea build-ului;
-   construiește JAR-ul cu testele native și păstrează acel POM efectiv.
-3. Actualizează proveniența unică și include JAR-ul/POM-ul direct în `lib`.
-4. Actualizează `atf.reporting.version` și rulează probele consumerilor.
-5. Verifică CodeSource-ul încărcat și egalitatea hash-ului cu artifactul inclus.
-
-Actualizarea binarului nu copiază sursele Reporting în acest reactor.
-Documentația descrie consumerul și snapshot-ul său; regulile sursei standalone și gate-urile
-producătorului sunt delimitate explicit. Acest document deține ownership-ul
-și sincronizarea; [atlasul integrării](ATF_Reporting_Library_Atlas.md) deține contextul consumerului fără sursă.
-
-## Biblioteca și verificarea curente
-
-[Proveniența bibliotecii](../library-provenance.json) identifică perechea
-curentă Core/Reporting, snapshot-ul sursei și acceptanța independentă a
-consumerului. În `lib` se păstrează direct numai cele mai recente perechi
-JAR/POM; sursa și harness-ul permanent Reporting rămân în J0.
-
-- [Contractul de audit inline](../../atf_j0/docs/ATF_Inline_Audit_Contract.md)
-  deține dovezile PNG complete și cele de aserțiuni. [Contractul de navigare](ATF_Large_Report_Navigation.md)
-  deține readiness-ul la pornire la rece și deadline-urile neschimbate.
-
-- Verificarea celei mai recente livrări se păstrează lângă pachetul producător,
-  conform [regulii de păstrare a dovezilor](ATF_Workspace_Synchronization.md#păstrarea-dovezilor-de-publicare).
-  Este distinctă de execuțiile noi ale aplicației, dispozitivului, brokerului
-  și ASR.
-
-
-## Biblioteci comune ale platformei
-
-Ghidul pentru [bibliotecile platformei](ATF_Platform_Libraries.md) descrie
-ownership-ul, bootstrap-ul Maven/IntelliJ și acceptanța consumerilor. [Manifestul
-de proveniență](../library-provenance.json) identifică perechile JAR/POM instalate.
+Folosește [ghidul bibliotecii Reporting](../lib/README.Reporting.md) pentru
+suprafața publicată și [sincronizarea artefactelor](ATF_Workspace_Synchronization.md)
+pentru regulile locale de instalare și proveniență.

@@ -23,11 +23,14 @@ Prefixul comun este `atf.testkit`. Kit-ul definește API de infrastructură a
 testelor, însă scope-ul Maven este o proprietate a fiecărei muchii din POM, nu a
 adnotării. `atf-reporting` rămâne utilizabil independent de Test Kit.
 
-| Consumator live | Scope în POM | Motiv / limită observată |
+| Modul J1 | Scope POM pentru Test Kit | Utilizare locală |
 |---|---|---|
-| `atf-core`, `atf-mock`, `atf-validation`, `atf-ui`, `atf-debug-ui` | `test` | folosesc vocabularul Test Kit în probe și adaptoare de test |
-| `atf-test-auto-ex`, `atf-test-practice-shop`, `atf-tests`, `atf-reporting-tests` | `test` | folosesc vocabularul Test Kit în probe și adaptoare JUnit; runtime-ul consumerilor din main nu importă Kit |
-| `atf-console` | `optional` + `compile` | extensia JUnit din `src/main` citește adnotări și policy resolvers; API-ul rămâne infrastructură de test |
+| `atf-validation` | `test` | teste unitare și componente pentru validare |
+| `atf-ui` | `test` | teste pentru politica browserului și adaptor |
+| `atf-debug-ui` | `test` | teste pentru serverul local |
+| `atf-test-practice-shop` | `test` | suite Shop de componentă, API și UI |
+| `atf-test-auto-ex` | `test` | suite AutoEx de componentă, API și UI |
+| `atf-tests` | `test` | guvernanța reactorului și documentației locale |
 
 Nu deduce scope-ul din numele modulului sau din adnotare. Pentru o schimbare de
 ambalare, verifică simultan `pom.xml`, importurile din `src/main`/`src/test` și
@@ -130,7 +133,7 @@ Contractul este per clasă; nu există override de canal per metodă.
 |---|---|
 | Shop E2E | acceptă `UI` și `UI_API`; transformă selecția în profil local; refuză conflictul cu un profil explicit diferit |
 | Shop API audit | cere canal `API` înaintea instalării capturii apelurilor |
-| Reporting Tests | composition root-ul UI refuză un canal declarat diferit de `UI` |
+| UI AutoEx | mapează canalul declarat prin configurația locală a consumerului |
 
 În Shop, `UI_API` cere binding nevid, inspector activ și allowlist înaintea
 browserului. `UI` elimină selecția dovezilor API; YAML-ul păstrează controlul
@@ -316,21 +319,21 @@ fișierului aparțin consumatorului.
   are nevoie de un mediu care permite crearea linkului.
 - Kit-ul nu descoperă proiectul și nu reordonează opțiunile YAML.
 
-Reporting Tests caută mai întâi rădăcina în strămoșii resursei UI încărcate,
-prin POM-ul reactorului și `atf-reporting-tests/pom.xml`, apoi în strămoșii
-directorului de pornire; absența lor este eroare explicită. Sursa Reporting nu este cerută.
+Consumerul furnizează rădăcina proiectului și baza output-ului UI resolverului
+Test Kit. Shop și AutoEx dețin aceste valori în adaptoarele locale; biblioteca
+selectată nu descoperă alt proiect sau spațiu de lucru.
 
 - Baza furnizată este `<project-root>/artifacts/reports/ui`; înlocuiește
   directorul UI încărcat din YAML. `atf.ui.report` selectează inputul auditului.
-- E2E-urile Reporting declară directorul project-relative
-  `artifacts/reports/ui/e2e`. În staging, proiectul este checkout-ul extern;
-  adnotarea nu redirecționează output-ul în proiectul live.
+- Shop și AutoEx rezolvă output-ul raportului în proiectul consumer selectat.
+  În staging, rădăcina proiectului este checkout-ul staged; output-ul generat
+  rămâne cu acea rulare și nu se redirecționează către alt workspace.
 
 Smoke-testul manual al compoziției IntelliJ este necesar numai la schimbări
 relevante:
 
-- rulează suitele cu working directory la root-ul reactorului și la
-  `atf-reporting-tests`, conform [ghidului suitei Extent](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij);
+- lansează testul Shop sau AutoEx selectat din IntelliJ, cu modulul consumer
+  și working directory configurate pentru checkout-ul J1 staged;
 - testele componente verifică separat rezolvarea deterministă a căilor, dar nu
   lansează IntelliJ.
 
@@ -343,10 +346,9 @@ relevante:
 | `ApiScenarioSetup(families = ...)` | nume de familii | fallback când selecția exactă lipsește |
 | `DocumentationTarget("module/README.md")` | declarație repeatable RUNTIME pe clasă | verifică path-ul și execută validatoarele |
 
-În Reporting Tests, referințele exacte au prioritate față de familii;
-catalogul, mock-ul și executarea rămân în modulul consumator.
-`ApiScenarioSelection` rămâne model neutru în Core; declarațiile de adnotare
-sunt în TestKit, fără dependență Core main către kit.
+Shop și AutoEx păstrează selecțiile API exacte, cataloagele, mock-urile și
+execuția în propriile surse de test. `ApiScenarioSelection` face parte din
+contractul bibliotecii Core selectate; declarațiile de adnotare sunt în Test Kit.
 
 `ApiScenarioSetup` și `DocumentationTarget` nu folosesc resolverele
 compoziționale ale canalului/output-ului. Nu se deduce pentru ele un suport
@@ -356,21 +358,22 @@ generic de meta-adnotări, superclass sau override per metodă.
 
 | Boundary | Probe existente | Limită |
 |---|---|---|
-| Nivel / tag | `AtfTestLayerArchitectureTest` | clasifică sursele de teste; nu certifică output-ul Extent |
-| Consolă | `AtfConsoleMessagePolicyResolverTest`, `AtfConsoleMessagePolicyTest`, Shop E2E/API și API resource tests | policy, precedență, conflict, override global și consumatori deterministici; concurența/lifecycle dinamic rămâne o probă separată |
-| Canal și activare | `AtfTestChannelResolverTest`, `AtfE2eActivationPolicyTest`, `ShopE2eTestSupportTest`, `ShopApiCallAuditPreflightTest`, `ConsumerModuleArchitectureGovernanceTest` | rezolvarea neutră UI/API/UI_API și precedența activării sunt probate separat; extensiile păstrează semnalele consumerului. Paritatea raportului și ownership-ul verdictelor aparțin Reporting, nu resolverului |
-| UI evidence | `AtfUiEvidenceContractTest`, `AtfUiEvidenceResolverTest`, `AutoExEvidenceProfileComponentTest`, `ShopE2eContextEvidenceProfileTest`, `ReportEvidenceProfileIntegrationTest` | resolverul și mapping-ul consumerilor au probe proprii; agregarea peste faze este opt-in Reporting, iar echivalența tuturor profilelor business rămâne criteriu distinct la consumer |
-| Ownership | `TestRunScopeComponentTest`, `AutoExApiReportScopeComponentTest`, `ShopAccountScopeComponentTest` | scope explicit, lansări succesive izolate și eliberare la owner; referința partajată nu acordă permisiune de mutație sau cleanup remote |
-| Calea raportului | `AtfReportPathPolicyResolverTest`, `AtfReportPathOptInTest`, `AtfConsoleTestExtensionIntegrationTest` | absență/opt-in/override, meta-adnotări, conflict și agregare pentru report owner |
-| Output | `ReportOutputDirectoryTest`, `UiReportSubdirectoryTest`, `AtfUiConfigurationLoaderTest` | ancore, inheritance/compoziție, cicluri, conflicte, path-uri invalide și working directory extern; containment-ul este probat prin symlink când e permis și directory junction ca fallback Windows |
-| Setup | `ApiScenarioSetupCatalogTest`, `ApiScenarioManifestTest`, `ApiSelectionMockPublisherComponentTest` | selecție și compoziție locală, fără servicii externe |
-| Documentație | `DocumentationTargetGovernanceTest` și suita whole-ATF | declarația repeatable selectează aceleași validatoare |
-| Browser local | `UiThenDisclosureSanityTest`, `ApiReportRenderedEvidenceComponentTest`, `SelectedApiTestsReportUiTest` | disclosure, reconciliere mock/câmpuri/query și navigarea fazei; nu certifică launcherul IntelliJ sau întreaga integrare API/UI_API |
+| Nivel / tag | `AtfTestLayerArchitectureTest` | clasifică sursele locale; nu certifică output-ul raportului |
+| Consolă | `ConsoleDefaultsGovernanceTest`, `ShopConsoleTelemetryTest` | protejează configurația locală a sink-ului și maparea evenimentelor Shop; nu retestează formatarea bibliotecii |
+| Canal și activare | `ShopE2eTestSupportTest`, `ShopApiCallAuditPreflightTest`, `ConsumerModuleArchitectureGovernanceTest` | verifică selecția și limitele locale ale consumerului; nu internals ale resolverului Test Kit |
+| UI evidence | `AutoExEvidenceProfileComponentTest`, `AutoExEvidenceProfileIsolationComponentTest`, `ShopE2eContextEvidenceProfileTest` | verifică maparea profilului local și izolarea scenariilor; nu toate profilele bibliotecii |
+| Ownership | `AutoExApiReportScopeComponentTest`, `AutoExComponentReportScopeComponentTest`, `ShopAccountScopeComponentTest` | verifică scope-ul raportului consumerului și ownership-ul contului; nu implică permisiune de cleanup remote |
+| Calea raportului | `AutoExReportPathComponentTest`, `AutoExE2eReportPathComponentTest`, `ShopReportPathComponentTest` | verifică alegerea căilor consumerului; nu resolverul intern al bibliotecii |
+| Setup | suitele API componente Shop și AutoEx | selecție și compoziție locală fără servicii live |
+| Documentație | `DocumentationTargetGovernanceTest`, `DocumentationDirectRelationshipGovernanceTest` și suita whole-ATF | validează documentele locale selectate și relațiile directe cu bibliotecile |
+| Browser local | `AutoExCatalogReportPresentationE2eTest`, `AutoExE2eOverviewNarrativeComponentTest` | verifică scenariile locale de raport selectate; nu toate căile de randare ale bibliotecii sau configurația IntelliJ |
 
-Selecția canalelor este un contract închis; redeschiderea cere un consumer nou
-sau o regresie. Paritatea și verdicturile au probe la ownerul
-[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); controalele Git verificate sunt în
+Selecția canalelor este un contract închis: redeschide-o numai pentru un
+consumer nou sau o regresie. Testele consumer locale verifică doar integrările
+de raport pe care le execută; contractul Reporting selectat descrie comportamentul
+mai larg al bibliotecii. Controalele Git verificate sunt în
 [baseline](ATF_Test_Changes_Baseline.md#controale-tehnice-verificate).
+
 Pentru dovezi și layout, contractele normative rămân
 [Reporting](ATF_Reporting_Contract.md), [display/layout](ATF_Reporting_Display_Contract.md)
 și [captura evidence](ATF_Evidence_Capture_Contract.md).

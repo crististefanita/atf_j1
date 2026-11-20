@@ -39,6 +39,28 @@ rebazat sau extins.
 </details>
 
 <details>
+<summary><strong>Control verificat — overview-ul root și selecția guvernanței</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-ROOT-AND-CODE-GOVERNANCE-20261120
+    status: VERIFIED
+    base: 754eb315045e565c150ca819498cf63154bee9b4
+    expires: 2026-11-30
+    reason: Păstrează overview-ul root local-first, concis și de sus în jos; cere fluxul API/UI către Extent, aserțiunile colapsabile de componentă, limita raportării testelor unitare și selecția porților de calitate a codului în ambele ediții.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=TestChangeGovernanceTest,RootReadmeGovernanceTest,CodeGovernanceSuiteCoverageTest,DocumentationDiagramGovernanceTest,DocumentationProseGovernanceTest,DocumentationReadmeStructureGovernanceTest,DocumentationLinkGovernanceTest,DocumentationDirectRelationshipGovernanceTest,DocumentationLanguageGovernanceTest,DocumentationAnchorGovernanceTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=754eb315045e565c150ca819498cf63154bee9b4" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java
+```
+
+Selecția focalizată de guvernanță a trecut cu 37/37, iar entry point-ul complet
+al reactorului a trecut cu 187/187 în EN și RO la 2026-11-20, fără eșecuri,
+erori sau teste omise.
+
+</details>
+
+<details>
 <summary><strong>Control verificat — commitul live reconciliat după promovare</strong></summary>
 
 Commitul live concurent a schimbat baza Git; toate cele 372 de intrări compilate
@@ -70,7 +92,7 @@ testChanges:
     status: VERIFIED
     base: 5773a1567e14b570b17608b25058158bb2b1c114
     expires: 2026-12-19
-    reason: Leagă aserțiunile catalogului de observația GET selectată unic, verifică aserțiunea API colapsabilă și detaliile cererii într-un vizualizator Extent local, păstrează folosirea API-ului Playwright în stratul E2E și impune prin guvernanța documentației catalogul live al spațiilor J0–J7.
+    reason: Leagă aserțiunile catalogului de observația GET selectată unic, verifică aserțiunea API colapsabilă și detaliile cererii într-un vizualizator Extent local, păstrează folosirea API-ului Playwright în stratul E2E și impune prin guvernanța documentației catalogul live al modulelor și bibliotecilor.
     proof: mvn -B -pl atf-tests,atf-test-auto-ex,atf-ui -am "-Dtest=DocumentedWorkspaceCatalogTest,DocumentationTargetGovernanceTest,ArchitectureOwnershipBoundaryTest,TestChangeGovernanceTest,AtfTestLayerArchitectureTest,AutoExRuntimeBoundaryComponentTest#catalogAssertionsBelongOnlyToTheSelectedGetAmongSamePathNeighbors+catalogApiCheckpointFailsClosedWhenTheSelectedEvidenceIsMissingOrAmbiguous,AutoExCatalogReportPresentationE2eTest,PlaywrightPagePreparationTest" "-Datf.governance.testChanges.baseRef=5773a1567e14b570b17608b25058158bb2b1c114" "-Datf.test.reportDirectory=artifacts/reports/j1-extent-api-20261119" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/lifecycle/AutoExRuntimeBoundaryComponentTest.java
@@ -90,6 +112,29 @@ documentația factuală și limitele straturilor de testare. Whole-ATF a rulat
 separat și a trecut cu 171/171; coeziunea pachetelor este reconciliată prin
 mutarea unui pachet și o excepție precisă, revizuită, cu un criteriu explicit
 de eliminare.
+
+</details>
+
+<details>
+<summary><strong>Control verificat — comparația de catalog și expandarea Extent în suita J1</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-CATALOG-SUITE-EXTENT-20261120
+    status: VERIFIED
+    base: 754eb315045e565c150ca819498cf63154bee9b4
+    expires: 2026-12-20
+    reason: Adaugă o probă Extent offline, deținută de suită, care confirmă că numai GET-ul capturat al catalogului deține comparația și că aserțiunile și detaliile requestului se expandează în raportul publicat.
+    proof: mvn -B -pl atf-tests,atf-test-auto-ex -am "-Dtest=TestChangeGovernanceTest,AutoExE2eOverviewNarrativeComponentTest" "-Datf.governance.testChanges.baseRef=754eb315045e565c150ca819498cf63154bee9b4" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/system/AutoExE2eOverviewNarrativeComponentTest.java
+```
+
+`AutoExE2eOverviewNarrativeComponentTest` a trecut 1/1 în ambele ediții.
+Scope-ul explicit de suită a generat un singur raport local UI/UI_API; Playwright
+a verificat GET-ul selectat al catalogului drept unic owner al comparației și a
+expandat assertions API și detaliile requestului. Suita canonică cu site-ul public
+nu a fost rulată.
 
 </details>
 
@@ -125,7 +170,38 @@ testChanges:
 
 </details>
 
-**Context J1:** controalele istorice copiate păstrează bazele producătorului.
+<details>
+<summary><strong>Control verificat — relațiile documentare directe J1</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DOC-DIRECT-RELATIONSHIP-20261120
+    status: VERIFIED
+    base: 754eb315045e565c150ca819498cf63154bee9b4
+    expires: 2026-12-20
+    allowDelete: true
+    reason: 'Impune limitele directe ale documentației și guvernanței J1: artefacte de bibliotecă selectate, fără dependențe de căi către workspace-uri vecine și cu ținte documentare locale; păstrează auditul istoric și verifică catalogul bilingv și randarea raportului.'
+    proof: 'mvn -B -o -pl atf-tests,atf-test-practice-shop,atf-test-auto-ex -am "-Dtest=TestChangeGovernanceTest,ArchitectureOwnershipBoundaryTest,GovernanceDeploymentTest,DocumentationDirectRelationshipGovernanceTest,DocumentedLibraryCatalogTest,LibraryDocumentationInventoryTest,PlatformLibraryContractTest,PlatformLibraryIntegrityTest,AutoExE2eOverviewNarrativeComponentTest,ShopApiCallAuditReportComponentTest,AutoExApiContractReportPublisherComponentTest,ShopComponentReportScopeComponentTest,AutoExComponentReportScopeComponentTest" "-Datf.governance.testChanges.baseRef=754eb315045e565c150ca819498cf63154bee9b4" "-Dsurefire.failIfNoSpecifiedTests=false" test; mvn -B -o -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=754eb315045e565c150ca819498cf63154bee9b4" "-Dsurefire.failIfNoSpecifiedTests=false" test'
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/ArchitectureOwnershipBoundaryTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeployment.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeploymentTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibraryIntegrityTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibrarySurface.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalog.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalogTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalog.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java
+```
+
+La 2026-11-20, verificările locale de raport și guvernanță au trecut în ambele ediții: Shop 21/21, AutoEx 22/22 și atf-tests 22/22 (65/65 în fiecare ediție). Verificarea de browser local AutoEx a expandat raportul Extent generat. Guvernanța Whole-ATF a trecut cu 179/179 în EN și 179/179 în RO, fără eșecuri, erori sau teste omise. Testele instrumentului de ediții au trecut 10/10; comparatorul nu a găsit probleme între cele 56 de documente Markdown.
+
+</details>
+
+**Context J1:** controalele istorice copiate își păstrează bazele Git inițiale.
 Controalele J1 folosesc baza reală de review a consumerului; eligibilitatea
 este verificată de [controlul Git](../atf-tests/README.md#guvernanța-schimbării-testelor), fără conversia implicită a bazelor.
 
@@ -4230,7 +4306,7 @@ testChanges:
     status: VERIFIED
     base: d93c17ad2c69f6cfe920281bd93e9fadbb29de32
     expires: 2026-11-30
-    reason: Publică Core parentless C1 cu sursa și nativele păstrate în J0; consumatorii verifică binarul real și păstrează probele negative, cataloagele și controalele de ownership.
+    reason: Publică Core parentless C1 cu sursa și testele native păstrate în pachetul bibliotecii Core; consumatorii verifică binarul real și păstrează probele negative, cataloagele și controalele de ownership.
     proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-console/pom.xml
@@ -4263,7 +4339,7 @@ testChanges:
     status: VERIFIED
     base: d93c17ad2c69f6cfe920281bd93e9fadbb29de32
     expires: 2026-11-30
-    reason: Publică Core parentless C1 cu sursa și nativele păstrate în J0; consumatorii verifică binarul real și păstrează probele negative, cataloagele și controalele de ownership.
+    reason: Publică Core parentless C1 cu sursa și testele native păstrate în pachetul bibliotecii Core; consumatorii verifică binarul real și păstrează probele negative, cataloagele și controalele de ownership.
     proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
     allowDelete: true
     paths:
@@ -4509,7 +4585,7 @@ testChanges:
     status: VERIFIED
     base: f38618c41cc9fd567c15caf34f0b9a5dfb8bf1d6
     expires: 2026-11-30
-    reason: Adoptă aceeași pereche J12 verificată în J0, fără schimbări ale oracolelor business ori ale Core C2.
+    reason: Adoptă aceeași pereche de artefacte J12 verificată prin dovezile pachetului, fără schimbări ale oracolelor business ori ale Core C2.
     proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java
@@ -4645,7 +4721,7 @@ testChanges:
     status: VERIFIED
     base: 8b373eacf690c624d0d659141332f94cc4ec2e45
     expires: 2026-11-30
-    reason: Centralizează implementarea și testele native identice pentru Console și Mock în J0; păstrează oracole independente pentru sursă/JAR, CodeSource fizic, verificări negative de integritate și guvernanță specifică fiecărui consumer. Ștergerile native din consumer păstrează catalogul J0 complet și copiile de recuperare din TMP.
+    reason: Centralizează implementarea și testele native identice pentru Console și Mock în pachetele bibliotecilor; păstrează oracole independente pentru sursă/JAR, CodeSource fizic, verificări negative de integritate și guvernanță specifică fiecărui consumer. Ștergerile native din consumer păstrează catalogul complet al pachetului și copiile de recuperare din TMP.
     proof: 'mvn -B -ntp -pl atf-tests -am -Dtest=PlatformLibraryContractTest,PlatformLibraryIntegrityTest -Dsurefire.failIfNoSpecifiedTests=false test'
     allowDelete: true
     paths:
@@ -4697,7 +4773,7 @@ testChanges:
     status: VERIFIED
     base: e9666ad15583274f792614f1971428c5104b0428
     expires: 2026-11-30
-    reason: Solicită exact patru perechi JAR/POM plate, plus README-ul dedicat și ownership-ul J0 asupra sursei bibliotecilor și feedback-ului; păstrează identitatea fizică a binarului, oracole negative independente și acceptanța consumer-ilor.
+    reason: Solicită exact patru perechi JAR/POM plate, plus README-ul dedicat și ownership-ul bibliotecilor asupra sursei și feedback-ului; păstrează identitatea fizică a binarului, oracole negative independente și acceptanța consumer-ilor.
     proof: 'mvn -B -ntp -pl atf-tests -am -Dtest=PlatformLibraryContractTest,PlatformLibraryIntegrityTest -Dsurefire.failIfNoSpecifiedTests=false test'
     paths:
       - atf-tests/src/test/java/atf/api/tests/governance/distribution/core/BinaryCoreFixture.java

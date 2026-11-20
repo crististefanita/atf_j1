@@ -2,12 +2,13 @@
 
 ## Pe scurt
 
-Historical C2/J9 evidence. The current disclosure and governance contract is
-described by the [current Reporting contract](../../atf_j0/atf-reporting/README.md). These C2/J9 results remain historical.
+Înregistrare istorică a dovezilor C2/J9. Contractul curent de disclosure și
+guvernanță este descris în [atlasul bibliotecii Reporting](ATF_Reporting_Library_Atlas.md).
+Aceste rezultate C2/J9 rămân istorice.
 
-J0 păstrează sursele și nativele; J1/J2/J3 consumă aceiași bytes C2/J9.
-Perechile JAR/POM sunt direct în lib, câte o versiune per bibliotecă; J3 are
-șapte module și nu mai păstrează Core sursă.
+Acest checkout J1 consemnează acceptanța istorică a octeților C2/J9. Perechile
+JAR/POM sunt păstrate direct în `lib`, câte o versiune selectată per bibliotecă;
+reactorul nu include un modul-sursă Core.
 
 | Bibliotecă | SHA-256 JAR |
 |---|---|
@@ -18,17 +19,15 @@ Perechile JAR/POM sunt direct în lib, câte o versiune per bibliotecă; J3 are
 
 | Suprafață | Rezultat și limită |
 |---|---|
-| Core sursă și JAR C2 | 276 native PASS pe fiecare; document complet, duplicate, null/write, redacție exactă și factory înainte de submission |
+| verificare sursă Core și JAR C2 | 276 teste native PASS pentru fiecare; document complet, duplicate, null/write, redactare exactă și factory înainte de trimitere |
 | control Core C1 | 37 cazuri noi, 20 FAIL așteptate; aceeași regresie pe sursa veche și JAR fizic |
-| Mock și Validation | suite complete pe sursă și separat în J1/J2/J3; route fallback independent, scalar YAML exact, tipuri și raw body păstrate |
+| Mock și Validation | suite pe sursă și suite consumer J1; rută fallback independentă, scalar YAML exact, tipuri și corp brut păstrate |
 | Reporting nativ | 64 PASS per build; redactor și formatter probate separat, cu numere și duplicate |
 | control Reporting J8 fizic | 16 cazuri, 15 FAIL așteptate; eroarea numerică și pierderea multiplicității sunt reproduse |
-| Reporting J9 fizic | 39 PASS: native JSON, browser JSON, disclosure API și CodeSource; fără implementare Reporting în harness |
-| unit-uri Reporting pe sursă | 486 PASS; distinct de cele opt componente JSON și cele 22 API disclosure |
-| Kit | 133 PASS separat în fiecare workspace; cele două probe requirement sunt separate semantic, fără prag relaxat |
+| Reporting J9 fizic | 39 PASS: teste native JSON, browser JSON, disclosure API și CodeSource; fără implementare Reporting în harness |
+| teste unitare Reporting pe sursă | 486 PASS; distincte de cele opt componente JSON și cele 22 verificări API disclosure |
+| Kit | 133 PASS separat în fiecare staging; cele două verificări ale cerințelor sunt distincte semantic, fără prag relaxat |
 | J1 | guvernanță completă și câte un component Shop/AutoEx; nu declară o nouă execuție de journey extern |
-| J2 | MOCK individual/suită, Extent/fallback, plus noua suită SQL embedded; fără certificare Kafka remote |
-| J3 | guvernanță și Speech component suite fără model; nu reprezintă reexecuție ASR ori microfon |
 | publicare | două build-uri curate identice pentru fiecare JAR; comparația API nu elimină simboluri publice |
 
 ## Randare și limite rămase
@@ -39,9 +38,10 @@ Perechile JAR/POM sunt direct în lib, câte o versiune per bibliotecă; J3 are
 - Oracolul refuză rotunjirea ori eliminarea unui duplicat chiar când statusurile rămân identice.
 - TAB MCP confirmă valorile și fallback keyboard; închiderea unui vecin după Expand all expune separat REPORT-SIBLING-DISCLOSURE-114.
 
-Cele patru criterii Reporting preexistente de coeziune/importuri rămân la J0.
-Timing-ul capturat/publicare, profilul inspectorului, contrastul și lățimea
-fallback păstrează criteriile lor; fidelitatea JSON nu le închide implicit.
+Patru criterii Reporting anterioare de coeziune/importuri rămân separate de
+această acceptanță JSON. Timing-ul capturării/publicării, profilul inspectorului,
+contrastul și lățimea fallback au criterii distincte; fidelitatea JSON nu le
+închide implicit.
 
 ## Reproducere și sincronizare
 

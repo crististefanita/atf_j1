@@ -66,4 +66,4 @@ Durata HTTP provine din `ReportResponse.duration()`; `detail(...)` păstrează t
 
 ---
 
-J0: [cod, teste și feedback](README.md#mentenanță-și-feedback).
+Detaliile de întreținere și feedback sunt în [indexul bibliotecii](README.md#maintenance-and-feedback).

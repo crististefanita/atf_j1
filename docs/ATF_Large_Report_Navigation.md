@@ -52,9 +52,9 @@ rândurile de aserțiuni cu observații.
   HTML sau heap-ul browserului.
 - Observațiile de performanță nu transformă niciodată un FAIL capturat în PASS.
 
-Producătorul deține regresiile permanente pentru sursă/JAR. Proveniența
-consumerului înregistrează binarul curent și acceptanța independentă; randarea
-Android arhivată nu certifică o rulare nouă pe dispozitiv.
+J1 consumă un binar Reporting versionat și consemnează acceptanță numai pentru
+verificările consumerului pe care le rulează. Randarea Android arhivată nu
+certifică o rulare nouă pe dispozitiv.
 
 ## Pornire la rece și readiness
 
@@ -67,8 +67,11 @@ Android arhivată nu certifică o rulare nouă pe dispozitiv.
 | conținut dinamic | păstrează observerii, invalidarea reviziei și normalizarea programată pentru mutațiile ulterioare |
 | deadline-uri | readiness/acțiune 10.000 ms; navigare 45.000 ms; matricile API existente păstrează 5.000 ms |
 
-- `ColdStartReadinessComponentTest` este menținut în J0; verifică cinci destinații inițiale, deep link-uri către scenarii la pornire, repararea linkurilor native, reîncărcări repetate și recuperarea după eșec.
-- [Contractul producătorului](../../atf_j0/docs/ATF_Large_Report_Navigation.md) definește aceleași limite sursă/JAR; dovezile de execuție datate rămân lângă versiunea împachetată.
+- Acceptanța consumerului ar trebui să inspecteze destinațiile inițiale, deep
+  link-urile de pornire, repararea linkurilor native, reîncărcările repetate și
+  recuperarea după eșec în artefactul Reporting selectat.
+- Acest document definește contractul vizibil de navigare; dovada consumerului
+  datată rămâne alături de coordonatele pachetului și înregistrarea execuției.
 - O rulare externă cu `atf.cold.input` pornește trei procese Chromium noi pe același artifact complet.
 
 ## Etichete native pentru timeline
@@ -78,8 +81,8 @@ Android arhivată nu certifică o rulare nouă pe dispozitiv.
 | șablon Spark | codifică cheia owner-ului timeline completă ca șir JSON; păstrează ghilimelele, întreruperile de linie, backslash-urile și Unicode |
 | date capturate | păstrează exact eticheta callerului și durata originală; fără tăiere sau verdict dedus |
 | upgrade de vendor | eșuează explicit când se schimbă expresia cheii native fixate, în loc să publice în tăcere un script invalid |
-| dovadă permanentă | `TimelineTitleEncodingComponentTest` execută scriptul încorporat real și refuză erorile browserului; regresiile timestamp-urilor rămân separate |
+| dovadă permanentă | browserul execută scriptul codificat și respinge erorile; regresiile timestamp rămân separate |
 
-Producătorul deține implementarea și testele permanente sursă/JAR. Consumerii
-își păstrează oracolele independente de aplicație; observațiile externe datate
-nu devin acceptanță proaspătă.
+J1 înregistrează versiunea Reporting selectată și dovezile propriei acceptanțe.
+Oracolele aplicațiilor consumer rămân independente; observațiile datate nu sunt
+acceptanță nouă.

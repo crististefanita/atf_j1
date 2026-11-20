@@ -56,7 +56,7 @@ Responsabilitățile rămân separate:
 | `atf-reporting` | generează și publică HTML-ul Extent |
 | `atf-debug-ui` | servește read-only artifactul local pe loopback |
 | `atf-ui` | deține politicile generice și adaptorul Java Playwright |
-| `atf-reporting-tests` / `atf.ui.tests.extent` | verificări automate UI pentru rapoarte Extent |
+| Teste consumatoare Shop/AutoEx | verificări locale ale rapoartelor Extent generate |
 | agentul + TAB MCP | investigație manuală interactivă |
 
 ## Pornire
@@ -117,9 +117,10 @@ mvn -pl atf-debug-ui -am test
 ```
 
 Testul verifică publicarea HTML și blocarea traversal-ului către fișiere din
-afara root-ului. Nu se adaugă un modul separat pentru teste: testele automate
-UI de audit Extent rămân în `atf-reporting-tests/src/test/java/atf/ui/tests/extent`;
-`atf-tests` deține doar testul de guvernanță globală; nu conține teste de browser.
+afara root-ului. Nu se adaugă un modul separat pentru testele de raportare:
+Practice Shop și AutoEx verifică scenariile locale de raport în modulele lor;
+`atf-tests` deține guvernanța reactorului și documentației, nu journey-urile
+de raport ale aplicației.
 
 ### Închiderea conexiunilor deținute
 
@@ -158,7 +159,7 @@ insuficient: launcher-ul folosește consola, care încarcă și bibliotecile de 
   modul, cu separatorul platformei.
 
 Nu se opresc procesele altui agent. Dacă hostul este deja saturat, testele
-reporting pot fi rulate izolat cu `-DforkCount=0`; acest mod este o măsură de
+care produc rapoarte pot fi rulate izolat cu `-DforkCount=0`; acest mod este o măsură de
 diagnostic/resurse, nu schimbă contractul testelor și nu devine implicit pentru
 execuțiile normale.
 

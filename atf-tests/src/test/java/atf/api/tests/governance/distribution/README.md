@@ -1,98 +1,71 @@
-# Guvernanță ATF — deployment sursă sau binar
+# Guvernanța ATF — artifacte J1 și limitele modulelor
 
 ## Pe scurt
 
-Acest pachet adaptează suprafața inspectată, păstrând regulile și selecția
-suitei. Producătorul verifică sursele Core/Reporting; consumerul verifică biblioteca
-publicată și încărcată, fără surse fictive ori teste dezactivate.
+Acest pachet verifică reactorul J1 declarat în POM-ul rădăcină și cele cinci
+artefacte de bibliotecă versionate consumate din `lib`. Citește numai POM-ul,
+fișierele artifactelor și proveniența din acest checkout.
 
-## Catalogul declarat
+## Catalogul local al bibliotecilor
 
-Catalogul este declarat prin Maven; un modul ori POM lipsă rămâne refuzat.
-
-| Profil | Module live | Harness explicit în TMP |
-|---|---:|---:|
-| sursă Core/Reporting | 12 | inclus |
-| journeys cu Core binar | 9 | 10 |
-| foundation cu Core sursă (fixture) | 8 | 9 |
-| Eventuate cu Core binar, fără UI | 7 | 8 |
-
-`atf.consumer.profile=foundation` exclude Shop/AutoEx; absența directoarelor
-nu selectează profilul, iar harness-ul nedeclarat nu este acceptat.
-
-Distribuția binară citește JAR-ul și POM-ul direct din `lib`, cu aceeași
-verificare de proveniență, POM inclus și CodeSource. O copie imbricată nu
-substituie artifactul cerut la calea declarată. `lib` are câte o pereche JAR/POM pentru Core și Reporting;
-hash-urile și catalogul probelor native sunt în `library-provenance.json`, la rădăcină.
-
-| Intrare | Responsabilitate | Probă |
+| Bibliotecă | Coordonată | Pereche locală |
 |---|---|---|
-| [GovernanceDeployment](GovernanceDeployment.java) | catalog Maven strict și documente reale pentru fiecare deployment | [module și ținte](GovernanceDeploymentTest.java) |
-| [CoreGovernanceSurface](core/CoreGovernanceSurface.java) | POM parentless, pereche C1, ownership bytecode și identitate încărcată | [mutanți Core](core/CoreGovernanceSurfaceTest.java) |
-| [ReportingGovernanceSurface](ReportingGovernanceSurface.java) | POM, ownership, proveniență și dependențe din sursă/JAR | [proveniență și mutanți](ReportingGovernanceSurfaceTest.java) |
-| [DeploymentFixture](DeploymentFixture.java) / [BinaryReportingFixture](BinaryReportingFixture.java) | fixture-uri private, cu mutații izolate | fără schimbarea sursei producătorului, cache-ului ori JAR-ului live |
+| Core | `atf.api:atf-core:1.0.0-c4` | `lib/atf-core-1.0.0-c4.jar` + POM |
+| Reporting | `atf.api:atf-reporting:1.0.0-j25` | `lib/atf-reporting-1.0.0-j25.jar` + POM |
+| Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` + POM |
+| Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` + POM |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k2` | `lib/atf-test-kit-1.0.0-k2.jar` + POM |
 
-## Alegerea suprafeței
+POM-ul rădăcină selectează versiunile. `library-provenance.json` identifică
+hash-urile binar/POM și dovezile păstrate despre pachete.
 
-- Un harness declarat păstrează integral auditurile surselor și fișierele cerute.
-- Un harness extern cere absența modulului și a namespace-urilor sale din toate
-  sursele locale; exemplele din literali nu sunt confundate cu declarații Java.
-- Probele negative refuză fixture-ul declarat lipsă, sursa shadow și copii în
-  Core/AutoEx. Contractele Reporting se execută separat pe JAR în TMP.
+## Suprafețe de verificare
 
-```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+| Punct de intrare | Responsabilitate | Dovadă |
+|---|---|---|
+| [GovernanceDeployment](GovernanceDeployment.java) | catalog Maven local strict și deployment declarat | [verificări de module și ținte](GovernanceDeploymentTest.java) |
+| [CoreGovernanceSurface](core/CoreGovernanceSurface.java) | identitatea artifactului Core, limita bytecode și clasa încărcată | [mutanți Core](core/CoreGovernanceSurfaceTest.java) |
+| [ReportingGovernanceSurface](ReportingGovernanceSurface.java) | POM Reporting, proveniență și limita sursă/JAR | [proveniență și mutanți](ReportingGovernanceSurfaceTest.java) |
+| [DeploymentFixture](DeploymentFixture.java) / [BinaryReportingFixture](BinaryReportingFixture.java) | mutații izolate ale deployment-ului local | reactorul live și artifactele publicate rămân neschimbate |
+
+## Fluxul dovezilor
+
+~~~mermaid
 flowchart LR
-    Maven["Declarație Maven"] -->|validează| Model["Perimetru strict"]
-    Model -->|modul sursă| Source["Java + POM<br/>producător"]
-    Model -->|coordonată externă| Binary["JAR + POM<br/>consumer"]
-    Source -->|protejează| Rules["Aceleași boundary-uri"]
-    Binary -->|protejează| Rules
-```
+    POM["POM rădăcină J1"] -->|selectează| Pair["cinci perechi JAR/POM în lib"]
+    Pair -->|rezolvate de| Reactor["Module J1"]
+    Reactor -->|exercitate de| Tests["teste consumer și guvernanță"]
+    Tests -->|înregistrează| Evidence["proveniență și rapoarte randate"]
+    Guard["guvernanța artifactelor"] -. verifică .-> Pair
+~~~
 
 <details>
-<summary><strong>Legendă — adaptare cu refuz explicit</strong></summary>
+<summary><strong>Legendă — dovezi despre artifactele locale</strong></summary>
 
-- Perimetrul păstrează catalogul canonic; nu elimină automat module lipsă.
-- Reporting binar cere versiune explicită și respinge sursa shadow din reactor.
-- Sursa păstrează probele lexicale și layout-ul Java; binarul verifică clasele,
-  POM-ul, proveniența, CodeSource-ul și dependențele prin `jdeps` din JDK.
-- Muchiile descriu alegerea dovezii; nu sunt dependențe Maven suplimentare.
+- POM-ul definește modulele locale și cele cinci versiuni de biblioteci selectate.
+- Guvernanța verifică coordonatele, octeții, limitele dependențelor și
+  identitatea încărcată fără să citească un workspace alăturat.
+- Catalogul testelor native din proveniență înregistrează dovezi despre pachet;
+  nu afirmă că testele respective au rulat în J1.
+- Acceptanța consumerului acoperă numai scenariile J1 selectate și executate.
 
 </details>
 
 ## Invariante și limite
 
-- Foundation refuză profile necunoscute, override pe sursa Reporting, module comune lipsă și surse shadow Shop/AutoEx, inclusiv namespace-uri ascunse în alte module.
-- Guard-urile aplicațiilor verifică sursa declarată sau excluderea explicită; fixture-urile negative rămân active în ambele profile. Geometria absentă din deployment este probată cu YAML/README private în TMP.
+- POM-ul J1 definește inventarul modulelor locale; lipsa unui modul declarat eșuează.
+- Distribuția binară citește perechile JAR/POM corespondente din `lib`.
+- Guvernanța respinge surse shadow, fișiere lipsă, coordonate duplicate și
+  module nedeclarate.
+- POM-ul încorporat trebuie să corespundă POM-ului distribuit; CodeSource și
+  verificările JDK `jdeps` identifică alt binar încărcat sau dependențe bytecode interzise.
+- Faptele documentației se compară cu POM-ul rădăcină, perechile fizice și
+  indexul local al bibliotecilor.
+- Guvernanța schimbărilor de test folosește baza de review a acestui checkout.
 
-- Ținta Reporting din producător rămâne README-ul său; J1 validează atlasul
-  binar și ghidul consumerului, prin aceleași validatoare.
-- Un required file rămâne fișier regulat; un director nu îl poate satisface.
-  Absența unui owner și interdicția unui director rămân verificări distincte.
-- Hash-urile din proveniența unică leagă JAR-ul, POM-ul și intrările producătorului; POM-ul embedded
-  trebuie să coincidă cu cel distribuit. CodeSource-ul refuză alt binar încărcat.
-- POM curat nu justifică bytecode dependent de Core, Validation, Kit ori JUnit;
-  proba ascunde o referință Core într-un JAR fixture și cere detectarea ei.
-- Catalogul native inclus în proveniență este o declarație verificată prin hash, nu execuția testelor
-  Java în consumer. Auditul sursei și regresiile native rămân la producător.
-- Mutantul documentar schimbă doar numărul declarat; fixture-urile 10/11/12
-  păstrează POM-ul și verifică separat scope-ul Kit și afirmațiile duplicate/lipsă.
-- `jdeps` este parte din JDK-ul necesar verificării; lipsa lui este refuz,
-  fără fallback la un control textual mai slab.
+## Mentenanță
 
-## Întreținere
-
-O schimbare de packaging actualizează catalogul, dovada și ambele deployment-uri
-în același increment. Retragerea Reporting Tests cere decizie și acceptanță
-separate; nu este activată prin absența unui director sau prin această adaptare.
-
-## Core sursă sau binar
-
-`atf.core.version` selectează explicit Core extern; simpla dispariție a
-directorului nu poate micșora catalogul. Consumerii refuză orice director
-Core shadow, inclusiv fără POM, și orice fișier suplimentar în lib.
-
-J0 verifică în continuare stilul și implementarea sursei Core. J1/J2 verifică
-POM-ul și clasele publicate, dependențele bytecode și hash-ul CodeSource;
-[contractul C1](../../../../../../../../../docs/ATF_Core_Consumer.md) separă aceste probe.
+Schimbarea unei versiuni de bibliotecă actualizează proprietatea rădăcină,
+perechea JAR/POM corespondentă, proveniența, catalogul documentației și dovada
+consumerului afectat într-un singur increment revizuit. Lipsa sau redenumirea
+unui fișier nu implică eliminarea dependenței.

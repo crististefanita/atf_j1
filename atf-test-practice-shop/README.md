@@ -7,8 +7,7 @@
 `ShopApiRunReport` păstrează lifecycle-ul și verdictul business. Sumarul sigur
 al excepției este delegat către
 [Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare),
-cu [probe neutre în Reporting Tests](../../atf_j0/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
-Probele Shop continuă să verifice configurația, selecția exchange-ului și adaptorul real.
+cu [contractul bibliotecii Reporting](../docs/ATF_Reporting_Library_Atlas.md) și verificări locale Shop pentru configurație, selecția exchange-ului și adaptorul real.
 
 **Trasee rapide:** [Journey](#traseul-de-achiziție) · [Fixture și billing](#configurația-modulului) · [Dovada order](#dovada-comenzii-curente) · [Raport per suită](#raport-partajat--starea-consumerului) · [Componentă sau E2E](#verificare-rapidă)
 
@@ -189,8 +188,8 @@ formatează câmpurile comune AutoEx/Shop, iar consumerul adaugă politica sa AP
 
 Compoziția test-scoped transmite câmpurile evenimentului Reporting către
 `AtfConsoleEvent.fromExternalEnums(...)` din Core, apoi publică în sink-ul
-configurat; Console nu depinde de Reporting. Compatibilitatea vocabularelor
-este probată în Reporting Tests, iar browserul și regulile Shop rămân locale.
+configurat; Console nu depinde de Reporting. Contractele bibliotecilor
+selectate definesc vocabularul comun, iar browserul și regulile Shop rămân locale.
 
 </details>
 
@@ -588,12 +587,13 @@ necunoscute sunt refuzate înaintea browserului.
 
 Aserțiunile acestor componente rămân în pasul standard `Component assertions`,
 colapsat implicit, cu redactare înaintea plafonului configurat, implicit 240 de caractere.
-Unit și probele renderer din Reporting Tests își păstrează categoriile separate.
+Aceste verificări componente Shop rămân separate de randarea comună furnizată
+de biblioteca Reporting selectată.
 
 </details>
 
 Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă);
-indicatorul agregat de recuperare rămâne în [feedback-ul auditului](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
+indicatorul agregat de recuperare rămâne în [feedback-ul auditului](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent).
 
 ## Configurația modulului
 
@@ -672,7 +672,7 @@ flowchart LR
 - Între checkpoint și Fill, snapshot-ul se recitește; o schimbare de stoc oprește mutația.
 - Verificarea valorii observate oprește clickul dacă aplicația ajustează cantitatea.
 - `ShopProductQuantityComponentTest` probează încărcarea întârziată, stocul epuizat, deadline-ul, valoarea ajustată și pierderea stocului.
-- Componentele folosesc `ShopComponentTest` și `AuditedAssertions`; probele renderer rămân în Reporting Tests.
+- Componentele folosesc `ShopComponentTest` și `AuditedAssertions`; biblioteca Reporting selectată furnizează randarea comună.
 
 </details>
 
@@ -787,8 +787,8 @@ journey-uri sunt:
 Testele API de componentă verifică separat rutele și metodele typed, variantele
 guest/authenticated, payload-ul și semantica exchange-ului prin transporturi
 controlate. Ele nu certifică serviciul live; `ShopStandaloneApiReportTest` este
-proba opt-in separată, iar testele generice pentru renderer și markup aparțin
-[`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md).
+proba opt-in separată, iar [contractul bibliotecii Reporting selectate](../docs/ATF_Reporting_Library_Atlas.md)
+descrie comportamentul comun al rendererului și markup-ului.
 
 `PUT` pentru actualizarea cantității și `DELETE` pentru eliminarea unui produs
 sunt contracte API ale modulului, nu pași din purchase-ul E2E curent.
@@ -1075,7 +1075,7 @@ raportului, păstrând cauza primară și celelalte exchange-uri observate.
 - Aserțiunile componente rămân în pasul standard colapsat, cu redactare înaintea
   plafonului 240. Transportul controlat rămâne distinct de verdictul live.
 
-Producerul și disponibilitatea sunt la [Core](../../atf_j0/atf-core/README.md#istoric-la-eroare-terminală),
+Producerul și disponibilitatea sunt la [Core](../docs/ATF_Core_Consumer.md),
 iar randarea este la [Reporting](../docs/ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate).
 
 ### De ce raportul API nu arată ca raportul UI
@@ -1278,7 +1278,7 @@ Scroll-ul local, glyph/ARIA, redeschiderea părinților și Fails → Tests se v
 în MCP/ATF Debug. Lizibilitatea la lățime mică este un contract al layout-ului
 Reporting, separat de succesul HTTP și de mapping-ul Shop.
 
-### Limita dintre testele Shop și testele Reporting
+### Limita dintre testele Shop și biblioteca Reporting
 
 Aplicăm [regula comună de ownership](../docs/ATF_Testing_Guide.md#owner-ul-testului-business-adaptor-sau-infrastructură);
 secțiunea de mai jos fixează numai exemplele și limitele specifice Shop. Owner-ul
@@ -1287,29 +1287,29 @@ se stabilește după invariantul afirmat, nu după faptul că testul publică un
 | Invariant | Owner și exemplu | Nu se mută aici |
 |---|---|---|
 | Intenție, rute, ordine și redactare business Shop | Shop; `ShopApiContractReportComponentTest` și `ShopApiCallAuditReportComponentTest` verifică semantica adaptorului și asocierea exchange-urilor | markup Extent sau implementarea rendererului |
-| HTML, tabele, Request/Response/Execution, disclosure, retry rendering și izolare generică | `atf-reporting-tests`; fixture-uri neutre, fără site real | politica Shop pentru câmpuri de înregistrare/adresă |
-| Adnotări, resolver-e și cleanup reutilizabil strict test-only | `atf-test-kit` | screenshot policy, profilul Shop sau browser harness |
+| contractul Reporting selectat: ierarhie HTML, tabele, disclosure și randare | ghidul bibliotecii descrie contractul; Shop verifică adaptorul local de raport | politica Shop pentru înregistrare/adresă |
+| Adnotări, resolver-e și cleanup generic, exclusiv pentru teste | JAR-ul bibliotecii Test Kit selectate | screenshot policy, profilul Shop sau browser harness |
 
-Izolarea request-urilor identice între scenarii este probată generic în
-Reporting; Shop păstrează aserțiunile sale asupra intențiilor și apelurilor
-distincte `/users/login`.
+Fiecare consumer își verifică ownership-ul request-urilor și maparea business
+față de biblioteca Reporting selectată. Shop păstrează aserțiunile sale despre
+intenții și apeluri distincte `/users/login`.
 
 <details>
 <summary><strong>Delimitarea probelor locale și a celor reutilizabile</strong></summary>
 
-| Probă curentă | Contract care rămâne Shop | Contract deținut în alt modul |
+| Probă curentă | Contract care rămâne Shop | Contract comun din biblioteca consumată de J1 |
 |---|---|---|
-| `ShopApiAuthenticationSchemaTest` | profilul/mecanismul prin mapper și browser journal; lipsa credentialelor din ambele artifacte | etichetele HTML canonice și paritatea proiecțiilor: `ApiAuthenticationSchemaContractTest` |
-| `ShopApiCallAuditReportComponentTest` | asocierea intenției/statusului la exchange, lipsa contractului explicit și diagnosticul auditului | retry rendering și proiecția diagnosticelor sunt probate generic în Reporting Tests |
-| `ShopApiBodyRedactionReportTest` | politica Shop pentru înregistrare/adresă, body malformed și ieșirea efectivă a adaptorului | redactarea generică și manual replay sunt probate la ownerii lor |
+| `ShopApiAuthenticationSchemaTest` | profilul/mecanismul prin mapper și browser journal; lipsa credentialelor din ambele artifacte | contractul Reporting selectat descrie etichetele canonice și proiecția; Shop verifică maparea locală |
+| `ShopApiCallAuditReportComponentTest` | asocierea intenției/statusului la exchange, lipsa contractului explicit și diagnosticul auditului | contractul Reporting selectat descrie randarea retry-ului și proiecția diagnosticelor |
+| `ShopApiBodyRedactionReportTest` | politica Shop pentru înregistrare/adresă, body malformed și ieșirea efectivă a adaptorului | contractul Reporting selectat descrie redactarea generică; Shop verifică ieșirea sa efectivă |
 | `ShopE2eFailureBoundaryTest` | eroarea business rămâne primară când publicarea dovezii și close eșuează; secundarele sunt suprimate în ordine | închiderea inversă prin `FailureAwareCleanup` este probată direct în Test Kit |
-| `ShopScreenshotPolicyTest` | maparea politicii și precedența YAML față de opțiunea legacy | filtrarea providerului înainte de captură: `ReportEvidenceProfileTest` în Reporting Tests |
+| `ShopScreenshotPolicyTest` | maparea politicii și precedența YAML față de opțiunea legacy | contractul Reporting selectat descrie filtrarea providerului înainte de captură |
 
 Proba retry locală verifică attempts/history/provenance prin mapper și modelul
-publicat de Shop, inclusiv contractul login inițial; `ApiRetryProjectionContractTest`
-verifică pipeline-ul unic în standalone Extent, fallback și UI+API, inclusiv
-retry epuizat. Copia directă a testului
-de cleanup și filtrarea generică a capturii nu mai sunt repetate aici.
+publicat de Shop, inclusiv contractul login inițial. Contractul Reporting
+selectat descrie pipeline-ul în Extent, fallback și UI+API, inclusiv retry-ul
+epuizat. Lifecycle-ul cleanup și filtrarea capturii sunt descrise de contractul
+bibliotecii, nu duplicate în Shop.
 
 Probele pentru asocierea intenției/statusului, eșecul JUnit și datele personale
 rămân locale: verifică apelarea adaptorului și politica Shop, nu layout-ul.
@@ -1368,8 +1368,9 @@ Probele componente verifică runtime-ul, contractele și artifactele pentru succ
 HTTP respins, transport fără răspuns și cleanup eșuat. Rularea autentificată live
 verifică separat comportamentul serverului; un raport 401 auditabil nu certifică un flow reușit.
 
-Interacțiunea generică a raportului este probată în
-[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); mapping-ul business rămâne Shop.
+Testele locale Shop inspectează ieșirea raportului cerută de scenariile lor;
+[contractul bibliotecii Reporting selectate](../docs/ATF_Reporting_Library_Atlas.md) descrie interacțiunea comună.
+Maparea business rămâne în Shop.
 Login-ul API nu dovedește automat autentificarea UI a aceluiași cont.
 
 </details>
@@ -1399,8 +1400,8 @@ copiate aici ca reguli paralele.
 - [Ghidul de testare ATF](../docs/ATF_Testing_Guide.md) — niveluri de verificare și traseul canonic;
 - [Contractul adnotărilor](../docs/ATF_Test_Infrastructure_Annotations.md) — declarațiile de nivel, canal, fixture și output;
 - [Contractul de captură](../docs/ATF_Evidence_Capture_Contract.md) — axele generice pentru flow, acțiuni și screenshot;
-- [`atf-core`](../../atf_j0/atf-core/README.md) — contracte neutre și transport;
-- [`atf-console`](../../atf_j0/atf-console/README.md) — politica diagnosticelor și afișarea căii raportului;
+- [`atf-core`](../docs/ATF_Core_Consumer.md) — contracte neutre și transport;
+- [`atf-console`](../lib/README.Console.md) — politica diagnosticelor și afișarea căii raportului;
 - [`atf-ui`](../atf-ui/README.md) — contractul browserului, locatorilor și inspectorului;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — modelul și randarea raportului;
 - [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) — adnotările și selecția testelor;
@@ -1498,7 +1499,7 @@ este închis o dată; cauza inițială rămâne primară, iar cleanup-ul distinc
 | Shop `src/main` | pagini, flow-uri, payload-uri, captură/politică Shop și validarea terminală `ShopPurchaseConfirmation`; fără JUnit/Test Kit |
 | Shop `src/test` | teste business, fixture-uri și adaptoare JUnit/report specifice Shop |
 | `atf-test-kit` | lifecycle neutru; nu primește browser, Reporting sau business |
-| `atf-ui` / `atf-reporting-tests` | auditul neutru de ecran / contractele generice de randare |
+| atf-ui / testele consumatorilor Shop și AutoEx | audit neutru al ecranului / verificări locale de integrare a randării |
 
 ### Ținta refactorizării suportului Shop
 

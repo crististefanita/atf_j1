@@ -1,19 +1,18 @@
 # Reporting ca bibliotecă — atlasul integrării consumerului
 
-Coordonatele curente, hash-urile și acceptanța independentă sunt înregistrate în
-[proveniența bibliotecii](../library-provenance.json). API-ul și ownership-ul de
-mai jos descriu integrarea curentă; inventarele J6/J7 marcate explicit cu date
-rămân istorice.
+Coordonatele curente, hash-urile și acceptanța consumerului sunt înregistrate în
+[proveniența bibliotecii](../library-provenance.json). Atlasul descrie contractul
+Reporting exercitat de J1; înregistrările de verificare datate rămân istorice.
 
 ## Pe scurt
 
-Acest atlas permite integrarea Reporting fără sursa bibliotecii. Pornește de
-la contractele consumate, callerul local și JAR-ul încărcat; implementarea,
-regresiile generice și documentația bibliotecii au owner în `atf_j0`.
+Acest atlas descrie integrarea J1 prin biblioteca Reporting versionată. Pornește
+de la contractul consumat, callerul local și JAR-ul încărcat; nu presupune că
+sursa bibliotecii face parte din reactorul J1.
 
 | Intenție | Intrare | Verifică la caller |
 |---|---|---|
-| publică un rezultat | [API și arbore](#api-consumat-și-ownerul-adaptorului) | observație și expected independente |
+| publică un rezultat | [API și arbore](#reporting-api-adapter) | observație și expected independente |
 | finalizează artifactul | [lifecycle](#lifecycle-și-publicare) | close al resursei proprii/comune și notificarea căii |
 | explică un failure | [diagnostic](#diagnostice-și-navigare) | cauza, faza, ordinalul și captura originală |
 | alege versiunea | [identitate binară](#identitatea-bibliotecii) | proprietatea Maven, hash, POM și CodeSource |
@@ -24,8 +23,8 @@ Versiunea este declarată în [POM-ul J1](../pom.xml); [lib](../lib) conține
 perechile Core și Reporting JAR/POM, direct în folder. [Proveniența](../library-provenance.json) păstrează
 hash-urile binarului/POM-ului, amprenta intrărilor și catalogul probelor native.
 
-Amprenta identifică snapshot-ul producătorului, fără a transporta sursa ori
-schimbările ulterioare din `atf_j0`. Diagnosticul pornește de la versiunea
+Amprenta identifică inputurile pachetului fără a transporta sursa bibliotecii
+sau versiuni ulterioare. Diagnosticul pornește de la versiunea
 încărcată; numele unei clase din stack trace nu implică sursă disponibilă în J1.
 
 API-ul folosit poate fi inspectat din binar:
@@ -38,7 +37,9 @@ Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
 din POM. Clasele `public` nu reprezintă automat suprafață stabilă pentru orice
 release; compatibilitatea se verifică pentru utilizările reale.
 
-## API consumat și ownerul adaptorului
+<a id="reporting-api-adapter"></a>
+
+## API consumat și adaptorul local
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
@@ -55,7 +56,8 @@ flowchart LR
 - Callerul deține HTTP-ul, browserul, expected-ul și politica business.
 - Modelele sunt ale bibliotecii; adaptorul conservă identitatea și valorile,
   fără obiecte Playwright sau Core ca protocol implicit.
-- JAR-ul deține proiecția; schimbarea rendererului se livrează din producător.
+- JAR-ul selectat definește proiecția; compară raportul randat după schimbarea
+  versiunii bibliotecii.
 - Muchiile exprimă date și verificare, nu module sursă suplimentare.
 
 </details>
@@ -175,7 +177,7 @@ starea necapturată și checkpoint-ul care deține dovada.
 
 Măsoară execuția, capturile și publicarea la ownerii lor; agregarea request-urilor
 nu este automat durata E2E. Transportă timing-ul typed, păstrând necunoscutul
-distinct de zero; modelele și randarea lui rămân la producător.
+distinct de zero; modelele și randarea lui provin din biblioteca selectată.
 
 [Runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md)
 și [suportul Shop](../atf-test-practice-shop/src/main/atf/shop/support/README.md)
@@ -189,7 +191,7 @@ business/comparație/execuție nu se deduce din titlu.
 
 `Fails → Tests` deschide scenariul, faza și ordinalul dovezii originale.
 Două grupuri omonime cer identitate typed; tabul vizibil singur nu certifică
-expandarea. Regresia neutră aparține Reporting Tests din producător.
+expandarea. Testele consumerului verifică arborele raportului selectat și navigarea.
 
 ## Tabele și randare
 
@@ -197,9 +199,9 @@ expandarea. Regresia neutră aparține Reporting Tests din producător.
 spațiul disponibil, wrapping-ul, scroll-ul local și disclosure-urile pentru
 toate tabelele: setup, assertions, Playwright actions și API.
 
-Snapshot-ul semantic nu probează stilul calculat ori tastatura. Consumerul
-verifică raportul său, iar producătorul matricea generică Extent/fallback;
-harness-ul aplicației nu injectează CSS sau JavaScript de corecție.
+Snapshot-ul semantic nu probează stilul calculat ori tastatura. J1 verifică
+raportul selectat prin scenariile consumerului; harness-ul aplicației nu
+injectează CSS sau JavaScript de corecție.
 
 ## Redactare și previzualizare
 
@@ -208,8 +210,8 @@ Comparația integrală precede redacția și bugetul de display. Un mismatch dup
 și canary-uri sensibile cer probe separate.
 
 Eticheta redactată nu este cheia selecției request-ului. Rezultatul unui fixture
-nu declară protecție universală pentru orice format sensibil; problema de
-redactor ori renderer revine la producător.
+nu declară protecție universală pentru orice format sensibil; problemele
+redactorului ori rendererului se înregistrează după versiunea și hash-ul bibliotecii selectate.
 
 ## Observație și recuperare BE
 
@@ -235,10 +237,10 @@ Shop/AutoEx rămân la consumer dacă modulul generic de teste este retras.
 
 | Observație | Verifică întâi în J1 | Ownerul corecției |
 |---|---|---|
-| clasă sau metodă absentă | versiune, POM, CodeSource și apelul compilat | adaptor J1 ori compatibilitate Reporting în `atf_j0` |
-| raport absent | opt-in, Store JUnit, cauza close-ului și output-ul | caller J1; publisher defect la producător |
+| clasă sau metodă absentă | versiune, POM, CodeSource și apelul compilat | adaptor J1 ori compatibilitatea versiunii Reporting selectate |
+| raport absent | opt-in, Store JUnit, cauza close-ului și output-ul | caller J1 ori contractul de publicare al bibliotecii selectate |
 | verdict/captură greșite | expected, mapper și identitatea invocării | consumer pentru input; Reporting pentru proiecție |
-| coloane ori backlink defecte | același HTML, fază/ordinal, viewport și tastatură | Reporting și regresia sa în `atf_j0` |
+| coloane ori backlink defecte | același HTML, fază/ordinal, viewport și tastatură | versiunea Reporting selectată și dovada locală de randare |
 
 Handoff-ul include coordonata/hash-ul, input minim fără secrete, cauza,
 expected/actual și reproducerea. [Procesul J1](ATF_Reporting_Consumer.md) fixează livrarea;
@@ -246,7 +248,8 @@ sursa bibliotecii și fișierele din JAR nu se repară în `lib`.
 
 ## Profil explicit și surse temporale
 
-[Contractul J0](../../atf_j0/atf-reporting/README.md#inspecția-artifactului-cu-intenție-explicită) separă intenția callerului de inspecția artifactului; apelul legacy rămâne Extent/HTTP.
+[Ghidul bibliotecii Reporting](../lib/README.Reporting.md) separă intenția
+callerului de inspecția artefactului; apelul legacy rămâne Extent/HTTP.
 [Proveniența curentă a bibliotecii](../library-provenance.json) identifică
-binarul livrat și acceptanța consumerilor; sursa și harness-ul Reporting rămân
-în J0.
+binarul selectat și acceptanța consumerului; acest reactor descrie contractul
+bibliotecii și verifică folosirea octeților selectați.

@@ -1,8 +1,8 @@
 # Contractul de raportare Extent pentru ATF Java
 
-În J1, acest contract descrie rezultatul cerut la integrarea bibliotecii.
-Modelele, rendererul și regresiile generice au owner în `atf_j0`; [atlasul JAR](ATF_Reporting_Library_Atlas.md)
-permite folosirea lor fără sursă locală, fără a garanta orice API `public`.
+Pentru J1, acest contract descrie rezultatul cerut la integrarea bibliotecii
+Reporting selectate. [Atlasul JAR](ATF_Reporting_Library_Atlas.md) explică
+contractul binar observabil fără a promite orice API `public`.
 
 ## Pe scurt
 
@@ -22,7 +22,8 @@ acest document rămâne owner-ul semanticii raportului și al evidence-ului.
 
 Pentru componentele AutoEx/Shop, un owner class/suite publică un raport comun,
 iar fiecare invocare auditată își păstrează scenariul, fazele și verdictul.
-Unit rămâne exceptat; artifactele-fixture ale testelor de Reporting au ownership separat.
+Testele unit rămân exceptate de la publicarea Extent. Fixture-urile consumer
+și fișierele de raport generate aparțin modulului local care le produce.
 
 ### Overview/System — instantaneu semantic
 
@@ -958,4 +959,3 @@ Schimbarea timestamp-ului nu modifică arborele Extent, statusurile, agregările
 sau randarea HTML.
 
 </details>
-

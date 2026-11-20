@@ -86,7 +86,7 @@ public record GovernanceDeployment(Path root, List<String> sourceModules, boolea
         if (!coreSource() && configured.equals("atf-core/README.md")) return List.of("docs/ATF_Core_Consumer.md");
         String module = configured.contains("/") ? configured.substring(0, configured.indexOf('/')) : "";
         if (List.of(AtfModuleIds.UI, AtfModuleIds.DEBUG_UI).contains(module) && !sourceModules.contains(module) && configured.equals(module + "/README.md"))
-            return List.of("docs/ATF_J2_Verification.md", "docs/ATF_Eventuate_Integration.md");
+            return List.of("docs/ATF_Architecture.md", "docs/ATF_Testing_Guide.md");
         if (consumerModule(module) && !sourceModules.contains(module) && configured.equals(module + "/README.md"))
             return List.of("docs/ATF_Reporting_Consumer.md", "docs/ATF_Workspace_Synchronization.md");
         if (!sourceModules.contains(AtfModuleIds.REPORTING_TESTS)

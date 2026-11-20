@@ -41,4 +41,4 @@ var total = body.path("total").decimalValue();
 
 ---
 
-Mentenanța codului și testelor Core aparține proiectului separat `atf_j0/atf-core`; [feedback-ul și sincronizarea](README.md#mentenanță-și-feedback) pornesc de la J0.
+Înregistrează constatările Core după coordonata Maven, versiune și hash-urile JAR/POM. Ghidul local descrie contractul consumat; proveniența identifică octeții inspectați.

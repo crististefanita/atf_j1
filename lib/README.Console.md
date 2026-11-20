@@ -42,4 +42,4 @@ Console depinde de Core; Kit este opțional pentru legătura JUnit. Proiecția r
 
 ---
 
-Mentenanța codului și testelor Console aparține proiectului separat `atf_j0/atf-console`; [feedback-ul și sincronizarea](README.md#mentenanță-și-feedback) pornesc de la J0.
+Înregistrează constatările Console după coordonata Maven, versiune și hash-urile JAR/POM. Păstrează constatările despre adaptor lângă modulul J1 afectat.

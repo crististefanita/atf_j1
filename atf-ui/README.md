@@ -35,8 +35,9 @@ flowchart LR
 - configurația descrie browserul și evidence-ul generic;
 - sesiunea compune browser, context și page, apoi înregistrează acțiuni;
 - atf-ui livrează payload-ul către consumer, nu decide verdictul și nu construiește HTML/CSS/Extent;
-- publisherul HTML aparține Reporting; `UiScreenAudit` deține observația generică
-  a ecranului în UI, iar probele browser ale artifactului aparțin Reporting Tests;
+- publisherul HTML aparține bibliotecii Reporting selectate; `UiScreenAudit`
+  deține observația generică a ecranului în UI, iar testele locale ale consumerului
+  verifică artifactele publicate de scenariile lor;
 - scenariul concret și verdictul business rămân la consumer.
 Etichetele scurte păstrează următorul sens:
 
@@ -65,14 +66,14 @@ Etichetele scurte păstrează următorul sens:
 |---|---|
 | browser, context, page, viewport, timeout | `atf-ui` |
 | acțiuni Playwright primitive și recorder neutru | `atf-ui` |
-| page objects, flows și testele declarative | modulul consumer; `atf-reporting-tests` pentru propriul audit al rapoartelor |
-| snapshot contract și validatori de browser | `atf-reporting` production + `atf-reporting-tests` test scope |
+| page objects, flows și teste declarative | modulele consumatoare Shop sau AutoEx |
+| contractul Reporting selectat și ieșirea randată | ghidul bibliotecii; testele consumatorilor verifică integrarea locală |
 | HTML, CSS, Extent lifecycle și publisher | `atf-reporting` |
-| mock, API scenarios și contract validation | `atf-reporting-tests` test scope + modulele API |
+| scenarii API cu mock și contracte ale aplicației | testele consumatorilor Shop sau AutoEx |
 
 `atf-ui` nu importă executorul de audit și publisherul de secțiune: validarea
 statică și proiecția raportului aparțin `atf-reporting`, iar scenariile E2E sunt
-în [README-ul auditului browser](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md).
+în [README-ul auditului browser](../docs/ATF_Reporting_Library_Atlas.md).
 Modulul UI nu publică Extent și nu emite assertions de secțiune.
 
 ## Traseul de integrare
@@ -127,10 +128,10 @@ consumerul compune politicile generice și publică artifactul prin
 
 `atf-ui` expune doar valori care descriu execuția browserului și capturarea
 generică. Nu este owner pentru `report.directory`, `apiSetup`, `audit` sau
-`filePrefix`; aceste valori sunt destinate exclusiv testelor și aparțin configurației interne a
-modulului `atf-reporting`:
+`filePrefix`; aceste setări sunt selectate de consumer și consumate de
+biblioteca Reporting. `atf-ui` nu le citește:
 
-[`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../../atf_j0/atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
+[`Contractul bibliotecii Reporting`](../docs/ATF_Reporting_Library_Atlas.md)
 
 ```yaml
 ui:
@@ -158,10 +159,10 @@ ui:
 - `viewport.width` și `viewport.height` exprimă dimensiunea cerută a capturii;
   viewport-ul CSS efectiv se calculează separat;
 - valoarea este validată în intervalul `25..200`, iar lipsa cheii păstrează `100`;
-- YAML-ul auditului Extent, override-urile `-Datf.ui.config`/`-Datf.ui.report`
-  și rezoluția raportului inspectat aparțin harness-ului din
-  `atf-reporting-tests`, nu bibliotecii `atf-reporting` sau adaptorului `atf-ui`.
-  Fiecare consumer deține separat configurația aplicației sale.
+- configurația raportului Extent, override-urile de raport și alegerea
+  artifactului inspectat aparțin compoziției locale a consumerului, nu
+  adaptorului generic `atf-ui`. Fiecare consumer deține separat configurația
+  aplicației sale.
 
 ### Geometria nativă a contextului
 
@@ -273,8 +274,9 @@ flowchart LR
 ## Acțiuni și locatori
 
 `atf-ui` poate executa o operație pe un `AtfLocator`, dar nu decide selectorul
-și nu știe intenția business. Locator facade-urile sunt în `atf-reporting-tests`
-test scope:
+și nu știe intenția business. Locatorii, page object-urile și intenția business
+aparțin consumerului; `atf-ui` furnizează operațiile generice pentru browser și
+locator:
 
 Vocabularul DOM reutilizabil este însă deținut aici, aproape de runtime-ul UI:
 
@@ -741,7 +743,7 @@ cauzele identice/distincte și callback-urile reținute.
 ## Inspectorul de rețea — limită generică de responsabilitate
 
 Fluxul cross-module și baseline-ul setup/causal au un singur owner în
-[diagrama arhitecturii](../docs/ATF_Architecture.md#capturarea-și-selecția-traficului-ui).
+[diagrama arhitecturii](../docs/ATF_Architecture.md#ui-traffic-capture-and-selection).
 
 `UiNetworkInspector` este opt-in și restrâns la host-urile configurate:
 
@@ -927,20 +929,16 @@ consumerului și nu schimbă politica generică fail-closed.
 ## Ce nu se pune în `atf-ui`
 
 - teste JUnit sau colecții API;
-- `UiConfiguration`, `UiAuditSuiteConfiguration`, loaderul YAML și contextul
-  pentru `atf.ui.config`/`atf.ui.report` — sunt configurație de test a
-  raportării și stau în `atf-reporting-tests/src/test/java/.../support/config`;
-- `SectionAuditCheckExecutor`, `SectionAuditCheckPolicy` sau
-  `ExtentSectionAuditPublisher`;
-- `ReportProjection`, reguli pentru Tests/Fails/Categories sau contractul static HTML;
+- configurația specifică a raportului, setup-ul API și compoziția auditului;
+- locatorii, fixture-urile și așteptările business specifice aplicației;
 - HTML/CSS/Extent nodes sau finalizarea artifactului;
 - page objects, selectorii produsului și flows de business;
 - fallback la un artifact arbitrar sau modificarea inputului API.
 
-Aceste limite sunt intenționate: `atf-ui` rămâne reutilizabil și testabil ca
-runtime Playwright, `atf-reporting` rămâne reutilizabil ca librărie de raportare,
-iar `atf-reporting-tests` deține compoziția testelor librăriei, de la componentă
-și integration până la E2E și adaptoarele browser.
+Aceste limite sunt intenționate: `atf-ui` furnizează adaptorul local Playwright,
+iar biblioteca Reporting versionată furnizează publicarea rapoartelor.
+Practice Shop și AutoEx păstrează scenariile, adaptoarele și verificările
+rapoartelor în modulele lor J1.
 
 ## Verificare
 
@@ -950,11 +948,10 @@ Teste runtime/config:
 mvn -pl atf-ui -am test
 ```
 
-Testele de raport UI se rulează din composition module-ul
-`atf-reporting-tests`, de exemplu:
+Rulează verificarea locală de componentă care publică raport, de exemplu:
 
 ```text
-mvn -pl atf-reporting-tests -am -Dtest=SelectedApiTestsReportUiTest test
+mvn -pl atf-test-auto-ex -am -Dtest=AutoExE2eOverviewNarrativeComponentTest -Dsurefire.failIfNoSpecifiedTests=false test
 ```
 
 Build și audit:

@@ -85,7 +85,7 @@ rendererului.
 |---|---|
 | Rădăcina TMP deținută | ATF_LIVE_SCREEN_AUDIT_ACTIVE_DO_NOT_CLEAN_85211735 |
 | Baza capturată J1 | f2aaa41e1f0939b93ccdab509492f862c09d18cc; lucrul local existent este păstrat |
-| Baza documentației J0 | 6bef40515954acd121c93a66e1bf544db14e97b5 |
+| Baza documentației biblioteca consumată | 6bef40515954acd121c93a66e1bf544db14e97b5 |
 | Rulări individuale | live-autoex-individual-atf_j1.log și live-shop-individual-atf_j1.log; XML-urile Surefire sunt păstrate |
 | Rulări din suite canonice | suite-autoex.log, suite-shop.log și recipisele JSON pentru discovery/metrici |
 | Verificare browser | render-audit.log, render-captures/audit.json și capturile PNG inspectate |

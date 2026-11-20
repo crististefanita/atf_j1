@@ -43,10 +43,12 @@ Regula de economie:
 
 ## Stilul intern ATF — uniformitate fără fonturi locale
 
-Uniformitatea README-urilor se obține prin Markdown semantic, nu prin CSS sau
-fonturi injectate în fiecare document:
+Markdownul semantic guvernează prezentarea paginii. Nu injecta fonturi sau CSS
+la nivelul paginii. Blocurile Mermaid pot folosi opțiunile native de temă ale
+motorului atunci când îmbunătățesc vizibil lizibilitatea etichetelor:
 
 - fontul, dimensiunea și culoarea aparțin rendererului Markdown;
+- opțiunile tematice Mermaid rămân în blocul diagramei și nu stilizează pagina;
 - README-urile folosesc un singur `#`, secțiuni `##`, subsections progresive și
   bullets `-` pentru scanare rapidă;
 - fiecare bloc de cod sau schemă are fence tipizat: `mermaid`, `text`, `java`,
@@ -465,6 +467,20 @@ să conțină contractele interne ale tuturor modulelor.
 - feedback: gap-uri dinamice și criterii de închidere;
 - artifacte generate: evidence temporară, niciodată navigație normativă.
 
+Pentru pagina principală a proiectului:
+
+- Primul ecran numește produsul, modulele și ownership-ul local. Nu introduce
+  workspace-uri surori și nu face din proveniența bibliotecilor partajate
+  subiectul paginii.
+- Tabelul modulelor urmează POM-ul rădăcină; este suficientă o singură diagramă
+  locală a fluxului dovezilor. Boundary-urile dependențelor trimit la ownerul
+  arhitecturii.
+- Dacă artefactele binare au nevoie de index, adaugă o singură notă scurtă la
+  final cu link către lib/README.md; versiunile și detaliile acceptanței rămân
+  în catalog și documentele ownerilor.
+- Păstrează notele, rulările datate și numărul testelor în evidența review-ului
+  sau în feedback, nu în README-ul root normativ.
+
 Linkurile din root trebuie să răspundă natural la „unde aprofundez?” și să nu
 introducă o a doua versiune a aceleiași hărți. O referință bună are o etichetă
 semantică și o întrebare clară, nu doar un path.
@@ -575,6 +591,7 @@ datate, istorice de rulări sau artifacte locale.
 | Dimensiune | Probă nativă | Ce mai cere review manual |
 |---|---|---|
 | Structură | [structura README-ului](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationReadmeStructureGovernanceTest.java) | primul ecran și traseul cititorului |
+| Perimetrul root-ului | [guvernanța README-ului principal](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java) | încadrare local-first și nota finală cu indexul bibliotecilor |
 | Linkuri și fragmente | [toate documentele guvernate](../atf-tests/src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java) și [probe negative](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) | sensul etichetei și afirmația de lângă link |
 | Stil și proză | [style](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationStyleGovernanceTest.java) și [prose](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationProseGovernanceTest.java) | formularea exactă, densitatea utilă și primul ecran |
 | Diagrame și legende | [diagram governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java) | randare, geometrie și păstrarea sensului |

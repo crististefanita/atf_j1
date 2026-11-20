@@ -25,7 +25,7 @@ rădăcină și în `docs/ATF_Architecture.md`.
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Core["Core JAR"] -->|alimentează| Validation["Validation"]
-    Tests["Reporting tests"] -. fixtures .-> Validation
+    Tests["Teste locale ale modulului"] -. fixture-uri .-> Validation
     Validation -->|calculează| Decision["Verdict typed"]
     Decision -->|publică| Sink["Sink"]
     Sink -->|adaptează| Adapter["Adaptor"]
@@ -45,7 +45,7 @@ Etichetele scurte păstrează următorul sens:
 | În schemă | Sens complet |
 |---|---|
 | Core | core models |
-| Reporting tests | reporting tests |
+| Teste de modul | teste unitare și componente atf-validation |
 | Verdict typed | typed decision |
 | Sink | validation sink |
 | Adaptor | consumer adapter |
@@ -63,8 +63,9 @@ Direcția este intenționată:
 - consumerul mapează decizia către portul reporting folosit de propria compoziție;
 - `atf-reporting` deține exclusiv Extent, HTML, CSS, asset-urile și finalizarea
   artifactului, fără dependență de acest modul;
-- `atf-reporting-tests` test scope verifică modulele prin fake-uri deterministe și
-  scenarii de integrare; `atf-tests` păstrează numai guvernanța globală a reactorului.
+- testele locale J1 verifică modulul de validare prin fake-uri deterministe;
+  `atf-tests` acoperă guvernanța întregului reactor fără să preia
+  comportamentul aplicațiilor.
 
 ## Alege forma validării
 
@@ -270,8 +271,8 @@ Testele modulului protejează separat:
 
 Testele sunt ratchet tests: când un contract eșuează, se repară
 implementarea, nu se relaxează assertion-ul pentru a face build-ul verde.
-Validarea vizuală a artifactului rămâne responsabilitatea suitei din
-`atf-reporting-tests`; verificarea manuală finală folosește ATF Debug/TAB MCP.
+Acceptanța vizuală a raportului consumerului aparține testului local care îl
+publică; verificarea manuală finală folosește ATF Debug/TAB MCP.
 
 ## Comparatorul AI — contract implementat
 

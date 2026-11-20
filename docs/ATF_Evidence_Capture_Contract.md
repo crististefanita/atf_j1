@@ -82,8 +82,9 @@ asserțiile ori verdictul.
 - **existent**: `atf-reporting` deține `ReportScreenshotPolicy`, modelul screenshot,
   session lifecycle și publication sink;
 - **existent**: `atf-ui` poate furniza captură PNG Base64 și acțiuni neutre;
-- **existent**: `atf-reporting-tests` are fixture-uri PNG deterministe și verifică
-  policy-ul fără browser;
+- **existent**: Practice Shop și AutoEx rulează verificări locale de componentă/UI
+  pentru dovezile publicate de scenariile lor; acestea nu certifică fiecare
+  comportament intern al bibliotecii;
 - **existent**: `ReportEvidenceProfile` compune typed `ReportEvidenceFlowMode`,
   `ReportScreenshotPolicy`, `ReportEvidenceCaptureSource` și
   `ReportUiActionDetailsMode`; mapping-ul se poate face prin `fromConfig(...)` sau
@@ -131,7 +132,7 @@ flowchart LR
     Adapter -->|implementează| Capture["Captură typed"]
     Ledger -->|alimentează| Reporting["Reporting"]
     Capture -->|alimentează| Reporting
-    ReportingTests["Reporting tests"] -. dovedește .-> Reporting
+    ConsumerChecks["Verificări consumer J1"] -. verifică integrarea locală .-> Reporting
     PracticeShop["Shop"] -. folosește .-> TestKit
 ```
 
@@ -143,7 +144,8 @@ flowchart LR
 - `atf-ui` execută operațiile browserului; adapterul consumerului implementează
   `ReportEvidenceCaptureProvider` și întoarce payload neutru;
 - `atf-reporting` normalizează și publică evidence-ul primit;
-- `atf-reporting-tests` validează biblioteca prin fixture-uri, nu devine production;
+- Practice Shop și AutoEx verifică integrările locale de raportare pe care le
+  exercită; aceste verificări consumer nu înlocuiesc contractul bibliotecii selectate;
 - Practice Shop demonstrează consumul, dar nu deține contractul transversal;
 - niciun publisher nu trebuie să importe un page object sau un endpoint de aplicație.
 
@@ -158,7 +160,7 @@ Etichetele scurte păstrează următorul sens:
 | Ledger | evidence ledger |
 | Captură typed | typed capture payload |
 | Reporting | atf-reporting · flow grouping + model + publication |
-| Reporting tests | atf-reporting-tests · fixtures + component/integration |
+| Verificări consumer J1 | scenarii Shop/AutoEx · integrarea bibliotecii selectate |
 | Shop | Practice Shop · consumer mapping |
 | implementează | implementează providerul |
 
@@ -271,8 +273,8 @@ nu demonstrează singur că fiecare adaptor selectează dovada potrivită.
 |---|---|
 | care este contractul transversal al capturii? | acest document |
 | cum publică reporting-ul policy-ul și HTML-ul? | [atlasul Reporting JAR](ATF_Reporting_Library_Atlas.md) |
-| cum se testează biblioteca fără browser? | [`atf-reporting-tests/README.md`](../../atf_j0/atf-reporting-tests/README.md) |
-| cum se auditează artifactul în browser? | [`atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md`](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md) |
+| Cum verifică J1 un contract de bibliotecă fără browser? | teste locale de componentă și guvernanța integrității artefactului |
+| Cum inspectează J1 un raport în browser? | test local al consumatorului și fluxul ATF Debug/Playwright |
 | cum furnizează browserul un payload neutru? | [`atf-ui/README.md`](../atf-ui/README.md) |
 | cum mapează un consumer propriul YAML și flow? | README-ul consumerului |
 | ce mai lipsește și cum se închide? | [`feedback/README.md`](feedback/README.md) și feedback-ul ownerului |

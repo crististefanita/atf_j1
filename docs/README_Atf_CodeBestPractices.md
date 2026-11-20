@@ -70,20 +70,19 @@ Etichetele scurte păstrează următorul sens:
 
 | Zonă | Responsabilitate | Nu deține |
 |---|---|---|
-| `atf-core` | contracte runtime neutre și utilități reutilizabile | Extent, browser, fixture business, lifecycle de test |
-| `atf-test-kit` | clasificare/adnotări de test și cleanup test-only failure-aware; alte primitive numai după probe | Playwright, browser lifecycle, Extent, profile sau flow-uri de consumer |
-| `atf-reporting` | modele, renderer, asset-uri și contracte reporting standalone | mock, browser și aplicație consumatoare |
-| `atf-mock` | transport/fixture determinist | reguli de randare |
-| `atf-ui` | Playwright și politici browser generice | configurarea concretă a raportului |
-| `atf-reporting-tests` | consumer, composition root și fixture-uri de reporting | producție reutilizabilă |
-| `atf-tests` | governance whole-reactor | teste de produs sau fixture-uri concrete |
+| Biblioteci selectate în `lib` | API-uri versionate Core, Reporting, Console, Mock și Test Kit | scenarii consumer J1 sau așteptări business |
+| `atf-validation` | contracte de răspuns, reguli de validare și publicarea verdictului local | randarea raportului sau rutele aplicației |
+| `atf-ui` | adaptor Playwright comun și politici browser | locatori de produs, configurarea raportului sau flow business |
+| `atf-debug-ui` | inspecție read-only locală a HTML-ului generat | generarea raportului sau comportamentul aplicației |
+| `atf-test-practice-shop` | configurare Shop, adaptoare și teste de aplicație | implementarea generică browser sau renderer |
+| `atf-test-auto-ex` | configurare AutoEx, adaptoare și teste de aplicație | implementarea generică browser sau renderer |
+| `atf-tests` | guvernanța reactorului, artifactelor și documentației locale | flow-uri business Shop/AutoEx |
 
 ```text
-consumer test
-  → atf-core ports/policies
-  → API/mock/UI adapters
-  → atf-reporting
-  → HTML/Extent artifact
+test Shop sau AutoEx
+  → așteptare business și adaptor consumer local
+  → API-uri din bibliotecile Core / Console / Reporting selectate
+  → artifact HTML Extent pentru scenariul local
 ```
 
 `atf-reporting` trebuie să poată fi compilat și consumat independent. Orice
@@ -583,6 +582,9 @@ Checklist obligatoriu pentru un modul de test:
 | Amplasarea responsabilităților | [ArchitectureOwnershipBoundaryTest](../atf-tests/src/test/java/atf/api/tests/governance/ArchitectureOwnershipBoundaryTest.java) | excepțiile sunt explicite; verdictul business rămâne la consumer |
 | Coeziunea pachetelor | [AtfPackageCohesionGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfPackageCohesionGovernanceTest.java) | limita de inventar nu justifică împărțirea mecanică a unei clase |
 | Layer și surse Java | [AtfTestLayerArchitectureTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java) | include rădăcinile din POM; nu demonstrează acoperirea funcțională |
+| Constante și lizibilitatea sursei | [ConstantsOwnershipGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/ConstantsOwnershipGovernanceTest.java) și [AtfSourceReadabilityGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfSourceReadabilityGovernanceTest.java) | protejează ownership-ul semantic și apelurile lizibile, nu fiecare alegere de naming |
+| Sursa consumerilor și acoperirea suitelor | [ConsumerModuleArchitectureGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java) și [ConsumerSuiteCoverageGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/ConsumerSuiteCoverageGovernanceTest.java) | guvernează boundary-urile sursei și selecția declarată, nu completitudinea business |
+| Înrolarea gate-urilor de cod | [CodeGovernanceSuiteCoverageTest](../atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java) | verifică dacă suita reactorului păstrează gate-urile de cod obligatorii |
 
 [Comanda whole-ATF](../atf-tests/README.md#verificare-rapidă) rulează în staging.
 Testele unit/component ale ownerului verifică comportamentul schimbat;

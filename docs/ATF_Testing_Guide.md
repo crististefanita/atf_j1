@@ -1,14 +1,15 @@
 # Ghid de testare ATF — straturi, responsabilități și dovezi
 
-**Perimetru J1:** Reporting este JAR extern. Comenzile care țintesc
-`atf-reporting/pom.xml`, resursele native sau auditul sursei se execută în
-staging-ul producătorului `atf_j0`; [ghidul J1](ATF_Reporting_Consumer.md) separă gate-urile și ownership-ul.
+**Domeniu J1:** Reporting este consumat prin perechea JAR/POM versionată
+selectată. Ghidul acoperă testele din modulele J1 locale și dovezile de
+consumator produse de acestea. [Ghidul consumatorului Reporting](ATF_Reporting_Consumer.md)
+explică selectarea artefactului și limitele acceptanței locale.
 
 ## Pe scurt
 
-Defectele Reporting observate în consumeri primesc [regresie permanentă](../../atf_j0/atf-reporting-tests/README.md#regresia-permanentă-a-fiecărui-defect-reporting)
-la producător, cu mock/contract și browser după boundary-ul afectat. Fiecare
-JAR candidat trece gate-ul extern în TMP; harness-ul nu este modul în J1.
+Alege ownerul comportamentului, apoi cel mai jos nivel de test care îl poate dovedi.
+J1 verifică identitatea artifactului selectat și integrările exercitate de consumatorii
+locali; acest ghid nu afirmă că rulează suita independentă a bibliotecii.
 
 Ghidul explică unde aparține un test, cum alegem cel mai mic nivel care poate
 dovedi comportamentul și cum trecem de la o verificare locală la proof de
@@ -78,11 +79,11 @@ API-ul implementat pentru canale, output, setup și documentație este în
 
 În AutoEx și Shop, componentele folosesc markerul consumerului și publică
 verificările evaluate în pasul standard `Component assertions`. Testele unit
-nu au această obligație; probele rendererului rămân o categorie separată în Reporting Tests.
+nu dețin randarea raportului; biblioteca Reporting selectată o furnizează.
 
 - `AuditedAssertions` și `RecordedAssertions` păstrează evaluarea JUnit unică;
   politica de rezultat, fazele și plafonul implicit de 240 de caractere sunt la
-  [Test Kit](../lib/README.TestKit.md#scope-și-integrare).
+  [Test Kit](../lib/README.TestKit.md#scope-and-integration).
 - Bugetul configurat se propagă din ownerul raportului în colector, inclusiv
   peste implicit; `Overview → System` arată valoarea efectivă. Probele consumerilor
   verifică lansarea individuală și prin suită, iar contractul comun este la
@@ -101,8 +102,8 @@ nu au această obligație; probele rendererului rămân o categorie separată î
   familia excepției. Pregătirea fixture-ului precede bugetul acțiunii;
   contorul DOM sincron numără activările native fără o confirmare RPC asincronă.
 - Lansarea individuală și suita folosesc același adaptor al aplicației;
-  validările Extent/fallback și interacțiunea disclosure-ului sunt probate la
-  [Reporting Tests](../../atf_j0/atf-reporting-tests/README.md).
+  validările Extent/fallback și interacțiunea disclosure-ului sunt descrise în
+  [ghidul consumerului Reporting](./ATF_Reporting_Consumer.md).
 
 Sesiunea comună aparține clasei sau suitei declarate; scenariul, comparațiile
 și timing-ul măsurat rămân per invocare. Publicarea finală și notificarea căii
@@ -111,7 +112,7 @@ urmează închiderea ownerului, după existența artifactului.
 | Contract verificat | Owner al probei | Probă de regresie |
 |---|---|---|
 | Resursă și audit izolat | Kit | `ScopedTestResourceTest`, `ScopedComponentAuditExtensionComponentTest` |
-| Scenariu împrumutat și close unic | Reporting Tests | `AssertionAuditRunComponentTest` |
+| Lifecycle și scope pentru raportul componentei | Shop/AutoEx | `ShopComponentReportScopeComponentTest`, `AutoExComponentReportScopeComponentTest` |
 | Metodă/clasă/suită și lansări repetate | Consumer | `AutoExComponentReportScopeComponentTest`, `ShopComponentReportScopeComponentTest` |
 | Selectori executabili și comentarii excluse | Core + ATF Tests | `AtfJavaSourceReferencesTest`, `ConsumerSuiteCoverageGovernanceTest` |
 
@@ -186,18 +187,18 @@ Celulele arată doar nivelurile care există în suitele executabile curente.
 
 | Modul | Unitate | Componentă | Integrare | E2E | Responsabil și scop principal |
 |---|:---:|:---:|:---:|:---:|---|
-| [`atf-core`](../../atf_j0/atf-core/README.md) | ✅ | — | — | — | contracte neutre și politici reutilizabile |
+| Biblioteca Core | — | — | — | — | contracte API consumate; testele sursei Core sunt în afara J1 |
 | [`atf-validation`](../atf-validation/README.md) | ✅ | ✅ | — | — | reguli de validare și rezultate tipizate |
-| [`atf-console`](../../atf_j0/atf-console/README.md) | ✅ | — | ✅ | — | politici/formatări unitare; integrarea extensiei cu Jupiter real |
-| [`atf-mock`](../../atf_j0/atf-mock/README.md) | — | ✅ | — | — | transport simulat și comportament determinist |
+| Biblioteca Console | — | — | — | — | ieșire diagnostică structurată, consumată de modulele locale |
+| Biblioteca Mock | — | — | — | — | transport fals determinist folosit de testele locale |
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | politici și adaptor Playwright generic |
 | [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și lansator pentru inspecție fără scriere |
-| [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | excepție: suită autonomă fără adnotări sau dependențe ATF |
-| [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | compoziție și probă pentru biblioteca Reporting |
+| Biblioteca Reporting selectată | — | — | — | — | dependență binară versionată; testele sursei sunt în afara acestui reactor |
+| Dovezi J1 pentru consumul Reporting | — | ✅ | ✅ | ✅ | adaptoare, scenarii și comportamentul raportului randat local |
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumator: contracte, API, fluxuri și parcurs în browser |
 | [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumator: parcurs de achiziție în profiluri UI distincte, probe componentă și API live cu opt-in |
 | [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | limită și guvernanța întregului reactor |
-| [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | ✅ | ✅ | — | — | vocabularul straturilor și contractele numai pentru teste |
+| Biblioteca Test Kit | — | — | — | — | adnotări de nivel și suport de testare consumate de suitele locale |
 
 Guard-ul reflectă ownerii fără a falsifica structura reactorului:
 
@@ -221,19 +222,21 @@ invariantul, nu fixture-ul și nici testul întreg:
 
 | Ce afirmă testul | Responsabil | Ce rămâne local la consumator |
 |---|---|---|
-| regulile aplicației, traseele UI/API, payload-ul și propagarea datelor | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#limita-dintre-testele-shop-și-testele-reporting) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suite-și-variante-de-evidence) | toate probele business, inclusiv cele cu mock; mock-ul izolează transportul, nu schimbă owner-ul |
+| regulile aplicației, traseele UI/API, payload-ul și propagarea datelor | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#limita-dintre-testele-shop-și-biblioteca-reporting) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suite-și-variante-de-evidence) | toate probele business, inclusiv cele cu mock; mock-ul izolează transportul, nu schimbă owner-ul |
 | traducerea contractului aplicației în portul public Reporting | consumerul care deține adaptorul | intenția/titlul business, asocierea așteptării la exchange, statusul specific și politica locală de redactare |
-| semantica generică a modelului, lifecycle-ului, publisherului, markup-ului, tabelelor, disclosure-urilor, CSS/JS ori browserului raportului | [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (sau testele standalone ale `atf-reporting`, după boundary) | probe neutre, fără dependență de Shop/AutoEx |
-| API-uri și cicluri de viață reutilizabile, exclusiv pentru teste: adnotări, rezolvoare, clasificare și primitive generice | [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare) | aplicația păstrează fixture-ul, ciclul de viață și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste de raportare |
+| contractul Reporting generic descris de biblioteca selectată | ghidul descrie contractul public; J1 verifică numai integrările locale ale consumatorilor | scenariile și adaptoarele rămân la Shop sau AutoEx |
+| API-uri și cicluri de viață reutilizabile, exclusiv pentru teste: adnotări, rezolvoare, clasificare și primitive generice | [`atf-test-kit`](../lib/README.TestKit.md#scope-and-integration) | aplicația păstrează fixture-ul, ciclul de viață și adaptarea de business; Kit-ul nu preia aserțiuni business sau teste de raportare |
 
-O probă poate rămâne consumer-owned chiar dacă publică un artifact: trebuie să
-verifice exclusiv contractul adaptorului aplicației și să folosească snapshot-ul
-semantic sau rezultatul typed pentru acea mapare. Structura DOM/HTML, CSS,
-formatul disclosures, retry rendering și alte invariants independente se testează
-o singură dată, cu fixture generică, la ownerul Reporting. Test Kit nu este un
-loc general de mutare a testelor: nu depinde de Reporting, Playwright sau codul
-consumerilor; candidatele se promovează numai dacă sunt primitive de infrastructură
-neutră, nu doar pentru că sunt folosite de două aplicații.
+O probă poate rămâne deținută de consumator chiar și când publică un artefact și
+verifică contractul adaptorului local:
+
+- Folosește un snapshot semantic sau un rezultat tipizat pentru a verifica
+  maparea.
+- Ghidul bibliotecii selectate descrie contractele HTML, CSS, disclosure și
+  Extent. Testele J1 verifică doar integrarea locală și output-ul generat.
+- Test Kit rămâne limitat la infrastructura neutră de testare. Nu depinde de
+  Reporting, Playwright sau codul consumerilor; promovează primitive doar când
+  pot fi reutilizate fără aceste dependențe.
 
 ### Proba fiecărui owner de resurse
 
@@ -406,18 +409,18 @@ un `Object` care ascunde aceleași dependențe.
   fișierele rămase de la o selecție anterioară nu intră în inventarul curent.
 - `ShopComponentSuite` include intenționat și pachete unit/support;
   `AutoExComponentSuite` selectează pachetul component;
-  `AtfReportingComponentSuite` cere tag-ul `component` și exclude clasele Suite.
 - Probele unit/integration mutate rămân verificate separat la owner, inclusiv
   Test Kit; absența lor din component suite este corectă numai cu dovadă de
   execuție în layer-ul declarat.
 - Nu compensați un test pierdut printr-un test nou fără legătură; comparați
   cazurile dispărute și echivalența invariantului înainte de ștergerea copiei.
 
-Gate-ul comun se rulează în staging extern, fără trafic business live:
+Rulează gate-ul comun din staging, fără trafic business live:
 
-```text
-mvn -pl atf-test-practice-shop,atf-test-auto-ex,atf-reporting-tests -am "-Dtest=ShopComponentSuite,AutoExComponentSuite,AtfReportingComponentSuite" "-Dsurefire.failIfNoSpecifiedTests=false" test
-```
+~~~text
+mvn -pl atf-test-practice-shop,atf-test-auto-ex -am "-Dtest=ShopComponentSuite,AutoExComponentSuite" "-Dsurefire.failIfNoSpecifiedTests=false" test
+~~~
+
 
 ## Traseul UI/API și ce verifică testele
 
@@ -441,7 +444,7 @@ Nu se testează două proiecții prin duplicarea aceluiași payload. Trace-ul pe
 checkpoint deține exchange-ul canonical; inspectorul grupează numai faptele
 necesare navigării și nu înlocuiește request/response details. Pentru ownerul
 consumer, configurație și lifecycle, continuă în README-ul Practice Shop; pentru
-renderer, markup și disclosure, continuă în README-ul `atf-reporting-tests`.
+Contractul bibliotecii este descris în ghidul Reporting; verifică numai comportamentul de consum J1 exercitat de testul local selectat.
 
 ### Precondiții E2E și `SETUP`
 
@@ -498,7 +501,7 @@ SETUP
   precedent pentru un port generic în Kit. Separarea sa în porturi locale mici
   este o țintă distinctă de mutarea source-set-ului deja livrată.
 - Boundary-ul AutoEx este descris în [README-ul Automation Exercise](../atf-test-auto-ex/README.md),
-  iar regula cross-consumer în [README-ul Test Kit](../lib/README.TestKit.md#scope-și-integrare).
+  iar regula cross-consumer în [README-ul Test Kit](../lib/README.TestKit.md#scope-and-integration).
 
 Forma raportului și ownership-ul fiecărei dovezi sunt normative în
 [ATF Reporting Contract](ATF_Reporting_Contract.md#dovezile-configurării-inițiale).
@@ -559,13 +562,13 @@ variație de conținut.
 
 | Probă de regresie existentă | Limită demonstrată |
 |---|---|
-| `ExtentReportDisclosureBrowserComponentTest` | request cu dovezi proprii și validare copil; mouse/Enter/Space, ARIA și ambele corpuri; titlu UI personalizat și checkpoint fără tabel HTTP sintetic |
-| `ReportApiViewportParityComponentTest` | metadate request și retry: conținut scurt Extent, scurt/lung fallback, viewport standard/îngust, scroll local și antet sticky |
-| `ReportEvidenceStyleContractTest` | eliminarea disclosure-urilor cu stylesheet-ul păstrat este respinsă; clasele din CSS/JS nu sunt dovadă de conținut |
+| `AutoExE2eOverviewNarrativeComponentTest` | GET-ul selectat din catalog deține comparația; aserțiunile API și disclosure-ul cererii se extind în raportul Extent local |
+| `ShopApiCallAuditReportComponentTest` | asocierea locală intenție/status cu exchange-ul observat și diagnosticul auditului adaptorului |
+| `AutoExCatalogReportPresentationE2eTest` | interacțiunea browser cu artifactul de raport local controlat și navigarea lui |
 
 Aceste probe nu certifică automat toate proiecțiile sau verdictul local al
 fiecărui exchange. Matricea contractelor și probelor aparține
-[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); lacunele active rămân în
+[Ghidul consumerului Reporting](ATF_Reporting_Consumer.md); lacunele active rămân în
 [registrul feedback-urilor](feedback/README.md), separat de controalele tehnice.
 
 ## Principii pentru teste scurte și plug-and-play
@@ -585,7 +588,7 @@ fiecărui exchange. Matricea contractelor și probelor aparține
 
 Regulile detaliate despre OOP, fixtures, importuri, package cohesion și
 anti-duplication sunt în [bunele practici de cod](README_Atf_CodeBestPractices.md).
-Contractele test-only și adnotările sunt în [`atf-test-kit`](../lib/README.TestKit.md#scope-și-integrare).
+Contractele test-only și adnotările sunt în [`atf-test-kit`](../lib/README.TestKit.md#scope-and-integration).
 
 ## Rulare și dovada randată
 
@@ -593,7 +596,7 @@ Contractele test-only și adnotările sunt în [`atf-test-kit`](../lib/README.Te
 |---|---|
 | un test țintit într-un modul și dependențele sale | `mvn -pl <modul> -am "-Dtest=<ClasaTest>" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 | suitea whole-ATF | `mvn -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
-| librăria `atf-reporting` izolată — numai în staging `atf_j0` | `mvn -f atf-reporting/pom.xml test` |
+| identitatea artefactului selectat și metadatele locale | mvn -pl atf-tests -am -Dtest=PlatformLibraryIntegrityTest -Dsurefire.failIfNoSpecifiedTests=false test |
 | Practice Shop — contracte selectate | `mvn -pl atf-test-practice-shop -am "-Dtest=ShopConfigurationTest,ShopCheckoutConfigurationTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 | boundary-uri Shop/AutoEx whole-ATF | `mvn -pl atf-tests -am "-Dtest=ConsumerModuleArchitectureGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 

@@ -23,7 +23,8 @@ flowchart LR
 
 - root POM și graph-ul de module intră în gate-ul whole-reactor;
 - atf-tests verifică limitele, nu implementează flow-uri de aplicație;
-- Practice Shop și reporting composition rămân consumatori separați;
+- Practice Shop și AutoEx sunt consumatori locali de aplicații; bibliotecile
+  folosite sunt dependențe binare versionate;
 - `Checks` grupează verificările de arhitectură, scope și siguranță runtime;
 - muchia punctată arată guard-ul aplicat consumatorilor, nu ownership transferat către governance;
 - consumatorii folosesc bibliotecile prin dependințe explicite, iar governance-ul
@@ -45,7 +46,7 @@ Etichetele scurte păstrează următorul sens:
 | documentație relocabilă și surse coerente | `governance.documentation.*`, `AtfSourceReadabilityGovernanceTest` | nu validează conținutul unui singur consumer |
 | ownership de constante și coeziune de package | `ConstantsOwnershipGovernanceTest`, `AtfPackageCohesionGovernanceTest` | maximum 8 clase/pachet în producție și în source-set-urile de test ale tuturor modulelor din reactor; excepțiile trebuie să fie explicite |
 | Practice Shop purchase journey | `atf-test-practice-shop` | nu se copiază aici |
-| reporting contract/API/UI composition | `atf-reporting-tests` | nu se mută în governance |
+| Scenarii și aserțiuni de raportare ale consumatorilor Shop/AutoEx | modulele lor consumatoare | rămân la consumator |
 
 ## Alege gate-ul după schimbare
 
@@ -64,37 +65,36 @@ Pentru IntelliJ și Maven folosește același [staging cu Git real](../docs/ATF_
 Harta de [rădăcini Java](#inventarul-comun-al-surselor-java) explică layout-urile
 consumerilor înaintea oricărei mutări de teste.
 
-## Guvernanța deployment-ului sursă sau binar
+## Guvernanța artifactelor și limitelor modulelor
 
-| Deployment | Module live | Cu harness Reporting în TMP |
-|---|---:|---:|
-| J0 source canonical | 12 | inclus |
-| J1 binary consumer | 6 | 7 |
-| J2 binary consumer | 5 | 6 |
-
-Un modul declarat lipsă este eroare; profilele nu sunt deduse din directoare.
-
-`WholeAtfGovernanceSuiteTest` păstrează aceeași selecție explicită în J1 și în
-producător. [Pachetul deployment](src/test/java/atf/api/tests/governance/distribution/README.md)
-selectează dovada după declarația Maven, fără a deduce excepții din fișiere lipsă.
-
-| Regulă | Reporting sursă | Reporting binar |
+| Suprafață | Sursa locală de adevăr | Dovezi de guvernanță |
 |---|---|---|
-| reactor | POM-ul live definește inventarul modulelor | modulele J1/J2 și perechea Reporting sunt explicite în `lib`; gate-ul extern adaugă numai modulul Reporting Tests în TMP. Sursa shadow și harness-ul nedeclarat sunt refuzate. |
-| documentație | README Reporting | atlas JAR și ghidul consumerului; aceleași controale de structură/link/proză |
-| ownership | fișierul Java exact și interdicțiile de package | clasa exactă din JAR și absența duplicatelor interzise |
-| independență | importuri sursă și POM standalone | POM fără parent/dependențe ATF și referințe de bytecode prin JDK `jdeps` |
-| identitate | modul sursă local | versiune, JAR/POM, proveniență unică, POM embedded și hash-ul CodeSource-ului |
-| test layer | sursele native și adnotările lor | catalog native inclus în proveniență; fără a-l prezenta drept execuție locală a sursei |
+| Reactorul J1 | POM-ul Maven rădăcină și cele șase module declarate | verificări de module și limite ale dependențelor |
+| Biblioteci consumate | cinci perechi JAR/POM versionate în `lib` | coordonate, octeți fizici, proveniență și identitatea clasei încărcate |
+| Acceptanță Reporting | scenarii component și UI J1 selectate | structura aserțiunilor, randarea HTML și navigarea raportului |
 
-Modul șters, coordonată absentă/greșită, artifact alterat și dependență ascunsă
-au controale negative. Mutantul factual funcționează pentru 8/9/10/11/12 module;
-asta nu autorizează un reactor cu module eliminate din catalog.
+Lipsa unui modul local declarat este o eroare; profilele nu se deduc din
+directoare. Suita verifică acest reactor și nu inspectează un workspace-soră.
 
-Controlul Git folosește baza reală de review a fiecărui proiect. Sincronizarea
-surselor comune nu copiază `.git`, POM-ul reactorului, JAR-ul sau controale
-cu baza celuilalt proiect; eligibilitatea se verifică distinct.
+`WholeAtfGovernanceSuiteTest` selectează porțile locale explicite.
+[Pachetul de deployment](src/test/java/atf/api/tests/governance/distribution/README.md)
+documentează verificările artifactelor și limitele modulelor.
 
+| Regulă | Reactor local | Artifact consumat |
+|---|---|---|
+| module și dependențe | POM-ul live definește inventarul și scope-urile modulelor | coordonatele selectate se rezolvă din perechi JAR/POM plate |
+| documentație | contractele și feedback-ul modulelor locale | catalogul artifactelor corespunde proprietăților POM și numelor fișierelor fizice |
+| limita sursei | ownership-ul modulelor și restricțiile de package | fără sursă shadow sau clase duplicate interzise în JAR |
+| independență | dependențele declarate ale modulelor | POM-ul publicat și verificările bytecode cu JDK `jdeps` |
+| identitate | modul Maven și clasa încărcată | versiune, JAR/POM, hash-uri în proveniență, POM încorporat și CodeSource |
+| dovezi de verificare | testele J1 selectate | catalogul inputurilor pachetului rămâne în proveniență; nu afirmă că testele native au rulat în J1 |
+
+Modul șters, coordonată lipsă, artifact alterat și dependență ascunsă au
+controale negative. Mutanții documentației schimbă doar afirmația documentată,
+păstrând POM-ul și fișierele intacte.
+
+Guvernanța schimbărilor de test folosește baza de review a acestui checkout.
+Nu compară și nu cere un workspace alăturat.
 ## Suita whole-ATF și reziduul de compatibilitate
 
 [`ReportUiActionAdapters`](src/test/java/atf/ui/tests/support/reporting/ReportUiActionAdapters.java)
@@ -120,6 +120,7 @@ src/test/java/atf/api/tests/governance/
 │   ├── structure/    ierarhia README-urilor și blocurile colapsabile
 │   ├── factual/      probe POM, workspace și configurație de consumer
 │   ├── links/        indexul heading-urilor Markdown și al ancorelor HTML
+│   ├── relationship/ limita relațiilor directe din documentația J1
 │   ├── DocumentationDiagramGovernanceTest.java
 │   ├── DocumentationProseGovernanceTest.java
 │   ├── DocumentationAnchorGovernanceTest.java
@@ -137,8 +138,8 @@ listelor/tabelelor/diagramelor, destinațiile linkurilor și paritatea fișierel
 non-Markdown. Testul Node.js este `tools/documentation-editions.test.mjs`.
 
 `WholeAtfGovernanceSuiteTest` este entry point-ul explicit pentru verificarea
-întregului reactor. El grupează verificările fără să mute responsabilitatea
-testelor de reporting în acest modul:
+întregului reactor. El grupează verificările reactorului și documentației, iar
+fiecare consumer păstrează responsabilitatea scenariilor proprii:
 
 - `ArchitectureModuleBoundaryTest` — reactor, POM, direcția dependențelor,
   importuri interzise, output de proces, stare statică și eliminarea
@@ -146,16 +147,16 @@ testelor de reporting în acest modul:
 - `ArchitectureOwnershipBoundaryTest` — placement-ul modulelor, package roots,
   ownership-ul reporting/UI și absența duplicărilor;
 - `AtfPackageCohesionGovernanceTest` — coeziunea package-urilor de producție
-  guvernate și a source-set-urilor de test din fiecare modul al reactorului,
-  inclusiv `atf-test-practice-shop`, `atf-test-kit` și `atf-reporting-tests`;
+  guvernate și a source-set-urilor de test din cele șase module declarate în
+  root POM;
   pragul este de maximum opt clase, iar diagnosticul identifică modulul,
   package-ul și clasele concrete pentru orice hotspot nou sau excepție stale;
-- `AtfSourceReadabilityGovernanceTest` — importuri duplicate în sursele Maven main/test și invocații ATF complet calificate în reporting tests; comentariile și literalii sunt excluși lexical;
+- `AtfSourceReadabilityGovernanceTest` — importuri duplicate în sursele Maven main/test și invocații ATF complet calificate în testele locale care folosesc Reporting; comentariile și literalii sunt excluși lexical;
 - `layers.AtfTestLayerArchitectureTest` — inventariază rădăcinile `sourceDirectory` și `testSourceDirectory` din POM (cu default Maven), apoi verifică nivelul fiecărei clase executabile; fixture-urile imbricate nu schimbă nivelul clasei exterioare;
 - `layers.ConsumerSuiteCoverageGovernanceTest` — exact trei suite principale per consumer, fără clase omise, selecții suprapuse sau amestec local/E2E/API live; citește declarația ownerului și selectorii executabili, fără comentarii ori fixture-uri nested promovate la gate. Probează și scope-ul explicit al rapoartelor componentelor;
 - `consumers.ConsumerModuleArchitectureGovernanceTest` și `ConsumerAuditSourceGraphTest` — resolver comun de adnotări pentru audit/layer, alias-uri, moștenire și helperi importați; comentariile, literalii și fixture-urile nested nu exclud ownerul executabil. Analiza sursei nu înlocuiește proba launcher/raport;
 - `ConstantsOwnershipGovernanceTest` — vocabularul de protocol, rute și
-  boundary-ul reporting standalone;
+  limita binară a bibliotecii selectate;
 - `governance.documentation.DynamicPathDocumentationArchitectureTest` — documentație
   relocabilă, fără căi de mașină sau nume de artifact generate concret;
 - `governance.documentation.structure.DocumentationReadmeStructureGovernanceTest` — un titlu,
@@ -165,6 +166,10 @@ testelor de reporting în acest modul:
 - `governance.documentation.language.DocumentationLanguageGovernanceTest` — verifică limba
   prozei Markdown vizibile și a etichetelor Mermaid pentru toate documentele,
   păstrând identificatorii, comenzile și exemplele de cod;
+- `governance.documentation.relationship.DocumentationDirectRelationshipGovernanceTest` —
+  verifică toate liniile Markdown curente J1, inclusiv exemplele delimitate prin
+  fence, și `AGENTS.md` pentru referințe în afara relației directe J1–biblioteca consumată; doar
+  baseline-ul istoric al controalelor este exclus și își păstrează identificatorii;
 - `governance.documentation.DocumentationStyleGovernanceTest` — stil semantic ATF:
   fence-uri tipizate, headings fără salturi, bullets `-` și fără font/CSS/HTML
   prezentational în README-uri și în documentul arhitectural canonic;
@@ -195,8 +200,8 @@ unui feedback direct care modifică regula, ownerul, criteriul sau dovada cerut�
 Pentru o verificare punctuală, se schimbă doar valoarea adnotării:
 
 ```java
-@DocumentationTarget("atf-reporting/README.md")
-class ReportingReadmeGovernanceTest {
+@DocumentationTarget("atf-test-practice-shop/README.md")
+class ConsumerReadmeGovernanceTest {
 }
 ```
 
@@ -208,8 +213,9 @@ Declarația repeatable `DocumentationTarget` aparține
 [Contractul adnotărilor](../docs/ATF_Test_Infrastructure_Annotations.md) explică
 ownership-ul și limitele de compoziție.
 
-Astfel, `atf-reporting-tests` nu mai deține verificări care inspectează întregul
-repository; păstrează doar boundary-ul API/UI propriu compoziției reporting.
+Suita verifică regulile reactorului local și artifactele bibliotecilor
+consumate. Nu înlocuiește testele consumerilor pentru comportamentul aplicației
+sau ieșirea rapoartelor generate.
 
 <details>
 <summary><strong>Ținta de curățare urmărită în feedback</strong></summary>
@@ -253,7 +259,7 @@ flowchart LR
 - O rădăcină goală, ieșită din modul, nesigură sau cu expresie Maven nerezolvată produce diagnostic.
 - Inventarul citește căile literale din POM; nu înlocuiește effective POM,
   moștenirea ori activarea profilelor Maven. Comentariile XML nu declară rădăcini.
-- Guard-ul expresiilor rămâne limitat la reporting tests și păstrează cele
+- Guard-ul expresiilor rămâne limitat la testele locale care folosesc Reporting și păstrează cele
   trei adaptoare revizuite. Detectează namespace-urile ATF actuale și legacy,
   constructori și apeluri pe mai multe linii, fără exemplele din comentarii/literale.
 
@@ -311,13 +317,11 @@ Ambele intră în suita whole-ATF; `@DocumentationTarget` aplică aceeași verif
 
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compară modulele și scope-ul Kit cu POM-urile reale.
-[DocumentedWorkspaceCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalogTest.java)
-citește POM-urile live J0–J7 și compară numărul modulelor, rolul producer/consumer
-și versiunea Reporting cu tabelul de sincronizare; verifică numerele selectate
-din Atlas, README-ul executiv J1 și matricea de deployment de aici, inclusiv
-modulul temporar de Reporting Tests. Mutanții de număr, rol și versiune trebuie
-respinși. Rularea cere checkouturile surori J0–J7 lângă J1, conform tabelului de
-staging grupat din [siguranța build-ului](../docs/ATF_Build_And_Execution_Safety.md).
+[DocumentedLibraryCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java)
+compară coordonatele celor cinci biblioteci și căile perechilor JAR/POM
+documentate cu root POM, fișierele fizice și ghidurile locale. Mutanții de
+versiune, cale de artifact și inventar de ghiduri trebuie respinși. Nu cere
+checkout-uri învecinate.
 [DocumentedUiGeometryContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedUiGeometryContractTest.java)
 extinde aceeași limită factuală la geometria numerică selectată, fără surse Reporting.
 Aceste probe sunt selectate explicit de `WholeAtfGovernanceSuiteTest`.
@@ -325,7 +329,7 @@ Aceste probe sunt selectate explicit de `WholeAtfGovernanceSuiteTest`.
 | Afirmație delimitată | Sursă executabilă | Refuz observabil |
 |---|---|---|
 | numărul modulelor din arhitectură | declarațiile directe `modules/module` din POM | număr diferit, afirmație absentă ori duplicată |
-| catalog J0–J7 | POM-urile live ale checkouturilor surori | count, rol producer/consumer sau versiune Reporting discordantă |
+| inventarul bibliotecilor consumate | POM rădăcină, perechi fizice `lib` și index local | versiune veche, pereche lipsă sau ghid lipsă/duplicat |
 | Kit în matricea consumerului | dependența directă din POM; scope omis înseamnă `compile` | scope diferit, Kit absent ori prezent în ambele coloane |
 | zoom generic versus exemplu configurat | `UiBrowserConfiguration.defaults()` | un exemplu particular nu redefinește implicitul runtime |
 | CSS și DPR din exemplul UI | `UiViewportScale` pentru intrările declarate | geometria derivată nu concordă cu modelul executabil |
@@ -396,9 +400,8 @@ indexul `docs/feedback/README.md` se păstrează permanent.
 ## Guvernanța detaliilor la consolă
 
 `ConsoleDefaultsGovernanceTest` protejează detaliile implicite și conectarea
-UI/API în Reporting și Shop. Testele comportamentale din `atf-console` și
-`ReportingTestConsoleTest` verifică formatarea și livrarea evenimentelor;
-override-ul YAML `false` rămâne suportat.
+UI/API folosite de modulele consumer. Biblioteca Console selectată furnizează
+formatarea și livrarea evenimentelor; override-ul YAML `false` rămâne suportat.
 
 ## Module consumatoare separate
 
@@ -427,10 +430,10 @@ atf-test-practice-shop/src/
 ```
 
 `atf-tests` nu deține clase de business, locatoare, flow-uri sau fixture-uri
-Practice Shop/AutoEx. Poate scana sursele consumerilor pentru reguli whole-ATF
-și arhitectură cross-module, fără să importe clasele lor de test. Testele care
-verifică aplicația externă rămân la consumer; cele care verifică modelul și
-randarea generică a raportului rămân în `atf-reporting-tests`.
+Practice Shop/AutoEx. Scanează sursele consumerilor pentru reguli de reactor,
+fără să importe clasele lor de test. Testele pentru aplicația externă și
+comportamentul rapoartelor generate rămân în Shop sau AutoEx; comportamentul
+comun al raportării vine din biblioteca Reporting selectată.
 
 ## Rulare și staging
 
@@ -454,8 +457,8 @@ sau cache-uri peste live. Procedura normativă este
 ```text
 whole reactor / module graph / architecture gates → atf-tests
 Practice Shop config / locators / pages / flows / E2E → atf-test-practice-shop
-reporting contracts / Extent composition → atf-reporting-tests
-renderer / HTML / CSS / public reporting API → atf-reporting
+Shop / AutoEx scenarios and local report checks → their J1 modules
+renderer / HTML / CSS / public reporting API → selected Reporting library
 ```
 
 Regulile generale OOP, locator boundary și layering sunt în

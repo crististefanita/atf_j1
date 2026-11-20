@@ -1,20 +1,18 @@
-# Reporting Tests — responsabilul și criteriile din J0
+# Reporting — dovezile consumerilor J1
 
 ## Pe scurt
 
-Acest consumator folosește biblioteca Reporting din JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a restanțelor.
+J1 nu are un modul separat cu teste pe sursa Reporting. Testele consumerului
+verifică biblioteca selectată prin adaptoare și scenarii locale; verificările de
+prezentare inspectează artefactul J1 generat.
 
-Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumatorul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
+## Înregistrează o problemă reproductibilă de raport
 
-<details>
-<summary><strong>Trimiteri stabile către criteriile ownerului</strong></summary>
+Atașează numele testului, coordonata Maven, hash-urile JAR/POM, calea raportului
+și arborele așteptat și observat. Precizează ce scenariu, pas sau aserțiune nu se
+extinde și dacă problema se reproduce la navigarea cu tastatura.
 
-## REPORT-TEST-AUDIT-60 — o dovadă identificabilă pentru fiecare scenariu
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md#report-test-audit-60--o-dovadă-identificabilă-pentru-fiecare-scenariu).
-
-## Dovada cerută pentru handoff
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Tests_Feedback.md#dovada-cerută-pentru-handoff).
-
-</details>
+Folosește [ghidul de consum Reporting](../ATF_Reporting_Consumer.md) pentru
+acceptanța locală și [ghidul de utilizare a bibliotecii](../../lib/README.Reporting.md)
+pentru contractul API publicat. Păstrează aserțiunile aplicației lângă testul J1
+afectat.

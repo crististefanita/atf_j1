@@ -67,8 +67,8 @@ afectat. Acest index trebuie să rămână scurt și stabil.
 
 | Ce schimbi | Probă de pornire | Limită |
 |---|---|---|
-| Cod și boundary | [WholeAtfGovernanceSuiteTest](../atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java) | verifică regula guvernată, nu toate comportamentele aplicației |
-| README și legende | [Validatorii documentari](README_Atf_DocumentationBestPractices.md#verificarea-editorială-la-owner) | structura validă cere în continuare confruntare cu sursa live |
+| Cod și boundary | [WholeAtfGovernanceSuiteTest](../atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java) și [acoperirea gate-urilor de cod](../atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java) | verifică regula guvernată, nu toate comportamentele aplicației |
+| README și legende | [gate-ul README principal](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java) și [validatorii documentari](README_Atf_DocumentationBestPractices.md#verificarea-editorială-la-owner) | structura validă cere în continuare confruntare cu sursa live |
 | Test protejat | [Politica testChanges](../atf-tests/README.md#guvernanța-schimbării-testelor) | o schimbare editorială nu autorizează relaxarea testului |
 
 Gate-ul se execută în [TMP](ATF_Build_And_Execution_Safety.md), prin comanda

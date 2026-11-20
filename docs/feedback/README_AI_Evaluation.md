@@ -67,13 +67,11 @@ calitate al unui model și nici prioritățile registrului central. Contractul
 implementat rămâne la responsabilul său; designul propus nu este dovadă de livrare.
 
 <a id="scorecard-executiv"></a>
-### Fișă executivă de evaluare
+### Stare curentă
 
-Implementarea rămâne **50/100**, conform evaluării existente: comparatorul,
-proveniența apelului și instantaneul tipizat sunt livrate; clasificarea
-`AMBIGUOUS`, registrul rulărilor, ciclul de viață AI și proiecția raportului
-lipsesc. Această curățare editorială nu recalculează gradul de pregătire și nu
-închide cerințe.
+- Livrate: comparatorul, proveniența apelului și instantaneul tipizat.
+- Rămân: clasificarea `AMBIGUOUS`, registrul rulărilor, ciclul de viață AI și
+  proiecția raportului.
 
 Contractul executabil este în [Validation](../../atf-validation/README.md#comparatorul-ai--contract-implementat);
 infrastructura generică de [raportare](../ATF_Reporting_Contract.md),

@@ -25,6 +25,8 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 }
 ```
 
+<a id="scope-and-integration"></a>
+
 ## Scope și integrare
 
 - Dependență atf.api:atf-test-kit cu versiunea atf.testkit.version din POM-ul proiectului. Folosiți test scope în produs; compile este justificat numai pentru suportul main al unui modul de test. Nu includeți Kit în APK/aplicație.
@@ -35,4 +37,4 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 
 ---
 
-Mentenanță, cod, teste și feedback: [atf_j0](README.md#mentenanță-și-feedback).
+Înregistrează constatările Test Kit după coordonata Maven, versiune și hash-urile JAR/POM. Păstrează comportamentul de adopție și verificările de păstrare a valorilor în modulul J1 afectat.

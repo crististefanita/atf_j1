@@ -3,9 +3,11 @@
 <a id="gov-package-cohesion-2026-11-19"></a>
 ## GOV-PACKAGE-COHESION-2026-11-19 — remedierea zonelor cu probleme de coeziune
 
-**Stare: Verificat la 2026-11-20. Prioritate: 74/100. Responsabili:** guvernanța `atf-tests`, împreună cu responsabilii pachetelor `atf-ui`.
+**Stare: Verificat la 2026-11-20; responsabili:** guvernanța `atf-tests` și responsabilii pachetelor `atf-ui`.
 
-Rularea `WholeAtfGovernanceSuiteTest` din 2026-11-19 a avut 163 de teste: 161 au trecut, iar două verificări de coeziune a pachetelor au eșuat. Constatarea este rezolvată prin mutarea verificării documentației într-un pachet responsabil și printr-o excepție revizuită pentru limita stabilă Playwright. Rularea completă ATF din 2026-11-20 a trecut cu 171/171 în ambele ediții documentare.
+Rularea suitei din 2026-11-19 a consemnat 163 de teste: 161 au trecut, iar două verificări de coeziune a pachetelor au eșuat. Remedierea a mutat verificarea documentației în pachetul responsabil și a păstrat o excepție revizuită pentru limita Playwright stabilă.
+
+La 2026-11-20, rerulările anterioare au trecut cu 177/177 și 179/179. Cea mai recentă a trecut cu 186/186 în ambele ediții după adăugarea guvernanței README-ului root și a unui control explicit pentru porțile obligatorii de calitate a codului, fără eșecuri, erori sau teste omise.
 
 | Zonă istorică | Rezolvare | Control curent |
 |---|---|---|
@@ -14,8 +16,11 @@ Rularea `WholeAtfGovernanceSuiteTest` din 2026-11-19 a avut 163 de teste: 161 au
 
 Excepția descrie limita comportamentală reală; nu suspendă guvernanța coeziunii pentru alte pachete. Verificarea raportului Extent în browser rămâne clasificată în pachetul E2E al consumerului.
 
-```text
-mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=5773a1567e14b570b17608b25058158bb2b1c114" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
-```
+Verificarea din 2026-11-20 a rulat `WholeAtfGovernanceSuiteTest` din layout-ul canonic de staging TMP, versionat cu Git, folosind baza curentă a fiecărei ediții:
 
-Suita a rulat din layout-ul canonic de staging TMP, versionat cu Git. Suita completă `AutoExE2eSuite` nu a făcut parte din această dovadă de guvernanță și rămâne urmărită separat acolo unde este necesară dovada artifactelor la nivel de suită.
+- `main` (`4ec3e14b357e0968776399477592fd13c3713631`): `mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4ec3e14b357e0968776399477592fd13c3713631" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test`
+- `main_RO` (`754eb315045e565c150ca819498cf63154bee9b4`): `mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=754eb315045e565c150ca819498cf63154bee9b4" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test`
+
+Cea mai recentă executare a trecut cu 186/186 în fiecare ediție, folosind comenzile de mai sus.
+
+Suita completă `AutoExE2eSuite` nu a făcut parte din această dovadă de guvernanță și rămâne urmărită separat acolo unde este necesară dovada artifactelor la nivel de suită.

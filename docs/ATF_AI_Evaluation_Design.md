@@ -733,7 +733,7 @@ care agentul produce schimbări în framework și teste.
 
 - `atf-test-kit` impune layer-ul testului;
 - `atf-tests` verifică modulele, ownership-ul, package cohesion și documentația;
-- `atf-reporting-tests` are composition roots și proof lower-level;
+- Shop și AutoEx conțin verificările locale consumer care publică rapoarte;
 - `atf-reporting` este separat de consumeri și de test support;
 - README-urile și feedback-ul au owneri și criterii de închidere;
 - schimbările testelor cer scope YAML exact, baseline Git, expirare și proof;
@@ -1177,7 +1177,7 @@ reconstruit.
 2. pune consumer-specific expected în composition root;
 3. folosește `atf-tests` pentru guard-uri whole-repository;
 4. folosește `atf-test-kit` numai pentru vocabular și layer contract;
-5. folosește `atf-reporting-tests` pentru composition și proof;
+5. folosește cel mai mic test consumer Shop sau AutoEx pentru verificarea compoziției locale;
 6. păstrează feedback-ul activ ca registry al gap-urilor, nu ca duplicat al
    README-urilor;
 7. implementează întâi contractul și gate-urile, apoi orice orchestrare agentic.
@@ -1216,7 +1216,8 @@ documentation drift.
 
 ### Etapa C — un singur test agentic pilot
 
-Se alege un seam mic din `atf-reporting-tests`, nu un flow business mare.
+Se alege un seam mic dintr-un adaptor consumer sau test de componentă local,
+nu un flow business mare.
 Pilotul trebuie să producă proposal, diff, focused test, gate result și feedback.
 
 ### Etapa D — AI evaluation pilot
@@ -1278,7 +1279,7 @@ Implementarea vertical slice analizată live:
 - `../atf-ui/src/main/java/atf/ui`;
 - `../atf-ui/src/main/java/atf/ui`;
 - `../atf-test-practice-shop/src/main/atf/shop`;
-- Reporting extern: modelele și porturile din JAR, adaptate în J1; sursa bibliotecii are owner în `atf_j0`.
+- Reporting extern: modelele și porturile din JAR, adaptate în J1; sursa bibliotecii are owner în `biblioteca consumată`.
 
 ## 34. Readiness și dovezi
 
@@ -1509,7 +1510,7 @@ flowchart LR
     Gates -->|verifică| Consumer["Consumeri"]
     Consumer -->|evaluează| Validation["Validation"]
     Validation -->|furnizează| Report["Reporting"]
-    Proof["Reporting Tests"] -.->|verifică| Report
+    Proof["Verificare consumer J1"] -.->|verifică| Report
 ```
 
 <details>
@@ -1520,7 +1521,8 @@ flowchart LR
 - `atf-tests` deține proposal/handoff și controalele schimbării testelor;
   consumerii compun evaluarea fără a muta business YAML ori browserul în Kit.
 - Validation deține verdictul AI; Reporting proiectează snapshot-ul prin
-  contractele proprii, iar Reporting Tests dovedește randarea și paritatea.
+  contractele proprii, iar o verificare consumer locală inspectează randarea
+  scenariului selectat; aceasta nu stabilește paritatea întregii biblioteci.
 - Toate acestea rămân design; absența unui modul suplimentar nu este o lacună.
 
 Etichetele scurte păstrează următorul sens:
@@ -1532,7 +1534,7 @@ Etichetele scurte păstrează următorul sens:
 | Consumeri | Compoziție · consumeri |
 | Validation | Evaluator · Validation |
 | Reporting | Snapshot · Reporting |
-| Reporting Tests | Probe · Reporting Tests |
+| Verificare consumer J1 | Shop/AutoEx · dovezi locale de raport |
 
 </details>
 

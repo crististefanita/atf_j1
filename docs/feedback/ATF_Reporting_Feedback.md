@@ -1,83 +1,69 @@
-# Reporting — responsabilul și criteriile din J0
+# Reporting — feedback despre consumul J1
 
 ## Pe scurt
 
-Acest consumator folosește biblioteca Reporting din JAR. [Registrul canonic J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) deține criteriile și prioritățile curente; nu păstrăm o copie concurentă a restanțelor.
+Registrul păstrează lacunele de integrare Reporting specifice J1. Reprodu
+fiecare constatare folosind coordonata Reporting selectată și păstrează raportul
+generat ca dovadă.
 
-Reproducerea locală se leagă de versiunea/hash-ul JAR-ului și de scenariul exact. Implementarea și regresia permanentă cu mock/contract se verifică în J0, apoi consumatorul acceptă binarul livrat, conform [protocolului](../ATF_Reporting_Consumer.md).
 
-<details>
-<summary><strong>Trimiteri stabile către criteriile ownerului</strong></summary>
+<a id="ui-recovery-audit-01--inspectable-attempts-in-extent"></a>
 
-## Criterii rămase pentru consolidare
+## UI-RECOVERY-AUDIT-01 — toate observațiile de recovery trebuie inspectabile în Extent
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#criterii-rămase-pentru-consolidare).
+**Stare:** Deschisă · **Responsabil:** dovezile recovery J1 și acceptanța raportului.
+Adaptorul local de înregistrare emite un singur record informativ per
+UiRecoveryTrace, iar documentația consumerilor descrie doar indicatorul agregat.
+Un raport randat nu a confirmat încă afișarea trace-ului complet într-un singur
+grup expandabil.
 
-## Ordinea pregătirii
+| Dovadă în cod | Ce se înregistrează |
+|---|---|
+| UiBackendRecovery.recording | Un record informativ pentru fiecare observație, cu titlul încercării și operația |
+| UiRecoveryTrace.description | Decizia, motivul, sumarul semnalului capturat când există, duratele probe/backoff/total și sursa politicii |
+| README-ul consumatorului | Descrie un indicator agregat de recovery; nu specifică ierarhia vizibilă pentru întreaga secvență |
+| Verificări de componentă 2026-11-20 | AutoExBackendRecoveryComponentTest a trecut 5/5, iar ShopBackendRecoveryComponentTest 6/6; ambele verifică siguranța trace-ului și limitele dispatch-ului, dar niciuna nu generează raport Extent |
 
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ordinea-pregătirii).
+- [ ] Rulează un scenariu determinist recuperat și unul terminal refuzat/epuizat în fiecare consumator care activează recovery.
+- [ ] Verifică raportul Extent generat: toate observațiile sunt grupate sub un singur pas recovery colapsat, în ordinea încercărilor, iar rezultatul agregat rămâne vizibil la părinte.
+- [ ] Extinde grupul și verifică decizia, motivul, metadatele sigure ale semnalului, durata și sursa politicii pentru fiecare încercare. Confirmă absența body-urilor și URL-urilor private.
+- [ ] Adaugă sau păstrează o aserțiune locală component/browser pentru starea inițial colapsată, expandarea tuturor, vizibilitatea completă a copiilor și redactare. Păstrează aserțiunile recovery separate de verdicturile business.
 
-## REPORT-PUBLIC-API-43 — suprafață susținută și ownership
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-public-api-43--suprafață-susținută-și-ownership).
-
-## REPORT-RELEASE-CONTRACT-45 — ce conține și ce promite pachetul
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-release-contract-45--ce-conține-și-ce-promite-pachetul).
-
-## REPORT-PORTABLE-DOCS-46 — adopție externă și documente transportabile
-
-[Ghidul de distribuire și consum al bibliotecilor J0](../../../atf_j0/docs/ATF_Platform_Libraries.md).
-
-## REPORT-FLOW-PROJECTION-36 — plan de dovezi separat de publicare
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-flow-projection-36--plan-de-dovezi-separat-de-publicare).
-
-## UI-RECOVERY-AUDIT-01 — încercări inspectabile în Extent
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
-
-## Index fallback — contract livrat J11
-
-[display contract](../../../atf_j0/docs/ATF_Reporting_Display_Contract.md) păstrează indexul neutru, statusul separat și numele integrale; criteriul generic 66 nu mai este deschis.
-
-## Contracte existente
-
-[Conținut și criteriu curent în J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#contracte-existente).
-
-</details>
-
-## Adoptarea curentă a bibliotecii
-
-Consultați [proveniența consumerului](../../library-provenance.json) și
-[contractul de navigare a rapoartelor mari](../../../atf_j0/docs/ATF_Large_Report_Navigation.md).
-
-## Acceptanța live verificată în J1
-
-Documentul de verificare pentru [achiziție și randare din 2026-11-03](../ATF_J1_Live_Screenshot_Verification.md)
-păstrează dovezile istorice pentru constatarea despre contextul lansării de mai jos.
+**Închidere:** un raport J1 generat și o verificare locală a raportului randat
+dovedesc că toate încercările sunt accesibile dintr-un singur grup colapsat și
+rămân complete după expandare, inclusiv expand-all. Sunt acoperite rezultatul
+recuperat și cel terminal; nu se publică conținut sensibil al cererilor.
 
 <a id="j1-launch-context-146"></a>
-<a id="j1-launch-context-146--record-the-actual-launch-scope"></a>
+
 ## J1-LAUNCH-CONTEXT-146 — înregistrarea domeniului real al lansării
 
-**Prioritate: P2. Responsabil:** metadatele lansării și compoziția consumerului
-în J1; capturarea reutilizabilă a contextului JUnit aparține Kit-ului. Este o
-lacună de context de audit, iar toate cele patru porți de business și randare au trecut.
+**Stare: Deschisă. Responsabil:** metadatele lansării J1 și compoziția
+consumerului. Verificările business și de randare trec; metadatele de audit nu
+conțin încă rădăcina JUnit și selecția efectivă a testelor.
 
-| Verificare | Fapt observat |
+| Martor | Fapt observat |
 |---|---|
-| Lansarea efectivă | Planul de descoperire păstrat execută o achiziție prin AutoExE2eSuite sau ShopE2eSuite |
-| Identitatea publicată | Niciun HTML al suitei nu conține numele canonic real al suitei; metadatele secundare de execuție nu îl furnizează |
-| Nume de fișier ambiguu | AutoEx folosește purchase-suite atât pentru raportul individual, cât și pentru cel al suitei |
-| Limita existentă | ReportEnvironmentField.SUITE este ascuns intenționat din System operațional; faptele despre lansare aparțin metadatelor secundare Tests/trace |
+| Compoziția AutoEx | `AutoExRunFactory` partajează o resursă de raport din store-ul rădăcină JUnit, dar denumește raportul după metoda de test și fiecare scenariu după clasa/display name al copilului; nu publică suita rădăcină sau selecția efectivă |
+| Compoziția Shop | `ShopE2eTestSupport` partajează un raport din store-ul rădăcină; `ShopRunReportFactory` primește configurația, profilul de dovezi și mediul, nu identitatea lansării JUnit |
+| Nume de fișier ambiguu | `AutoExReportSession.fileName` derivă numele raportului din metodă, astfel o rulare directă a metodei și o rulare de suită pot avea același prefix |
+| Limită existentă | `ReportEnvironmentField.SUITE` este ascuns intenționat din System operațional; informația lansării aparține metadatelor secundare Tests/trace |
+| Verificare controlată 2026-11-20 | `AutoExE2eOverviewNarrativeComponentTest` a trecut două scenarii fixture UI/UI_API în scope de suită și a verificat expandarea raportului; nu verifică suita canonică rădăcină sau selecția efectivă |
 
-- [ ] Capturați la limita JUnit domeniul imuabil al lansării, rădăcina reală a suitei când este cunoscută, clasa/metoda selectată și numărul efectiv de selecții; păstrați explicit starea necunoscută când valoarea nu este disponibilă.
-- [ ] Furnizați aceste fapte sigure prin API-urile neutre existente pentru metadate/observații; păstrați titlurile pașilor de business, câte un raport per suită și preview-ul de 240 de caractere.
-- [ ] Adăugați contracte permanente de componentă pentru lansări directe și filtrate ale suitei canonice, inclusiv clase cu același titlu și un nume de fișier înșelător; nu deduceți domeniul din textul artifactului.
-- [ ] Nu includeți achiziția browserului sau comportamentul aplicației în această schimbare de metadate; regresiile generice de randare aparțin J0 numai dacă se reproduce un defect real de publicare.
+- [ ] Capturează scope-ul imuabil al lansării, rădăcina canonică a suitei când
+  este cunoscută, clasa/metoda selectată și numărul selecției efective la
+  limita JUnit; păstrează o valoare unknown explicită când informația lipsește.
+- [ ] Publică aceste fapte sigure prin limita neutră existentă pentru metadate,
+  în afara System operațional; păstrează titlurile pașilor business, un raport
+  per suită și preview-ul de 240 de caractere.
+- [ ] Adaugă teste J1 pentru lansări directe și filtrate ale suitei canonice,
+  inclusiv clase cu același titlu și nume de fișier înșelătoare. Nu deduce
+  scope-ul din numele artefactelor sau textul afișat al pașilor.
+- [ ] Dacă contractul Test Kit selectat nu expune contextul necesar, notează
+  coordonata exactă a bibliotecii și o reproducere J1 minimală; păstrează
+  achiziția browserului și comportamentul aplicației în afara acestui item.
 
-**Închidere:** un cititor poate identifica contextul real al lansării direct
-din fiecare HTML, fără checkout-ul sursă sau logul launcherului extern.
-Artifactele live care au trecut sunt baseline-ul, nu înlocuitorul oracolului
-negativ permanent.
+**Închidere:** cititorul identifică suita-rădăcină JUnit, selecția efectivă și
+testele selectate din fiecare raport HTML fără checkout de surse sau loguri ale
+launcherului. Lansările directe și filtrate trec testele pozitive și negative;
+testele business sau de randare singure nu închid această lacună de metadate.

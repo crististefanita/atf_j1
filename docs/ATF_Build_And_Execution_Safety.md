@@ -1,11 +1,9 @@
-# Build și execuție sigură pentru ATF
+# Build-uri și execuții ATF J1 sigure
 
-Pentru sursele Core și Reporting din `atf_j0` și consumerii J1–J7, aplică [protocolul workspace-ului](ATF_Workspace_Synchronization.md) înaintea sync-ului selectiv.
-
-**Perimetru J1:** Reporting este JAR extern. Comenzile care țintesc
-`atf-reporting/pom.xml`, resursele native sau auditul sursei se execută în
-staging-ul producătorului `atf_j0`; [ghidul J1](ATF_Reporting_Consumer.md) separă gate-urile și ownership-ul.
-
+J1 consumă cinci perechi JAR/POM versionate și le verifică prin guvernanța
+locală a integrității artefactelor și prin testele consumatorilor care le
+exercită. Build-urile și testele rulează în staging deținut; sincronizarea și
+promovarea surselor urmează [procedura artefactelor bibliotecilor](ATF_Workspace_Synchronization.md).
 ## Pe scurt
 
 - live-ul este contextul de lucru și sursa de sincronizare;
@@ -198,7 +196,7 @@ care nu este director refuză lotul fără modificări live. Preflight-ul nu cre
 părinții lipsă; directoarele se creează numai pentru fișierul executat.
 Execuția revalidează fiecare destinație; un eșec I/O ori drift apărut ulterior
 poate lăsa un lot parțial promovat. Atomicitatea rămâne per fișier, fără rollback
-al lotului; probele permanente sunt la [Core](../../atf_j0/atf-core/README.md#manifest-și-promovare-guarded).
+al lotului; probele permanente sunt la [Core](ATF_Core_Consumer.md).
 
 - Verificați și recitiți starea efectivă după orice eroare; nu interpretați
   excepția ca dovadă că niciun fișier nu s-a schimbat.
@@ -225,11 +223,7 @@ mvn -o -f "$stage\pom.xml" test
 Pentru execuția Java se păstrează aceeași regulă într-un staging extern
 checkout-ului, de exemplu `${ATF_STAGING_ROOT}/Atf-java-feedback-<id>`. Sursele se
 resynchronizează înainte de build; `target`, rapoartele și dump-urile rămân
-excluse din sync. Testele de raportare acceptă
-`-Datf.test.reportDirectory=<stage>\artifacts\reports`, iar testul configured
-report folosește `-Datf.report.config=<stage>\atf.yaml`; astfel raportul de
-verificat este determinist sub `<stage>\artifacts\reports`, indiferent de
-working directory-ul IDE/Maven.
+excluse din sync. Testele J1 care generează rapoarte acceptă -Datf.test.reportDirectory=<stage>/artifacts/reports; scenariile configurate pot utiliza și -Datf.report.config=<stage>/atf.yaml. Consultă README-ul modulului pentru proprietățile acceptate și păstrează rapoartele generate în staging-ul selectat, indiferent de working directory-ul IDE sau Maven.
 
 </details>
 
@@ -265,40 +259,37 @@ robocopy . $stage /E /XD .git target artifacts spark bin obj /XF '*.log' '*.loca
 mvn -f "$stage\pom.xml" '-Dtest=WholeAtfGovernanceSuiteTest' '-Dsurefire.failIfNoSpecifiedTests=false' '-Datf.governance.testChanges.baseRef=<review-base>' test
 ```
 
-### Reactorul este obligatoriu pentru contracte între module
+### Gate-uri de verificare J1
 
-```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
+Folosește reactorul pentru comportamentul local între module. Folosește testul
+de integritate a artefactelor pentru perechile JAR/POM exacte selectate de
+POM-ul rădăcină. Acceptanța consumatorului și identitatea artefactelor sunt
+verificări distincte.
+
+~~~mermaid
 flowchart LR
-    Changed["ATF change"] -->|declanșează| Reactor["reactor gate"]
-    Reactor -->|dovedește| SameSources["same-stage"]
-    Standalone["reporting"] -->|declanșează| Isolated["standalone gate"]
-    Isolated -->|dovedește| IsolatedProof["isolated proof"]
-```
+  Change[Modificare sursă sau POM J1] -->|rulează| Reactor[Teste în reactorul local]
+  Reactor -->|dovedește| Consumer[Comportamentul consumatorului selectat]
+  Pair[Perechea JAR/POM selectată] -->|verificată de| Integrity[Test de integritate artefact]
+  Consumer -->|publică| Report[Dovezi Extent locale]
+~~~
 
-<details>
-<summary><strong>Legendă — două gate-uri independente</strong></summary>
-
-- **Reactor gate**: `mvn -pl <consumer> -am test`; recompilă modulul schimbat împreună cu consumatorii din același stage.
-- **Standalone gate — producător `atf_j0`**: `mvn -f atf-reporting/pom.xml test`; verifică reporting-ul izolat, fără consumatori.
-- **Proof**: rezultatul trebuie să provină din sursele stage-ului, nu dintr-un JAR local vechi.
-
-Când un modul de test consumă API-uri schimbate în `atf-core`, `atf-ui` sau
-alte module ale reactorului, verificarea se rulează cu `-am` (de exemplu
-`mvn -pl atf-reporting-tests -am test`). Pentru librăria standalone, `mvn -f atf-reporting/pom.xml test`
-este gate-ul izolat intenționat; un `mvn -pl atf-reporting-tests test` izolat poate
-rezolva un JAR instalat anterior din repository-ul local și poate raporta
-constructori/metode lipsă care nu există în sursele stage-ului. Rezultatul
-izolat este acceptabil numai după un reactor build verde sau dacă dependențele
-folosite sunt explicit construite din același stage; altfel nu este dovadă
-pentru codul live.
-
-După un re-sync în același staging, timestamp-urile păstrate de copiere pot fi
-mai vechi decât clasele deja compilate, chiar dacă semnătura sursei s-a schimbat.
-Un mesaj Maven `Nothing to compile` nu dovedește atunci echivalența sursă/class.
-Folosește un staging nou sau `clean test` numai în staging-ul privat, după
-terminarea build-ului propriu; checkout-ul live și output-ul altor execuții
-nu se curăță. Artifactele deja produse rămân separat de `target`.
+- **Gate consumator:** rulează modulul afectat și dependențele necesare din
+  reactor cu Maven -am, folosind aceeași copie de staging.
+- **Gate de guvernanță:** rulează WholeAtfGovernanceSuiteTest după modificarea
+  reactorului, metadatelor bibliotecilor sau relațiilor documentației.
+- **Gate de artefact:** rulează PlatformLibraryIntegrityTest pentru a verifica
+  octeții și coordonatele perechilor JAR/POM selectate. Acesta nu execută
+  testele sursei bibliotecii.
+- **Dovadă:** folosește rezultate produse din sursele de staging și perechile
+  binare selectate; nu te baza pe clase vechi sau rapoarte generate anterior.
+- După resincronizarea în același staging, timestamp-urile copiate pot fi mai
+  vechi decât clasele compilate, chiar dacă semnătura sursei s-a schimbat.
+  `Nothing to compile` nu dovedește echivalența sursă/clasă.
+- Folosește un staging nou sau rulează `clean test` doar în staging privat,
+  după terminarea propriului build.
+- Nu curăța checkout-ul live sau output-ul altei execuții. Păstrează artefactele
+  generate separat de `target`.
 
 - O compilare întreruptă poate lăsa fișiere `.class` incomplete, chiar dacă
   Maven le consideră actuale. `ClassFormatError` cere verificarea output-ului

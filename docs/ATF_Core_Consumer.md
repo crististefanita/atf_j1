@@ -1,115 +1,117 @@
-# ATF Core — distribuție și consum binar
+# ATF Core — artefactul bibliotecii și acceptanța consumerului
 
 ## Pe scurt
 
-J0 păstrează implementarea și toate testele native Core. J1–J7 consumă
-aceeași bibliotecă `atf.api:atf-core`, cu versiunea declarată în POM-ul consumerului, fără modul sursă ori teste
-native copiate în live. Reporting are publicare și acceptanță separate.
+J1 consumă Core prin perechea JAR/POM versionată selectată de POM-ul rădăcină.
+Reactorul nu conține modulul-sursă Core; testele locale inspectează artefactul
+fizic și exercită integrările J1 care îl folosesc.
 
-| Contract | Regulă curentă |
+| Contract | Verificare J1 curentă |
 |---|---|
-| runtime | Java 21; Jackson Databind și YAML 2.17.2 |
-| independență | POM fără parent de reactor; zero dependențe ATF/JUnit/Extent de producție |
-| layout consumer | `lib/atf-core-${atf.core.version}.jar` și `.pom`; [lib](../lib/README.md) păstrează câte o pereche per bibliotecă |
-| proveniență | `coreLibrary` în `library-provenance.json`; hash JAR/POM, intrări și catalog native; istoricul build-urilor rămâne distinct |
-| sursă și teste | ownerul sursei J0; niciun Core shadow în consumer |
+| Runtime | Java 21; versiunile dependențelor sunt fixate în POM-ul publicat |
+| Artefact | `atf.api:atf-core:1.0.0-c4`, păstrat în `lib` |
+| Distribuție | O pereche JAR/POM plată; fără părinte de reactor sau sursă shadow |
+| Proveniență | `coreLibrary` înregistrează coordonate, hash-uri, inputuri și dovezi despre pachet |
+| Scope consumer | HTTP, configurație, JSON și lifecycle folosite de modulele locale |
 
 ## Maven și IntelliJ
 
-Din rădăcina unui staging TMP al consumerului, `mvn -B validate` instalează
-cele cinci perechi în repository-ul Maven selectat. Apoi reîncarcă POM-ul rădăcină
-în IntelliJ, folosind același repository Maven ca la bootstrap. Nu se folosesc
-`systemPath`, repository file cu ierarhie ori un JAR adăugat manual în IDE.
+Rulează din rădăcina unei copii TMP deținute. Folosește aceleași setări și
+repository Maven pentru rezolvarea din linia de comandă și IntelliJ:
 
-```powershell
-mvn -B validate
-mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
-```
+~~~powershell
+mvn -B -ntp -N validate
+mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
+~~~
 
-WholeAtfGovernanceSuiteTest este selecția J1/J2; J3 folosește SpeechWorkspaceGovernanceTest în aceeași comandă. Comenzile sunt pentru staging-ul propriu; adaugă `-Dmaven.repo.local=<TMP>/m2`
-la ambele. Un `-pl` care omite rădăcina necesită bootstrap-ul anterior.
+Prima comandă instalează cele cinci perechi de biblioteci în repository-ul
+Maven selectat. Reîncarcă POM-ul rădăcină în IntelliJ după selectarea aceluiași
+JDK și repository. Nu folosi `systemPath`, repository ierarhic de fișiere sau
+JAR adăugat manual în IDE.
 
-Core este acum dependență externă, astfel `-pl atf-core` se rulează doar în J0.
-Reactorul sursă rămâne la `1.0.0-SNAPSHOT`; numai dependențele Core ale
-consumerilor folosesc `atf.core.version` din POM-ul rădăcină.
+## Integritatea artefactului și acceptanță
 
-## Publicare și verificare
+1. Selectează versiunea Core prin `atf.core.version` și păstrează perechea
+   JAR/POM corespondentă direct în `lib`.
+2. Verifică coordonata publicată, POM-ul încorporat, valorile SHA-256,
+   namespace-ul bytecode-ului și `CodeSource`-ul încărcat efectiv.
+3. Respinge sursele shadow, coordonatele lipsă, fișierele suplimentare în
+   distribuție și dependențele de producție interzise.
+4. Rulează contractele locale afectate și scenariile consumerului pe artefactul
+   fizic; păstrează raportul și dovezile execuției în TMP.
+5. Actualizează proveniența numai când se schimbă octeții pachetului sau
+   dovezile de verificare înregistrate.
 
-1. Reconciliază schimbarea și probele la ownerul J0; păstrează codul și testele locale.
-2. Construiește în TMP cu POM parentless; transformarea de publicare schimbă numai versiunea proiectului, nu versiunea Test Kit de test.
-3. Rulează nativele și apoi aceleași teste pe JAR în harness TMP fără surse Core. Kit/JUnit rămân dependențe de test.
-4. Verifică separat J1–J7: compile, contracte afectate, guvernanță, CodeSource/hash și rapoarte; J2 MOCK nu certifică un broker Kafka.
-5. Livrează o singură pereche nouă per bibliotecă și proveniența verificată; retrage perechea anterioară fără versiuni paralele.
+Guvernanța citește proveniența care descrie inputurile pachetului și verificările
+native ale bibliotecii. Aceste înregistrări nu afirmă că verificările au rulat
+în J1.
 
-Guvernanța verifică coordonata, POM-ul inclus byte cu byte, hash-urile,
-catalogul nativ, namespace-urile bytecode și încărcarea reală. Probele negative
-refuză lipsa coordonatei, sursa shadow, fișiere extra/imbricate, dependențe ATF
-de producție și metadata alterată. Analiza sursei Core rămâne responsabilitatea
-J0; consumerul păstrează probele binare și testele propriei integrări.
+## Fluxul artefactului Core
 
-Împachetarea nu schimbă preview-ul de 240 de caractere, aserțiunile
-colapsabile, ownership-ul business ori backlog-ul funcțional existent.
-Procedura completă este în [sincronizare](ATF_Workspace_Synchronization.md)
-și [build izolat](ATF_Build_And_Execution_Safety.md).
-
-## Harta livrării Core
-
-```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+~~~mermaid
 flowchart LR
-    Owner["J0<br/>sursă + native"] -->|verifică| Binary["Core<br/>JAR + POM"]
-    Binary -->|adoptă| J1["J1<br/>Shop și AutoEx"]
-    Binary -->|adoptă| J2["J2 WIP<br/>cozi și mesaje"]
-    Binary -->|adoptă| J3["J3<br/>speech"]
-    Binary -->|adoptă| J4["J4<br/>Android"]
-    Binary -->|adoptă| J5["J5<br/>Rentz"]
-    Binary -->|adoptă| J6["J6<br/>Hold’em"]
-    Binary -->|adoptă| J7["J7<br/>Chess"]
-```
+    Pin["POM rădăcină<br/>coordonata Core"] --> Pair["lib/<br/>JAR + POM Core"]
+    Pair -->|instalează| Repo["Repository Maven"]
+    Repo -->|rezolvă pentru| Modules["Module J1"]
+    Modules -->|acceptanță locală| Evidence["Dovezi consumer"]
+    Governance["Guvernanța artefactelor"] -. verifică identitatea și limita .-> Pair
+~~~
 
 <details>
-<summary><strong>Legendă — aceeași bibliotecă, acceptanțe distincte</strong></summary>
+<summary><strong>Legendă — rezolvarea artefactului și dovada locală</strong></summary>
 
-- Muchiile descriu publicarea și adoptarea, nu dependențe Maven între workspace-uri.
-- J0 păstrează implementarea și toate nativele; testele pe JAR se copiază numai într-un harness TMP.
-- Exemple de acceptanță: J1 verifică integrarea web; J2 verifică MOCK fără browser; J3 verifică speech fără descărcare de modele. Aceste probe nu certifică un broker sau ASR real.
-- Reporting are propria versiune și proveniență; Core și Reporting nu au dependență de producție între ele.
+- POM-ul rădăcină fixează coordonata Core folosită de J1.
+- Maven și IntelliJ rezolvă perechea fizică din repository-ul local selectat.
+- Acceptanța consumerului acoperă numai comportamentul Core exercitat prin
+  modulele J1; Reporting are coordonate și proveniență separate.
+- Diagrama arată rezolvarea dependenței, nu o dependență de un workspace cu surse.
 
 </details>
 
 ## Limita acceptanței Reporting
 
-Reporting deține profilul explicit, timing-ul capturat/publicare și disclosure-ul standard.
-Aceste probe sunt distincte de Core și de acceptanțele aplicațiilor; the [Reporting owner contract](../../atf_j0/atf-reporting/README.md) defines the independent publication boundaries.
+Reporting controlează identitatea raportului, timpii capturați și publicați,
+aserțiunile și disclosures. Integrarea Core și acceptanța aplicației sunt
+distincte de contractul Reporting. [Atlasul bibliotecii Reporting](ATF_Reporting_Library_Atlas.md)
+descrie contractul observabil.
 
-## Document JSON complet și evidence fidel
+## Documente JSON complete și dovezi fidele
 
-| Boundary | Contract |
+| Limită | Contractul folosit de consumer |
 |---|---|
-| JsonDocuments | un document complet, fără trailing content sau chei duplicate, inclusiv nested; reader imuabil, arbore nou per apel |
-| sintaxă și write | scalarii și literalul null sunt JSON; fabrica POST/PUT JSON refuză null înainte ca request-ul să poată fi expediat |
-| request explicit | căile form/text rămân disponibile; executorul nu deduce JSON doar din metoda HTTP |
-| egalitate Mock | decimale BigDecimal fără narrowing; număr/string și integer/decimal păstrează distincțiile existente; raw body rămâne intact |
-| redactare Core | tokenuri numerice și câmpuri publice duplicate păstrate; fiecare valoare sensibilă este mascată integral |
-| display Reporting | proiecție streaming autonomă, fără dependență Core; numerele și duplicatele se păstrează înaintea truncării configurate |
-| assertions | expected/actual se redactează separat; verdictul callerului rămâne independent de preview-ul implicit 240 |
+| JsonDocuments | Un document complet, fără conținut final suplimentar sau chei duplicate, inclusiv imbricate; reader imuabil și arbore nou la fiecare apel |
+| Sintaxă și scriere | Scalarile și literalul null sunt JSON; factory-ul POST/PUT JSON respinge null înainte de trimitere |
+| Cerere explicită | Căile form/text rămân disponibile; executorul nu deduce JSON doar din metoda HTTP |
+| Egalitate Mock | BigDecimal fără îngustare; number/string și integer/decimal își păstrează distincțiile; corpul brut rămâne intact |
+| Redactare Core | Tokenurile numerice și câmpurile publice duplicate se păstrează; fiecare valoare sensibilă este mascată complet |
+| Afișare Reporting | Proiecția independentă păstrează numerele și duplicatele înainte de trunchierea configurată |
+| Aserțiuni | Expected/actual sunt redactate separat; verdictul callerului e independent de preview-ul de 240 de caractere |
 
-- Parserul strict refuză documentul ambiguu pentru decizii; proiecția evidence păstrează toate aparițiile câmpurilor.
-- Mock acceptă literalul null ca sintaxă, separat de interdicția fabricii write.
-- JSON invalid de diagnostic nu devine payload valid.
+- Parserul strict respinge documentele ambigue folosite pentru decizii; proiecția
+  de dovezi păstrează fiecare apariție a câmpului.
+- Mock acceptă literalul null ca sintaxă, independent de restricția factory-ului
+  de scriere.
+- JSON-ul diagnostic invalid nu devine payload valid.
 
-Nativele Core și regresiile generice Reporting rămân numai în J0. Harness-urile
-temporare verifică JAR-urile fizice, fără surse de implementare shadow.
+Testele consumerului și guvernanța artefactelor verifică binarele selectate fără
+a adăuga sursa bibliotecii în reactor.
 
-## Core — console și anulare upstream
+## Core, Console și anulare upstream
 
-Lifecycle-ul complet și string-urile JSON publice folosesc politica de redactare declarată. Future-ul HTTP păstrează o legătură best effort către operația upstream; cursele au un singur owner terminal, iar eșecul cleanup rămâne suppressed.
+Future-ul HTTP păstrează o legătură best-effort de anulare către operația
+upstream. Execuția concurentă are un singur proprietar terminal, iar erorile de
+cleanup rămân suprimate.
 
-- URLConnection deține body-ul, workerul virtual și conexiunea; colectarea body-ului, connect și citirea consumă același deadline. Un body livrat după terminare nu poate porni request-ul.
+- URLConnection deține corpul, worker-ul virtual și conexiunea; colectarea
+  corpului, conectarea și citirile consumă același deadline. Un corp livrat după
+  terminare nu poate porni cererea.
+- Anularea nu confirmă rollback pe server și nu autorizează replay-ul unei
+  mutații incerte. Un GET local controlat și testul pe JAR fizic rămân distincte
+  de E2E-ul consumerului.
 
-- Anularea nu confirmă rollback server-side și nu autorizează replay al unei mutații incerte. Nativele controlate, GET-ul local blocat și proba pe JAR rămân verificări distincte de E2E-ul consumerului.
+## Bibliotecile comune ale platformei
 
-
-## Shared platform libraries
-
-[Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+[Consumul bibliotecilor platformei](ATF_Platform_Libraries.md) documentează
+contractele celor cinci artefacte, distribuția plată, bootstrap-ul
+Maven/IntelliJ și acceptanța locală. Comportamentul adaptorului și catalogului
+rămâne în modulele J1.

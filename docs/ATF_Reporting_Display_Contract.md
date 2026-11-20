@@ -1,8 +1,8 @@
 # ATF Reporting — contract de display și layout
 
-În J1, acest contract descrie rezultatul cerut la integrarea bibliotecii.
-Modelele, rendererul și regresiile generice au owner în `atf_j0`; [atlasul JAR](ATF_Reporting_Library_Atlas.md)
-permite folosirea lor fără sursă locală, fără a garanta orice API `public`.
+Pentru J1, acest contract descrie rezultatul cerut la integrarea bibliotecii
+Reporting selectate. [Atlasul JAR](ATF_Reporting_Library_Atlas.md) explică
+contractul binar observabil fără a promite orice API `public`.
 
 ## Pe scurt
 
@@ -11,10 +11,9 @@ raportului Extent și ale fallback-ului HTML. El completează
 [Contractul de raportare ATF](ATF_Reporting_Contract.md), care deține semantica
 evidence-ului, ownership-ul verdictelor și schema API.
 
-`atf-reporting` deține markup-ul, token-urile, CSS-ul și JavaScript-ul publicat;
-`atf-reporting-tests` deține probele unit/component/integration/browser;
-consumerii verifică doar integrarea propriilor adaptoare. Documentul nu descrie
-un artifact concret, un URL sau o captură istorică.
+Biblioteca selectată definește markup-ul publicat, token-urile, CSS-ul și
+JavaScript-ul; testele J1 verifică integrarea adaptoarelor proprii și raportul
+randat. Documentul nu descrie un artefact concret, URL sau screenshot istoric.
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
@@ -198,10 +197,10 @@ computed style, nu prin copierea unei reguli locale.
 
 | Nivel | Verifică | Owner |
 |---|---|---|
-| unit | vocabular, modele, token-uri, policy și funcții JS/CSS publicate | `atf-reporting` |
-| component | markup real, ordine, ownership, disclosure, JSON, viewport și asset manifest | `atf-reporting-tests` |
-| integration | Extent/fallback, publication, input mock și paritatea proiecțiilor | `atf-reporting-tests` |
-| E2E/browser | click, Enter/Space, expand/collapse, computed style, scroll, deep-link și page errors pe artifact fresh | `atf-reporting-tests`, prin ATF Debug + Playwright/Chromium headless |
+| unit | vocabular, modele, token-uri, policy și funcții JS/CSS publicate | contractul bibliotecii Reporting selectate; J1 nu are teste ale sursei bibliotecii |
+| component | markup, disclosure, viewport și asset-uri exercitate de un consumator | test local Shop/AutoEx, limitat la aserțiunile sale |
+| integration | compoziția adaptorului, publicarea Extent și fallback-ul exercitate local | modulul consumator Shop sau AutoEx |
+| E2E/browser | interacțiunea în browser și expandarea/colapsarea unui raport nou al consumatorului | modulul local care folosește ATF Debug și Playwright/Chromium |
 | consumer | intenția business și adaptorul aplicației, fără renderer paralel | modulul consumer |
 
 Verificarea vizuală nu folosește browser Windows real și nu oprește rulările
@@ -226,5 +225,5 @@ redeschide singur un ToDo. Redeschiderea cere o abatere reproductibilă în codu
 - [Contractul semantic de raportare](ATF_Reporting_Contract.md)
 - [Contractul de captură a evidence-ului](ATF_Evidence_Capture_Contract.md)
 - [Atlasul Reporting JAR](ATF_Reporting_Library_Atlas.md)
-- [README `atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md)
+- [Ghidul consumerului Reporting](./ATF_Reporting_Consumer.md)
 - [Registrul feedback-ului activ](feedback/README.md)

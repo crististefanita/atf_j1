@@ -1,12 +1,13 @@
 # Atlas de context ATF — intrări, ownership și probe
 
-[Referința J0 și sincronizarea J1–J7](ATF_Workspace_Synchronization.md) fixează ownership-ul, starea țintelor și dovada fiecărei livrări.
+[Catalogul bibliotecilor și ghidul de sincronizare](ATF_Workspace_Synchronization.md) identifică binarele selectate de J1 și dovezile locale de acceptanță.
 
 ## Pe scurt
 
-J0 deține implementarea și testele Core/Reporting; J1 deține scenariile AutoEx/Shop.
-J2 este WIP pentru framework și teste Kafka/mesagerie, cu Setup PowerShell în Podman;
-[harta workspace-urilor](ATF_Workspace_Synchronization.md) separă infrastructura copiată de contractele și acceptanța mesageriei.
+J1 deține scenariile AutoEx/Shop, adaptoarele consumerului și criteriile de
+acceptanță. Consumă artefactele versionate Core, Reporting, Console, Mock și
+Test Kit din `lib`; atlasul rămâne concentrat pe module locale și contractele
+observabile ale bibliotecilor.
 
 Atlasul reduce contextul inițial pentru un cititor sau un AI: alegi boundary-ul,
 identifici contractul și proba, apoi deschizi numai sursa relevantă și callerul
@@ -17,9 +18,9 @@ POM-ul livrat, CodeSource-ul și contractul observabil, fără sursă presupusă
 | Subiect | Hartă locală | Citește codul când |
 |---|---|---|
 | guvernanță source/binary | [deployment](../atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md) | schimbi catalogul, țintele documentare, POM-ul distribuit, CodeSource-ul ori dovada de independență; aceeași suită protejează ambele forme |
-| redactare și mască literală | [Core security](../../atf_j0/atf-core/src/main/java/atf/core/security/README.md) | schimbi masca brută, codificarea replacement-ului regex, câmpurile sensibile ori fallback-ul; comparația, preview-ul și rendererul au owneri distincți |
+| redactare și mască literală | [Core security](ATF_Core_Consumer.md) | schimbi masca brută, codificarea replacement-ului regex, câmpurile sensibile ori fallback-ul; comparația, preview-ul și rendererul au owneri distincți |
 | inventar main/test și output exclus | [inventarul ATF Tests](../atf-tests/README.md#inventarul-comun-al-surselor-java) | schimbi parcurgerea POM-urilor sau excluderea segmentelor; confruntă sursa compilabilă cu setul inspectat |
-| promovare selectivă | [guard-ul Core](../../atf_j0/atf-core/README.md#manifest-și-promovare-guarded) | schimbi baseline-ul, eligibilitatea sursei/părinților ori copierea atomică |
+| promovare selectivă | [guard-ul Core](ATF_Core_Consumer.md) | schimbi baseline-ul, eligibilitatea sursei/părinților ori copierea atomică |
 | suma facturii AutoEx | [contractul monetar](../atf-test-auto-ex/README.md#validarea-completă-a-sumei-facturii) | schimbi delimitarea clauzei, gramatica numerică, comparația sau proiecția; checks independente și probe negative auditabile |
 | runtime AutoEx | [runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) | schimbi compoziția, ownerul contului, observația facturii ori finalizarea |
 | suport Shop | [suport Shop](../atf-test-practice-shop/src/main/atf/shop/support/README.md) | schimbi validarea, confirmarea coșului, selecția traficului ori readiness-ul |
@@ -34,16 +35,16 @@ POM-ul livrat, CodeSource-ul și contractul observabil, fără sursă presupusă
 | fidelitate documentară executabilă | [guard-ul factual](../atf-tests/README.md#documente-și-responsabilități) | schimbi modulele, scope-ul Kit, implicitul UI ori geometria YAML Shop/AutoEx; proza se compară cu POM/configurație/model, prin mutanți documentari |
 | continuitatea selectului | [contractul UI](../atf-ui/README.md#așteptare-nativă-și-unicitate) | schimbi observația înaintea activării, confirmarea nativă ori refuzul replay-ului |
 | rețea browser | [rețea browser](../atf-ui/src/main/java/atf/ui/network/README.md) | schimbi hook-uri, identitate, retenție ori cleanup |
-| biblioteca Reporting | [integrare Reporting](ATF_Reporting_Library_Atlas.md#api-consumat-și-ownerul-adaptorului) | schimbi adaptorul local ori diagnostichezi binarul; modelul/rendererul se repară în `atf_j0` |
-| consolidare Reporting și probe | [implementare](feedback/ATF_Reporting_Feedback.md) / [Reporting Tests](feedback/ATF_Reporting_Tests_Feedback.md) | separi defectul de lifecycle/API de oracol, fixture binar și navigarea dovezii |
+| biblioteca Reporting | [integrare Reporting](ATF_Reporting_Library_Atlas.md#reporting-api-adapter) | schimbi adaptorul local sau diagnostichezi un raport după coordonata și hash-ul selectate |
+| evidence pentru rapoartele consumerilor | [lacuna locală](feedback/ATF_Reporting_Tests_Feedback.md) / [contractul bibliotecii selectate](ATF_Reporting_Library_Atlas.md) | separi defectul adaptorului local de comportamentul bibliotecii și navigarea raportului |
 | achiziție și close ale sesiunii UI | [contract UI](../atf-ui/README.md#lifecycle-ul-sesiunii-și-limita-probei) | schimbi cauza primară, rollback-ul resurselor ori erorile simultane de cleanup |
 
 ## Boundary-uri de fidelitate
 
 | Schimbare | Contract și probă |
 |---|---|
-| mască literală și Authorization quoted/trunchiat | [Core security](../../atf_j0/atf-core/src/main/java/atf/core/security/README.md); comparație originală → redacție → preview → Extent/fallback |
-| MIME și headere efective | [Core HTTP](../../atf_j0/atf-core/README.md#media-type-headere-și-vocabular-de-protocol); tip/subtip, precedență și o singură expediere |
+| mască literală și Authorization quoted/trunchiat | [Core security](ATF_Core_Consumer.md); comparație originală → redacție → preview → Extent/fallback |
+| MIME și headere efective | [Core HTTP](ATF_Core_Consumer.md); tip/subtip, precedență și o singură expediere |
 | URI al artifactului | [Debug UI](../atf-debug-ui/README.md#identitatea-path-ului-uri); plus, spațiu și o singură decodare |
 | sursă compilabilă versus output | [ATF Tests](../atf-tests/README.md#inventarul-comun-al-surselor-java); descoperire POM separată de parcurgerea rădăcinii Java |
 | credentiale în formularul API AutoEx | [auditul fixture-ului](../atf-test-auto-ex/README.md#credentiale-în-aserțiunile-componente-api); egalitatea map-ului original, proiecție publică și diagnostic fără parola brută |
@@ -78,10 +79,9 @@ pornește investigația; nu înlocuiește verificarea sursei afectate.
 
 | Decizie inițială | Sursa de adevăr | Limita ei |
 |---|---|---|
-| ce reactor folosesc? | [workspace-uri](ATF_Workspace_Synchronization.md#catalogul-de-module-și-reporting), apoi POM-ul țintei | POM-uri live: J0 12, J1 6, J2 WIP 5, J3 speech 4, J4 Android 3, J5 Rentz 2, J6 Hold’em 5, J7 Chess 1; profilurile nu se deduc din foldere absente |
-| schimbare Reporting? | [atlasul sursei J0](../../atf_j0/atf-reporting/src/main/java/atf/reporting/README.md) și [regresiile permanente](../../atf_j0/atf-reporting-tests/README.md) | J1–J7 au versiuni și acceptanțe de consumer distincte; J4 păstrează j24, iar documentația sursei nu certifică automat JAR-ul consumat |
-| schimbare de aplicație? | [Shop](../../atf_j1/atf-test-practice-shop/README.md) sau [AutoEx](../../atf_j1/atf-test-auto-ex/README.md) | expected, captură și selecție business rămân în consumer |
-| schimbare Kafka/Podman? | [atlasul J2](../../atf_j2/docs/ATF_Context_Atlas.md), apoi Setup și configurația | trei componente MOCK și scripturi existente; clientul Java/brokerul real sunt WIP |
+| ce module și biblioteci sunt selectate? | [catalogul local al bibliotecilor](ATF_Workspace_Synchronization.md#consumed-library-catalog), apoi POM-ul rădăcină | declarațiile modulelor J1 și coordonatele selectate provin din acest checkout |
+| schimbare Reporting? | [ghidul bibliotecii Reporting](../lib/README.Reporting.md) și [atlasul consumerului](ATF_Reporting_Library_Atlas.md) | identifică perechea JAR/POM selectată și verifică integrarea locală și raportul randat |
+| schimbare de aplicație? | [Shop](../atf-test-practice-shop/README.md) sau [AutoEx](../atf-test-auto-ex/README.md) | valorile așteptate, capturarea și selecția business rămân la consumer |
 
 
 
@@ -89,9 +89,9 @@ pornește investigația; nu înlocuiește verificarea sursei afectate.
    Înaintea refactorizării, reconciliază feedback-ul ownerului cu sursa live și
    precizează proba de închidere; actualizează constatarea pe parcursul incrementului.
 2. Pentru sursa locală deschide intrarea, callerul și proba pozitivă/negativă;
-   pentru Reporting identifică versiunea și adaptorul, apoi API-ul JAR și
-   artifactul. Escaladează implementarea la producător; extinde
-   căutarea numai când apare o dependență sau o contradicție concretă.
+   pentru Reporting identifică versiunea selectată și adaptorul, apoi inspectează
+   API-ul JAR și dovada din raport. Extinde căutarea numai când apare o
+   dependență sau o contradicție concretă.
 3. Verifică POM-ul pentru scope, configurația pentru deadline/policy și testul
    pentru afirmația exactă. O denumire de clasă nu demonstrează comportamentul.
 4. După schimbare, actualizează harta apropiată și linkul de intrare dacă s-au
@@ -152,16 +152,16 @@ negative nu intră în selecțiile canonice și nu devin componente live mascate
 
 | Responsabilitate | Owner și limită de dependență | Ce păstrează consumerul |
 |---|---|---|
-| execuție HTTP, request și răspuns observat | [Core](../../atf_j0/atf-core/README.md); Reporting primește valori, fără executor | endpoint, operația și expected-ul aplicației |
+| execuție HTTP, request și răspuns observat | [Core](ATF_Core_Consumer.md); Reporting primește valori, fără executor | endpoint, operația și expected-ul aplicației |
 | comparație și rezultat de validare | [Validation](../atf-validation/README.md); fără renderer ori JUnit | regula business și expected-ul independent |
 | browser, deadline, captură și listener | [UI](../atf-ui/README.md); fără rute Shop/AutoEx | semnalul aplicației care confirmă acțiunea și selecția dovezii |
 | protocol runner, scope și cleanup neutru | [Test Kit](../lib/README.TestKit.md#scope-și-integrare); compus la granița JUnit | Store-ul concret, conturile și ordinea proprie a resurselor |
 | proiecție typed, status, markup și publicare | [Reporting](ATF_Reporting_Library_Atlas.md); fără Core, UI sau Kit | observația, verdictul și metadata aplicației |
 | query observat și identitate | [contractul Reporting](ATF_Reporting_Library_Atlas.md#schimb-api-și-identitate); UI calculează amprenta înaintea redactării | mapperul conservă perechile disponibile sau amprenta opacă; selecția business rămâne locală |
-| diagnostic de consolă | [Console](../../atf_j0/atf-console/README.md); bridge la compoziție | alegerea sink-ului; fără dependență Console în JAR-ul Reporting |
-| stub, rutare și asociere mock | [Mock](../../atf_j0/atf-mock/README.md); adaptorul de raportare este verificat separat | fixture-ul și intenția scenariului |
+| diagnostic de consolă | [Console](../lib/README.Console.md); bridge la compoziție | alegerea sink-ului; fără dependență Console în JAR-ul Reporting |
+| stub, rutare și asociere mock | [Mock](../lib/README.Mock.md); adaptorul de raportare este verificat separat | fixture-ul și intenția scenariului |
 | inspecție locală read-only | [Debug UI](../atf-debug-ui/README.md) | alegerea sursei și sesiunea inspectată |
-| probe neutre de raportare și compoziție | [Reporting Tests](../../atf_j0/atf-reporting-tests/README.md) | proba adaptorului real și traseul business rămân Shop/AutoEx |
+| verificări locale ale raportului și compoziția bibliotecii | [ghidul consumerului Reporting](ATF_Reporting_Library_Atlas.md) | proba adaptorului real și traseul business rămân în Shop/AutoEx |
 | guvernanță cross-module și probe negative | [ATF Tests](../atf-tests/README.md) | respectarea contractului, fără excepții locale pentru refactor |
 
 Un import Reporting într-un test Shop nu îl transformă într-un test generic.
@@ -203,10 +203,10 @@ endpoint-ului nu se mută în Kit pentru a uniformiza forma claselor.
 | pointer iframe sau captură la 70% | `UiViewportScale` → `PlaywrightUiSession` → proba HTTP neutră UI → configurația și metadata Shop/AutoEx; un click DOM nu dovedește pointer trusted |
 | timeout în gate-ul nativ de geometrie | fixture `openReady` → trace al pregătirii și al clickului → contorul real; cele 5 s se consumă o dată, iar pointerul păstrează 850 ms, fără retry |
 | query extern care întrerupe cleanup-ul contului | [listenerul AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/support/account/AutoExAccountDeletionAttempt.java) → [proba browser](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/business/AutoExBusinessFaultComponentTest.java); query-ul și fragmentul nu participă la matching ori la diagnosticul redirectului |
-| anulare intermitentă în testul Core | [ExecutionResilienceTest](../../atf_j0/atf-core/src/test/java/atf/core/ExecutionResilienceTest.java) → [contractul probei](../../atf_j0/atf-core/README.md#determinism-și-concurență); bariera confirmă intrarea transportului, iar FutureTask transferă rezultatul către JUnit |
+| anulare intermitentă în testul Core | [ExecutionResilienceTest](ATF_Core_Consumer.md) → [contractul probei](ATF_Core_Consumer.md); bariera confirmă intrarea transportului, iar FutureTask transferă rezultatul către JUnit |
 | deadline reînnoit de confirmări | [ObservationBudgetComponentTest](../atf-ui/src/test/java/atf/ui/playwright/ObservationBudgetComponentTest.java) → [integrarea nativă](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightReadinessBudgetComponentTest.java); aritmetica folosește ticks controlați, iar integrarea verifică separat browserul și activarea unică |
 | timeout GET reînnoit în adaptorul AutoEx | [proba nativă](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/navigation/AutoExReadOnlyBudgetBoundaryComponentTest.java) măsoară timeout-urile efectiv trimise browserului, separat de aritmetica ceasului UI; un pointer și două recuperări read-only |
-| bibliotecă Reporting extrasă | [atlasul JAR](ATF_Reporting_Library_Atlas.md) → POM livrat → CodeSource/hash → adaptor → artifact; gate-ul sursei rulează la producător, nu printr-un director Reporting improvizat în J1 |
+| diagnosticarea bibliotecii Reporting | [atlasul JAR](ATF_Reporting_Library_Atlas.md) → POM selectat → CodeSource/hash → adaptor → raport; acceptanța folosește biblioteca fizică selectată de J1 |
 
 Păstrați adaptarea aplicației în main și glue-ul JUnit în test. Kit-ul oferă
 primitive neutre, nu primește browserul ori politică business. O extracție cere
@@ -223,7 +223,7 @@ comportament; mutarea aceleiași clase într-un alt modul nu este această prob�
 | reguli OOP și limite de responsabilitate | [README_Atf_CodeBestPractices](README_Atf_CodeBestPractices.md) |
 | build în TMP și promovare selectivă | [ATF_Build_And_Execution_Safety](ATF_Build_And_Execution_Safety.md) |
 | criterii încă nedemonstrate | [registrul feedback-urilor](feedback/README.md) |
-| integrarea Reporting fără sursă | [atlasul JAR](ATF_Reporting_Library_Atlas.md) și [direcțiile sync](ATF_Reporting_Consumer.md#ownership-și-direcția-sincronizării) |
+| integrarea Reporting fără sursă | [atlasul JAR](ATF_Reporting_Library_Atlas.md) și [rezolvarea și acceptanța consumerului](ATF_Reporting_Consumer.md#resolve-and-accept) |
 
 Shop este excepția explicită a [controlului Git testChanges](../atf-tests/README.md#guvernanța-schimbării-testelor),
 nu a arhitecturii, coeziunii ori verificărilor comportamentale. Nu adăuga path-uri
@@ -275,14 +275,8 @@ decide ce se mută sau se elimină după dovadă.
 - Reia hash-urile live înaintea promovării. Contextul citit anterior nu autorizează
   suprascrierea schimbărilor paralele și nu certifică automat noua combinație.
 
-## Core ca bibliotecă — owner și deployment
+## Consumul bibliotecii Core
 
-J1 consumă Core, Reporting, Console, Mock și Test Kit ca biblioteci externe; contractele sunt în [ghidul platformei](ATF_Platform_Libraries.md).
-
-[Contractul Core](ATF_Core_Consumer.md) separă sursa, publicarea și acceptanțele consumerilor.
-Testele native se păstrează în J0, iar acceptanța pe binar rulează în TMP.
-
-
-## Shared platform libraries
-
-[Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+[Contractul Core](ATF_Core_Consumer.md) și [ghidul bibliotecilor platformei](ATF_Platform_Libraries.md)
+descriu coordonatele selectate, verificările pachetului, rezolvarea Maven/IntelliJ
+și acceptanța J1. Adaptoarele și cataloagele aplicației rămân în modulele locale.
