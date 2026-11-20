@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 2,
+  "englishBranch": "main",
+  "romanianBranch": "main_RO",
+  "documents": 56,
+  "englishSha256": "82483f13b17987caec2c98c5dc35e8578b881d13e9743723f76345c248b3dc39",
+  "romanianSha256": "1a715dd3c62c8a9c2064c43ed44ad9bca72a2859a0cf24db37611fa1f9b0244d",
+  "romanianCommit": "193a467ba0dd8bfae1e6fb58c06e016cc949f0ab"
+}
