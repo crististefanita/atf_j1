@@ -12,6 +12,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 |---|---|---|
 | [UI-RECOVERY-AUDIT-01](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent) | J1 recovery evidence and report acceptance | render recovered and terminal cases; verify one collapsed group expands fully and remains redacted |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Reporting metadata composition | capture the JUnit root and effective selection in audit metadata |
+| [DOC-VERIFICATION-RECORD-SCOPE-20261120](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120) | Documentation artifact governance | decide whether the remaining standalone verification records are durable owner contracts; if not, move run evidence out of maintained docs and reject undated report fixtures |
 | [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity) | Shop billing journey | separate browser startup from lookup settlement timing |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 
@@ -20,8 +21,10 @@ record library observations by coordinate, version, hash, and local reproducer.
 | Contract | Current record |
 |---|---|
 | AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
-| J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); at initial closure, focused proof 65/65 and Whole-ATF 179/179 in EN and RO; editions align across 56 documents |
-| Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); governance 187/187 in EN and RO and edition comparison is clean |
+| J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); latest Whole-ATF governance 190/190 in EN and RO; all 52 Markdown structures and link destinations match |
+| Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); latest governance 190/190 in EN and RO; Markdown edition structure remains aligned |
+| Project maps and dated or library-versioned verification snapshots | [Implemented on 2026-11-20](ATF_Documentation_Feedback.md#doc-context-artifact-governance-20261120); the remaining undated verification-record scope is tracked separately above |
+| Documentation edition review and worktree comparison | [Verified on 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); focused governance 18/18 in EN and RO, Node tests 10/10, and clean TMP comparison across 52 documents |
 | Screenshot evidence policy | [Evidence capture contract](../ATF_Evidence_Capture_Contract.md), the UI module guide, and native browser geometry tests define the current behavior |
 | Consumer contracts | Module READMEs and executable tests define current behavior |
 
