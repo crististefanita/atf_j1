@@ -70,20 +70,19 @@ The short labels have the following meanings:
 
 | Area | Responsibility | Does not own |
 |---|---|---|
-| `atf-core` | neutral runtime contracts and reusable utilities | Extent, browser, business fixture, test lifecycle |
-| `atf-test-kit` | test classification/annotations and test-only failure-aware cleanup; other primitives only after proof | Playwright, browser lifecycle, Extent, consumer profiles or flows |
-| `atf-reporting` | models, renderer, assets, and standalone Reporting contracts | mock, browser, and consuming application |
-| `atf-mock` | deterministic transport/fixture | rendering rules |
-| `atf-ui` | Playwright and generic browser policies | concrete report configuration |
-| `atf-reporting-tests` | consumer, composition root, and Reporting fixtures | reusable production code |
-| `atf-tests` | whole-reactor governance | product tests or concrete fixtures |
+| Selected library artifacts in `lib` | versioned Core, Reporting, Console, Mock, and Test Kit APIs | J1 consumer scenarios or business expectations |
+| `atf-validation` | response contracts, validation rules, and local verdict publication | report rendering or application routes |
+| `atf-ui` | shared Playwright adapter and browser policies | product locators, report configuration, or business flow |
+| `atf-debug-ui` | read-only local inspection of generated HTML | report generation or application behavior |
+| `atf-test-practice-shop` | Shop configuration, adapters, and application tests | generic browser or renderer implementation |
+| `atf-test-auto-ex` | AutoEx configuration, adapters, and application tests | generic browser or renderer implementation |
+| `atf-tests` | local reactor, artifact, and documentation governance | Shop/AutoEx business flows |
 
 ```text
-consumer test
-  → atf-core ports/policies
-  → API/mock/UI adapters
-  → atf-reporting
-  → HTML/Extent artifact
+Shop or AutoEx test
+  → local business expectation and consumer adapter
+  → selected Core / Console / Reporting library APIs
+  → Extent HTML artifact for that local scenario
 ```
 
 `atf-reporting` must be compilable and consumable independently. Any
@@ -580,6 +579,9 @@ Required checklist for a test module:
 | Responsibility placement | [ArchitectureOwnershipBoundaryTest](../atf-tests/src/test/java/atf/api/tests/governance/ArchitectureOwnershipBoundaryTest.java) | exceptions are explicit; the business verdict remains in the consumer |
 | Package cohesion | [AtfPackageCohesionGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfPackageCohesionGovernanceTest.java) | an inventory limit does not justify mechanically splitting a class |
 | Layer and Java sources | [AtfTestLayerArchitectureTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java) | includes roots from the POM; does not demonstrate functional coverage |
+| Constants and source readability | [ConstantsOwnershipGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/ConstantsOwnershipGovernanceTest.java) and [AtfSourceReadabilityGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfSourceReadabilityGovernanceTest.java) | protects semantic ownership and readable call sites, not every naming choice |
+| Consumer source and suite coverage | [ConsumerModuleArchitectureGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java) and [ConsumerSuiteCoverageGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/ConsumerSuiteCoverageGovernanceTest.java) | guards source boundaries and declared suite selection, not business completeness |
+| Code-gate enrollment | [CodeGovernanceSuiteCoverageTest](../atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java) | proves required code gates remain selected by the whole-reactor suite |
 
 [The whole-ATF command](../atf-tests/README.md#quick-verification) runs in staging.
 The owner's unit/component tests verify changed behavior;

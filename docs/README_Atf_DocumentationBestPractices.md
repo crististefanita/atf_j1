@@ -6,7 +6,7 @@ legends, links, and feedback. Code, OOP, and testing rules are in
 
 ## At a glance — what a README should provide
 
- A good README is a navigable map of a contract, not a work log or a copy of the
+A good README is a navigable map of a contract, not a work log or a copy of the
 code. The first screen must provide enough orientation; links lead to more
 detail, but should not be required to understand the purpose.
 
@@ -43,10 +43,12 @@ Concision rules:
 
 ## ATF house style — consistency without local fonts
 
-Keep READMEs consistent with semantic Markdown, not CSS or
-fonts injected into each document:
+Semantic Markdown owns page presentation. Do not inject page-level fonts or
+CSS. Mermaid blocks may use the diagram engine's native theme settings when
+they materially improve label legibility:
 
 - font, size, and color belong to the Markdown renderer;
+- Mermaid theme settings stay within the diagram block and do not style the page;
 - READMEs use one `#`, `##` sections, progressive subsections, and
   `-` bullets for quick scanning;
 - every code or diagram block has a typed fence: `mermaid`, `text`, `java`,
@@ -456,6 +458,18 @@ not contain the internal contracts of every module.
 - feedback: dynamic gaps and closure criteria;
 - generated artifacts: temporary evidence, never normative navigation.
 
+For the root entry page:
+
+- The first screen names the local product, modules, and ownership. It does not
+  introduce sibling workspaces or make shared-library provenance its subject.
+- The module table follows the root POM; one local evidence-flow diagram is
+  enough. Link to the architecture owner for dependency scopes.
+- If binary dependencies need an index, add one short final note linking
+  lib/README.md; keep versions and acceptance detail in the catalog and owner
+  documents.
+- Keep scores, dated runs, and test counts in review or feedback evidence, not
+  in the normative root README.
+
 Links from the root should naturally answer “where can I learn more?” without
 introducing a second version of the same map. A good reference has a semantic
 label and a clear question, not just a path.
@@ -567,6 +581,7 @@ histories, or local artifacts.
 | Dimension | Native check | What still requires manual review |
 |---|---|---|
 | Structure | [README structure](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationReadmeStructureGovernanceTest.java) | first screen and reader journey |
+| Root scope | [root README governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java) | local-first framing and the final library-index note |
 | Links and fragments | [all governed documents](../atf-tests/src/test/java/atf/api/tests/governance/documentation/links/DocumentationLinkGovernanceTest.java) and [negative checks](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationAnchorGovernanceTest.java) | meaning of the label and claim next to the link |
 | Style and prose | [style](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationStyleGovernanceTest.java) and [prose](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationProseGovernanceTest.java) | exact wording, useful density, and first screen |
 | Diagrams and legends | [diagram governance](../atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java) | rendering, geometry, and preservation of meaning |

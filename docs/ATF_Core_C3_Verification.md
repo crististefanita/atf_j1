@@ -1,12 +1,12 @@
-# Core C3 and J2 Consumer Profiles — Verification 2026-11-02
+# Core C3 — J1 Consumer Verification 2026-11-02
 
 ## At a glance
 
-J0 retains Core and Reporting source and their permanent tests. J1–J4 consume
-the same Core C3 pair; Reporting remains at J12, with no artificial release to
-adopt an existing API.
+J1 consumed the Core C3 pair while Reporting remained at J12; no new release
+was needed to use an existing API. This dated record keeps package identity and
+historical verification results separate from current library versions.
 
-| Artifact | Identitate |
+| Artifact | Identity |
 |---|---|
 | Core | atf.api:atf-core:1.0.0-c3 |
 | Core JAR SHA-256 | 605407B9D40E67C9C352EE6E94DA758E50BD3CFB14CC0D7A0DE3359C71088447 |
@@ -23,39 +23,32 @@ adopt an existing API.
   not replace the terminal verdict.
 - Cleanup failure is suppressed on the primary cancellation. A blocked local
   GET retains one dispatch, `CANCELLED`, and no invented response.
-- J2 profiles are declared by the owner before reading HTML; identity, business
-  effect, typed SQL, and complete-value oracles remain independent.
 
 ## Executed matrix
 
 | Proof | Result / boundary |
 |---|---|
-| Core source | 286 native tests, zero failures/errors/skips |
-| Parentless Core | two independent fresh builds, 286 native tests each, byte-identical JAR |
-| Physical Core JAR | the same 286 native tests plus one CodeSource control; no Core source |
+| Core source verification | 286 native tests, zero failures/errors/skips |
+| Parentless Core package | two independent fresh builds, 286 native tests each, byte-identical JAR |
+| Physical Core JAR | the same 286 native tests plus one CodeSource control; no source in the consumer |
 | API C2 → C3 | zero public/protected symbols removed |
 | Reporting on Core C3 | 16 source cases, 43 JAR cases, and one identity control; zero failures/errors/skips in accepted gates |
-| J2 Eventuate | 14 reports, 18 invocations, six controlled JUnit FAIL results |
-| J2 Mock | 14 reports, comparisons and verdicts from independent proofs; no fake HTTP |
-| J2 SQL | 12 reports, 36 invocations, four controlled JDBC exceptions |
-| J2 profiles | 40/40 conform; every ACTUAL mutant rejected; five additional unit contracts |
 | Browser | Extent suite/FAIL, combined Mock and message/SQL fallback; mouse, Enter/Space, final row, and exact backlink |
 
 ## Limits and documentation
 
-SQL has no runtime Core or Reporting dependency. Eventuate loads Core C3, and
-both modules consume the physical Reporting J12 artifact. Cancelling a future
-does not prove server-side rollback; these proofs do not certify the Kafka, ASR,
-or Android applications.
+The consumer acceptance recorded here verifies the published library contract
+for J1. Cancelling a future does not prove server-side rollback; these proofs do
+not certify behavior beyond the listed local and binary checks.
 
-- Active J0 feedback retains only Core/Reporting. Test Kit, shared governance,
-  AI, and consumer coordination are tracked in the J1 register.
-- The audit history remains a dated document; read proven contracts at their
-  owner. The transfer does not close criteria without implementation and proof.
+- Provenance and package-verification records describe the historical inputs;
+  they do not claim those source checks ran in J1.
+- Read current consumer contracts in the local library guides. This dated record
+  does not establish the behavior of later library versions.
 
 TMP evidence: ATF_ADOPTION_CORE_C3_ACTIVE_DO_NOT_CLEAN_HjeEfO — gates, XML,
-core-binary-api.json, C3 matrices, inventory, and guarded promotion. Reporting
-source/JAR regressions and final governance are recorded in the increment receipts.
+core-binary-api.json, C3 matrices, inventory, and guarded promotion. The dated
+receipt records package verification separately from J1 consumer acceptance.
 
 
 <details>
@@ -67,11 +60,9 @@ source/JAR regressions and final governance are recorded in the increment receip
 - Two documentation gates targeted another staging area and are excluded in
   `invalid-documentation-gates.json`. Correct gates verify project identity
   explicitly; the runner rejects a name/workdir mismatch.
-- The copied J4 TMP cache contained invalid POM/JAR files; accepted verification
-  uses a fresh cache and two passing Core/Reporting contracts.
 - The intermediate Core publisher was replaced before delivery. Only
   publisher-3/4 produce the final byte-identical candidate with all 149 inputs pinned.
-- New Reporting requirements for high-volume memory and full ACTION/OBSERVE
-  remain open in J0; J4 mitigations and Core C3 do not close them.
+- This historical consumer verification does not close requirements for
+  high-volume memory or complete ACTION/OBSERVE evidence in later versions.
 
 </details>

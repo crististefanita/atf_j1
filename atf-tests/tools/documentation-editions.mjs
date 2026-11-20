@@ -86,7 +86,9 @@ export function markdownContract(path, source) {
     inTextBlock = false;
   };
 
-  for (const line of source.replaceAll('\r\n', '\n').split('\n')) {
+  const lines = source.replaceAll('\r\n', '\n').split('\n');
+  while (lines.length > 0 && !lines.at(-1).trim()) lines.pop();
+  for (const line of lines) {
     const match = FENCE.exec(line);
     if (match) {
       flushText();
@@ -125,6 +127,11 @@ export function markdownContract(path, source) {
               content = reason[1] + reason[2];
               yamlReasonIndent = indent;
             }
+          } else if (/^\s*(?:-\s+)?base:\s*[a-f0-9]{40}(?:[a-f0-9]{24})?\s*$/i.test(line)) {
+            content = line.replace(/[a-f0-9]{40}(?:[a-f0-9]{24})?\s*$/i, '<branch-commit>');
+          } else {
+            content = line.replace(/(-Datf\.governance\.testChanges\.baseRef=)[a-f0-9]{40}(?:[a-f0-9]{24})?(?=["\s]|$)/gi,
+              '$1<branch-commit>');
           }
         }
       }

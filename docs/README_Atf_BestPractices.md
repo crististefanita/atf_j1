@@ -66,8 +66,8 @@ This index should remain short and stable.
 
 | What changes | Starting proof | Limitation |
 |---|---|---|
-| Code and boundary | [WholeAtfGovernanceSuiteTest](../atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java) | verifies the governed rule, not every application behavior |
-| README and legends | [Documentation validators](README_Atf_DocumentationBestPractices.md#owner-editorial-review) | valid structure still requires checking against the live source |
+| Code and boundary | [WholeAtfGovernanceSuiteTest](../atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java) and [code-gate coverage](../atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java) | verifies the governed rule, not every application behavior |
+| README and legends | [root README gate](../atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java) and [documentation validators](README_Atf_DocumentationBestPractices.md#owner-editorial-review) | valid structure still requires checking against the live source |
 | Protected test | [testChanges policy](../atf-tests/README.md#test-change-governance) | an editorial change does not authorize weakening the test |
 
 Run the gate in [TMP](ATF_Build_And_Execution_Safety.md), using the command in

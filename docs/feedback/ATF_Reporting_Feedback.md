@@ -1,81 +1,68 @@
-# Reporting — J0 owner and criteria
+# Reporting — J1 consumer feedback
 
 ## At a glance
 
-This consumer uses the Reporting JAR. The [canonical J0 register](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md) owns the current criteria and priorities; we do not keep a competing copy of the backlog.
+This register keeps J1-specific Reporting integration gaps. Reproduce each
+finding against the selected Reporting coordinate and preserve the generated
+report as evidence.
 
-Local reproductions are tied to the JAR version/hash and the exact scenario. Implementation and permanent mock/contract regression are verified in J0; the consumer then accepts the delivered binary according to the [protocol](../ATF_Reporting_Consumer.md).
 
-<details>
-<summary><strong>Stable links to owner criteria</strong></summary>
+<a id="ui-recovery-audit-01--inspectable-attempts-in-extent"></a>
 
-## Criteria remaining for consolidation
+## UI-RECOVERY-AUDIT-01 — make every recovery observation inspectable in Extent
 
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#criterii-rămase-pentru-consolidare).
+**Status:** Open · **Owner:** J1 recovery evidence and report acceptance. The
+local recording adapter emits one information record per UiRecoveryTrace, while
+consumer documentation describes only an aggregate indicator. A rendered
+report has not yet confirmed that the full trace appears in one expandable group.
 
-## Preparation order
+| Code evidence | What is recorded |
+|---|---|
+| UiBackendRecovery.recording | One information record per observation, titled by attempt and labeled with the operation |
+| UiRecoveryTrace.description | Decision, reason, captured signal summary when available, probe/backoff/total durations, and policy source |
+| Current consumer README | Describes an aggregate recovery indicator; it does not specify the visible hierarchy for the full attempt sequence |
+| 2026-11-20 component checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest passed 6/6; both assert trace safety and dispatch limits, but neither produces an Extent report |
 
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ordinea-pregătirii).
+- [ ] Run a deterministic recovered scenario and a terminal refused/exhausted scenario in each consumer that enables recovery.
+- [ ] Verify the generated Extent report groups all observations under one collapsed recovery step, in attempt order, with an aggregate outcome visible at the parent.
+- [ ] Expand the group and verify each attempt's decision, reason, safe signal metadata, duration, and policy source appears once. Confirm that request bodies and private URLs are absent.
+- [ ] Add or retain a local component/browser assertion for initial collapsed state, expand-all behavior, full child visibility, and redaction. Keep the recovery assertions separate from business verdicts.
 
-## REPORT-PUBLIC-API-43 — supported surface and ownership
-
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-public-api-43--suprafață-susținută-și-ownership).
-
-## REPORT-RELEASE-CONTRACT-45 — package contents and promises
-
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-release-contract-45--ce-conține-și-ce-promite-pachetul).
-
-## REPORT-PORTABLE-DOCS-46 — external adoption and portable documentation
-
-[J0 library distribution and consumption guide](../../../atf_j0/docs/ATF_Platform_Libraries.md).
-
-## REPORT-FLOW-PROJECTION-36 — evidence plan separate from publication
-
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#report-flow-projection-36--plan-de-dovezi-separat-de-publicare).
-
-## UI-RECOVERY-AUDIT-01 — inspectable attempts in Extent
-
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--încercări-inspectabile-în-extent).
-
-## Index fallback — J11 delivered contract
-
-The [display contract](../../../atf_j0/docs/ATF_Reporting_Display_Contract.md) preserves the neutral index, separate status, and full names; generic criterion 66 is no longer open.
-
-## Existing contracts
-
-[Current content and criterion in J0](../../../atf_j0/docs/feedback/ATF_Reporting_Feedback.md#contracte-existente).
-
-</details>
-
-## Current library adoption
-
-See [consumer provenance](../../library-provenance.json) and the
-[large report navigation contract](../../../atf_j0/docs/ATF_Large_Report_Navigation.md).
-
-## Verified J1 live acceptance
-
-The [2026-11-03 purchase and rendering receipt](../ATF_J1_Live_Screenshot_Verification.md)
-owns the historical evidence for the launch-context finding below.
+**Closure:** a generated J1 report and a local rendered-report check prove that all
+attempts are discoverable from one collapsed recovery group and remain complete
+after expansion, including expand-all. Both recovered and terminal outcomes
+are covered; no sensitive request content is published.
 
 <a id="j1-launch-context-146"></a>
+
 ## J1-LAUNCH-CONTEXT-146 — record the actual launch scope
 
-**Priority: P2. Owner:** J1 launch metadata and consumer composition; reusable
-JUnit context capture belongs in Kit. This is an audit-context gap, with all
-four business and rendering gates passing.
+**Status: Open. Owner:** J1 launch metadata and consumer composition. Business
+and rendering checks pass; audit metadata still omits the JUnit root and the
+effective test selection.
 
 | Witness | Observed fact |
 |---|---|
-| Actual launch | The retained discovery plan executes one purchase through AutoExE2eSuite or ShopE2eSuite |
-| Published identity | Neither suite HTML contains its actual canonical suite name; secondary execution metadata does not supply it |
-| Ambiguous filename | AutoEx uses purchase-suite in both individual and suite report names |
-| Existing boundary | ReportEnvironmentField.SUITE is intentionally hidden from operational System; launch facts belong in secondary Tests/trace metadata |
+| AutoEx composition | `AutoExRunFactory` shares a report resource from the JUnit root store, but names the report from the test method and each scenario from the child test class/display name; it does not publish the root suite or effective selection |
+| Shop composition | `ShopE2eTestSupport` shares a root-store report; `ShopRunReportFactory` receives configuration, evidence profile, and environment, not JUnit launch identity |
+| Ambiguous filename | `AutoExReportSession.fileName` derives the report name from the method, so a direct method run and a suite run can share the same name prefix |
+| Existing boundary | `ReportEnvironmentField.SUITE` is intentionally hidden from operational System; launch facts belong in secondary Tests/trace metadata |
+| 2026-11-20 controlled check | `AutoExE2eOverviewNarrativeComponentTest` passed two UI/UI_API fixture scenarios in suite scope and verified report expansion; it does not assert the canonical root suite or effective selection |
 
-- [ ] Capture immutable launch scope, real suite root when known, selected class/method and effective selection count at the JUnit boundary; preserve an explicit unknown state when unavailable.
-- [ ] Supply those safe facts through existing neutral metadata/observation APIs; retain the business step titles, one report per suite and preview 240.
-- [ ] Add permanent component contracts for direct and filtered canonical-suite launches, including same-title classes and a misleading filename; never derive scope from artifact text.
-- [ ] Keep browser acquisition and application behavior out of this metadata change; generic rendering regressions belong in J0 only if an actual publication defect is reproduced.
+- [ ] Capture immutable launch scope, canonical suite root when known, selected
+  class/method, and effective selection count at the JUnit boundary; retain an
+  explicit unknown value when unavailable.
+- [ ] Publish those safe facts through the existing neutral metadata boundary,
+  outside operational System; preserve business step titles, one report per
+  suite, and the 240-character preview.
+- [ ] Add J1 contracts for direct and filtered canonical-suite launches,
+  including same-title classes and misleading file names. Do not infer scope
+  from artifact names or displayed step text.
+- [ ] If the selected Test Kit contract cannot expose the required context,
+  record the exact library coordinate and a minimal J1 reproducer; keep browser
+  acquisition and application behavior outside this metadata item.
 
-**Closure:** a standalone reader identifies the real launch context from each
-HTML without the source checkout or external launcher log. These passing live
-artifacts are the baseline, not a substitute for the permanent negative oracle.
+**Closure:** a reader identifies the JUnit root suite, effective selection, and
+selected tests from each HTML report without source checkout or launcher logs.
+Direct and filtered launches pass positive and negative contracts; passing
+business or rendering checks alone does not close this metadata gap.

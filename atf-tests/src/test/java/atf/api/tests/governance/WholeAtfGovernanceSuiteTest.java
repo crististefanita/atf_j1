@@ -9,6 +9,7 @@ import atf.api.tests.governance.distribution.GovernanceDeploymentTest;
 import atf.api.tests.governance.distribution.ReportingGovernanceSurfaceTest;
 import atf.api.tests.governance.distribution.ReportingHarnessOwnershipTest;
 import atf.api.tests.governance.documentation.DocumentationDiagramGovernanceTest;
+import atf.api.tests.governance.documentation.relationship.DocumentationDirectRelationshipGovernanceTest;
 import atf.api.tests.governance.documentation.language.DocumentationLanguageGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationProseGovernanceTest;
 import atf.api.tests.governance.documentation.structure.DocumentationReadmeStructureGovernanceTest;
@@ -16,11 +17,13 @@ import atf.api.tests.governance.documentation.DocumentationStyleGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationTargetGovernanceTest;
 import atf.api.tests.governance.documentation.links.DocumentationLinkGovernanceTest;
 import atf.api.tests.governance.documentation.DocumentationAnchorGovernanceTest;
+import atf.api.tests.governance.documentation.structure.RootReadmeGovernanceTest;
 import atf.api.tests.governance.documentation.factual.DocumentedBuildContractTest;
-import atf.api.tests.governance.documentation.factual.DocumentedWorkspaceCatalogTest;
+import atf.api.tests.governance.documentation.factual.DocumentedLibraryCatalogTest;
 import atf.api.tests.governance.documentation.factual.DocumentedUiGeometryContractTest;
 import atf.api.tests.governance.documentation.DynamicPathDocumentationArchitectureTest;
 import atf.api.tests.governance.consumers.ConsumerModuleArchitectureGovernanceTest;
+import atf.api.tests.governance.quality.CodeGovernanceSuiteCoverageTest;
 import atf.api.tests.governance.layers.AtfTestLayerArchitectureTest;
 import atf.api.tests.governance.layers.ConsumerSuiteCoverageGovernanceTest;
 import org.junit.platform.suite.api.SelectClasses;
@@ -45,6 +48,7 @@ import org.junit.platform.suite.api.Suite;
         ConstantsOwnershipGovernanceTest.class,
         DynamicPathDocumentationArchitectureTest.class,
         DocumentationDiagramGovernanceTest.class,
+        DocumentationDirectRelationshipGovernanceTest.class,
         DocumentationLanguageGovernanceTest.class,
         DocumentationProseGovernanceTest.class,
         DocumentationReadmeStructureGovernanceTest.class,
@@ -52,10 +56,12 @@ import org.junit.platform.suite.api.Suite;
         DocumentationTargetGovernanceTest.class,
         DocumentationLinkGovernanceTest.class,
         DocumentationAnchorGovernanceTest.class,
+        RootReadmeGovernanceTest.class,
         DocumentedBuildContractTest.class,
-        DocumentedWorkspaceCatalogTest.class,
+        DocumentedLibraryCatalogTest.class,
         DocumentedUiGeometryContractTest.class,
         ConsumerModuleArchitectureGovernanceTest.class,
+        CodeGovernanceSuiteCoverageTest.class,
         AtfTestLayerArchitectureTest.class,
         ConsumerSuiteCoverageGovernanceTest.class
 })

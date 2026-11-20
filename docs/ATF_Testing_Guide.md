@@ -1,14 +1,15 @@
 # ATF Testing Guide — layers, responsibilities, and evidence
 
-**J1 scope:** Reporting is an external JAR. Commands that target
-`atf-reporting/pom.xml`, native resources, or source audits run in the
-producer's `atf_j0` staging; the [J1 guide](ATF_Reporting_Consumer.md) separates gates and ownership.
+**J1 scope:** Reporting is consumed as the selected versioned JAR/POM pair.
+This guide covers tests in the local J1 modules and the consumer evidence those
+tests produce. The [Reporting consumer guide](ATF_Reporting_Consumer.md) explains
+artifact selection and the limits of local acceptance.
 
 ## At a glance
 
-Reporting defects observed in consumers receive a [permanent regression](../../atf_j0/atf-reporting-tests/README.md#regresia-permanentă-a-fiecărui-defect-reporting)
-at the producer, using mock/contract and browser proof according to the affected boundary. Each
-candidate JAR passes the external gate in TMP; the harness is not a module in J1.
+Choose the owner of the behavior, then the lowest test level that can prove it.
+J1 verifies the selected artifact identity and the integrations exercised by
+local consumers; this does not claim to execute a library's independent test suite.
 
 The guide explains where a test belongs, how to choose the lowest level that can
 prove the behavior, and how to move from a local check to composition or
@@ -78,7 +79,7 @@ The implemented API for channels, output, setup, and documentation is described 
 
 In AutoEx and Shop, components use the consumer marker and publish
 evaluated checks in the standard `Component assertions` step. Unit tests
-do not have this requirement; renderer probes remain a separate category in Reporting Tests.
+do not own report rendering; the selected Reporting library supplies it.
 
 - `AuditedAssertions` and `RecordedAssertions` preserve the single JUnit evaluation;
   result policy, phases, and the default limit of 240 characters are documented in
@@ -102,7 +103,7 @@ do not have this requirement; renderer probes remain a separate category in Repo
   the synchronous DOM counter counts native activations without asynchronous RPC confirmation.
 - Individual launches and suites use the same application adapter;
   Extent/fallback validation and disclosure interaction are tested in
-  [Reporting Tests](../../atf_j0/atf-reporting-tests/README.md).
+  [Reporting consumer guide](ATF_Reporting_Consumer.md).
 
 The shared session belongs to the declared class or suite; the scenario,
 comparisons, and measured timing remain per invocation. Final publication and
@@ -111,7 +112,7 @@ path notification follow owner closure, once the artifact exists.
 | Verified contract | Probe owner | Regression probe |
 |---|---|---|
 | Resource and isolated audit | Kit | `ScopedTestResourceTest`, `ScopedComponentAuditExtensionComponentTest` |
-| Borrowed scenario and exactly-once close | Reporting Tests | `AssertionAuditRunComponentTest` |
+| Component report lifecycle and scope | Shop/AutoEx | `ShopComponentReportScopeComponentTest`, `AutoExComponentReportScopeComponentTest` |
 | Method/class/suite and repeated launches | Consumer | `AutoExComponentReportScopeComponentTest`, `ShopComponentReportScopeComponentTest` |
 | Executable selectors and excluded comments | Core + ATF Tests | `AtfJavaSourceReferencesTest`, `ConsumerSuiteCoverageGovernanceTest` |
 
@@ -186,25 +187,23 @@ Cells show only levels that exist in the current executable suites.
 
 | Module | Unit | Component | Integration | E2E | Owner and primary purpose |
 |---|:---:|:---:|:---:|:---:|---|
-| [`atf-core`](../../atf_j0/atf-core/README.md) | ✅ | — | — | — | neutral contracts and reusable policies |
+| Core library | — | — | — | — | consumed API contracts; Core source tests are outside J1 |
 | [`atf-validation`](../atf-validation/README.md) | ✅ | ✅ | — | — | validation rules and typed results |
-| [`atf-console`](../../atf_j0/atf-console/README.md) | ✅ | — | ✅ | — | unit policy/formatter; extension integration with real Jupiter |
-| [`atf-mock`](../../atf_j0/atf-mock/README.md) | — | ✅ | — | — | fake transport and deterministic behavior |
+| Console library | — | — | — | — | structured diagnostic output consumed by local modules |
+| Mock library | — | — | — | — | deterministic fake transport used by local tests |
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | generic Playwright policy and adapter |
 | [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | read-only server and launcher for inspection |
-| [`atf-reporting`](ATF_Reporting_Library_Atlas.md) | — | — | — | — | exception: standalone suites without ATF annotations or dependencies |
-| [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md) | ✅ | ✅ | ✅ | ✅ | composition and proof for the Reporting library |
+| Selected Reporting library | — | — | — | — | versioned binary dependency; its source tests are outside this reactor |
+| J1 Reporting consumer evidence | — | ✅ | ✅ | ✅ | local adapters, scenarios, and rendered report behavior |
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumer: contracts, API, flows, and browser journeys |
 | [`atf-test-auto-ex`](../atf-test-auto-ex/README.md) | — | ✅ | ✅ | ✅ | consumer: purchase journeys in distinct UI profiles, component probes, and opt-in live API |
 | [`atf-tests`](../atf-tests/README.md) | — | ✅ | ✅ | — | boundary and whole-reactor governance |
-| [`atf-test-kit`](../lib/README.TestKit.md#scope-and-integration) | ✅ | ✅ | — | — | test layer vocabulary and test-only contracts |
+| Test Kit library | — | — | — | — | test-level annotations and support consumed by local suites |
 
 The guard reflects the owners without falsifying the reactor structure:
 
-- `atf-reporting` is `standalone-independent`; its tests run in its own module
-  and are not reactor suites with layer annotations;
-- `AtfTestLayerArchitectureTest` verifies the exception and requires one annotation per
-  executable test in the reactor;
+- The selected Reporting JAR is a binary dependency, not a source module in this reactor;
+- AtfTestLayerArchitectureTest checks executable tests in the local reactor against their declared test level;
 - this guide's matrix links to the owners; it does not duplicate the validator in each cell.
 
 AutoEx has separate suites for component, purchase E2E, and live API.
@@ -221,19 +220,20 @@ Move the invariant, not the fixture or the entire test:
 
 | What the test asserts | Owner | What remains local in the consumer |
 |---|---|---|
-| application rules, UI/API paths, payloads, and data propagation | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#boundary-between-shop-and-reporting-tests) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suites-and-evidence-variants) | all business probes, including mock-backed ones; the mock isolates transport without changing ownership |
+| application rules, UI/API paths, payloads, and data propagation | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md#boundary-between-shop-tests-and-the-reporting-library) / [`atf-test-auto-ex`](../atf-test-auto-ex/README.md#suites-and-evidence-variants) | all business probes, including mock-backed ones; the mock isolates transport without changing ownership |
 | translation of the application contract to the public Reporting port | the consumer that owns the adapter | business intent/title, mapping the expectation to the exchange, specific status, and local redaction policy |
-| generic semantics of the model, lifecycle, publisher, markup, tables, disclosures, CSS/JS, or report browser | [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md#regula-limitelor-de-responsabilitate) (or standalone `atf-reporting` tests, depending on the boundary) | neutral probes with no dependency on Shop/AutoEx |
-| reusable, strictly test-only APIs and lifecycles: annotations, resolvers, classification, and generic primitives | [`atf-test-kit`](../lib/README.TestKit.md#scope-and-integration) | the application keeps its fixture, lifecycle, and business adapter; the Kit does not take business assertions or Reporting tests |
+| generic Reporting contract described by the selected library | the guide describes its public contract; J1 verifies only local consumer integrations | consumer scenarios and adapters remain in Shop or AutoEx |
+| reusable, strictly test-only APIs and lifecycles: annotations, resolvers, classification, and generic primitives | [`atf-test-kit`](../lib/README.TestKit.md#scope-and-integration) | the application keeps its fixture, lifecycle, business assertions, and report publication |
 
-A probe can remain consumer-owned even if it publishes an artifact: it must
-verify only the application adapter contract and use the semantic snapshot or
-typed result for that mapping. DOM/HTML structure, CSS, disclosure format,
-retry rendering, and other independent invariants are tested once with a generic
-fixture at the Reporting owner. Test Kit is not a general place to move tests:
-it does not depend on Reporting, Playwright, or consumer code; promote candidates
-only if they are neutral infrastructure primitives, not merely because two
-applications use them.
+A probe can remain consumer-owned while it publishes an artifact and verifies
+the local adapter contract:
+
+- Use a semantic snapshot or typed result to verify the mapping.
+- The selected library guide describes HTML, CSS, disclosure, and Extent
+  contracts. J1 tests verify only their local integration and generated output.
+- Test Kit remains limited to neutral test infrastructure. It does not depend on
+  Reporting, Playwright, or consumer code; promote a test primitive only when it
+  is reusable without those dependencies.
 
 ### Probe each resource owner
 
@@ -406,18 +406,18 @@ an `Object` that hides the same dependencies.
   files left by an earlier selection do not belong in the current inventory.
 - `ShopComponentSuite` intentionally includes unit/support packages;
   `AutoExComponentSuite` selects the component package;
-  `AtfReportingComponentSuite` requires the `component` tag and excludes Suite classes.
 - Moved unit/integration probes remain separately verified by their owners,
   including Test Kit; their absence from the component suite is correct only with
   execution proof at the declared layer.
 - Do not compensate for a lost test with an unrelated new test; compare the
   missing cases and invariant equivalence before deleting the copy.
 
-Run the shared gate in external staging, without live business traffic:
+Run the shared gate in staging, without live business traffic:
 
-```text
-mvn -pl atf-test-practice-shop,atf-test-auto-ex,atf-reporting-tests -am "-Dtest=ShopComponentSuite,AutoExComponentSuite,AtfReportingComponentSuite" "-Dsurefire.failIfNoSpecifiedTests=false" test
-```
+~~~text
+mvn -pl atf-test-practice-shop,atf-test-auto-ex -am "-Dtest=ShopComponentSuite,AutoExComponentSuite" "-Dsurefire.failIfNoSpecifiedTests=false" test
+~~~
+
 
 ## UI/API path and what the tests verify
 
@@ -441,7 +441,7 @@ Do not test two projections by duplicating the same payload. The per-checkpoint
 trace owns the canonical exchange; the inspector groups only the facts needed
 for navigation and does not replace request/response details. For the consumer
 owner, configuration, and lifecycle, continue in the Practice Shop README; for
-the renderer, markup, and disclosure, continue in the `atf-reporting-tests` README.
+For the selected library contract, use the Reporting guide; verify J1 consumer behavior with a local component or browser test.
 
 ### E2E prerequisites and `SETUP`
 
@@ -556,13 +556,13 @@ content variation.
 
 | Existing regression probe | Demonstrated limitation |
 |---|---|
-| `ExtentReportDisclosureBrowserComponentTest` | request with its own evidence and child validation; mouse/Enter/Space, ARIA, and both bodies; custom UI title and checkpoint without a synthetic HTTP table |
-| `ReportApiViewportParityComponentTest` | request and retry metadata: short Extent content, short/long fallback, standard/narrow viewport, local scroll, and sticky header |
-| `ReportEvidenceStyleContractTest` | removing disclosures while retaining the stylesheet is rejected; CSS/JS classes are not proof of content |
+| `AutoExE2eOverviewNarrativeComponentTest` | selected catalog GET owns the comparison; its API assertions and request disclosure expand in the local Extent report |
+| `ShopApiCallAuditReportComponentTest` | local intent/status association with the observed exchange and the adapter's audit diagnosis |
+| `AutoExCatalogReportPresentationE2eTest` | browser interaction with the controlled local report artifact and its navigation |
 
 These probes do not automatically certify every projection or the local verdict
 for each exchange. The contract and proof matrix belongs to
-[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); active gaps remain in the
+[Reporting consumer guide](ATF_Reporting_Consumer.md); active gaps remain in the
 [feedback register](feedback/README.md), separate from technical controls.
 
 ## Principles for short, plug-and-play tests
@@ -589,7 +589,7 @@ Test-only contracts and annotations are in [`atf-test-kit`](../lib/README.TestKi
 |---|---|
 | one targeted test in a module and its dependencies | `mvn -pl <modul> -am "-Dtest=<ClasaTest>" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 | whole-ATF suite | `mvn -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
-| isolated `atf-reporting` library — only in `atf_j0` staging | `mvn -f atf-reporting/pom.xml test` |
+| selected library artifact identity and local metadata | mvn -pl atf-tests -am -Dtest=PlatformLibraryIntegrityTest -Dsurefire.failIfNoSpecifiedTests=false test |
 | Practice Shop — selected contracts | `mvn -pl atf-test-practice-shop -am "-Dtest=ShopConfigurationTest,ShopCheckoutConfigurationTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 | Shop/AutoEx whole-ATF boundaries | `mvn -pl atf-tests -am "-Dtest=ConsumerModuleArchitectureGovernanceTest" "-Dsurefire.failIfNoSpecifiedTests=false" test` |
 

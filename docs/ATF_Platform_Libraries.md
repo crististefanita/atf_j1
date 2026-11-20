@@ -1,67 +1,91 @@
 # ATF — platform library consumption
 
-[Ownership, feedback, and synchronization](../lib/README.md) describes the shared J0 workflow; this page details the technical integration.
+This guide describes the five versioned library artifacts consumed by the J1
+reactor and the checks that protect their use.
 
 ## At a glance
 
-J1 consumes Core, Reporting, Console, Mock and Test Kit as external libraries;
-J0 owns their implementation and native tests. Consumer adapters, configuration
-and acceptance stay with each deployment. The live module counts, consumer roles
-and Reporting versions are maintained in the
-[workspace catalog](ATF_Workspace_Synchronization.md#module-and-reporting-catalog)
-instead of being copied into this library guide.
+J1 resolves Core, Reporting, Console, Mock, and Test Kit from flat JAR/POM pairs
+in `lib`. The root POM selects versions; local adapters, configuration,
+business scenarios, and acceptance tests stay in their owning J1 modules.
+Library details are summarized in the [artifact catalog](ATF_Workspace_Synchronization.md#consumed-library-catalog)
+and the [local library index](../lib/README.md).
 
-## Console and Mock boundaries
+## Library contracts
 
-| Library | Production dependencies | Ownership |
-|---|---|---|
-| Console | Core, Jackson YAML, JUnit API; optional Test Kit for the JUnit bridge | Neutral event formatting, configured stdout and JUnit lifecycle projection |
-| Mock | Core and Jackson YAML; Kit and JUnit are test-only | Deterministic HTTP-port replacement, strict JSON and exact route/query/numeric matching |
-| Reporting | No ATF module dependency | HTML/Extent/fallback, audit projection and rendering |
+| Library | Main contract used here |
+|---|---|
+| Core | HTTP execution, configuration, JSON, and lifecycle primitives |
+| Reporting | Extent/fallback rendering and auditable report evidence |
+| Console | Neutral event formatting and configured diagnostics |
+| Mock | Deterministic HTTP-port replacement and strict request matching |
+| Test Kit | JUnit classification, comparisons, and test lifecycle support |
 
-Console retains its existing JUnit bridge. Consumers using that bridge declare Kit themselves; an optional Maven dependency does not provide Kit transitively. 
+- The Console JUnit bridge is optional. Consumer modules that use it declare
+  Test Kit directly because optional Maven dependencies are not transitive.
+- Console and Mock do not depend on Reporting, Validation, or application
+  modules.
+- Business fixtures and YAML catalogs remain in their consumer modules.
 
-Console and Mock do not depend on Reporting, Validation or application modules. Business fixtures and YAML catalogs remain at their consumer.
+## Resolution and acceptance
 
-## Source and binary flow
-
-```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
+~~~mermaid
 flowchart LR
-    Source["J0<br/>source + native tests"] -->|package| Pair["One candidate<br/>JAR + standalone POM"]
-    Pair -->|adopt| Lib["J1<br/>flat lib"]
-    Lib -->|validate| Acceptance["Per-consumer<br/>contracts + components"]
-```
+    Coordinates["Root POM<br/>library versions"] --> Pair["lib/<br/>five JAR/POM pairs"]
+    Pair -->|validate installs| Maven["Maven local repository"]
+    Maven -->|dependency resolution| Consumer["J1 modules"]
+    Consumer -->|local scenarios| Acceptance["Component and integration evidence"]
+    Provenance["library-provenance.json"] -. hashes and origin .-> Pair
+    Governance["J1 governance"] -. checks .-> Pair
+~~~
 
 <details>
-<summary><strong>Legend — one package, independent acceptance</strong></summary>
+<summary><strong>Legend — binary dependencies and local evidence</strong></summary>
 
-- Arrows describe publication and acceptance, not extra Maven modules.
-- J0 keeps all native test classes; binary acceptance reuses them only in an owned TMP harness, with no production source on its classpath.
-- Every consumer retains its own Git base and domain scope; a passing gate in one consumer does not prove another consumer.
-- Root POM properties select the current coordinates. The publication POM pins the tested Core dependency; its version is independent of the consumer reactor version.
+- The arrows describe dependency resolution and consumer acceptance.
+- J1 tests execute against the physical library JARs selected by the root POM.
+- Governance verifies coordinates, POM/JAR consistency, hashes, dependency
+  boundaries, and the flat `lib` inventory.
+- Native library source and tests are not included in this reactor. Provenance
+  may record package evidence, but a J1 consumer run does not imply those tests
+  were executed here.
 
 </details>
 
 ## Maven and IntelliJ
 
-Run from the consumer root, in an owned TMP copy:
+Run from a disposable TMP copy:
 
-```powershell
+~~~powershell
 mvn -B -ntp -N validate
 mvn -B -ntp -DskipTests test-compile
-```
+~~~
 
-The root validate phase installs the five real POM/JAR pairs into the selected Maven local repository. Use the same Maven settings and local repository in IntelliJ, then reload the root POM. Dependencies use `atf.core.version`, `atf.reporting.version`, `atf.console.version`, `atf.mock.version` and `atf.testkit.version`; source modules must not be restored to satisfy imports.
+The root `validate` phase installs the five real POM/JAR pairs into the selected
+Maven repository. Use the same JDK, Maven settings, and repository in IntelliJ,
+then reload the root POM. Dependency versions are selected with
+`atf.core.version`, `atf.reporting.version`, `atf.console.version`,
+`atf.mock.version`, and `atf.testkit.version`.
 
-Native library commands run at J0 only. Acceptance against a published JAR compiles the native tests in TMP without copying production classes, verifies the actual CodeSource, and preserves negative oracles. Do not select nested JUnit fixture classes directly: their intentional failures are asserted by their enclosing test.
+Do not select nested JUnit fixture classes directly: their intentional failures
+are asserted by their enclosing tests. Verify the physical JAR `CodeSource`
+when diagnosing classpath conflicts.
 
 ## Integrity and maintenance
 
-- `lib` contains ten binary artifacts plus the index and five per-library usage guides: five JAR/POM pairs, no nested repository, old versions, source or verification notes.
-- Root `library-provenance.json` retains original Core/Reporting provenance and adds `platformLibraries.console`, `platformLibraries.mock` and `platformLibraries.test-kit`: coordinates, binary/POM hashes, producer-input digest, native catalog and current package evidence.
-- The embedded Maven POM must equal the adjacent published POM byte for byte. Consumer governance verifies the physical JAR, source-shadow rejection, dependency boundary and flat inventory.
-- Builds, caches, recovery copies and the latest package verification note stay in the owned producer TMP stage. Official docs describe contracts rather than iterative release history.
-- Changes start at J0, preserve the 240-character default preview and auditable collapsible assertions, then receive separate component acceptance in every affected consumer. No device, external broker or ASR acceptance is inferred from offline checks.
+- `lib` contains five current JAR/POM pairs, an index, and one usage guide per
+  library. It has no nested repository, source tree, or stale version pair.
+- `library-provenance.json` records coordinates, binary/POM hashes, and
+  package-input evidence. Historical entries remain available for audit.
+- The embedded Maven POM must match the adjacent published POM byte for byte.
+  Governance checks the physical artifacts, source-shadow rejection,
+  dependency boundaries, and flat inventory.
+- Builds, caches, generated reports, recovery copies, and temporary package
+  notes stay in owned TMP staging.
+- Preserve the 240-character default preview and auditable, collapsible
+  component/E2E assertions. Offline checks do not imply device, external broker,
+  or ASR acceptance.
 
-See [workspace synchronization](ATF_Workspace_Synchronization.md) and [isolated execution](ATF_Build_And_Execution_Safety.md). The source owners are [Console](../../atf_j0/atf-console/README.md) and [Mock](../../atf_j0/atf-mock/README.md).
+See [artifact synchronization](ATF_Workspace_Synchronization.md) and
+[isolated execution](ATF_Build_And_Execution_Safety.md), plus the individual
+[Console](../lib/README.Console.md) and [Mock](../lib/README.Mock.md) guides.

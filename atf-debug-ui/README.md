@@ -58,7 +58,7 @@ Responsibilities remain separate:
 | `atf-reporting` | generates and publishes Extent HTML |
 | `atf-debug-ui` | serves the local artifact read-only over loopback |
 | `atf-ui` | owns generic policies and the Java Playwright adapter |
-| `atf-reporting-tests` / `atf.ui.tests.extent` | automated UI checks for Extent reports |
+| Shop/AutoEx consumer tests | local checks that inspect generated Extent reports |
 | agent + TAB MCP | interactive manual inspection |
 
 ## Startup
@@ -118,9 +118,9 @@ mvn -pl atf-debug-ui -am test
 ```
 
 The test verifies HTML publishing and blocks traversal to files outside the
-root. No separate test module is added: automated Extent audit UI tests remain
-in `atf-reporting-tests/src/test/java/atf/ui/tests/extent`; `atf-tests` owns
-only the global governance test and contains no browser tests.
+root. No separate reporting-test module is added: Practice Shop and AutoEx
+verify their local report scenarios in their own modules; `atf-tests` owns
+reactor and documentation governance, not application report journeys.
 
 ### Closing owned connections
 
@@ -160,7 +160,7 @@ configuration libraries.
   module, with the platform's path separator.
 
 Do not stop another agent's processes. If the host is already saturated,
-reporting tests can run in-process with `-DforkCount=0`; this is a diagnostic or
+report-producing tests can run in-process with `-DforkCount=0`; this is a diagnostic or
 resource measure, does not change the test contract, and does not become the
 default for normal runs.
 

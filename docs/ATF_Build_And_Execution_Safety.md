@@ -1,13 +1,9 @@
-# Safe ATF Builds and Execution
+# Safe ATF J1 Builds and Execution
 
-For Core and Reporting sources in `atf_j0` and J1–J7 consumers, apply the
-[workspace protocol](ATF_Workspace_Synchronization.md) before selective synchronization.
-
-**J1 perimeter:** Reporting is an external JAR. Commands targeting
-`atf-reporting/pom.xml`, native resources, or source audits run in the
-`atf_j0` producer staging area; the [J1 guide](ATF_Reporting_Consumer.md)
-separates gates and ownership.
-
+J1 consumes five versioned library JAR/POM pairs and verifies them through local
+artifact-integrity governance and the consumer tests that exercise them.
+Builds and tests run in owned staging; source synchronization and promotion
+follow the [library artifact procedure](ATF_Workspace_Synchronization.md).
 ## At a glance
 
 - the live checkout is the working context and synchronization source;
@@ -198,7 +194,7 @@ that is not a directory, causes the batch to be rejected without live changes.
 Preflight does not create missing parents; directories are created only for the
 file being executed. Execution revalidates every destination; an I/O failure or
 later drift may leave a partially promoted batch. Atomicity remains per file,
-without batch rollback; permanent probes are in [Core](../../atf_j0/atf-core/README.md#manifest-și-promovare-guarded).
+without batch rollback; permanent probes are in [Core library guide](ATF_Core_Consumer.md).
 
 - Verify and reread the actual state after any error; do not interpret
   an exception as proof that no files changed.
@@ -225,11 +221,7 @@ mvn -o -f "$stage\pom.xml" test
 For Java execution, keep the same rule in staging external to the
 checkout, for example `${ATF_STAGING_ROOT}/Atf-java-feedback-<id>`. Resynchronize
 sources before the build; `target`, reports, and dumps remain
-excluded from sync. Reporting tests accept
-`-Datf.test.reportDirectory=<stage>\artifacts\reports`, iar testul configured
-report test uses `-Datf.report.config=<stage>\atf.yaml`; this makes the report
-to inspect deterministic under `<stage>\artifacts\reports`, regardless of the
-IDE/Maven working directory.
+excluded from sync. J1 report-producing tests accept -Datf.test.reportDirectory=<stage>/artifacts/reports; configured scenarios may also use -Datf.report.config=<stage>/atf.yaml. Check the owning module README for supported properties and keep generated reports under the selected stage, independent of the IDE or Maven working directory.
 
 </details>
 
@@ -265,40 +257,35 @@ robocopy . $stage /E /XD .git target artifacts spark bin obj /XF '*.log' '*.loca
 mvn -f "$stage\pom.xml" '-Dtest=WholeAtfGovernanceSuiteTest' '-Dsurefire.failIfNoSpecifiedTests=false' '-Datf.governance.testChanges.baseRef=<review-base>' test
 ```
 
-### The reactor is required for cross-module contracts
+### J1 verification gates
 
-```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
+Use the reactor for local cross-module behavior. Use the artifact-integrity
+test for the exact JAR/POM pairs selected by the root POM. Consumer acceptance
+and artifact identity are separate checks.
+
+~~~mermaid
 flowchart LR
-    Changed["ATF change"] -->|triggers| Reactor["reactor gate"]
-    Reactor -->|proves| SameSources["same-stage"]
-    Standalone["reporting"] -->|triggers| Isolated["standalone gate"]
-    Isolated -->|proves| IsolatedProof["isolated proof"]
-```
+  Change[J1 source or POM change] -->|runs| Reactor[Local reactor tests]
+  Reactor -->|proves| Consumer[Selected consumer behavior]
+  Pair[Selected library JAR/POM] -->|checked by| Integrity[Artifact integrity test]
+  Consumer -->|publishes| Report[Local Extent evidence]
+~~~
 
-<details>
-<summary><strong>Legend — two independent gates</strong></summary>
-
-- **Reactor gate**: `mvn -pl <consumer> -am test`; recompiles the changed module together with its consumers in the same stage.
-- **Standalone gate — producer `atf_j0`**: `mvn -f atf-reporting/pom.xml test`; checks Reporting in isolation, without consumers.
-- **Proof**: the result must come from the stage sources, not an old local JAR.
-
-When a test module consumes APIs changed in `atf-core`, `atf-ui`, or
-other reactor modules, run verification with `-am` (for example,
-`mvn -pl atf-reporting-tests -am test`). For the standalone library, `mvn -f atf-reporting/pom.xml test`
-is the intentionally isolated gate; an isolated `mvn -pl atf-reporting-tests test` may
-resolve a previously installed JAR from the local repository and report
-missing constructors/methods that are not missing from the stage sources. The isolated
-result is acceptable only after a successful reactor build or if the dependencies
-used were explicitly built from the same stage; otherwise, it is not evidence
-for the live code.
-
-After resyncing into the same staging area, copied timestamps may be
-older than already compiled classes, even if the source signature has changed.
-A Maven `Nothing to compile` message does not then prove source/class equivalence.
-Use a new staging area or `clean test` only in private staging, after
-your own build has finished; do not clean the live checkout or another execution's
-output. Artifacts already produced remain separate from `target`.
+- **Consumer gate:** run the affected module and required reactor dependencies
+  with Maven -am, from the same staging copy.
+- **Governance gate:** run WholeAtfGovernanceSuiteTest after changing reactor,
+  library metadata, or documentation relationships.
+- **Artifact gate:** run PlatformLibraryIntegrityTest to check selected JAR/POM
+  bytes and coordinates. This does not execute library source tests.
+- **Proof:** use outputs produced from the staging sources and selected binary
+  pairs; do not rely on stale classes or previously generated reports.
+- After resyncing into the same staging area, copied timestamps may be older
+  than compiled classes even when the source signature changed. `Nothing to
+  compile` does not prove source/class equivalence.
+- Use a new staging area, or run `clean test` only in private staging after your
+  build has finished.
+- Do not clean the live checkout or another execution's output. Keep generated
+  artifacts separate from `target`.
 
 - An interrupted compilation can leave incomplete `.class` files even if
   Maven considers them current. `ClassFormatError` requires checking the compiled output

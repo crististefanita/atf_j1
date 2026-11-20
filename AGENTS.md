@@ -1,39 +1,38 @@
-# ATF workspace rules
+# ATF J1 workspace rules
 
-- Use the sibling workspace `atf_j0` (`../atf_j0`) as the current Core/Reporting/Console/Mock
-  source and test reference.
-  `demo2` is historical; do not edit or synchronize it for new work.
+- Treat this checkout as the source of truth for its reactor, configuration,
+  Shop/AutoEx scenarios, consumer adapters, and acceptance criteria.
 - Read `docs/ATF_Workspace_Synchronization.md` and
   `docs/ATF_Build_And_Execution_Safety.md` before changing or delivering code.
-- Keep Reporting implementation/native tests in `atf_j0/atf-reporting` and
-  permanent mock, contract and browser regressions in `atf_j0/atf-reporting-tests`.
-- After relevant J0 changes, assess both `atf_j1` and `atf_j2`. Deliver and
-  validate each initialized consumer separately. Inspect J2's current bootstrap
-  and messaging scope; do not infer its acceptance from J1's results.
-- J2 keeps its existing Git and messaging scope. Its explicit Eventuate profile includes Setup and excludes Shop, AutoEx, UI and Debug UI; do not restore those modules or Playwright in J2.
-- Keep Core implementation and native tests only in J0. Binary consumers
-  retain the latest Core, Reporting, Console, Mock and Test Kit JAR/POM pairs directly in `lib`,
-  with one root provenance file. Do not copy Reporting source or its harness
-  into the live binary consumers.
-- Reconcile common code and consumer adapters selectively in both directions.
-  Preserve local work, reactor POMs, configurations and independent Git bases.
-  A successful file promotion is not an atomic transaction across workspaces.
-- Build/test only in owned TMP staging; keep generated reports/cache/output
-  there. Preserve the 240-character default reporting preview and auditable,
+- Consume Core, Reporting, Console, Mock, and Test Kit through the versioned
+  JAR/POM pairs in `lib`. Use the root POM for selected versions and
+  `library-provenance.json` for coordinates, hashes, and recorded package origin.
+  Do not copy library source into this reactor.
+- Keep each J1 consumer adapter, domain expectation, configuration, and
+  integration test local. Describe shared dependencies by library name,
+  Maven coordinate, version, and observable contract.
+- Preserve local reactor POMs, configurations, and Git base. Build and test only
+  in owned TMP staging; keep generated reports, cache, and output there.
+- Preserve the 240-character default reporting preview and auditable,
   collapsible component/E2E assertions.
 - Playwright validation must inherit the SDK-selected Node runtime by default.
-  Do not silently overwrite `PLAYWRIGHT_NODEJS_PATH` with the agent's runtime.
+  Do not silently overwrite `PLAYWRIGHT_NODEJS_PATH` with another runtime.
   Record an explicit runtime experiment separately from SDK-default acceptance.
-- Keep owner documentation and feedback current with the actual code and
-  tests. Preserve historical build provenance; a directory rename alone does
-  not require a new Reporting version or imply a fresh test execution.
-
-- Keep active J0 feedback limited to Core/Reporting/Console/Mock and Test Kit, including generic Reporting tests. J1 coordinates other shared-module criteria and consumer handoffs; preserve domain ownership and independent acceptance in J2/J3/J4. Compatibility routes may remain in J0 without duplicated TODOs.
-
-- Screenshot evidence preserves page context: capture the entire browser viewport
-  at the configured zoom (70% for Shop/AutoEx journeys), or the whole Android
-  display. Region crops may supplement the original frame, never replace it.
-  The report viewer fits the complete image to the screen with its aspect ratio
-  and all edges intact. Explicit geometry tests retain their independent scales.
-
-- Keep project README files and docs focused on current contracts. Retain only the current Reporting verification note beside its producer package in owned TMP; record its location in current consumer provenance. Do not accumulate per-release verification Markdown in docs or consumer lib. Preserve historical build/test provenance.
+- Keep project READMEs and docs aligned with the current code and tests. Record
+  feedback against a reproducible local scenario and the exact library
+  coordinate/hash when relevant. Preserve historical build/test provenance;
+  do not infer a new version or test run from a directory rename.
+- Screenshot evidence preserves page context: capture the entire browser
+  viewport at the configured zoom (70% for Shop/AutoEx journeys), or the whole
+  Android display. Region crops may supplement the original frame, never replace
+  it. The report viewer fits the complete image to the screen with its aspect
+  ratio and all edges intact. Explicit geometry tests retain their independent
+  scales.
+- Keep the root README local-first and concise: explain the J1 modules and
+  evidence flow before any dependency note. If the library catalog is needed,
+  link to lib/README.md once in the final section; do not add sibling
+  workspace identities, run scores, or dated results.
+- Keep current contract documentation concise. Retain only the current package
+  verification note beside the artifact in owned TMP; record its location in
+  provenance when required. Do not accumulate per-release verification
+  Markdown in docs or `lib`.

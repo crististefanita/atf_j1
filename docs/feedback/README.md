@@ -1,72 +1,42 @@
-# ATF J1 — register of active gaps
+# ATF J1 — active feedback register
 
 ## At a glance
 
-J1 owns the AutoEx/Shop tests and Reporting JAR integration; Reporting implementation and generic regressions are owned by J0. Delivered contracts are documented under [their owners](../ATF_Context_Atlas.md); this register retains only the gaps and closure paths.
+This register tracks reproducible gaps in J1 code, documentation, and consumer
+acceptance. J1 consumes the versioned libraries listed in [`lib`](../../lib/README.md);
+record library observations by coordinate, version, hash, and local reproducer.
 
-The [synchronization protocol](../ATF_Workspace_Synchronization.md) inventories J0–J7: J0 owns the sources, J1 the web tests, and J2 remains WIP for Kafka/messaging with setup in Podman. Results and priorities do not transfer between them automatically.
+## Active findings
 
-## Library feedback
-
-Findings about Core, Reporting, Console, Mock, and Test Kit go to their J0 owner. J1 retains domain issues and local acceptance. See the [library guide](../../lib/README.md).
-
-
-## Top active feedback
-
-Scores are priorities, not quality grades or coverage percentages. The formula is impact /40 + gap /30 + feasibility /20 + documentation debt /10; definitions and evidence remain with the owner.
-
-| J1 criterion | Local owner | Remaining evidence |
+| Finding | Local owner | Next evidence |
 |---|---|---|
-| Launch identity | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | real suite identity in audit metadata |
-| Suite-scoped artifact catalog | [AUTOEX-CATALOG-EVIDENCE-146](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146) | component and local browser checks passed; inspect comparison ownership in the artifact from a controlled suite run |
-| AutoEx cart confirmation | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | reproduce the timeout and observe cart state after the click |
-| Shop lookup | [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity) | readiness budget and lookup-race oracles |
-| Documentation contract fidelity | [DOC-LIBRARY-CONTRACTS-147](ATF_Documentation_Feedback.md#doc-library-contracts-147) | J1 prose, link and factual gates pass; producer chronology controls and the two J0 cross-workspace findings remain open |
+| [UI-RECOVERY-AUDIT-01](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent) | J1 recovery evidence and report acceptance | render recovered and terminal cases; verify one collapsed group expands fully and remains redacted |
+| [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Reporting metadata composition | capture the JUnit root and effective selection in audit metadata |
+| [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity) | Shop billing journey | separate browser startup from lookup settlement timing |
+| [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 
-[Reporting](ATF_Reporting_Feedback.md) and [Reporting Tests](ATF_Reporting_Tests_Feedback.md) point to the canonical J0 backlog and its current priorities. J1 retains reproduction and acceptance for its own JAR without a competing copy of the criteria.
+## Delivered consumer evidence
 
-## Verified contracts and controls
-
-| Delivered contract | Verification authority |
+| Contract | Current record |
 |---|---|
-| UI preparation and contextual screenshots | [UI-FIRST-PAINT-144](../ATF_UI_First_Frame_Verification.md) |
-| AutoEx search with GET and fresh DOM | [AutoEx verification](../ATF_AutoEx_Search_Verification.md) |
-| Strict JSON and exact numeric matching | [J1 Core](../ATF_Core_Consumer.md#complete-json-documents-and-faithful-evidence) · [J0 Mock](../../../atf_j0/atf-mock/README.md#json-strict-și-potrivire-numerică-exactă) |
-| Package cohesion | [GOV-PACKAGE-COHESION-2026-11-19](ATF_Code_Maintenance_Feedback.md#gov-package-cohesion-2026-11-19) | whole-ATF 171/171; one package split and one bounded, reviewed Playwright exception |
+| AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
+| J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); at initial closure, focused proof 65/65 and Whole-ATF 179/179 in EN and RO; editions align across 56 documents |
+| Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); governance 187/187 in EN and RO and edition comparison is clean |
+| UI screenshot context | [Live screenshot verification](../ATF_J1_Live_Screenshot_Verification.md) records its exact environment and evidence boundary |
+| Consumer contracts | [Context atlas](../ATF_Context_Atlas.md), module READMEs, and executable tests define current behavior |
 
-The [Core contract](../ATF_Core_Consumer.md) defines the source and native
-evidence in J0, JAR consumption in J1–J7, and separate acceptance. Resolved
-distribution criteria and deterministic timeout evidence are in the owner's
-documentation and baseline; no active Core defects remain in feedback.
+## Record a library observation
 
-The [atlas](../ATF_Context_Atlas.md), [architecture](../ATF_Architecture.md),
-and [testing guide](../ATF_Testing_Guide.md) own the stable contracts and
-starting evidence. Technical controls are in the [baseline](../ATF_Test_Changes_Baseline.md#verified-technical-controls), using the project's actual bases.
+1. Reproduce it in the smallest affected J1 test against the selected physical
+   JAR.
+2. Record the Maven coordinate, version, JAR/POM hashes, expected and observed
+   behavior, and report path when applicable.
+3. Keep application policy and adapter findings with the local module. Describe
+   library behavior through its published guide and the evidence J1 can inspect.
 
-## AI design — separate assessment
+## Closure and history
 
-[AI evaluation](README_AI_Evaluation.md) separates the existing comparator from the proposed agentic design. The design backlog does not expand the maintenance increment, and the [editorial note](../README_Atf_DocumentationBestPractices.md#editorial-review-rubric) does not certify implementation readiness.
-
-## Retention, promotion, and verification
-
-| Situation | Action and authority |
-|---|---|
-| contract already implemented | keep the rule in the owner's README; the index points to it through the [atlas](../ATF_Context_Atlas.md) |
-| real gap | trigger, observation, owner, priority, and closure criterion in domain feedback |
-| partial result | state the limit and remaining work; a passing guard does not close another scenario |
-| verified Git control | [baseline](../ATF_Test_Changes_Baseline.md); do not rebase or extend it implicitly |
-
-The [documentation protocol](../README_Atf_DocumentationBestPractices.md#retaining-and-deleting-feedback) and [TMP build guidance](../ATF_Build_And_Execution_Safety.md) govern each increment. Remove a criterion only after evidence and promotion of the stable contract.
-
-<a id="cerințe-comune-preluate-din-j0--2026-11-02"></a>
-
-## Coordination boundaries with J0
-
-| J1 owner | Retained criteria | Boundary |
-|---|---|---|
-| [Test Kit](ATF_Common_Test_Support_Feedback.md) | Validation adoption diagnostics | code, API, and Unicode preview contract remain in J0 |
-| [Documentation governance](ATF_Documentation_Feedback.md) | DOC-CONTEXT-DEPLOYMENT-111 (81) | J1 documentation gates pass; the J0 README inventory, retired J4 anchor, and producer chronology controls remain open |
-| [AI](README_AI_Evaluation.md) | existing AI-EVAL/AI-WORKFLOW IDs | separate design; moving it does not authorize new functionality |
-| [Android coordination](ATF_Consumer_Reporting_Handoff_Feedback.md) | J4 device/business responsibilities and evidence | J4 retains oracles and Android execution; J0 retains the generic renderer |
-
-The Unicode preview contract is documented in the [Test Kit guide](../../lib/README.TestKit.md). Validation evidence remains specific to J1.
+Move a stable rule into the relevant README and remove a feedback item only when
+its closure evidence passes. Verified test-change controls and their Git bases
+remain in the [baseline](../ATF_Test_Changes_Baseline.md); do not infer a new run
+from a copied folder or a renamed artifact.

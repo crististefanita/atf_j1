@@ -35,8 +35,9 @@ flowchart LR
 - configuration describes the browser and generic evidence;
 - the session composes browser, context, and page, then records actions;
 - atf-ui delivers payloads to the consumer; it does not decide verdicts or build HTML/CSS/Extent;
-- the HTML publisher belongs to Reporting; `UiScreenAudit` owns generic screen
-  observation in UI, while browser proofs for the artifact belong to Reporting Tests;
+- the HTML publisher belongs to the selected Reporting library; `UiScreenAudit`
+  owns generic screen observation in UI, while local consumer tests verify the
+  artifacts their scenarios publish;
 - the concrete scenario and business verdict stay with the consumer.
 Short labels carry the following meanings:
 
@@ -65,14 +66,14 @@ Short labels carry the following meanings:
 |---|---|
 | browser, context, page, viewport, timeout | `atf-ui` |
 | primitive Playwright actions and neutral recorder | `atf-ui` |
-| page objects, flows, and declarative tests | consumer module; `atf-reporting-tests` for its own report audit |
-| snapshot contract and browser validators | `atf-reporting` production + `atf-reporting-tests` test scope |
+| page objects, flows, and declarative tests | Shop or AutoEx consumer module |
+| selected Reporting contract and rendered output | Reporting library guide; consumer tests verify local integration |
 | HTML, CSS, Extent lifecycle, and publisher | `atf-reporting` |
-| mock, API scenarios, and contract validation | `atf-reporting-tests` test scope + API modules |
+| mock-backed API scenarios and application contracts | Shop or AutoEx consumer tests |
 
 `atf-ui` does not import the audit executor or section publisher: static
 validation and report projection belong to `atf-reporting`, while E2E scenarios
-are in the [browser audit README](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md).
+are in the [Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md).
 The UI module does not publish Extent or emit section assertions.
 
 ## Integration path
@@ -127,10 +128,10 @@ the consumer composes generic policies and publishes the artifact through
 
 `atf-ui` exposes only values that describe browser execution and generic
 capture. It does not own `report.directory`, `apiSetup`, `audit`, or
-`filePrefix`; these values are test-only and belong to the internal
-configuration of `atf-reporting`:
+`filePrefix`; these settings are selected by the consumer and consumed by the
+Reporting library. `atf-ui` does not read them:
 
-[`atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml`](../../atf_j0/atf-reporting-tests/src/test/resources/atf-reporting-ui.yaml)
+[Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md)
 
 ```yaml
 ui:
@@ -158,10 +159,7 @@ ui:
 - `viewport.width` and `viewport.height` express the requested capture size;
   the effective CSS viewport is calculated separately;
 - the value is validated in the `25..200` range, and an absent key preserves `100`;
-- the Extent audit YAML, `-Datf.ui.config`/`-Datf.ui.report` overrides,
-  and inspected-report resolution belong to the harness in
-  `atf-reporting-tests`, not to the `atf-reporting` library or `atf-ui` adapter.
-  Each consumer separately owns its application configuration.
+- consumers own their report configuration, output resolution, and application-specific settings; atf-ui does not load report configuration or publish Extent output.
 
 ### Native context geometry
 
@@ -272,8 +270,9 @@ flowchart LR
 ## Actions and locators
 
 `atf-ui` can perform an operation on an `AtfLocator`, but it does not choose the
-selector or know the business intent. Locator facades are in the
-`atf-reporting-tests` test scope:
+selector or know the business intent. Locators, page objects, and business
+intent belong to the consumer; `atf-ui` supplies generic browser and locator
+operations.
 
 Reusable DOM vocabulary is owned here, close to the UI runtime:
 
@@ -931,20 +930,16 @@ decision and does not change the generic fail-closed policy.
 ## What does not belong in `atf-ui`
 
 - JUnit tests or API collections;
-- `UiConfiguration`, `UiAuditSuiteConfiguration`, the YAML loader, and context
-  for `atf.ui.config`/`atf.ui.report` — these are test configuration for
-  reporting and live in `atf-reporting-tests/src/test/java/.../support/config`;
-- `SectionAuditCheckExecutor`, `SectionAuditCheckPolicy`, or
-  `ExtentSectionAuditPublisher`;
-- `ReportProjection`, rules for Tests/Fails/Categories, or the static HTML contract;
+- consumer-specific report configuration, API setup, and audit composition;
+- application-specific report locators, fixtures, and business expectations;
 - HTML/CSS/Extent nodes or artifact finalization;
 - page objects, product selectors, and business flows;
 - fallback to an arbitrary artifact or modification of API input.
 
-These boundaries are intentional: `atf-ui` remains reusable and testable as
-Playwright runtime, `atf-reporting` remains reusable as a reporting library,
-and `atf-reporting-tests` owns the library test composition, from component
-and integration through E2E and browser adapters.
+These boundaries are intentional: `atf-ui` provides the local Playwright
+adapter, and the versioned Reporting library provides report publication.
+Practice Shop and AutoEx keep their application scenarios, adapters, and report
+checks in their own J1 modules.
 
 ## Verification
 
@@ -954,11 +949,10 @@ Runtime/configuration tests:
 mvn -pl atf-ui -am test
 ```
 
-UI report tests run from the composition module
-`atf-reporting-tests`, for example:
+Run the local report-producing component check, for example:
 
 ```text
-mvn -pl atf-reporting-tests -am -Dtest=SelectedApiTestsReportUiTest test
+mvn -pl atf-test-auto-ex -am -Dtest=AutoExE2eOverviewNarrativeComponentTest -Dsurefire.failIfNoSpecifiedTests=false test
 ```
 
 Build and audit:

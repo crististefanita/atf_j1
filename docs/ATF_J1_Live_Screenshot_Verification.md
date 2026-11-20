@@ -81,7 +81,7 @@ keeps this auditability improvement separate from generic renderer defects.
 |---|---|
 | Owned TMP root | ATF_LIVE_SCREEN_AUDIT_ACTIVE_DO_NOT_CLEAN_85211735 |
 | J1 captured base | f2aaa41e1f0939b93ccdab509492f862c09d18cc; existing local work retained |
-| J0 documentation base | 6bef40515954acd121c93a66e1bf544db14e97b5 |
+| library artifact documentation base | 6bef40515954acd121c93a66e1bf544db14e97b5 |
 | Individual runs | live-autoex-individual-atf_j1.log and live-shop-individual-atf_j1.log; Surefire XML retained |
 | Canonical suite runs | suite-autoex.log, suite-shop.log and their discovery/metrics JSON receipts |
 | Browser verification | render-audit.log, render-captures/audit.json and inspected PNG captures |

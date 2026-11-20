@@ -67,12 +67,11 @@ score or the central register's priorities. The implemented contract remains
 with its owner; proposed design is not evidence of delivery.
 
 <a id="scorecard-executiv"></a>
-### Executive scorecard
+### Current state
 
-Implementation remains **50/100**, according to the existing assessment: the
-comparator, invocation provenance, and typed snapshot are delivered; `AMBIGUOUS`
-classification, the run ledger, AI lifecycle, and report projection are missing.
-This editorial cleanup does not recalculate readiness or close requirements.
+- Delivered: comparator, invocation provenance, and typed snapshot.
+- Remaining: `AMBIGUOUS` classification, run ledger, AI lifecycle, and report
+  projection.
 
 The executable contract is in [Validation](../../atf-validation/README.md#ai-comparator--implemented-contract);
 generic [reporting](../ATF_Reporting_Contract.md), [UI observation](../../atf-ui/README.md),

@@ -8046,21 +8046,6 @@
       }
     }
   },
-  "platformLibraryOwnership": {
-    "sourceOwner": "atf_j0",
-    "implementationAndNativeTests": [
-      "atf-console",
-      "atf-mock"
-    ],
-    "consumerSourceModules": 7,
-    "contract": "lib/README.md",
-    "nativeTestRetention": "Complete matching producer catalogs retained in J0; consumer source retirement is recoverable in owned TMP",
-    "acceptanceEvidence": "C:/Users/Cristi/AppData/Local/Temp/ATF_CONSOLE_MOCK_ACTIVE_DO_NOT_CLEAN_74b0e613",
-    "rendering": "Five Chromium-reviewed Extent artifacts; targeted expansion only",
-    "qualification": "Focused adoption passes; broad Shop UI and existing unit-layer findings remain open in J1 feedback",
-    "feedbackOwner": "atf_j0",
-    "feedbackRegistry": "atf_j0/docs/feedback/README.md"
-  },
   "currentConsumerAcceptance": {
     "status": "PASSED",
     "workspace": "atf_j1",

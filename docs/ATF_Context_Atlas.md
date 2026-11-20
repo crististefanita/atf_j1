@@ -1,14 +1,14 @@
 # ATF Context Atlas — Entry Points, Ownership, and Proofs
 
-The [J0 reference and J1–J7 synchronization guide](ATF_Workspace_Synchronization.md)
-defines ownership, target status, and evidence for each delivery.
+The [library catalog and synchronization guide](ATF_Workspace_Synchronization.md)
+identify the binaries selected by J1 and its local acceptance evidence.
 
 ## At a glance
 
-J0 owns Core/Reporting implementation and tests; J1 owns AutoEx/Shop scenarios.
-J2 is work in progress for the framework and Kafka/messaging tests, with
-PowerShell setup in Podman; the [workspace map](ATF_Workspace_Synchronization.md)
-separates copied infrastructure from messaging contracts and acceptance.
+J1 owns the AutoEx/Shop scenarios, consumer adapters, and acceptance criteria.
+It consumes versioned Core, Reporting, Console, Mock, and Test Kit artifacts
+from `lib`; this atlas stays focused on local modules and their observable
+library contracts.
 
 This atlas reduces initial context for a reader or AI: choose a boundary,
 identify its contract and proof, then open only the relevant source and caller.
@@ -19,9 +19,9 @@ and observable contract without assuming source is available.
 | Topic | Local map | Read the code when |
 |---|---|---|
 | source/binary governance | [deployment](../atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md) | changing the catalog, documentation targets, distributed POM, CodeSource, or independence proof; the same suite protects both forms |
-| redaction and literal masking | [Core security](../../atf_j0/atf-core/src/main/java/atf/core/security/README.md) | changing the raw mask, regex replacement encoding, sensitive fields, or fallback; comparison, preview, and renderer have distinct owners |
+| redaction and literal masking | [Core library guide](ATF_Core_Consumer.md) | changing the raw mask, regex replacement encoding, sensitive fields, or fallback; comparison, preview, and renderer have distinct owners |
 | main/test inventory and excluded output | [ATF Tests inventory](../atf-tests/README.md#shared-java-source-inventory) | changing POM traversal or segment exclusions; compare compilable sources with the inspected set |
-| selective promotion | [Core guard](../../atf_j0/atf-core/README.md#manifest-și-promovare-guarded) | changing the baseline, source/parent eligibility, or atomic copy |
+| selective promotion | [Core library guide](ATF_Core_Consumer.md) | changing the baseline, source/parent eligibility, or atomic copy |
 | AutoEx invoice total | [monetary contract](../atf-test-auto-ex/README.md#complete-invoice-amount-validation) | changing clause boundaries, numeric grammar, comparison, or projection; independent checks and auditable negative proofs |
 | AutoEx runtime | [AutoEx runtime](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md) | changing composition, account ownership, invoice observation, or completion |
 | Shop support | [Shop support](../atf-test-practice-shop/src/main/atf/shop/support/README.md) | changing validation, cart confirmation, traffic selection, or readiness |
@@ -36,16 +36,16 @@ and observable contract without assuming source is available.
 | executable documentation fidelity | [factual guard](../atf-tests/README.md#documents-and-responsibilities) | changing modules, Kit scope, UI defaults, or Shop/AutoEx YAML geometry; prose is compared with POM/configuration/model through documentation mutants |
 | select continuity | [UI contract](../atf-ui/README.md#native-waiting-and-uniqueness) | changing observation before activation, native confirmation, or replay refusal |
 | browser network | [browser network](../atf-ui/src/main/java/atf/ui/network/README.md) | changing hooks, identity, retention, or cleanup |
-| Reporting library | [Reporting integration](ATF_Reporting_Library_Atlas.md#consumed-api-and-adapter-ownership) | changing the local adapter or diagnosing the binary; model/renderer fixes belong in `atf_j0` |
-| Reporting consolidation and proofs | [implementation](feedback/ATF_Reporting_Feedback.md) / [Reporting Tests](feedback/ATF_Reporting_Tests_Feedback.md) | separating a lifecycle/API defect from oracle, binary fixture, and evidence navigation |
+| Reporting library | [Reporting integration](ATF_Reporting_Library_Atlas.md#reporting-api-adapter) | changing the local adapter or diagnosing a report against its selected coordinate and hash |
+| Reporting consumer evidence | [local gap](feedback/ATF_Reporting_Tests_Feedback.md) / [selected library contract](ATF_Reporting_Library_Atlas.md) | separating a local adapter defect from library behavior and report navigation |
 | UI session acquisition and close | [UI contract](../atf-ui/README.md#session-lifecycle-and-evidence-boundary) | changing the primary cause, resource rollback, or simultaneous cleanup failures |
 
 ## Fidelity boundaries
 
 | Change | Contract and proof |
 |---|---|
-| literal mask and quoted/truncated Authorization | [Core security](../../atf_j0/atf-core/src/main/java/atf/core/security/README.md); compare original → redaction → preview → Extent/fallback |
-| MIME and effective headers | [Core HTTP](../../atf_j0/atf-core/README.md#media-type-headere-și-vocabular-de-protocol); type/subtype, precedence, and a single send |
+| literal mask and quoted/truncated Authorization | [Core library guide](ATF_Core_Consumer.md); compare original → redaction → preview → Extent/fallback |
+| MIME and effective headers | [Core library guide](ATF_Core_Consumer.md); type/subtype, precedence, and a single send |
 | artifact URI | [Debug UI](../atf-debug-ui/README.md#uri-path-identity); plus sign, space, and single decoding |
 | compilable source versus output | [ATF Tests](../atf-tests/README.md#shared-java-source-inventory); POM discovery separate from Java-root traversal |
 | credentials in AutoEx API form | [fixture audit](../atf-test-auto-ex/README.md#credentials-in-api-component-assertions); original-map equality, public projection, and diagnostics without the raw password |
@@ -80,10 +80,9 @@ starts an investigation; it does not replace checking the affected source.
 
 | Initial decision | Source of truth | Its limit |
 |---|---|---|
-| Which reactor should I use? | [workspaces](ATF_Workspace_Synchronization.md#module-and-reporting-catalog), then the target POM | Live POMs: J0 12, J1 6, J2 WIP 5, J3 speech 4, J4 Android 3, J5 Rentz 2, J6 Hold'em 5, J7 Chess 1; do not infer profiles from absent folders |
-| Reporting change? | [J0 source atlas](../../atf_j0/atf-reporting/src/main/java/atf/reporting/README.md) and [permanent regressions](../../atf_j0/atf-reporting-tests/README.md) | J1–J7 have distinct versions and consumer acceptance; J4 retains j24, and source documentation does not certify the consumed JAR |
-| Application change? | [Shop](../../atf_j1/atf-test-practice-shop/README.md) or [AutoEx](../../atf_j1/atf-test-auto-ex/README.md) | expected values, capture, and business selection remain with the consumer |
-| Kafka/Podman change? | [J2 atlas](../../atf_j2/docs/ATF_Context_Atlas.md), then setup and configuration | three MOCK components and existing scripts; the Java client/real broker are WIP |
+| Which modules and libraries are selected? | [local library catalog](ATF_Workspace_Synchronization.md#consumed-library-catalog), then the root POM | J1 module declarations and selected library coordinates come from this checkout |
+| Reporting change? | [Reporting library guide](../lib/README.Reporting.md) and [consumer atlas](ATF_Reporting_Library_Atlas.md) | identify the selected JAR/POM and verify the local integration and rendered report |
+| Application change? | [Shop](../atf-test-practice-shop/README.md) or [AutoEx](../atf-test-auto-ex/README.md) | expected values, capture, and business selection remain with the consumer |
 
 
 
@@ -91,9 +90,9 @@ starts an investigation; it does not replace checking the affected source.
    reconcile owner feedback with live source and define the closure proof; update
    the finding throughout the increment.
 2. For local source, open the entry point, caller, and positive/negative proof;
-   for Reporting, identify the version and adapter, then the JAR API and artifact.
-   Escalate implementation changes to the producer; widen the search only when a
-   concrete dependency or contradiction appears.
+   for Reporting, identify the selected version and adapter, then inspect the
+   JAR API and report evidence. Widen the search only for a concrete dependency
+   or contradiction.
 3. Check the POM for scope, configuration for deadline/policy, and the test for
    the exact claim. A class name does not prove behavior.
 4. After the change, update the nearby map and entry link if responsibility,
@@ -154,16 +153,16 @@ fixtures are excluded from canonical selections and do not become masked live co
 
 | Responsibility | Owner and dependency limit | What the consumer retains |
 |---|---|---|
-| HTTP execution, request, and observed response | [Core](../../atf_j0/atf-core/README.md); Reporting receives values, not an executor | endpoint, operation, and application expected value |
+| HTTP execution, request, and observed response | [Core library guide](ATF_Core_Consumer.md); Reporting receives values, not an executor | endpoint, operation, and application expected value |
 | comparison and validation result | [Validation](../atf-validation/README.md); no renderer or JUnit | business rule and independent expected value |
 | browser, deadline, capture, and listener | [UI](../atf-ui/README.md); no Shop/AutoEx routes | application signal confirming the action and evidence selection |
 | runner protocol, scope, and neutral cleanup | [Test Kit](../lib/README.TestKit.md#scope-and-integration); composed at the JUnit boundary | concrete Store, accounts, and resource order |
 | typed projection, status, markup, and publication | [Reporting](ATF_Reporting_Library_Atlas.md); no Core, UI, or Kit | observation, verdict, and application metadata |
 | observed query and identity | [Reporting contract](ATF_Reporting_Library_Atlas.md#api-exchange-and-identity); UI computes the fingerprint before redaction | mapper preserves available pairs or an opaque fingerprint; business selection stays local |
-| console diagnostics | [Console](../../atf_j0/atf-console/README.md); bridge at composition | sink selection; no Console dependency in the Reporting JAR |
-| stub, routing, and mock association | [Mock](../../atf_j0/atf-mock/README.md); reporting adapter is verified separately | fixture and scenario intent |
+| console diagnostics | [Console library guide](../lib/README.Console.md); bridge at composition | sink selection; no Console dependency in the Reporting JAR |
+| stub, routing, and mock association | [Mock library guide](../lib/README.Mock.md); reporting adapter is verified separately | fixture and scenario intent |
 | local read-only inspection | [Debug UI](../atf-debug-ui/README.md) | source selection and inspected session |
-| neutral reporting and composition tests | [Reporting Tests](../../atf_j0/atf-reporting-tests/README.md) | real adapter proof and business flow stay in Shop/AutoEx |
+| local report checks and library composition | [Reporting library contract](ATF_Reporting_Library_Atlas.md) | real adapter proof and business flow stay in Shop/AutoEx |
 | cross-module governance and negative tests | [ATF Tests](../atf-tests/README.md) | contract compliance without local refactor exceptions |
 
 Importing Reporting into a Shop test does not make it a generic test.
@@ -205,10 +204,10 @@ move into Kit just to make class shapes uniform.
 | iframe pointer or capture at 70% | `UiViewportScale` → `PlaywrightUiSession` → neutral UI HTTP test → Shop/AutoEx configuration and metadata; a DOM click does not prove a trusted pointer |
 | timeout in native geometry gate | `openReady` fixture → preparation and click trace → real counter; the 5 s budget is consumed once and the pointer retains 850 ms, with no retry |
 | external query interrupts account cleanup | [AutoEx listener](../atf-test-auto-ex/src/main/java/atf/autoex/support/account/AutoExAccountDeletionAttempt.java) → [browser test](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/business/AutoExBusinessFaultComponentTest.java); query and fragment do not participate in redirect matching or diagnostics |
-| intermittent cancellation in Core test | [ExecutionResilienceTest](../../atf_j0/atf-core/src/test/java/atf/core/ExecutionResilienceTest.java) → [test contract](../../atf_j0/atf-core/README.md#determinism-și-concurență); the barrier confirms transport entry and FutureTask transfers the result to JUnit |
+| intermittent cancellation in Core test | [Core library guide](ATF_Core_Consumer.md) → [Core library guide](ATF_Core_Consumer.md); the barrier confirms transport entry and FutureTask transfers the result to JUnit |
 | confirmation renews the deadline | [ObservationBudgetComponentTest](../atf-ui/src/test/java/atf/ui/playwright/ObservationBudgetComponentTest.java) → [native integration](../atf-ui/src/test/java/atf/ui/playwright/PlaywrightReadinessBudgetComponentTest.java); arithmetic uses controlled ticks, while integration separately verifies the browser and single activation |
 | GET timeout is renewed in AutoEx adapter | [native test](../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/navigation/AutoExReadOnlyBudgetBoundaryComponentTest.java) measures timeouts actually sent to the browser separately from UI clock arithmetic; one pointer and two read-only recoveries |
-| extracted Reporting library | [JAR atlas](ATF_Reporting_Library_Atlas.md) → delivered POM → CodeSource/hash → adapter → artifact; the source gate runs at the producer, not through an improvised Reporting directory in J1 |
+| Reporting library diagnosis | [JAR atlas](ATF_Reporting_Library_Atlas.md) → selected POM → CodeSource/hash → adapter → report; acceptance uses the physical library selected by J1 |
 
 Keep application adaptation in main and JUnit glue in test. Kit provides
 neutral primitives; it does not own the browser or business policy. An extraction
@@ -225,7 +224,7 @@ behavior; moving the same class to another module is not such proof.
 | OOP rules and responsibility limits | [README_Atf_CodeBestPractices](README_Atf_CodeBestPractices.md) |
 | build in TMP and selective promotion | [ATF_Build_And_Execution_Safety](ATF_Build_And_Execution_Safety.md) |
 | criteria not yet demonstrated | [feedback register](feedback/README.md) |
-| Reporting integration without source | [JAR atlas](ATF_Reporting_Library_Atlas.md) and [sync directions](ATF_Reporting_Consumer.md#ownership-and-synchronization-direction) |
+| Reporting integration without source | [JAR atlas](ATF_Reporting_Library_Atlas.md) and [consumer resolution and acceptance](ATF_Reporting_Consumer.md#resolve-and-accept) |
 
 Shop is an explicit exception to the [testChanges Git control](../atf-tests/README.md#test-change-governance),
 not to architecture, cohesion, or behavioral checks. Do not add Shop paths to a
@@ -277,14 +276,8 @@ determines what moves or is removed after evidence is available.
 - Re-read live hashes before promotion. Previously read context does not authorize
   overwriting parallel changes or automatically certify the new combination.
 
-## Core as a library — ownership and deployment
+## Core library consumption
 
-J1 consumes Core, Reporting, Console, Mock, and Test Kit as external libraries; their contracts are in the [platform guide](ATF_Platform_Libraries.md).
-
-[The Core contract](ATF_Core_Consumer.md) separates source, publication, and consumer acceptance.
-Native tests stay in J0, while binary acceptance runs in TMP.
-
-
-## Shared platform libraries
-
-[Platform library consumption](ATF_Platform_Libraries.md) defines the five library owners, flat distribution, Maven/IntelliJ bootstrap and independent consumer acceptance. Console/Mock native tests stay in J0; consumer adapters and catalogs stay local.
+[Core contract](ATF_Core_Consumer.md) and [platform library guide](ATF_Platform_Libraries.md)
+describe the selected coordinates, package checks, Maven/IntelliJ resolution,
+and J1 acceptance. Application adapters and catalogs stay in local modules.

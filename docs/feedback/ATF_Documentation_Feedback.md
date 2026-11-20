@@ -1,106 +1,85 @@
-# ATF documentation — deployment fidelity
+# ATF documentation — library catalog and local scope
 
 ## At a glance
 
-The atlas points readers to code and POMs, while shared governance belongs to ATF Tests.
-An editorial review and passing link checks do not certify every factual claim.
+This item tracks factual J1 documentation about the five consumed libraries
+and keeps current J1 documents focused on local contracts, coordinates, and
+consumer evidence.
 
-## DOC-CONTEXT-DEPLOYMENT-111 — priority 81
+<a id="doc-library-contracts-147"></a>
 
-**Priority: 81/100** = impact 31 + gap 24 + feasibility 18 + documentation debt 8.
-**Owner:** shared governance coordinated in J1; each deployment retains its own contracts and acceptance.
+## DOC-LIBRARY-CONTRACTS-147 — document the consumed library catalog
 
-The original reproduction listed 10 J1 modules, 8 J2 modules, and Reporting J6
-in the atlas, although the reactor had 9/7 modules and the binary was J8. This
-remains historical context. The J1 factual guard now checks the J0–J7 catalog
-from the POMs, including producer/consumer roles and Reporting versions, with
-documentation mutants for count, role, and version; its coverage does not
-certify claims outside this contract.
+**Status: Verified and closed on 2026-11-20.** The catalog names the five
+selected Maven coordinates and physical JAR/POM pairs. Factual governance checks
+them against the local POM and files; relationship governance keeps current J1
+documentation scoped to its local modules and consumed library contracts.
 
-- Selectively compare current atlas/index claims with the explicit reactor,
-      Reporting ownership, and target provenance; read the expected version
-      from the deployment rather than a historical test constant.
-- Change only one fact in the negative test: the module count by one from
-      the POM, or the current version to one historical version. The guard must
-      identify the rejected claim.
-- Continue accepting legitimate J6/J7/J8/J9 history and checks against
-      their original bases; an old version in the log is not a defect by itself.
-- Distinguish ownership of the J0 Core source from JAR consumption of Core
-      in J1–J7; do not shrink the catalog implicitly when folders are absent.
+### Contract and proof
 
-**Closure requires:** named and historical documents pass, and current mutants are
-rejected without relaxing the boundary. The [local J2 criterion](../../../atf_j2/docs/feedback/ATF_Documentation_Feedback.md)
-has its own acceptance and does not implicitly close shared governance.
-
-### Reconcile current claims
-
-The current catalog of modules, roles, and Reporting versions is in
-[workspace synchronization](../ATF_Workspace_Synchronization.md#module-and-reporting-catalog);
-historical evidence keeps its original coordinates.
-
-- The J1/J2 inventory and counts in the README, Atlas, and synchronization
-  table were reconciled with live POMs and are covered by
-  [DocumentedWorkspaceCatalogTest](../../atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalogTest.java).
-- The Core/Reporting and platform guides use the shared catalog for the current
-  inventory without repeating module or version snapshots.
-- The introductory prose in [J1 architecture](../ATF_Architecture.md) was
-  shortened.
-- The J1 prose, language, link, structure, and factual gates now pass in the recorded whole-ATF run. The two cross-workspace J0 findings below remain outside this checkout and keep the shared criterion open.
-
-The 163-test result from 2026-11-19 is historical. On 2026-11-20, `WholeAtfGovernanceSuiteTest` passed 171/171 in both documentation editions. The J1 documentation gates pass; the J0 README inventory and retired J4 anchor remain open as cross-workspace findings.
-
-Two cross-workspace findings remain outside the J1 files:
-
-- The table in the [J0 README](../../../atf_j0/README.md) ends at J6 and has
-  no J7 row, although the ownership paragraph and J0 atlas already name J1–J7
-  consumers.
-- The sibling-checkout link gate found a retired J4 anchor in the [J0 inline audit contract](../../../atf_j0/docs/ATF_Inline_Audit_Contract.md); the current
-  heading is [Capture and ownership](../../../atf_j4/docs/reporting/ATF_Android.md#capture-and-ownership).
-
-These keep the shared criterion open; the J1 remediation does not mark them resolved.
+- [Workspace synchronization](../ATF_Workspace_Synchronization.md#consumed-library-catalog)
+  records the selected libraries; [platform library use](../ATF_Platform_Libraries.md)
+  summarizes the contracts J1 exercises.
+- [DocumentedLibraryCatalogTest](../../atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java)
+  checks coordinates, physical pairs, POM coordinates, and one usage guide per library.
+- [DocumentationDirectRelationshipGovernanceTest](../../atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java)
+  scans all J1 Markdown, including the test-change baseline and `AGENTS.md`,
+  plus fenced examples; historical records follow the same library-only rule.
+- [WholeAtfGovernanceSuiteTest](../../atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java)
+  selects both checks in the standard governance suite.
 
 ```mermaid
 flowchart LR
-    POMs[Live J0–J7 POMs] -->|provide| Inventory[Current inventory and owners]
-    Inventory -->|feeds| Atlas[Context Atlas]
-    Inventory -->|updates| Maps[READMEs and workspace maps]
-    Maps -->|guides| Reader[Consumer checkout selection]
-    Governance[Documentation gates] -.->|verify counts, roles, and links| Inventory
-    Governance -.->|verify navigation| Maps
+    POM["J1 root POM"] -->|selects| Pairs["five library JAR/POM pairs"]
+    Pairs -->|documented by| Catalog["local catalog + usage guides"]
+    Catalog -->|checked against| Files["POM and physical files"]
+    Gate["J1 documentation governance"] -.->|checks facts and scope| Catalog
 ```
-<details>
-<summary><strong>Legend — sources, maps, and checks</strong></summary>
 
-- Live POMs define the current module count.
-- The inventory centralizes counts and owners and feeds the atlas and short maps.
-- The gates verify facts, roles, and navigation destinations.
+<details>
+<summary><strong>Legend — local documentation proof</strong></summary>
+
+- The root POM is the source of selected versions; files in `lib` are the
+  physical artifacts J1 resolves.
+- The factual test rejects stale coordinates, wrong file names, and missing
+  guides.
+- Relationship governance allows local J1 contracts and consumed library
+  identifiers; it rejects other ATF workspace names and paths.
+
 </details>
 
-- Catalog/version contradictions from the 2026-11-01 audit were reconciled
-  editorially in increment J12.
-- The J1 semantic catalog guard now rejects independent count, role, and version mutants; legitimate historical releases remain accepted. Producer-side chronology controls and the two J0 findings remain shared work.
-- J1 coordinates shared governance; each deployment has its own acceptance,
-  without mirroring documents.
-- Documentation specific to the Core/Reporting APIs remains with J0 owners.
+### Verified evidence
 
-<a id="doc-library-contracts-147"></a>
-## DOC-LIBRARY-CONTRACTS-147 — keep release chronology outside official contracts
+| Proof | Result |
+|---|---|
+| Focused consumer and catalog checks in both editions | Shop 21/21, AutoEx 22/22, atf-tests 22/22; 65/65 per edition. The local AutoEx browser check expanded the generated Extent report. |
+| Whole-ATF governance at the initial closure | 179/179 in each edition; the revised top-down root-overview governance now records 187/187. |
+| Documentation editions | Node tests 10/10; comparison reports no problems across 56 Markdown documents. |
 
-**Priority: 82/100.** J1 owns common documentation governance; J0 owns the Core/Reporting contracts and fixes their factual content. Official README, atlas and contract pages must describe current behavior rather than successive library improvements.
+Closure covers the documented J1 reactor and its consumed library contracts.
+The tests verify the selected binary artifacts and local integrations; they do
+not claim to execute a library's independent source suite.
 
-- [ ] Add a permanent producer documentation control for library release narratives and release-specific verification/scorecard pages; mutation controls insert a historical improvement paragraph and a retired-release link into an otherwise valid official document.
-- [ ] Preserve legitimate workspace names, semantic configuration examples, current provenance, approved test-change controls and domain implementation journals; do not reject every number or the word incremental.
-- [ ] Keep one current verification note per library beside its package and retain original build facts in provenance; official pages link to stable owner contracts.
-- [ ] Reconcile current claims with actual POM/source boundaries; a valid link or a high editorial score does not prove the meaning of its surrounding claim.
-- [x] Derive J0–J7 module counts and library-consumer roles from each live POM;
-      reject one-count and one-role mutants in the factual documentation gate.
-      The recorded `DocumentedWorkspaceCatalogTest` result is 6/6 focused cases,
-      including count, role, Reporting-version, temporary-harness and stale
-      Atlas/README mutants. This bounded check verifies the live J0–J7 catalog;
-      producer chronology controls and the two J0 findings remain separate work.
-- [ ] Keep the Core ownership/deployment contract canonical in
-      `ATF_Core_Consumer.md`; reduce repeated explanatory blocks in the J0
-      architecture, atlas and index to short links so those facts cannot drift.
-- [ ] Keep Romanian prose consistent across the J0 README, atlas, architecture,
-      and library guides; retain English API identifiers and code examples,
-      while removing mid-document language switches in explanatory prose.
+<a id="doc-root-overview-20261120"></a>
+
+## DOC-ROOT-OVERVIEW-20261120 — keep the project entry page local-first
+
+**Status: Reverified and closed on 2026-11-20.** The root README now explains
+the two application consumers, API/browser scope, module ownership, report
+evidence, and how to verify the reactor. It includes one short final library
+index link and no sibling-workspace identities or run scores.
+
+`RootReadmeGovernanceTest` enforces project purpose, API/browser scope, the exact
+root-POM module inventory, report boundaries, section order, a connected
+consumer-to-Extent flow, and one final library-index link.
+
+- Negative fixtures reject sibling names, run scores, a missing report contract,
+  disconnected flows, misplaced or repeated library notes, missing modules, and
+  excessive length.
+- Shared diagram governance requires labeled edges and a collapsed legend.
+
+| Proof | Result |
+|---|---|
+| Focused documentation and change-control gates | 37/37 in EN and RO. |
+| Whole-reactor governance | 187/187 in EN and RO; no failures, errors, or skipped tests. |
+| Edition tooling | Node tests 10/10; Markdown structure and link destinations match across the 56 documents. |

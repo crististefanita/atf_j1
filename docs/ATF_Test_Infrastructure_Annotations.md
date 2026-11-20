@@ -23,11 +23,14 @@ The common prefix is `atf.testkit`. The Kit defines a test infrastructure API,
 but Maven scope is a property of each dependency edge in the POM, not of the
 annotation. `atf-reporting` remains usable independently of Test Kit.
 
-| Live consumer | POM scope | Observed reason / limitation |
+| J1 module | POM scope for Test Kit | Local use |
 |---|---|---|
-| `atf-core`, `atf-mock`, `atf-validation`, `atf-ui`, `atf-debug-ui` | `test` | use Test Kit vocabulary in probes and test adapters |
-| `atf-test-auto-ex`, `atf-test-practice-shop`, `atf-tests`, `atf-reporting-tests` | `test` | use Test Kit vocabulary in probes and JUnit adapters; consumer runtime code in main does not import the Kit |
-| `atf-console` | `optional` + `compile` | the JUnit extension in `src/main` reads annotations and policy resolvers; the API remains test infrastructure |
+| `atf-validation` | `test` | validation unit and component tests |
+| `atf-ui` | `test` | browser policy and adapter tests |
+| `atf-debug-ui` | `test` | local server tests |
+| `atf-test-practice-shop` | `test` | Shop component, API, and UI suites |
+| `atf-test-auto-ex` | `test` | AutoEx component, API, and UI suites |
+| `atf-tests` | `test` | local reactor and documentation governance |
 
 Do not infer scope from the module name or annotation. For a packaging change,
 check `pom.xml`, imports in `src/main`/`src/test`, and the architecture guard
@@ -129,7 +132,7 @@ The contract is per class; there is no per-method channel override.
 |---|---|
 | Shop E2E | accepts `UI` and `UI_API`; maps the selection to a local profile; rejects a conflict with a different explicit profile |
 | Shop API audit | requires the `API` channel before installing call capture |
-| Reporting Tests | the UI composition root rejects a channel declared as anything other than `UI` |
+| AutoEx UI | maps the declared channel through the local consumer configuration |
 
 In Shop, `UI_API` requires a non-empty binding, an active inspector, and an
 allowlist before browser startup. `UI` removes API evidence selection; YAML
@@ -318,22 +321,21 @@ file publication belong to the consumer.
   requires an environment that permits link creation.
 - The Kit does not discover the project or reorder YAML options.
 
-Reporting Tests first searches for the root among the ancestors of the loaded UI
-resource, using the reactor POM and `atf-reporting-tests/pom.xml`, then among
-the ancestors of the starting directory; if neither is found, it fails
-explicitly. Reporting source is not required.
+The consumer supplies the project root and the UI output base to the Test Kit
+resolver. Shop and AutoEx own these values in their local adapters; the selected
+library does not discover another project or workspace.
 
 - The supplied base is `<project-root>/artifacts/reports/ui`; it replaces the
   UI directory loaded from YAML. `atf.ui.report` selects the audit input.
-- Reporting E2E tests declare the project-relative directory
-  `artifacts/reports/ui/e2e`. In staging, the project is the external checkout;
-  the annotation does not redirect output into the live project.
+- Shop and AutoEx resolve report output inside the selected consumer project.
+  In staging, each project root is the staged checkout; generated output stays
+  with that run and is not redirected into another workspace.
 
 Manual smoke testing of IntelliJ composition is required only for relevant
 changes:
 
-- run the suites with the working directory set to the reactor root and to
-  `atf-reporting-tests`, as described in the [Extent suite guide](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md#rulare-directă-din-intellij);
+- launch the selected Shop or AutoEx test from IntelliJ with its consumer
+  module and working directory configured for the staged J1 checkout;
 - component tests verify deterministic path resolution separately, but do not
   launch IntelliJ.
 
@@ -346,10 +348,9 @@ changes:
 | `ApiScenarioSetup(families = ...)` | family names | fallback when exact selection is absent |
 | `DocumentationTarget("module/README.md")` | repeatable RUNTIME declaration on a class | validates the path and runs the validators |
 
-In Reporting Tests, exact references take precedence over families;
-the catalog, mock, and execution remain in the consumer module.
-`ApiScenarioSelection` remains a neutral model in Core; annotation declarations
-are in TestKit, with no dependency from Core main to the Kit.
+Shop and AutoEx keep exact API selections, catalogs, mocks, and execution in
+their own test sources. `ApiScenarioSelection` is part of the selected Core
+library contract; annotation declarations are in Test Kit.
 
 `ApiScenarioSetup` and `DocumentationTarget` do not use the compositional
 channel/output resolvers. Do not infer generic support for meta-annotations,
@@ -359,21 +360,21 @@ superclasses, or per-method overrides for them.
 
 | Boundary | Existing probes | Limitation |
 |---|---|---|
-| Level / tag | `AtfTestLayerArchitectureTest` | classifies test sources; does not certify Extent output |
-| Console | `AtfConsoleMessagePolicyResolverTest`, `AtfConsoleMessagePolicyTest`, Shop E2E/API and API resource tests | policy, precedence, conflict, global override, and deterministic consumers; concurrency/dynamic lifecycle requires a separate probe |
-| Channel and activation | `AtfTestChannelResolverTest`, `AtfE2eActivationPolicyTest`, `ShopE2eTestSupportTest`, `ShopApiCallAuditPreflightTest`, `ConsumerModuleArchitectureGovernanceTest` | neutral UI/API/UI_API resolution and activation precedence are tested separately; extensions retain consumer signals. Report parity and verdict ownership belong to Reporting, not the resolver |
-| UI evidence | `AtfUiEvidenceContractTest`, `AtfUiEvidenceResolverTest`, `AutoExEvidenceProfileComponentTest`, `ShopE2eContextEvidenceProfileTest`, `ReportEvidenceProfileIntegrationTest` | the resolver and consumer mappings have their own probes; cross-phase aggregation is Reporting opt-in, while parity across all business profiles remains a separate consumer criterion |
-| Ownership | `TestRunScopeComponentTest`, `AutoExApiReportScopeComponentTest`, `ShopAccountScopeComponentTest` | explicit scope, isolated successive launches, and release by the owner; a shared reference does not grant permission to mutate or clean up remotely |
-| Report path | `AtfReportPathPolicyResolverTest`, `AtfReportPathOptInTest`, `AtfConsoleTestExtensionIntegrationTest` | absence/opt-in/override, meta-annotations, conflict, and aggregation for report owners |
-| Output | `ReportOutputDirectoryTest`, `UiReportSubdirectoryTest`, `AtfUiConfigurationLoaderTest` | anchors, inheritance/composition, cycles, conflicts, invalid paths, and external working directory; containment is tested with symlinks when allowed and a directory junction as the Windows fallback |
-| Setup | `ApiScenarioSetupCatalogTest`, `ApiScenarioManifestTest`, `ApiSelectionMockPublisherComponentTest` | local selection and composition, without external services |
-| Documentation | `DocumentationTargetGovernanceTest` and the whole-ATF suite | the repeatable declaration selects the same validators |
-| Local browser | `UiThenDisclosureSanityTest`, `ApiReportRenderedEvidenceComponentTest`, `SelectedApiTestsReportUiTest` | disclosure, mock/field/query reconciliation, and phase navigation; does not certify the IntelliJ launcher or the full API/UI_API integration |
+| Level / tag | `AtfTestLayerArchitectureTest` | classifies local test sources; does not certify report output |
+| Console | `ConsoleDefaultsGovernanceTest`, `ShopConsoleTelemetryTest` | protects local sink configuration and Shop event mapping; does not retest library formatting |
+| Channel and activation | `ShopE2eTestSupportTest`, `ShopApiCallAuditPreflightTest`, `ConsumerModuleArchitectureGovernanceTest` | verifies local consumer selection and activation boundaries; not the Test Kit resolver internals |
+| UI evidence | `AutoExEvidenceProfileComponentTest`, `AutoExEvidenceProfileIsolationComponentTest`, `ShopE2eContextEvidenceProfileTest` | checks local profile mapping and scenario isolation; not every library profile |
+| Ownership | `AutoExApiReportScopeComponentTest`, `AutoExComponentReportScopeComponentTest`, `ShopAccountScopeComponentTest` | checks consumer report scope and account ownership; no permission for remote cleanup is implied |
+| Report path | `AutoExReportPathComponentTest`, `AutoExE2eReportPathComponentTest`, `ShopReportPathComponentTest` | verifies consumer path selection; not the library's internal path resolver |
+| Setup | Shop and AutoEx API component suites | local selection and composition without live services |
+| Documentation | `DocumentationTargetGovernanceTest`, `DocumentationDirectRelationshipGovernanceTest`, and the whole-ATF suite | validates selected local documents and direct library relationships |
+| Local browser | `AutoExCatalogReportPresentationE2eTest`, `AutoExE2eOverviewNarrativeComponentTest` | checks the selected local report scenarios; does not certify every library rendering path or IntelliJ configuration |
 
-Channel selection is a closed contract; reopening it requires a new consumer
-or a regression. Report parity and verdicts are tested by the
-[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md) owner; verified Git controls are in the
-[baseline](ATF_Test_Changes_Baseline.md#verified-technical-controls).
+Channel selection is a closed contract: reopen it only for a new consumer or a
+regression. Local consumer tests verify only the report integrations they run;
+the selected Reporting contract describes wider library behavior. Verified Git
+controls are in the [baseline](ATF_Test_Changes_Baseline.md#verified-technical-controls).
+
 For evidence and layout, the normative contracts remain
 [Reporting](ATF_Reporting_Contract.md), [display/layout](ATF_Reporting_Display_Contract.md)
 and [evidence capture](ATF_Evidence_Capture_Contract.md).

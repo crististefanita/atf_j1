@@ -1,8 +1,8 @@
 # ATF Java Extent Reporting Contract
 
-In J1, this contract describes the required result when integrating the library.
-The models, renderer, and generic regressions are owned by `atf_j0`; the [JAR atlas](ATF_Reporting_Library_Atlas.md)
-explains how to use them without local source, without promising every `public` API.
+For J1, this contract describes the required result when integrating the
+selected Reporting library. The [JAR atlas](ATF_Reporting_Library_Atlas.md)
+explains the observable binary contract without promising every `public` API.
 
 ## At a glance
 
@@ -22,7 +22,8 @@ this document remains the owner of report and evidence semantics.
 
 For AutoEx/Shop components, a class/suite owner publishes a shared report,
 while each audited invocation retains its scenario, phases, and verdict.
-Unit remains exempt; fixture artifacts for Reporting tests have separate ownership.
+Unit tests remain exempt from Extent publication. Consumer fixtures and
+generated report files are owned by the local module that creates them.
 
 ### Overview/System — semantic snapshot
 
@@ -957,4 +958,3 @@ Changing the timestamp does not change the Extent tree, statuses, aggregation,
 or HTML rendering.
 
 </details>
-

@@ -37,6 +37,27 @@ consumer's fresh execution; no historical control is rebased or extended.
 </details>
 
 <details>
+<summary><strong>Verified control — root overview and governance selection</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-ROOT-AND-CODE-GOVERNANCE-20261120
+    status: VERIFIED
+    base: 4ec3e14b357e0968776399477592fd13c3713631
+    expires: 2026-11-30
+    reason: Keep the root overview local-first, concise, and top-down; require its API/UI-to-Extent path, collapsible component assertions, unit-test report boundary, and whole-reactor code-quality gate coverage in both editions.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=TestChangeGovernanceTest,RootReadmeGovernanceTest,CodeGovernanceSuiteCoverageTest,DocumentationDiagramGovernanceTest,DocumentationProseGovernanceTest,DocumentationReadmeStructureGovernanceTest,DocumentationLinkGovernanceTest,DocumentationDirectRelationshipGovernanceTest,DocumentationLanguageGovernanceTest,DocumentationAnchorGovernanceTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4ec3e14b357e0968776399477592fd13c3713631" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java
+```
+
+The focused governance selection passed 37/37, and the whole-reactor entry point
+passed 187/187 in EN and RO on 2026-11-20, with no failures, errors, or skips.
+
+</details>
+
+<details>
 <summary><strong>Verified control — live commit reconciled after promotion</strong></summary>
 
 The concurrent live commit changed the Git base, with all 372 compiled inputs
@@ -67,7 +88,7 @@ testChanges:
     status: VERIFIED
     base: 5773a1567e14b570b17608b25058158bb2b1c114
     expires: 2026-12-19
-    reason: Bind catalog assertions to the uniquely selected GET observation, verify the collapsible API assertion and request disclosures in a local Extent viewer, keep Playwright API use in the E2E layer, and enforce the live J0–J7 workspace catalog through documentation governance.
+    reason: Bind catalog assertions to the uniquely selected GET observation, verify the collapsible API assertion and request disclosures in a local Extent viewer, keep Playwright API use in the E2E layer, and enforce the live module and library catalog through documentation governance.
     proof: mvn -B -pl atf-tests,atf-test-auto-ex,atf-ui -am "-Dtest=DocumentedWorkspaceCatalogTest,DocumentationTargetGovernanceTest,ArchitectureOwnershipBoundaryTest,TestChangeGovernanceTest,AtfTestLayerArchitectureTest,AutoExRuntimeBoundaryComponentTest#catalogAssertionsBelongOnlyToTheSelectedGetAmongSamePathNeighbors+catalogApiCheckpointFailsClosedWhenTheSelectedEvidenceIsMissingOrAmbiguous,AutoExCatalogReportPresentationE2eTest,PlaywrightPagePreparationTest" "-Datf.governance.testChanges.baseRef=5773a1567e14b570b17608b25058158bb2b1c114" "-Datf.test.reportDirectory=artifacts/reports/j1-extent-api-20261119" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/lifecycle/AutoExRuntimeBoundaryComponentTest.java
@@ -86,6 +107,28 @@ The focused proof checks the selected API response, Extent presentation, factual
 documentation and test-layer boundaries. Whole-ATF was run separately and passed
 171/171; package cohesion is reconciled through one package move and one precise
 reviewed exception with an explicit removal criterion.
+
+</details>
+
+<details>
+<summary><strong>Verified control — J1 suite-owned catalog comparison and Extent expansion</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-CATALOG-SUITE-EXTENT-20261120
+    status: VERIFIED
+    base: 4ec3e14b357e0968776399477592fd13c3713631
+    expires: 2026-12-20
+    reason: Add an offline suite-owned Extent proof that the captured catalog GET alone owns the comparison and that its assertions and request disclosures expand in the published report.
+    proof: mvn -B -pl atf-tests,atf-test-auto-ex -am "-Dtest=TestChangeGovernanceTest,AutoExE2eOverviewNarrativeComponentTest" "-Datf.governance.testChanges.baseRef=4ec3e14b357e0968776399477592fd13c3713631" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/system/AutoExE2eOverviewNarrativeComponentTest.java
+```
+
+`AutoExE2eOverviewNarrativeComponentTest` passed 1/1 in both editions. Its
+explicit suite scope generated one local UI/UI_API report; Playwright verified
+the selected catalog GET as the only comparison owner and expanded its API
+assertions and request disclosure. The canonical public-site suite was not run.
 
 </details>
 
@@ -121,7 +164,38 @@ testChanges:
 
 </details>
 
-**J1 context:** copied historical controls retain the producer base.
+<details>
+<summary><strong>Verified control — direct J1 documentation relationships</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DOC-DIRECT-RELATIONSHIP-20261120
+    status: VERIFIED
+    base: 4ec3e14b357e0968776399477592fd13c3713631
+    expires: 2026-12-20
+    allowDelete: true
+    reason: 'Enforce the direct J1 documentation and governance boundary: selected library artifacts, no neighboring-workspace path dependency, and local documentation targets; preserve historical audit entries and verify the bilingual catalog and report expansion.'
+    proof: 'mvn -B -o -pl atf-tests,atf-test-practice-shop,atf-test-auto-ex -am "-Dtest=TestChangeGovernanceTest,ArchitectureOwnershipBoundaryTest,GovernanceDeploymentTest,DocumentationDirectRelationshipGovernanceTest,DocumentedLibraryCatalogTest,LibraryDocumentationInventoryTest,PlatformLibraryContractTest,PlatformLibraryIntegrityTest,AutoExE2eOverviewNarrativeComponentTest,ShopApiCallAuditReportComponentTest,AutoExApiContractReportPublisherComponentTest,ShopComponentReportScopeComponentTest,AutoExComponentReportScopeComponentTest" "-Datf.governance.testChanges.baseRef=4ec3e14b357e0968776399477592fd13c3713631" "-Dsurefire.failIfNoSpecifiedTests=false" test; mvn -B -o -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4ec3e14b357e0968776399477592fd13c3713631" "-Dsurefire.failIfNoSpecifiedTests=false" test'
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/ArchitectureOwnershipBoundaryTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeployment.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeploymentTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibraryIntegrityTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibrarySurface.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalog.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalogTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalog.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java
+```
+
+On 2026-11-20, focused local report and governance checks passed in both editions: Shop 21/21, AutoEx 22/22, and atf-tests 22/22 (65/65 total per edition). AutoEx's local browser check expanded the generated Extent report. Whole-ATF governance passed 179/179 in EN and 179/179 in RO, with no failures, errors, or skips. The edition-tool tests passed 10/10; the comparator found no problems across 56 Markdown documents.
+
+</details>
+
+**J1 context:** copied historical controls retain their original Git bases.
 J1 controls use the consumer review base; eligibility
 is verified by [Git control](../atf-tests/README.md#test-change-governance), without implicitly converting bases.
 
@@ -4226,7 +4300,7 @@ testChanges:
     status: VERIFIED
     base: d93c17ad2c69f6cfe920281bd93e9fadbb29de32
     expires: 2026-11-30
-    reason: Publish parentless Core C1 with source and native tests retained in J0; consumers verify the real binary and preserve negative tests, catalogs, and ownership controls.
+    reason: Publish parentless Core C1 with source and native tests retained in the Core library package; consumers verify the real binary and preserve negative tests, catalogs, and ownership controls.
     proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-console/pom.xml
@@ -4259,7 +4333,7 @@ testChanges:
     status: VERIFIED
     base: d93c17ad2c69f6cfe920281bd93e9fadbb29de32
     expires: 2026-11-30
-    reason: Publish parentless Core C1 with source and native tests retained in J0; consumers verify the real binary and preserve negative tests, catalogs, and ownership controls.
+    reason: Publish parentless Core C1 with source and native tests retained in the Core library package; consumers verify the real binary and preserve negative tests, catalogs, and ownership controls.
     proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
     allowDelete: true
     paths:
@@ -4505,7 +4579,7 @@ testChanges:
     status: VERIFIED
     base: f38618c41cc9fd567c15caf34f0b9a5dfb8bf1d6
     expires: 2026-11-30
-    reason: Adopt the same J12 pair verified in J0, without changing business oracles or Core C2.
+    reason: Adopt the same J12 library pair verified through package evidence, without changing business oracles or Core C2.
     proof: mvn -B -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java
@@ -4640,7 +4714,7 @@ testChanges:
     status: VERIFIED
     base: 8b373eacf690c624d0d659141332f94cc4ec2e45
     expires: 2026-11-30
-    reason: Centralize identical Console and Mock implementation/native tests in J0; retain independent source/JAR oracles, physical CodeSource, negative integrity checks and consumer-specific governance. Native consumer deletions retain the complete matching J0 catalog and TMP recovery copies.
+    reason: Centralize identical Console and Mock implementation/native tests with their library packages; retain independent source/JAR oracles, physical CodeSource, negative integrity checks and consumer-specific governance. Native consumer deletions retain the complete matching package catalog and TMP recovery copies.
     proof: 'mvn -B -ntp -pl atf-tests -am -Dtest=PlatformLibraryContractTest,PlatformLibraryIntegrityTest -Dsurefire.failIfNoSpecifiedTests=false test'
     allowDelete: true
     paths:
@@ -4692,7 +4766,7 @@ testChanges:
     status: VERIFIED
     base: e9666ad15583274f792614f1971428c5104b0428
     expires: 2026-11-30
-    reason: Require exactly four flat JAR/POM pairs plus the dedicated README and J0 ownership of library source and feedback; preserve physical binary identity, independent negative oracles and consumer acceptance.
+    reason: Require exactly four flat JAR/POM pairs plus the dedicated README and library-source ownership and feedback; preserve physical binary identity, independent negative oracles and consumer acceptance.
     proof: 'mvn -B -ntp -pl atf-tests -am -Dtest=PlatformLibraryContractTest,PlatformLibraryIntegrityTest -Dsurefire.failIfNoSpecifiedTests=false test'
     paths:
       - atf-tests/src/test/java/atf/api/tests/governance/distribution/core/BinaryCoreFixture.java

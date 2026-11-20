@@ -24,7 +24,7 @@ and `docs/ATF_Architecture.md`.
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Core["Core JAR"] -->|feeds| Validation["Validation"]
-    Tests["Reporting tests"] -. fixtures .-> Validation
+    Tests["Local module tests"] -. fixtures .-> Validation
     Validation -->|calculates| Decision["Typed verdict"]
     Decision -->|publishes| Sink["Sink"]
     Sink -->|adapts| Adapter["Adapter"]
@@ -44,7 +44,7 @@ Short labels carry the following meanings:
 | In the diagram | Full meaning |
 |---|---|
 | Core | core models |
-| Reporting tests | reporting tests |
+| Module tests | atf-validation unit and component tests |
 | Verdict typed | typed decision |
 | Sink | validation sink |
 | Adaptor | consumer adapter |
@@ -62,8 +62,9 @@ The dependency direction is intentional:
 - the consumer maps the decision to the reporting port used by its composition;
 - `atf-reporting` exclusively owns Extent, HTML, CSS, assets, and artifact
   finalization, without depending on this module;
-- `atf-reporting-tests` verifies modules in test scope through deterministic
-  fakes and integration scenarios; `atf-tests` retains only global reactor governance.
+- local J1 tests verify the validation module through deterministic fakes;
+  `atf-tests` covers whole-reactor governance without taking ownership of
+  application behavior.
 
 ## Choose the validation form
 
@@ -271,8 +272,7 @@ The module tests separately protect:
 
 The tests are ratchet tests: when a contract fails, fix the implementation;
 do not weaken the assertion to make the build green. Visual validation of the
-artifact remains the responsibility of the `atf-reporting-tests` suite; final
-manual review uses ATF Debug/TAB MCP.
+consumer report acceptance remains with the local test that publishes it; final manual review uses ATF Debug/TAB MCP.
 
 ## AI comparator — implemented contract
 

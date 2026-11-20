@@ -7,7 +7,7 @@
 `ShopApiRunReport` owns the lifecycle and business verdict. Safe exception
 summarization is delegated to
 [Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostics-and-navigation),
-with [neutral proofs in Reporting Tests](../../atf_j0/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+with [Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md).
 Shop proofs continue to verify configuration, exchange selection, and the real adapter.
 
 **Quick links:** [Purchase journey](#purchase-journey) · [Fixture and billing](#module-configuration) · [Order proof](#current-order-proof) · [Suite report](#shared-report--consumer-state) · [Component or E2E](#quick-verification)
@@ -187,8 +187,9 @@ formats the fields shared by AutoEx/Shop, and the consumer adds its API policy.
 
 The test-scoped composition passes Reporting event fields to
 `AtfConsoleEvent.fromExternalEnums(...)` in Core, then publishes to the
-configured sink; Console does not depend on Reporting. Vocabulary compatibility
-is tested in Reporting Tests, while the browser and Shop rules remain local.
+configured sink; Console does not depend on Reporting. The selected library
+contracts define the shared event vocabulary, while browser and Shop rules
+remain local.
 
 </details>
 
@@ -509,7 +510,7 @@ replace registration and purchase through the real application.
 | Contract part | State and owner |
 |---|---|
 | Scenario profile | `ShopE2eContext` passes the resolved profile when publishing to the shared session; config supplies the base, and the annotation can override declared axes. |
-| Sibling scenario isolation | `ShopE2eContextEvidenceProfileTest` publishes siblings with different profiles on success and failure; neutral Reporting probes protect projection and screenshots. |
+| Sibling scenario isolation | `ShopE2eContextEvidenceProfileTest` publishes siblings with different profiles on success and failure; the selected Reporting contract describes projection and screenshots. |
 | Overview/System | Each scenario contributes its resolved snapshot. Shared values remain exact; a field that differs or is absent in a sibling becomes `Mixed — varies by scenario`. The mapper receives the environment captured by the composition root explicitly and does not read JVM state. |
 | Phase aggregation | In the `UNIFIED_FLOW` profile, Shop enables per-scenario accumulation. Guest UI-only publishes configuration checks directly in `TEST BODY`, without a `SETUP` phase. Authenticated setup keeps its own phase and status; a single terminal Gherkin node renders checkpoints in order, with provenance, assertions, and API validation beside their checkpoint. Failed authenticated setup completes the flow in `SETUP`, with no `TEST BODY` or invented terminal capture. `SCREEN_CHECKPOINTS` profiles retain publication by phase. |
 
@@ -593,8 +594,8 @@ and unknown operations are rejected before the browser starts.
 
 Assertions for these components remain in the standard `Component assertions`
 step, collapsed by default, with redaction before the configured limit, 240
-characters by default. Unit tests and renderer probes in Reporting Tests keep
-their separate categories.
+characters by default. These Shop component checks remain separate from the
+shared rendering behavior supplied by the selected Reporting library.
 
 </details>
 
@@ -679,7 +680,7 @@ flowchart LR
 - Between the checkpoint and Fill, the snapshot is reread; a stock change stops the mutation.
 - Checking the observed value stops the click if the application adjusts the quantity.
 - `ShopProductQuantityComponentTest` probes delayed loading, exhausted stock, deadline, adjusted value, and lost stock.
-- Components use `ShopComponentTest` and `AuditedAssertions`; renderer probes remain in Reporting Tests.
+- Components use `ShopComponentTest` and `AuditedAssertions`; the selected Reporting library supplies shared rendering.
 
 </details>
 
@@ -796,7 +797,7 @@ Component API tests separately verify routes and typed methods, guest/authentica
 variants, payloads, and exchange semantics through controlled transports. They
 do not certify the live service; `ShopStandaloneApiReportTest` is a separate
 opt-in proof, while generic renderer and markup tests belong to
-[`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md).
+[Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md).
 
 `PUT` for quantity updates and `DELETE` for removing a product are module API
 contracts, not steps in the current E2E purchase. Billing completion is chosen
@@ -1093,7 +1094,7 @@ preserving the primary cause and other observed exchanges.
 - Component assertions remain in the standard collapsed step, with redaction
   before the 240-character limit. Controlled transport remains distinct from a live verdict.
 
-The producer and availability are in [Core](../../atf_j0/atf-core/README.md#istoric-la-eroare-terminală),
+The producer and availability are in [Core library guide](../docs/ATF_Core_Consumer.md),
 and rendering is in [Reporting](../docs/ATF_Reporting_Library_Atlas.md#api-exchange-and-identity).
 
 ### Why the API report differs from the UI report
@@ -1304,7 +1305,7 @@ Local scrolling, glyph/ARIA, reopening parents, and Fails → Tests are checked
 in MCP/ATF Debug. Readability at narrow widths is a Reporting layout contract,
 separate from HTTP success and Shop mapping.
 
-### Boundary between Shop and Reporting tests
+### Boundary between Shop tests and the Reporting library
 
 Apply the [shared ownership rule](../docs/ATF_Testing_Guide.md#test-owner-business-adapter-or-infrastructure);
 the section below defines only Shop-specific examples and boundaries. The owner
@@ -1313,28 +1314,28 @@ is determined by the asserted invariant, not by whether the test publishes a rep
 | Invariant | Owner and example | Does not move here |
 |---|---|---|
 | Shop business intent, routes, order, and redaction | Shop; `ShopApiContractReportComponentTest` and `ShopApiCallAuditReportComponentTest` check adapter semantics and exchange association | Extent markup or renderer implementation |
-| HTML, tables, Request/Response/Execution, disclosure, retry rendering, and generic isolation | `atf-reporting-tests`; neutral fixtures, no real site | Shop policy for registration/address fields |
-| Reusable annotations, resolvers, and strictly test-only cleanup | `atf-test-kit` | screenshot policy, Shop profile, or browser harness |
+| selected Reporting contract: HTML hierarchy, tables, disclosure, and rendering | library guide describes the contract; Shop verifies its local report adapter | Shop-specific registration/address policy |
+| Generic test-only annotations, resolvers, and cleanup utilities | selected Test Kit library JAR | screenshot policy, Shop profile, or browser harness |
 
-Isolation of identical requests across scenarios is proven generically in
-Reporting; Shop retains its assertions about intent and distinct `/users/login` calls.
+Each consumer verifies its request ownership and business mapping against the selected
+Reporting library. Shop retains its assertions about intent and distinct `/users/login` calls.
 
 <details>
 <summary><strong>Boundary between local and reusable tests</strong></summary>
 
-| Current test | Contract retained by Shop | Contract owned by another module |
+| Current test | Contract retained by Shop | Shared library contract consumed by J1 |
 |---|---|---|
-| `ShopApiAuthenticationSchemaTest` | profile/mechanism through the mapper and browser journal; credentials absent from both artifacts | canonical HTML labels and projection parity: `ApiAuthenticationSchemaContractTest` |
-| `ShopApiCallAuditReportComponentTest` | intent/status association with the exchange, missing explicit contract, and audit diagnosis | retry rendering and diagnostic projection are proven generically in Reporting Tests |
-| `ShopApiBodyRedactionReportTest` | Shop policy for registration/address, malformed body, and actual adapter output | generic redaction and manual replay are proven by their owners |
+| `ShopApiAuthenticationSchemaTest` | profile/mechanism through the mapper and browser journal; credentials absent from both artifacts | selected Reporting contract describes canonical labels and projection; Shop verifies its local mapping |
+| `ShopApiCallAuditReportComponentTest` | intent/status association with the exchange, missing explicit contract, and audit diagnosis | selected Reporting contract describes retry rendering and diagnostic projection |
+| `ShopApiBodyRedactionReportTest` | Shop policy for registration/address, malformed body, and actual adapter output | selected Reporting contract describes generic redaction; Shop verifies its actual output |
 | `ShopE2eFailureBoundaryTest` | business error remains primary when evidence publication and close fail; secondary errors are suppressed in order | reverse-order closing through `FailureAwareCleanup` is tested directly in Test Kit |
-| `ShopScreenshotPolicyTest` | policy mapping and YAML precedence over the legacy option | provider filtering before capture: `ReportEvidenceProfileTest` in Reporting Tests |
+| `ShopScreenshotPolicyTest` | policy mapping and YAML precedence over the legacy option | selected Reporting contract describes provider filtering before capture |
 
 The local retry test checks attempts/history/provenance through the mapper and
-Shop's published model, including the initial login contract;
-`ApiRetryProjectionContractTest` checks the single pipeline in standalone
-Extent, fallback, and UI+API, including exhausted retry. The direct copy of the
-cleanup test and generic capture filtering are not repeated here.
+Shop's published model, including the initial login contract. The selected
+Reporting contract describes the pipeline across Extent, fallback, and UI+API,
+including exhausted retry. Cleanup lifecycle and capture filtering are
+described by the selected library contract rather than duplicated in Shop.
 
 Tests for intent/status association, JUnit failure, and personal data remain
 local: they check adapter invocation and Shop policy, not layout. A neutral
@@ -1393,7 +1394,7 @@ authenticated run checks server behavior separately; an auditable 401 report
 does not certify a successful flow.
 
 Generic report interaction is tested in
-[Reporting Tests](../../atf_j0/atf-reporting-tests/README.md); business mapping remains in Shop.
+[Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md); business mapping remains in Shop.
 API login does not automatically prove UI authentication for the same account.
 
 </details>
@@ -1422,8 +1423,8 @@ not copied here as parallel rules.
 - [ATF testing guide](../docs/ATF_Testing_Guide.md) — verification levels and canonical path;
 - [Annotation contract](../docs/ATF_Test_Infrastructure_Annotations.md) — declarations for level, channel, fixture, and output;
 - [Capture contract](../docs/ATF_Evidence_Capture_Contract.md) — generic axes for flow, actions, and screenshots;
-- [`atf-core`](../../atf_j0/atf-core/README.md) — neutral contracts and transport;
-- [`atf-console`](../../atf_j0/atf-console/README.md) — diagnostic policy and report path display;
+- [Core library guide](../docs/ATF_Core_Consumer.md) — neutral contracts and transport;
+- [Console library guide](../lib/README.Console.md) — diagnostic policy and report path display;
 - [`atf-ui`](../atf-ui/README.md) — browser, locator, and inspector contracts;
 - [`atf-reporting`](../docs/ATF_Reporting_Library_Atlas.md) — report model and rendering;
 - [`atf-test-kit`](../lib/README.TestKit.md#scope-and-integration) — annotations and test selection;
@@ -1522,7 +1523,7 @@ once; the original cause remains primary, and a distinct cleanup error is suppre
 | Shop `src/main` | pages, flows, payloads, Shop capture/policy, and terminal `ShopPurchaseConfirmation` validation; no JUnit/Test Kit |
 | Shop `src/test` | Shop-specific business tests, fixtures, and JUnit/report adapters |
 | `atf-test-kit` | neutral lifecycle; receives no browser, Reporting, or business logic |
-| `atf-ui` / `atf-reporting-tests` | neutral screen audit / generic rendering contracts |
+| atf-ui / Shop and AutoEx consumer tests | neutral screen audit / local report integration checks |
 
 ### Shop support refactoring target
 

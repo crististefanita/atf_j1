@@ -25,6 +25,8 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 }
 ```
 
+<a id="scope-and-integration"></a>
+
 ## Scope and integration
 
 - Dependency: atf.api:atf-test-kit with the atf.testkit.version from the project POM. Use test scope in production; compile is justified only for main-scope support in a test module. Do not include Kit in an APK/application.
@@ -35,4 +37,4 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 
 ---
 
-Maintenance, code, tests, and feedback: [atf_j0](README.md#maintenance-and-feedback).
+Record Test Kit findings against its Maven coordinate, version, and JAR/POM hashes. Keep adoption behavior and value-retention checks with the affected J1 module.

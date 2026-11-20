@@ -60,4 +60,3 @@ The scope contract is in the [UI README](../../../../../../README.md#observation
 the network inspector keeps its ownership and release order separate.
 
 Continue with the [ATF context atlas](../../../../../../../docs/ATF_Context_Atlas.md).
-

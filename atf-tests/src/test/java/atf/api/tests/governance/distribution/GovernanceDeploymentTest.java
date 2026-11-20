@@ -21,6 +21,14 @@ public class GovernanceDeploymentTest {
         assertEquals(List.of("missing.md"), GovernanceDeployment.read(root).documentationTargets("missing.md"),
                 "An arbitrary absent target must never be silently substituted");
     }
+    @Test void omittedLocalUiModulesResolveOnlyToJ1Documentation() {
+        var deployment = new GovernanceDeployment(root, List.of(), true);
+        assertEquals(List.of("docs/ATF_Architecture.md", "docs/ATF_Testing_Guide.md"),
+                deployment.documentationTargets("atf-ui/README.md"));
+        assertEquals(List.of("docs/ATF_Architecture.md", "docs/ATF_Testing_Guide.md"),
+                deployment.documentationTargets("atf-debug-ui/README.md"));
+    }
+
     @Test void aDeletedModuleOrPomCannotChooseASmallerPerimeter() throws Exception {
         prepare(false);
         var pom = root.resolve("pom.xml");

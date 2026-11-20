@@ -45,4 +45,4 @@ var response = mock.send(ApiRequest.of("GET", "/health"),
 
 ---
 
-Maintenance of Mock code and tests belongs to the separate `atf_j0/atf-mock` project; [feedback and synchronization](README.md#maintenance-and-feedback) start from J0.
+Record Mock findings against its Maven coordinate, version, and JAR/POM hashes. Keep fixture intent and consumer behavior with the affected J1 module.

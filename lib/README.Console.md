@@ -42,4 +42,4 @@ Console depends on Core; Kit is optional for JUnit integration. The projection i
 
 ---
 
-Maintenance of Console code and tests belongs to the separate `atf_j0/atf-console` project; [feedback and synchronization](README.md#maintenance-and-feedback) start from J0.
+Record Console findings against its Maven coordinate, version, and JAR/POM hashes. Keep consumer-adapter findings with the affected J1 module.

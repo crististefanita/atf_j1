@@ -56,8 +56,9 @@ flowchart LR
 Generic exception diagnostics use the
 [Reporting formatter](../docs/ATF_Reporting_Library_Atlas.md#diagnostics-and-navigation).
 AutoEx retains API and phase correlation, together with proofs for the real
-adapter; cyclic graphs, redaction, and neutral rendering have
-[proofs in Reporting Tests](../../atf_j0/atf-reporting-tests/README.md#diagnosticul-neutru-al-excepțiilor).
+adapter. Cyclic-graph handling, redaction, and neutral rendering are described
+by the selected [Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md);
+local consumer tests verify only the behavior exercised by their scenarios.
 
 - This module owns the E2E journey and support specific to the AutoEx site.
 - The usual gate selects `AutoExPurchaseUiE2eTest` directly and runs the purchase once.
@@ -150,11 +151,9 @@ model redacts registration and payment fields from its text representation.
 
   JUnit declarations and own resource acquisition.
 
-- `AutoExConsoleBridge` passes Reporting fields to the neutral factory
-
-  `AtfConsoleEvent.fromExternalEnums(...)` in Core; Console remains independent
-
-  of Reporting, and their compatibility is tested in Reporting Tests.
+- `AutoExConsoleBridge` maps Reporting fields through
+  `AtfConsoleEvent.fromExternalEnums(...)`; the adapter uses the selected
+  library contracts without adding a source-level library test module here.
 
 - This separation keeps site-specific support testable, without production
 
@@ -415,10 +414,11 @@ one, or delay the flow to provoke it.
   is protected by governance; criteria are in the
   [business acceptance contract](../docs/ATF_Testing_Guide.md#individual-and-suite-business-acceptance).
 
-These three selections use the same `AutoExPurchaseJourney` implementation.
-They are not all run to demonstrate more business, and no purchase variant is
-added for each capture or layout combination. Tests for report formatting,
-navigation, and rendering belong to `atf-reporting-tests`.
+These three selections use the same `AutoExPurchaseJourney`; adding purchase
+variants for capture or layout combinations would not demonstrate more business.
+The selected Reporting library owns generic formatting, navigation, and
+rendering, while AutoEx report-producing tests verify their local scenario
+evidence.
 
 `AutoExE2eSuite` includes:
 
@@ -445,11 +445,10 @@ the points below describe only what Automation Exercise-specific tests assert.
   Negative cases reject invalid JSON, mismatched code/message, and failed HTTP
   even when the body declares success; the DTO retains form encoding and the
   upstream MIME type. Extent and fallback artifacts are checked for password
-  absence, while shared formatting and redaction are tested in
-  [`atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md);
-- form-encoded replay without an adapter is tested by
-  `ApiManualReplayProjectionTest` in Reporting Tests; here the check remains
-  that the actual AutoEx artifact does not expose the password;
+  absence; shared formatting and redaction behavior comes from the selected
+  Reporting library;
+- this consumer check is limited to password absence in the actual AutoEx
+  artifact; it does not claim generic replay-projection coverage;
 - the default directory and API report override are consumer-specific; reusable
   validation of a relative path under the project root, including prevention
   of traversal/reparse-point escape, belongs to
@@ -1133,8 +1132,9 @@ ownership, the diagnostic, and report closure.
 - Component assertions remain in the standard collapsed step; the configured
   budget and redaction of the full text before truncation remain required.
 
-The producer contract is in [Core](../../atf_j0/atf-core/README.md#istoric-la-eroare-terminală),
-and the projection is in [Reporting](../docs/ATF_Reporting_Library_Atlas.md#api-exchange-and-identity).
+The consumed [Core library contract](../lib/README.Core.md) defines the
+request/response types; the [Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md#api-exchange-and-identity)
+describes their report projection.
 
 ### Why the API report differs from the UI report
 
@@ -1430,9 +1430,10 @@ The shared diagram for capture, baseline, and publishing is in
   values remain visible in the body/cURL, according to the policy accepted for
   this evidence; UI actions retain the existing masking.
 
-Selection/budget/cursor evidence belongs to `atf-ui`; presentation and snapshots
-belong to `atf-reporting-tests`. AutoEx verifies the YAML, real cart route,
-catalog precondition, and business journey, without generic renderer tests.
+Selection, budget, and cursor evidence belongs to the local `atf-ui` adapter.
+The selected Reporting library supplies report presentation and snapshots;
+AutoEx verifies its YAML, real cart route, catalog precondition, and business
+journey through local consumer tests.
 
 - `awaitCartExchange` passively waits for a GET XHR/FETCH on the product's exact
   path. The quantity query is not part of path equality; a prefixed product,
@@ -1698,8 +1699,8 @@ and unknown operations are rejected before the browser starts.
 
 Assertions from these components remain in the standard `Component assertions`
 step, collapsed by default, with redaction before the configured limit, which
-defaults to 240 characters. Unit and renderer tests in Reporting Tests retain
-their separate categories.
+defaults to 240 characters. These local component checks remain separate from
+generic rendering behavior supplied by the selected Reporting library.
 
 </details>
 

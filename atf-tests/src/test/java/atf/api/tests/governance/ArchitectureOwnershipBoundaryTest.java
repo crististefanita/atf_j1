@@ -3,6 +3,7 @@ package atf.api.tests.governance;
 import atf.api.tests.governance.distribution.ReportingHarnessOwnership;
 
 import atf.core.config.module.AtfModuleIds;
+import atf.libraries.PlatformLibrarySurface;
 import atf.api.tests.governance.distribution.ReportingGovernanceSurface;
 import atf.api.tests.governance.distribution.core.CoreGovernanceSurface;
 import atf.testkit.AtfComponentTest;
@@ -34,8 +35,11 @@ public class ArchitectureOwnershipBoundaryTest {
         Path root = locateProjectRoot();
         Path testModule = root.resolve(AtfModuleIds.TESTS);
         Path reportingTests = modulePath(root, AtfModuleIds.REPORTING_TESTS, TEST_JAVA);
-        Path producerMockTests = root.toAbsolutePath().normalize().getParent()
-                .resolve("atf_j0").resolve(AtfModuleIds.MOCK).resolve(TEST_JAVA);
+        var mockLibrary = new PlatformLibrarySurface(root, "mock");
+        Path mockNativeTest = root.resolve(AtfModuleIds.MOCK).resolve(TEST_JAVA)
+                .resolve("atf/mock/fixtures/MockTransportTestFixtures.java");
+        Path misplacedMockTest = root.resolve(AtfModuleIds.MOCK).resolve(MAIN_JAVA)
+                .resolve("atf/mock/MockTransportTestFixtures.java");
 
         assertAll(
                 () -> assertFalse(containsJavaFileNamed(testModule.resolve("src/main"), ".java"),
@@ -123,10 +127,10 @@ public class ArchitectureOwnershipBoundaryTest {
                 () -> requireFile(reportingTests.resolve(REPORTING_UI_TESTS_PACKAGE)
                                 .resolve("support/section/fixtures/MissingApiSetupDeclaration.java"),
                         "invalid source declarations belong to an explicit fixtures namespace"),
-                () -> requireFile(producerMockTests.resolve("atf/mock/fixtures/MockTransportTestFixtures.java"),
-                        "mock transport vocabulary belongs to an explicit test fixtures namespace"),
-                () -> assertFalse(Files.isRegularFile(producerMockTests.resolve("atf/mock/MockTransportTestFixtures.java")),
-                        "mock transport fixtures must not be mixed with production-package tests"));
+                () -> assertTrue(mockLibrary.owns(mockNativeTest),
+                        "the selected Mock artifact records its native fixture in package evidence"),
+                () -> assertFalse(mockLibrary.owns(misplacedMockTest),
+                        "the selected Mock artifact does not publish native fixtures in its production API"));
     }
 
     @Test

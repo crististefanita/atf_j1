@@ -43,7 +43,9 @@ for assertion rows.
 - Very large required evidence still consumes parser, layout and image memory; a content budget is not a total HTML or browser-heap guarantee.
 - Performance observations never turn a captured FAIL into PASS.
 
-The producer owns permanent source/JAR regressions. Consumer provenance records the current binary and independent acceptance; archived Android rendering does not certify a fresh device run.
+J1 consumes a versioned Reporting binary and records acceptance only for the
+consumer checks it runs. Archived Android rendering does not certify a fresh
+device run.
 
 ## Cold startup and readiness
 
@@ -56,8 +58,11 @@ The producer owns permanent source/JAR regressions. Consumer provenance records 
 | dynamic content | retain observers, revision invalidation and scheduled normalization for later mutations |
 | deadlines | readiness/action 10,000 ms; navigation 45,000 ms; existing API matrices retain 5,000 ms |
 
-- `ColdStartReadinessComponentTest` is maintained in J0; it covers five initial destinations, startup scenario deep links, native link repair, repeated loads, and failure/recovery.
-- The [producer contract](../../atf_j0/docs/ATF_Large_Report_Navigation.md) defines the same source/JAR boundaries; dated execution evidence remains beside the packaged release.
+- Consumer acceptance should inspect the initial destinations, startup deep
+  links, native link repair, repeated loads, and failure/recovery in the selected
+  report artifact.
+- This document defines the visible navigation contract; dated consumer
+  evidence remains with the package coordinates and execution record.
 - An external `atf.cold.input` run starts three fresh Chromium processes against the same complete artifact.
 
 ## Native timeline labels
@@ -67,6 +72,8 @@ The producer owns permanent source/JAR regressions. Consumer provenance records 
 | Spark template | encode the full timeline owner key as a JSON string; preserve quotes, line breaks, backslashes and Unicode |
 | captured data | retain the exact caller label and original duration; no trimming or inferred verdict |
 | vendor upgrade | fail explicitly when the pinned native key expression changes, instead of silently publishing invalid script |
-| permanent proof | TimelineTitleEncodingComponentTest executes the real embedded script and rejects browser errors; timestamp regressions stay separate |
+| permanent proof | execute the encoded script through a browser check and reject browser errors; timestamp regressions stay separate |
 
-The producer owns implementation and permanent source/JAR tests. Consumers retain their independent application oracles; dated external witnesses do not become fresh acceptance.
+J1 records the selected Reporting version and its own acceptance evidence.
+Consumer application oracles remain independent; dated observations are not
+fresh acceptance.

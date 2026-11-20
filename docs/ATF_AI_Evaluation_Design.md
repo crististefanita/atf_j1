@@ -731,7 +731,7 @@ ATF Java already has important protections for agents:
 
 - `atf-test-kit` enforces the test layer;
 - `atf-tests` checks modules, ownership, package cohesion, and documentation;
-- `atf-reporting-tests` has composition roots and lower-level proof;
+- Shop and AutoEx contain the local report-producing consumer checks;
 - `atf-reporting` is separate from consumers and test support;
 - READMEs and feedback have owners and closure criteria;
 - test changes require exact YAML scope, Git baseline, expiry, and proof;
@@ -1167,7 +1167,7 @@ capability, but would reduce reuse and make the score hard to reconstruct.
 2. put consumer-specific expected in the composition root;
 3. use `atf-tests` for whole-repository guards;
 4. use `atf-test-kit` only for vocabulary and the layer contract;
-5. use `atf-reporting-tests` for composition and proof;
+5. use the smallest Shop or AutoEx consumer test to verify local composition;
 6. keep active feedback as the gap registry, not as a duplicate of
    READMEs;
 7. implement the contract and gates first, then any agentic orchestration.
@@ -1205,7 +1205,8 @@ overly broad layer, literal verdict, missing evidence, and documentation drift.
 
 ### Stage C — one agentic pilot test
 
-Choose a small seam in `atf-reporting-tests`, not a large business flow.
+Choose a small seam in a local consumer adapter or component test, not a large
+business flow.
 The pilot must produce a proposal, diff, focused test, gate result, and feedback.
 
 ### Stage D — AI evaluation pilot
@@ -1267,7 +1268,7 @@ Live implementation of the analyzed vertical slice:
 - `../atf-ui/src/main/java/atf/ui`;
 - `../atf-ui/src/main/java/atf/ui`;
 - `../atf-test-practice-shop/src/main/atf/shop`;
-- External Reporting: models and ports from the JAR, adapted in J1; the library source is owned in `atf_j0`.
+- External Reporting: models and ports from the JAR, adapted in J1; the library source is owned in `consumed library artifact`.
 
 ## 34. Readiness and evidence
 
@@ -1497,7 +1498,7 @@ flowchart LR
     Gates -->|check| Consumer["Consumers"]
     Consumer -->|evaluates| Validation["Validation"]
     Validation -->|provides| Report["Reporting"]
-    Proof["Reporting Tests"] -.->|verify| Report
+    Proof["J1 consumer check"] -.->|verifies| Report
 ```
 
 <details>
@@ -1508,7 +1509,8 @@ flowchart LR
 - `atf-tests` owns proposal/handoff and test-change controls;
   consumers compose evaluation without moving business YAML or the browser into Kit.
 - Validation owns the AI verdict; Reporting projects the snapshot through
-  its contracts, and Reporting Tests proves rendering and parity.
+  its contracts, and a local consumer check verifies the rendered output for
+  the selected scenario; this does not establish library-wide parity.
 - All of this remains design; the absence of an additional module is not a gap.
 
 Short labels have the following meanings:
@@ -1520,7 +1522,7 @@ Short labels have the following meanings:
 | Consumers | Composition · consumers |
 | Validation | Evaluator · Validation |
 | Reporting | Snapshot · Reporting |
-| Reporting Tests | Tests · Reporting Tests |
+| J1 consumer check | Shop/AutoEx · local report evidence |
 
 </details>
 

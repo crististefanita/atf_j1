@@ -66,4 +66,4 @@ HTTP duration comes from `ReportResponse.duration()`; `detail(...)` preserves th
 
 ---
 
-J0: [code, tests, and feedback](README.md#maintenance-and-feedback).
+library artifact: [code, tests, and feedback](README.md#maintenance-and-feedback).

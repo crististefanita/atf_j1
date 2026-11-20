@@ -8,6 +8,7 @@ import test from 'node:test';
 import {
   compareDocumentationEditions,
   inspectDocumentationEditions,
+  markdownContract,
   verifyReviewedDocumentation
 } from './documentation-editions.mjs';
 
@@ -64,6 +65,19 @@ test('accepts parallel editions with translated labels and matching Markdown str
   assert.equal(result.documents, 2);
 });
 
+test('ignores trailing blank lines while preserving internal Markdown structure', t => {
+  const roots = pair(t);
+  const enPath = join(roots.english, 'docs/guide.md');
+  const roPath = join(roots.romanian, 'docs/guide.md');
+  writeFileSync(enPath, readFileSync(enPath, 'utf8').replace(/\n+$/, '\n'));
+  writeFileSync(roPath, readFileSync(roPath, 'utf8').replace(/\n+$/, '\n\n\n'));
+  assert.deepEqual(compareDocumentationEditions(roots.english, roots.romanian).problems, []);
+
+  writeFileSync(roPath, readFileSync(roPath, 'utf8').replace('| Owner | Result |', '\n| Owner | Result |'));
+  assert.ok(compareDocumentationEditions(roots.english, roots.romanian).problems
+    .includes('Markdown structure differs: docs/guide.md'));
+});
+
 test('allows localized prose examples in text fences while preserving their line structure', t => {
   const {english, romanian} = pair(t);
   const englishDoc = readFileSync(join(english, 'docs/guide.md'), 'utf8')
@@ -95,6 +109,41 @@ test('allows translated multiline YAML reasons while preserving block style and 
   assert.deepEqual(compareDocumentationEditions(english, romanian).problems, []);
 
   writeFileSync(join(romanian, 'docs/guide.md'), romanianDoc.replace('reason: >-', 'reason: |'));
+  assert.ok(compareDocumentationEditions(english, romanian).problems
+    .includes('Markdown structure differs: docs/guide.md'));
+});
+
+test('allows branch-specific test-control commits without hiding proof differences', t => {
+  const {english, romanian} = pair(t);
+  const control = base => [
+    '',
+    '```yaml',
+    'testChanges:',
+    '  - id: DOC-CONTROL-01',
+    '    status: VERIFIED',
+    `    base: ${base}`,
+    '    expires: 2026-12-20',
+    '    reason: branch-specific verification control',
+    `    proof: mvn -Dtest=DocumentationDirectRelationshipGovernanceTest -Datf.governance.testChanges.baseRef=${base} test`,
+    '    paths:',
+    '      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java',
+    '```',
+    ''
+  ].join('\n');
+  const englishHash = '4ec3e14b357e0968776399477592fd13c3713631';
+  const romanianHash = '754eb315045e565c150ca819498cf63154bee9b4';
+  const enPath = join(english, 'docs/guide.md');
+  const roPath = join(romanian, 'docs/guide.md');
+  writeFileSync(enPath, readFileSync(enPath, 'utf8') + control(englishHash));
+  writeFileSync(roPath, readFileSync(roPath, 'utf8') + control(romanianHash));
+
+  assert.deepEqual(compareDocumentationEditions(english, romanian).problems, []);
+  const enContract = markdownContract('docs/guide.md', readFileSync(enPath, 'utf8'));
+  const roContract = markdownContract('docs/guide.md', readFileSync(roPath, 'utf8'));
+  assert.deepEqual(enContract.structure, roContract.structure);
+
+  writeFileSync(roPath, readFileSync(roPath, 'utf8')
+    .replace('DocumentationDirectRelationshipGovernanceTest', 'DocumentationTargetGovernanceTest'));
   assert.ok(compareDocumentationEditions(english, romanian).problems
     .includes('Markdown structure differs: docs/guide.md'));
 });

@@ -41,4 +41,4 @@ var total = body.path("total").decimalValue();
 
 ---
 
-Maintenance of Core code and tests belongs to the separate `atf_j0/atf-core` project; [feedback and synchronization](README.md#maintenance-and-feedback) start from J0.
+Record Core findings against its Maven coordinate, version, and JAR/POM hashes. The local guide describes the consumed contract; provenance identifies the inspected bytes.

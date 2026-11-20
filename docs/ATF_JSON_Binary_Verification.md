@@ -3,11 +3,12 @@
 ## At a glance
 
 Historical C2/J9 evidence. The current disclosure and governance contract is
-described by the [current Reporting contract](../../atf_j0/atf-reporting/README.md). These C2/J9 results remain historical.
+described by the [Reporting library atlas](ATF_Reporting_Library_Atlas.md).
+These C2/J9 results remain historical.
 
-J0 retains the sources and native tests; J1/J2/J3 consume the same C2/J9 bytes.
-JAR/POM pairs are stored directly in `lib`, with one version per library; J3
-has seven modules and no longer retains Core source.
+This J1 checkout records historical acceptance of the C2/J9 bytes. JAR/POM
+pairs are stored directly in `lib`, one selected version per library; no Core
+source module is included in this reactor.
 
 | Library | JAR SHA-256 |
 |---|---|
@@ -20,15 +21,13 @@ has seven modules and no longer retains Core source.
 |---|---|
 | Core source and C2 JAR | 276 native PASS each; complete document, duplicates, null/write, exact redaction, and factory before submission |
 | Core C1 control | 37 new cases, 20 expected FAIL results; the same regression on old source and physical JAR |
-| Mock and Validation | full suites on source and separately in J1/J2/J3; independent route fallback, exact YAML scalar, types, and raw body retained |
+| Mock and Validation | source suites and J1 consumer suites; independent route fallback, exact YAML scalar, types, and raw body retained |
 | Native Reporting | 64 PASS per build; redactor and formatter proved separately, including counts and duplicates |
 | Physical Reporting J8 control | 16 cases, 15 expected FAIL results; numeric precision error and multiplicity loss reproduced |
 | Physical Reporting J9 | 39 PASS: native JSON, browser JSON, API disclosure, and CodeSource; no Reporting implementation in the harness |
 | Reporting source unit tests | 486 PASS; separate from the eight JSON component tests and 22 API disclosure cases |
 | Kit | 133 PASS separately in each workspace; the two requirement proofs are semantically distinct, with no relaxed threshold |
 | J1 | full governance and one Shop/AutoEx component test each; no new external journey run is claimed |
-| J2 | individual/suite MOCK, Extent/fallback, and the new embedded SQL suite; no remote Kafka certification |
-| J3 | governance and Speech component suite without a model; not an ASR or microphone rerun |
 | publication | two identical clean builds for each JAR; API comparison removes no public symbols |
 
 ## Rendering and remaining limits
@@ -39,9 +38,9 @@ has seven modules and no longer retains Core source.
 - The oracle rejects rounding or removing a duplicate even when statuses remain identical.
 - TAB MCP confirms values and keyboard fallback; closing a neighbor after Expand all exposes REPORT-SIBLING-DISCLOSURE-114 separately.
 
-The four pre-existing Reporting cohesion/import criteria remain with J0.
-Capture/publication timing, inspector profile, contrast, and fallback width
-retain their own criteria; JSON fidelity does not close them implicitly.
+Four earlier Reporting cohesion/import criteria remain separate from this JSON
+acceptance. Capture/publication timing, inspector profile, contrast, and fallback
+width keep distinct criteria; JSON fidelity does not close them implicitly.
 
 ## Reproduction and synchronization
 

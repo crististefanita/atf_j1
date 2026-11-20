@@ -1,8 +1,8 @@
 # ATF Reporting — display and layout contract
 
-In J1, this contract describes the required result when integrating the library.
-The models, renderer, and generic regressions are owned by `atf_j0`; the [JAR atlas](ATF_Reporting_Library_Atlas.md)
-explains how to use them without local source, without promising every `public` API.
+For J1, this contract describes the required result when integrating the
+selected Reporting library. The [JAR atlas](ATF_Reporting_Library_Atlas.md)
+explains the observable binary contract without promising every `public` API.
 
 ## At a glance
 
@@ -11,10 +11,9 @@ of the Extent report and HTML fallback. It complements the
 [ATF Reporting Contract](ATF_Reporting_Contract.md), which owns evidence
 semantics, verdict ownership, and the API schema.
 
-`atf-reporting` owns the markup, tokens, and published CSS and JavaScript;
-`atf-reporting-tests` owns unit, component, integration, and browser checks;
-consumers verify only the integration of their own adapters. This document does not describe
-a specific artifact, URL, or historical screenshot.
+The selected library defines the published markup, tokens, CSS, and JavaScript;
+J1 tests verify only the integration of its own adapters and the rendered report.
+This document does not describe a specific artifact, URL, or historical screenshot.
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
@@ -198,10 +197,10 @@ level, not by copying a local rule.
 
 | Level | Checks | Owner |
 |---|---|---|
-| unit | vocabulary, models, tokens, policy, and published JS/CSS functions | `atf-reporting` |
-| component | real markup, order, ownership, disclosure, JSON, viewport, and asset manifest | `atf-reporting-tests` |
-| integration | Extent/fallback, publication, mock input, and projection parity | `atf-reporting-tests` |
-| E2E/browser | click, Enter/Space, expand/collapse, computed style, scroll, deep link, and page errors on a fresh artifact | `atf-reporting-tests`, through ATF Debug + headless Playwright/Chromium |
+| unit | vocabulary, models, tokens, policy, and published JS/CSS functions | selected Reporting library contract; no source-level library tests in J1 |
+| component | markup, disclosure, viewport, and asset behavior exercised by a consumer | local Shop/AutoEx consumer test, limited to its assertions |
+| integration | adapter composition, Extent publication, and fallback behavior exercised locally | Shop or AutoEx consumer module |
+| E2E/browser | browser interaction and expand/collapse on a fresh consumer report | local consumer module using ATF Debug and Playwright/Chromium |
 | consumer | business intent and application adapter, without a parallel renderer | consumer module |
 
 Visual verification does not use a real Windows browser or stop active runs.
@@ -226,5 +225,5 @@ and tests, or an explicit requirements change.
 - [Semantic Reporting Contract](ATF_Reporting_Contract.md)
 - [Evidence Capture Contract](ATF_Evidence_Capture_Contract.md)
 - [Reporting JAR Atlas](ATF_Reporting_Library_Atlas.md)
-- [README `atf-reporting-tests`](../../atf_j0/atf-reporting-tests/README.md)
+- [Reporting consumer guide](ATF_Reporting_Consumer.md)
 - [Active feedback register](feedback/README.md)

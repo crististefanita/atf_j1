@@ -208,4 +208,3 @@ After offline tests and the scenario run:
 
 Visual validation is part of the reporting test. A green build alone is not
 sufficient when a change affects the DOM or CSS.
-

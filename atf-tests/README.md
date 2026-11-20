@@ -23,7 +23,8 @@ flowchart LR
 
 - the root POM and module graph are included in the whole-reactor gate;
 - atf-tests verifies boundaries; it does not implement application flows;
-- Practice Shop and reporting composition remain separate consumers;
+- Practice Shop and AutoEx are local application consumers; the libraries they
+  use are selected as versioned binary dependencies;
 - `Checks` groups architecture, scope, and runtime-safety checks;
 - the dotted edge shows a guard applied to consumers, not ownership transferred to governance;
 - consumers use libraries through explicit dependencies, and governance verifies
@@ -45,7 +46,7 @@ Short labels carry the following meanings:
 | relocatable documentation and consistent sources | `governance.documentation.*`, `AtfSourceReadabilityGovernanceTest` | does not validate one consumer's content |
 | constant ownership and package cohesion | `ConstantsOwnershipGovernanceTest`, `AtfPackageCohesionGovernanceTest` | maximum 8 classes per package in production and test source sets across all reactor modules; exceptions must be explicit |
 | Practice Shop purchase journey | `atf-test-practice-shop` | is not copied here |
-| reporting contract/API/UI composition | `atf-reporting-tests` | is not moved into governance |
+| Shop/AutoEx consumer report scenarios and assertions | their own consumer modules | remain with the consumer |
 
 ## Choose the gate for the change
 
@@ -64,37 +65,37 @@ For IntelliJ and Maven, use the same [staging with real Git](../docs/ATF_Build_A
 The [Java source roots](#shared-java-source-inventory) map explains consumer
 layouts before moving any tests.
 
-## Source or binary deployment governance
+## Library artifact and module-boundary governance
 
-| Deployment | Live modules | With Reporting harness in TMP |
-|---|---:|---:|
-| J0 source canonical | 12 | included |
-| J1 binary consumer | 6 | 7 |
-| J2 binary consumer | 5 | 6 |
-
-A declared module that is missing is an error; profiles are not inferred from directories.
-
-`WholeAtfGovernanceSuiteTest` keeps the same explicit selection in J1 and at
-the producer. The [deployment package](src/test/java/atf/api/tests/governance/distribution/README.md)
-selects proof from the Maven declaration without inferring exceptions from missing files.
-
-| Rule | Source Reporting | Binary Reporting |
+| Surface | Local source of truth | Governing evidence |
 |---|---|---|
-| reactor | live POM defines the module inventory | J1/J2 modules and Reporting pair are explicit in `lib`; the external gate adds only Reporting Tests in TMP. Shadow source and undeclared harnesses are rejected. |
-| documentation | Reporting README | JAR atlas and consumer guide; same structure/link/prose controls |
-| ownership | exact Java file and package restrictions | exact class in the JAR and no forbidden duplicates |
-| independence | source imports and standalone POM | POM without a parent/ATF dependencies and bytecode references checked with JDK `jdeps` |
-| identity | local source module | version, JAR/POM, unique provenance, embedded POM, and CodeSource hash |
-| test layer | native sources and their annotations | native catalog included in provenance; not represented as local source execution |
+| J1 reactor | root Maven POM and six declared modules | module and dependency-boundary checks |
+| Consumed libraries | five versioned JAR/POM pairs in `lib` | coordinates, physical bytes, provenance, and loaded identity |
+| Reporting acceptance | selected J1 component and UI scenarios | assertion structure, HTML rendering, and report navigation |
 
-Deleted modules, missing/wrong coordinates, altered artifacts, and hidden
-dependencies have negative controls. The factual mutant works for 8/9/10/11/12
-modules; this does not authorize a reactor whose catalog omits modules.
+A declared local module that is missing is an error; profiles are not inferred
+from directories. The suite checks this reactor and does not inspect a sibling
+workspace.
 
-Git control uses each project's actual review base. Synchronizing shared sources
-does not copy `.git`, the reactor POM, JAR, or controls based on another
-project's revision; eligibility is checked separately.
+`WholeAtfGovernanceSuiteTest` selects the explicit local gates. The
+[deployment package](src/test/java/atf/api/tests/governance/distribution/README.md)
+documents the library-artifact and module-boundary checks.
 
+| Rule | Local reactor | Consumed artifact |
+|---|---|---|
+| modules and dependencies | live POM defines module inventory and scopes | selected library coordinates resolve from flat JAR/POM pairs |
+| documentation | local module contracts and feedback | artifact catalog matches POM properties and physical filenames |
+| source boundary | module ownership and package restrictions | no source shadow or forbidden duplicate classes in the JAR |
+| independence | declared module dependencies | published POM and bytecode dependency checks with JDK `jdeps` |
+| identity | Maven module and loaded class | version, JAR/POM, provenance hashes, embedded POM, and CodeSource |
+| verification evidence | selected J1 tests | provenance catalogs package inputs; it does not claim native tests ran in J1 |
+
+Deleted modules, missing coordinates, altered artifacts, and hidden dependencies
+have negative controls. Documentation mutants change only the documented claim
+while keeping the POM and files intact.
+
+Git test-change governance uses this checkout's review base. It does not compare
+against or require a neighboring workspace.
 ## Whole-ATF suite and compatibility residue
 
 [`ReportUiActionAdapters`](src/test/java/atf/ui/tests/support/reporting/ReportUiActionAdapters.java)
@@ -120,6 +121,7 @@ src/test/java/atf/api/tests/governance/
 │   ├── structure/    owner README hierarchy and collapsible-block checks
 │   ├── factual/      POM, workspace, and consumer-configuration evidence
 │   ├── links/        Markdown heading and HTML anchor index
+│   ├── relationship/ direct J1 documentation relationship boundary
 │   ├── DocumentationDiagramGovernanceTest.java
 │   ├── DocumentationProseGovernanceTest.java
 │   ├── DocumentationAnchorGovernanceTest.java
@@ -137,8 +139,8 @@ structure, link destinations, and parity of non-Markdown files. The Node.js test
 is `tools/documentation-editions.test.mjs`.
 
 `WholeAtfGovernanceSuiteTest` is the explicit entry point for whole-reactor
-verification. It groups the checks without moving ownership of reporting tests
-to this module:
+verification. It groups reactor and documentation checks while each consumer
+keeps ownership of its application scenarios:
 
 - `ArchitectureModuleBoundaryTest` — reactor, POM, dependency direction,
   forbidden imports, process output, static state, and removal of
@@ -146,11 +148,10 @@ to this module:
 - `ArchitectureOwnershipBoundaryTest` — module placement, package roots,
   reporting/UI ownership, and absence of duplicates;
 - `AtfPackageCohesionGovernanceTest` — cohesion of governed production packages
-  and test source sets in every reactor module, including
-  `atf-test-practice-shop`, `atf-test-kit`, and `atf-reporting-tests`;
+  and test source sets in the six modules declared by the root POM;
   the limit is eight classes maximum, and the diagnostic identifies the module,
   package, and concrete classes for any new hotspot or stale exception;
-- `AtfSourceReadabilityGovernanceTest` — duplicate imports in Maven main/test sources and fully qualified ATF invocations in reporting tests; comments and literals are lexically excluded;
+- `AtfSourceReadabilityGovernanceTest` — duplicate imports in local Maven main/test sources and the configured reporting-call boundary; comments and literals are lexically excluded;
 - `layers.AtfTestLayerArchitectureTest` — inventories `sourceDirectory` and
   `testSourceDirectory` roots from the POM (using Maven defaults), then checks
   the level of every executable class; nested fixtures do not change the level
@@ -166,7 +167,7 @@ to this module:
   fixtures do not exclude the executable owner. Source analysis does not replace
   launcher/report evidence;
 - `ConstantsOwnershipGovernanceTest` — protocol vocabulary, routes, and the
-  standalone Reporting boundary;
+  selected library binary boundary;
 - `governance.documentation.DynamicPathDocumentationArchitectureTest` — relocatable documentation,
   relocatable, without machine paths or concrete generated artifact names;
 - `governance.documentation.structure.DocumentationReadmeStructureGovernanceTest` — one title,
@@ -176,6 +177,10 @@ to this module:
 - `governance.documentation.language.DocumentationLanguageGovernanceTest` — checks the language
   of visible Markdown prose and Mermaid labels across all documents, while
   preserving identifiers, commands, and code examples;
+- `governance.documentation.relationship.DocumentationDirectRelationshipGovernanceTest` — checks
+  every current J1 Markdown line, including fenced examples, and `AGENTS.md` for
+  references to other ATF workspaces; only the historical
+  test-change baseline is excluded and retains its original audit identifiers;
 - `governance.documentation.DocumentationStyleGovernanceTest` — ATF semantic style:
   typed fences, headings without skipped levels, `-` bullets, and no font/CSS/HTML
   presentation markup in READMEs or the canonical architecture document;
@@ -206,8 +211,8 @@ the target document.
 For a targeted check, change only the annotation value:
 
 ```java
-@DocumentationTarget("atf-reporting/README.md")
-class ReportingReadmeGovernanceTest {
+@DocumentationTarget("atf-test-practice-shop/README.md")
+class ConsumerReadmeGovernanceTest {
 }
 ```
 
@@ -219,8 +224,9 @@ The repeatable `DocumentationTarget` declaration belongs to
 The [annotation contract](../docs/ATF_Test_Infrastructure_Annotations.md) explains
 ownership and composition limits.
 
-Thus, `atf-reporting-tests` no longer owns checks that inspect the entire
-repository; it retains only the API/UI boundary specific to reporting composition.
+The suite checks local reactor rules and the consumed library artifacts. It
+does not replace consumer tests for application behavior or generated report
+output.
 
 <details>
 <summary><strong>Cleanup target tracked in feedback</strong></summary>
@@ -268,9 +274,10 @@ flowchart LR
 - The inventory reads literal paths from the POM; it does not replace the
   effective POM, inheritance, or Maven profile activation. XML comments do not
   declare roots.
-- The expression guard remains limited to reporting tests and retains the
-  three reviewed adapters. It detects current and legacy ATF namespaces,
-  constructors, and multiline calls, excluding examples in comments/literals.
+- The expression guard applies when reporting composition sources are part of
+  the declared reactor. This binary consumer verifies artifact identity and
+  rejects copied reporting namespaces; the source-call rule retains its three
+  reviewed adapters.
 
 ### Two inventories with distinct responsibilities
 
@@ -328,13 +335,8 @@ meaning of its label.
 
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compares the modules and Kit scope with the actual POMs.
-[DocumentedWorkspaceCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedWorkspaceCatalogTest.java)
-reads the live J0–J7 POMs and compares module counts, producer/consumer roles,
-and the Reporting version with the synchronization table; it checks the counts
-selected from the Atlas, the J1 executive README, and the deployment matrix
-here, including the temporary Reporting Tests module. Mutants in count, role,
-and version must be rejected. The run requires sibling J0–J7 checkouts next to
-J1, according to the grouped staging table in [build safety](../docs/ATF_Build_And_Execution_Safety.md).
+[DocumentedLibraryCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java)
+compares the five documented library coordinates and JAR/POM paths with the root POM, physical files, and local library guides. Mutants in version, artifact path, and guide inventory must be rejected. It requires no neighboring checkout.
 [DocumentedUiGeometryContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedUiGeometryContractTest.java)
 extends the same factual boundary to selected numeric geometry, without
 Reporting sources. These checks are explicitly selected by
@@ -343,7 +345,7 @@ Reporting sources. These checks are explicitly selected by
 | Bounded claim | Executable source | Observable rejection |
 |---|---|---|
 | module count in the architecture | direct `modules/module` declarations in the POM | different count, missing claim, or duplicate claim |
-| J0–J7 catalog | live POMs from sibling checkouts | mismatched count, producer/consumer role, or Reporting version |
+| consumed library inventory | root POM, physical `lib` pairs, and library index | stale version, missing pair, or missing/duplicate guide |
 | Kit in the consumer matrix | direct POM dependency; omitted scope means `compile` | different scope, Kit absent, or Kit present in both columns |
 | generic zoom versus configured example | `UiBrowserConfiguration.defaults()` | a specific example does not redefine the runtime default |
 | CSS and DPR in the UI example | `UiViewportScale` for declared inputs | derived geometry does not match the executable model |
@@ -413,10 +415,9 @@ the `docs/feedback/README.md` index is retained permanently.
 
 ## Console detail governance
 
-`ConsoleDefaultsGovernanceTest` protects default details and UI/API wiring in
-Reporting and Shop. Behavioral tests in `atf-console` and
-`ReportingTestConsoleTest` verify formatting and event delivery; the YAML
-`false` override remains supported.
+`ConsoleDefaultsGovernanceTest` protects the local default details and UI/API
+wiring used by consumer modules. The selected Console library supplies event
+formatting and delivery; the YAML `false` override remains supported.
 
 ## Separate consumer modules
 
@@ -445,10 +446,10 @@ atf-test-practice-shop/src/
 ```
 
 `atf-tests` does not own business classes, locators, flows, or Practice Shop/AutoEx
-fixtures. It can scan consumer sources for whole-ATF rules and cross-module
-architecture without importing their test classes. Tests that verify the
-external application stay with the consumer; tests that verify the generic
-report model and rendering stay in `atf-reporting-tests`.
+fixtures. It scans local consumer sources for reactor rules without importing
+their test classes. Tests that verify the external application and generated
+report behavior stay with Shop or AutoEx; shared report behavior comes from the
+selected Reporting library.
 
 ## Running and staging
 
@@ -472,8 +473,8 @@ over live content. The normative procedure is
 ```text
 whole reactor / module graph / architecture gates → atf-tests
 Practice Shop config / locators / pages / flows / E2E → atf-test-practice-shop
-reporting contracts / Extent composition → atf-reporting-tests
-renderer / HTML / CSS / public reporting API → atf-reporting
+Shop / AutoEx scenarios and local report checks → their J1 modules
+renderer / HTML / CSS / public reporting API → selected Reporting library
 ```
 
 General OOP, locator boundary, and layering rules are in

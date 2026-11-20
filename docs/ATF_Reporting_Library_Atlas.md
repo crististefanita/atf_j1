@@ -1,16 +1,16 @@
 # Reporting as a library — consumer integration atlas
 
-Current coordinates, hashes and independent acceptance are recorded in [library provenance](../library-provenance.json). The API and ownership below describe the current integration; the explicitly dated J6/J7 inventories remain historical.
+Current coordinates, hashes, and consumer acceptance are recorded in [library provenance](../library-provenance.json). This atlas describes the Reporting contract exercised by J1; dated verification records remain historical.
 
 ## At a glance
 
-This atlas supports Reporting integration without the library source. It starts
-from the consumed contracts, local caller, and loaded JAR; implementation,
-generic regressions, and library documentation are owned by `atf_j0`.
+This atlas supports J1 integration through the versioned Reporting library. It
+starts from the consumed contract, local caller, and loaded JAR; it does not
+assume library source is part of the J1 reactor.
 
 | Intent | Entry point | Verify at the caller |
 |---|---|---|
-| publish a result | [API and tree](#consumed-api-and-adapter-ownership) | independent observation and expected value |
+| publish a result | [API and tree](#reporting-api-adapter) | independent observation and expected value |
 | finalize the artifact | [lifecycle](#lifecycle-and-publication) | close of the owned/shared resource and path notification |
 | explain a failure | [diagnostics](#diagnostics-and-navigation) | cause, phase, ordinal, and original capture |
 | choose a version | [binary identity](#library-identity) | Maven ownership, hash, POM, and CodeSource |
@@ -21,8 +21,8 @@ The version is declared in the [J1 POM](../pom.xml); [lib](../lib) contains
 the Core and Reporting JAR/POM pairs directly in the folder. [Provenance](../library-provenance.json) records
 the binary/POM hashes, input fingerprint, and catalog of native checks.
 
-The fingerprint identifies the producer snapshot without carrying source or
-subsequent changes from `atf_j0`. Diagnostics start from the loaded version;
+The fingerprint identifies the packaged inputs without carrying library source
+or later versions. Diagnostics start from the loaded version;
 a class name in a stack trace does not imply that source is available in J1.
 
 The API in use can be inspected from the binary:
@@ -35,7 +35,9 @@ The example uses the included version; after an upgrade, use the coordinate
 from the POM. `public` classes are not automatically a stable surface for every
 release; verify compatibility for actual usages.
 
-## Consumed API and adapter ownership
+<a id="reporting-api-adapter"></a>
+
+## Consumed API and local adapter
 
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
@@ -52,7 +54,8 @@ flowchart LR
 - The caller owns HTTP, the browser, expected values, and business policy.
 - The models belong to the library; the adapter preserves identity and values,
   without Playwright or Core objects as the default protocol.
-- The JAR owns the projection; renderer changes are delivered by the producer.
+- The selected JAR defines the projection; compare rendered output after a
+  library version change.
 - Edges represent data and verification, not additional source modules.
 
 </details>
@@ -172,7 +175,7 @@ the uncaptured state, and the checkpoint that owns the evidence.
 
 Measure execution, captures, and publication at their respective owners; aggregating requests
 does not automatically give the E2E duration. Carry typed timing, keeping unknown
-distinct from zero; its models and rendering remain with the producer.
+distinct from zero; its models and rendering come from the selected library.
 
 [Runtime AutoEx](../atf-test-auto-ex/src/main/java/atf/autoex/runtime/README.md)
 and [Shop support](../atf-test-practice-shop/src/main/atf/shop/support/README.md)
@@ -186,7 +189,7 @@ of business/comparison/execution is not inferred from the title.
 
 `Fails → Tests` opens the scenario, phase, and ordinal of the original evidence.
 Two same-named groups require typed identity; the visible tab alone does not certify
-expansion. Generic regression coverage belongs to the producer's Reporting Tests.
+expansion. Consumer tests verify the selected report tree and its navigation.
 
 ## Tables and rendering
 
@@ -194,9 +197,9 @@ The [display contract](ATF_Reporting_Display_Contract.md) defines columns,
 available space, wrapping, local scrolling, and disclosures for
 all tables: setup, assertions, Playwright actions, and API.
 
-The semantic snapshot does not test computed style or keyboard behavior. The consumer
-checks its report, while the producer checks the generic Extent/fallback matrix;
-the application harness does not inject corrective CSS or JavaScript.
+The semantic snapshot does not test computed style or keyboard behavior. J1 checks
+the selected report with its consumer scenarios; the application harness does not
+inject corrective CSS or JavaScript.
 
 ## Redaction and preview
 
@@ -206,7 +209,7 @@ and sensitive canaries require separate checks.
 
 The redacted label is not the request-selection key. A fixture result
 does not claim universal protection for every sensitive format; redactor or
-renderer issues belong to the producer.
+renderer gaps are recorded against the selected library version and hash.
 
 ## Observation and backend recovery
 
@@ -232,10 +235,10 @@ remain with the consumer if the generic test module is retired.
 
 | Observation | Check first in J1 | Fix owner |
 |---|---|---|
-| missing class or method | version, POM, CodeSource, and compiled call | J1 adapter or Reporting compatibility in `atf_j0` |
-| missing report | opt-in, JUnit Store, close cause, and output | J1 caller; producer if publisher is defective |
+| missing class or method | version, POM, CodeSource, and compiled call | J1 adapter or compatibility of the selected Reporting version |
+| missing report | opt-in, JUnit Store, close cause, and output | J1 caller or the selected library's publication contract |
 | wrong verdict/capture | expected value, mapper, and invocation identity | consumer for input; Reporting for projection |
-| broken columns or backlink | same HTML, phase/ordinal, viewport, and keyboard | Reporting and its regressions in `atf_j0` |
+| broken columns or backlink | same HTML, phase/ordinal, viewport, and keyboard | selected Reporting version and the local rendering evidence |
 
 The handoff includes the coordinate/hash, minimal input without secrets, cause,
 expected/actual, and reproduction. The [J1 process](ATF_Reporting_Consumer.md) defines delivery;
@@ -243,5 +246,7 @@ do not patch library source or JAR contents in `lib`.
 
 ## Explicit profile and temporal sources
 
-[The J0 contract](../../atf_j0/atf-reporting/README.md#inspecția-artifactului-cu-intenție-explicită) separates caller intent from artifact inspection; the legacy call remains Extent/HTTP.
-The [current library provenance](../library-provenance.json) identifies the delivered binary and consumer acceptance; source and the Reporting harness remain in J0.
+[Reporting library contract](../lib/README.Reporting.md) separates caller intent from artifact inspection; the legacy call remains Extent/HTTP.
+The [current library provenance](../library-provenance.json) identifies the
+delivered binary and consumer acceptance; this reactor documents the library
+contract and verifies its own use of the selected bytes.

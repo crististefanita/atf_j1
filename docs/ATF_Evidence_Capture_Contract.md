@@ -82,8 +82,9 @@ or the verdict.
 - **existing**: `atf-reporting` owns `ReportScreenshotPolicy`, the screenshot
   model, session lifecycle, and publication sink;
 - **existing**: `atf-ui` can provide Base64 PNG captures and neutral actions;
-- **existing**: `atf-reporting-tests` has deterministic PNG fixtures and checks
-  policy without a browser;
+- **existing**: Practice Shop and AutoEx run local component/UI report checks
+  for the evidence their scenarios publish; these do not certify every
+  internal library behavior;
 - **existing**: `ReportEvidenceProfile` composes typed `ReportEvidenceFlowMode`,
   `ReportScreenshotPolicy`, `ReportEvidenceCaptureSource`, and
   `ReportUiActionDetailsMode`; mapping uses `fromConfig(...)` or a builder and
@@ -131,7 +132,7 @@ flowchart LR
     Adapter -->|implements| Capture["Typed capture"]
     Ledger -->|feeds| Reporting["Reporting"]
     Capture -->|feeds| Reporting
-    ReportingTests["Reporting tests"] -. proves .-> Reporting
+    ConsumerChecks["J1 consumer checks"] -. verifies local integration .-> Reporting
     PracticeShop["Shop"] -. uses .-> TestKit
 ```
 
@@ -143,8 +144,8 @@ flowchart LR
 - `atf-ui` executes browser operations; the consumer adapter implements
   `ReportEvidenceCaptureProvider` and returns a neutral payload;
 - `atf-reporting` normalizes and publishes the received evidence;
-- `atf-reporting-tests` validates the library through fixtures and does not
-  become production code;
+- Practice Shop and AutoEx verify the local report integrations they exercise;
+  these consumer checks do not replace the selected library contract;
 - Practice Shop demonstrates consumption but does not own the cross-cutting contract;
 - no publisher should import a page object or application endpoint.
 
@@ -159,7 +160,7 @@ The short labels have the following meaning:
 | Ledger | evidence ledger |
 | Typed capture | typed capture payload |
 | Reporting | atf-reporting · flow grouping + model + publication |
-| Reporting tests | atf-reporting-tests · fixtures + component/integration |
+| J1 consumer checks | Shop/AutoEx scenarios · selected library integration |
 | Shop | Practice Shop · consumer mapping |
 | implements | implements the provider |
 
@@ -273,8 +274,8 @@ not prove that each adapter selects the right evidence.
 |---|---|
 | What is the cross-cutting capture contract? | this document |
 | How does Reporting publish policy and HTML? | [Reporting JAR atlas](ATF_Reporting_Library_Atlas.md) |
-| How is the library tested without a browser? | [`atf-reporting-tests/README.md`](../../atf_j0/atf-reporting-tests/README.md) |
-| How is the artifact audited in a browser? | [`atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md`](../../atf_j0/atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md) |
+| How does J1 verify a library contract without a browser? | local consumer component tests and artifact-integrity governance |
+| How does J1 inspect a report in a browser? | a local consumer test and the ATF Debug/Playwright workflow |
 | How does the browser provide a neutral payload? | [`atf-ui/README.md`](../atf-ui/README.md) |
 | How does a consumer map its YAML and flow? | the consumer README |
 | What remains and how is it closed? | [`feedback/README.md`](feedback/README.md) and owner feedback |
