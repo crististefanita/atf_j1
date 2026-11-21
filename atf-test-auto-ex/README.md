@@ -1693,13 +1693,16 @@ Separat, `AutoExExtentTestExtension` publică urma recovery capturată în
 raportul JUnit real al suitei component, prin observațiile de fază din Test Kit
 K3 și Reporting J26. Nodul INFO este frate cu `Component assertions` în
 `TEST BODY`; verdictul aserțiunilor și numărul testelor rămân cele normale.
-Fiecare încercare are o operație lizibilă, politică, observație, timing măsurat
-probe/backoff/total și rezultat INFO. Disclosure-ul urmei pornește colapsat și
-rămâne colapsat după `Expand all nodes`; deschiderea lui afișează fiecare
-încercare o singură dată. Testul component deschide HTML-ul real al suitei în
-Playwright și verifică aceste stări și redactarea body-ului și URL-ului
-fixture-ului. Dovezile acoperă suita component recovery; nu afirmă acceptanță
-E2E pe site-ul public.
+Fiecare încercare afișează politica, observația, timing-ul măsurat
+probe/backoff/total și rezultatul INFO. Câmpul `Attempt N · Operation` conține
+acum eticheta evenimentului `Backend observation #N`, nu operația semantică de
+recovery `catalog-readiness`. Neclaritatea câmpului este urmărită în
+[feedback-ul de recovery J1](../docs/feedback/ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
+Proba Playwright a testului component deschide doar HTML-ul sintetic separat din
+`target/autoex-runtime-reports/recovery-audit`; nu deschide raportul produs de
+extensia JUnit. Inspectarea raportului real al suitei și proba locală a
+rendererului sunt dovezi distincte. Dovezile acoperă suita component recovery;
+nu afirmă acceptanță E2E pe site-ul public.
 
 </details>
 

@@ -22,10 +22,10 @@ site-ul public.
 
 | Dovadă în cod | Ce se înregistrează |
 |---|---|
-| UiBackendRecovery.recording | Un record informativ pentru fiecare observație, cu titlul încercării și operația |
+| UiBackendRecovery.recording | Emite o acțiune INFO pentru fiecare trace: ACTION este `BE observation #n`, TARGET este operația semantică `catalog-readiness`; auditul component proiectează acum ACTION drept câmp `Operation` și omite TARGET |
 | UiRecoveryTrace.description | Decizia, motivul, sumarul semnalului capturat când există, duratele probe/backoff/total și sursa politicii |
 | README-ul curent al consumerului | Descrie probe locale de raportare componente și diferențiază pasul sintetic cu rezultatul în titlu de raportul produs de o suită |
-| Verificări ale raportului 2026-11-21 | AutoExBackendRecoveryComponentTest a trecut 5/5, iar ShopBackendRecoveryComponentTest 6/6, în ambele ediții; generează rapoarte Extent locale și le deschide în Playwright |
+| Verificări ale raportului 2026-11-21 | AutoExBackendRecoveryComponentTest a trecut 5/5, iar ShopBackendRecoveryComponentTest 6/6, în ambele ediții; fiecare test component deschide în Playwright propria probă Extent locală sintetică, separat de raportul JUnit al suitei |
 
 - [x] Rulează scenarii deterministe recuperate și terminal epuizate în ambii consumatori.
 - [x] Verifică titlul pasului cu rezultatul și încercările ordonate într-un singur disclosure de observații, colapsat inițial.
@@ -49,26 +49,30 @@ Controlul verificat rămâne în
 
 ## J1-RECOVERY-RUNNER-TRACE-2026-11-21 — urmele recovery în rapoartele reale ale componentelor
 
-**Status: Activ — acceptanța Maven a trecut; verificarea IntelliJ rămâne
-deschisă.** J1 consumă acum Reporting J26 și Test Kit K3. Adaptoarele ambelor
+**Status: Activ — testele Maven trec; acceptanța browserului pe raportul real
+este parțială; verificarea IntelliJ rămâne deschisă.** J1 consumă acum Reporting J26 și Test Kit K3. Adaptoarele ambelor
 componente transmit observațiile recovery imuabile în faza JUnit reală
 `TEST BODY`, alături de pasul standard `Component assertions`.
 
 | Dovada artifactului | Comportament observat |
 |---|---|
-| Raportul real Shop component | `ShopExtentTestExtension` publică nodul INFO separat `Backend recovery trace · <outcome>`, lângă `Component assertions`; verdictul și numărul testelor rămân neschimbate. |
-| Raportul real AutoEx component | `AutoExExtentTestExtension` publică aceeași limită pentru suita component recovery. |
+| Raportul real Shop component | `ShopExtentTestExtension` publică nodul INFO separat `Backend recovery trace · <outcome>`, lângă `Component assertions`; valoarea `Attempt N · Operation` este `Backend observation #N`, nu operația semantică de recovery. Verdictul și numărul testelor rămân neschimbate. |
+| Raportul real AutoEx component | `AutoExExtentTestExtension` publică aceeași limită și folosește acum aceeași etichetă de eveniment în câmpul `Operation`. |
 | Rulări consumer Maven | Shop a trecut 6/6 și AutoEx 5/5 în EN și RO, folosind JAR-urile fizice J26/K3. |
-| Randare Playwright | Toate cele patru rapoarte reale au fost deschise. `Expand all nodes` extinde ierarhia normală, iar fiecare disclosure trace rămâne colapsat; deschiderea afișează încercările ordonate cu operație, politică, observație, timing măsurat probe/backoff/total și rezultat INFO, fiecare o singură dată. |
-| Siguranță și rezultat | Canary-ul body-ului și URL-ul fixture-ului lipsesc; `EXHAUSTED` rămâne un rezultat business așteptat într-un test care trece. |
+| Randare Playwright | Probele Playwright deținute de consumatori deschid doar HTML-ul local sintetic. O verificare separată în browser a deschis raportul JUnit real Shop și a verificat navigarea, disclosure-urile nested colapsate după `Expand all nodes`, `TEST BODY` și tabelul de aserțiuni vizibile, precum și rândurile de observație randate; apoi s-a oprit la așteptarea specifică fixture-ului `not captured`. Raportul JUnit real AutoEx nu a fost verificat în browser. Operația semantică nu este verificată în proiecția auditului component; proba cu tabel sintetic o arată doar în TARGET. |
+| Siguranță și rezultat | Căutarea în sursa celor 17 rapoarte JUnit generate pentru Shop/AutoEx nu a găsit nici canary-ul body-ului privat, nici `127.0.0.1`; `EXHAUSTED` rămâne un rezultat business așteptat într-un test care trece. Acceptanța în browser a redactării în raportul real AutoEx rămâne deschisă. |
 
 - [x] Publicați trace-ul recovery ordonat din fiecare rulare reală JUnit a
-  componentelor, într-un disclosure separat, colapsat inițial, cu operație,
-  politică, observație, timing măsurat, rezultat INFO și valori redactate.
+  componentelor, într-un disclosure separat, colapsat inițial, cu eticheta
+  evenimentului, politica, observația, timing măsurat, rezultat INFO și valori redactate.
   Păstrați pasul standard de aserțiuni, verdictul testului și numărul testelor.
-- [x] Deschideți în Playwright artifactele generate de Maven. Verificați că
-  `Expand all nodes` extinde ierarhia normală clasă/body/aserțiuni, trace-ul
-  rămâne colapsat și încercările apar o singură dată după deschidere.
+- [x] Rulați probele Playwright deținute de fiecare consumer pe HTML-ul local
+  sintetic de recovery. Verificați `Expand all nodes`, dovezile colapsate
+  independent, rândurile ordonate complete și redactarea în acele probe.
+- [ ] Finalizați acceptanța în browser pe rapoartele JUnit reale Shop și AutoEx
+  cu un oracol owner/scenariu independent de fixture. Proba Shop curentă ajunge
+  la tabelul de aserțiuni și rândurile de observație, dar se oprește la markerul
+  fixture hardcodat `not captured`; raportul real AutoEx nu a fost deschis.
 - [ ] Deschideți artifactul real după o rulare IntelliJ. Verificați același
   director de rapoarte, ierarhia de aserțiuni, trace-ul colapsat independent,
   câmpurile ordonate ale încercărilor și redactarea în raportul IDE.
@@ -77,6 +81,9 @@ componente transmit observațiile recovery imuabile în faza JUnit reală
 testelor componente din IntelliJ. Workspace-ul repo nu are un runner IntelliJ
 disponibil în mediul acestei verificări; succesul Maven nu închide paritatea
 directorului de output din IDE.
+
+Lipsa etichetei operației semantice și proiecția tipizată a trace-ului rămân
+urmărite separat în [J1-RECOVERY-TRACE-TYPING-2026-11-21](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
 
 <a id="j1-launch-context-146"></a>
 
