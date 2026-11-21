@@ -10,6 +10,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Finding | Local owner | Next evidence |
 |---|---|---|
+| [J1-RECOVERY-RUNNER-TRACE-2026-11-21](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21) | Shop/AutoEx component report projection | add the ordered recovery trace to the real JUnit artifact as a collapsed disclosure; verify expansion in Maven and IntelliJ |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Reporting metadata composition | capture the JUnit root and effective selection in audit metadata |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 
