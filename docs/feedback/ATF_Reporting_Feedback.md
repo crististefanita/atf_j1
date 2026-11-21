@@ -11,35 +11,44 @@ report as evidence.
 
 ## UI-RECOVERY-AUDIT-01 — make every recovery observation inspectable in Extent
 
-**Status:** Open · **Owner:** J1 recovery evidence and report acceptance. The
-local recording adapter emits one information record per UiRecoveryTrace, while
-consumer documentation describes only an aggregate indicator. A rendered
-report has not yet confirmed that the full trace appears in one expandable group.
+**Status: Verified and closed on 2026-11-21.** The J1 consumers generate an
+Extent report with the recovery outcome in the parent step and the complete
+attempt trace in one collapsed `Audit observations` disclosure. The disclosure
+is rendered as `details.atf-ui-observations`, not as a separate recovery step
+or `atf-ui-action-sequence` group.
 
 | Code evidence | What is recorded |
 |---|---|
 | UiBackendRecovery.recording | One information record per observation, titled by attempt and labeled with the operation |
 | UiRecoveryTrace.description | Decision, reason, captured signal summary when available, probe/backoff/total durations, and policy source |
-| Current consumer README | Describes an aggregate recovery indicator; it does not specify the visible hierarchy for the full attempt sequence |
-| 2026-11-20 component checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest passed 6/6; both assert trace safety and dispatch limits, but neither produces an Extent report |
+| Current consumer README | Describes local component report probes and distinguishes their fixture-supplied parent from a suite-generated aggregate step |
+| 2026-11-21 report checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest 6/6 in both editions, generating local Extent reports and opening them in Playwright |
 
-- [ ] Run a deterministic recovered scenario and a terminal refused/exhausted scenario in each consumer that enables recovery.
-- [ ] Verify the generated Extent report groups all observations under one collapsed recovery step, in attempt order, with an aggregate outcome visible at the parent.
-- [ ] Expand the group and verify each attempt's decision, reason, safe signal metadata, duration, and policy source appears once. Confirm that request bodies and private URLs are absent.
-- [ ] Add or retain a local component/browser assertion for initial collapsed state, expand-all behavior, full child visibility, and redaction. Keep the recovery assertions separate from business verdicts.
+- [x] Run deterministic recovered and terminal exhausted scenarios in both consumers.
+- [x] Verify the aggregate outcome in the parent step and the ordered attempts in one initially collapsed observations disclosure.
+- [x] Expand the disclosure and verify all rows, decisions, safe signal metadata, durations, policy source, and redaction of request bodies and local URLs.
+- [x] Verify the initial collapsed state, expand-all behavior, full row visibility, and redaction in the local component/browser tests.
 
-**Closure:** a generated J1 report and a local rendered-report check prove that all
-attempts are discoverable from one collapsed recovery group and remain complete
-after expansion, including expand-all. Both recovered and terminal outcomes
-are covered; no sensitive request content is published.
+**Closure evidence:** both consumer tests pass in EN and RO.
+
+- Playwright confirms the disclosure starts closed and stays closed after
+  `Expand all nodes`; opening it reveals every attempt in order.
+- The fixture supplies the local parent label; J1's captured rows pass through
+  the selected Reporting renderer.
+- This verifies local consumer projection and disclosure rendering. It does not
+  verify a suite-generated parent step or public-site E2E report.
+- Generated HTML excludes the fixture URL and private response body.
+
+The verified test-change control is retained in the
+[baseline](../ATF_Test_Changes_Baseline.md#recovery-extent-report-rendering).
 
 <a id="j1-launch-context-146"></a>
 
 ## J1-LAUNCH-CONTEXT-146 — record the actual launch scope
 
-**Status: Open. Owner:** J1 launch metadata and consumer composition. Business
-and rendering checks pass; audit metadata still omits the JUnit root and the
-effective test selection.
+**Status: Still open after the 2026-11-21 recheck. Owner:** J1 launch metadata
+and consumer composition. Business and rendering checks pass; audit metadata
+still omits the JUnit root and the effective test selection.
 
 | Witness | Observed fact |
 |---|---|
@@ -48,6 +57,9 @@ effective test selection.
 | Ambiguous filename | `AutoExReportSession.fileName` derives the report name from the method, so a direct method run and a suite run can share the same name prefix |
 | Existing boundary | `ReportEnvironmentField.SUITE` is intentionally hidden from operational System; launch facts belong in secondary Tests/trace metadata |
 | 2026-11-20 controlled check | `AutoExE2eOverviewNarrativeComponentTest` passed two UI/UI_API fixture scenarios in suite scope and verified report expansion; it does not assert the canonical root suite or effective selection |
+
+The 2026-11-21 recovery report checks and whole-reactor governance pass do not
+assert launch identity. They leave this metadata finding open.
 
 - [ ] Capture immutable launch scope, canonical suite root when known, selected
   class/method, and effective selection count at the JUnit boundary; retain an

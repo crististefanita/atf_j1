@@ -1010,9 +1010,8 @@ viewport; Android retains its entire physical display and orientation.
 | Test coverage | Pixel oracles verify all four corners at 70/100% and extra lower-page context at 70%; independent geometry-scale tests keep their own scales |
 
 The [native geometry regression](src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
-checks captured PNG pixels rather than configuration alone. The
-[verification record](../docs/ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up)
-separates capture, viewer and consumer acceptance.
+checks captured PNG pixels rather than configuration alone. This owner
+contract covers capture, viewer geometry and consumer context.
 
 ## Explicit fixture preparation
 
@@ -1034,9 +1033,6 @@ explicitly; ordinary runtime actions retain their existing behavior.
   target. Those refusals and a false postcondition keep their original action deadline.
 - Fixture preparation consumes one bounded navigation allowance across all
   stages; attachment and capture do not receive a renewed timeout.
-
-[First-frame verification](../docs/ATF_UI_First_Frame_Verification.md) separates
-fixture preparation, the actual driver runtime and the measured operation.
 
 ## Deterministic click deadline with a postcondition
 

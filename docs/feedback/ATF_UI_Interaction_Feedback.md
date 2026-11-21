@@ -1,11 +1,13 @@
-# UI interaction — verification references
+# UI interaction — owner contracts
 
 ## Verified contract — UI-FIRST-PAINT-144
 
-The [verification record](../ATF_UI_First_Frame_Verification.md) owns the
-bounded setup, original failure, runtime comparison and acceptance evidence.
+The [UI owner README](../../atf-ui/README.md) defines explicit fixture
+preparation, the shared navigation budget, native action deadlines, and the
+full-context screenshot and pixel contracts. Its linked tests are the durable
+acceptance criteria.
 
 ## Verified screenshot context
 
-See the [capture contract](../../atf-ui/README.md#full-context-screenshots)
-and the [rendering and regression evidence](../ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up).
+The complete viewport, configured scale, image-fit behavior, and geometry
+regressions are documented with their owner in the [UI README](../../atf-ui/README.md).

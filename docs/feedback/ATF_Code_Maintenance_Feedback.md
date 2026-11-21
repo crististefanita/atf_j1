@@ -27,7 +27,7 @@ The initial 2026-11-20 verification ran `WholeAtfGovernanceSuiteTest` from the G
 Those executions passed 186/186 in each edition and are historical; their
 commands and bases above are retained as the original proof.
 
-### Latest re-verification — 2026-11-20
+### Previous committed re-verification — 2026-11-20
 
 After the context-artifact cleanup and governance update, the complete
 `WholeAtfGovernanceSuiteTest` passed 190/190 in both live editions, with no
@@ -45,3 +45,19 @@ failures, errors, or skipped tests:
   evidence remains tracked separately where suite-scoped artifacts are required.
 - After the feedback edits, focused documentation governance passed 18/18 in
   both editions on 2026-11-21.
+
+### Current review worktrees — 2026-11-21
+
+Fresh Git-backed EN and RO worktrees were checked against their review bases
+(`72c387e98735b03fe1afd65cab1913b76b1d86b4` and
+`07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0`). Focused consumer checks and
+whole-reactor governance passed in each edition:
+
+- `ShopBillingSynchronizationComponentTest`: 13/13.
+- `ShopBackendRecoveryComponentTest`: 6/6; `AutoExBackendRecoveryComponentTest`: 5/5.
+- `WholeAtfGovernanceSuiteTest`: 190/190, with no failures, errors, or skips.
+- Documentation-edition Node tests: 10/10; the final edition comparison found
+  0 problems across all 50 maintained Markdown documents.
+
+These results cover local fixtures and report-rendering probes. The public AutoEx
+cart finding remains open, and no public-site E2E suite result is inferred.

@@ -2,9 +2,9 @@
 
 ## AutoEx search owned response
 
-The [consumer verification](ATF_AutoEx_Search_Verification.md) records the
-terminal queue-full cause, independent HTTP/DOM oracles, preserved budgets and
-retained preparation failures. Existing controls keep their historical bases.
+The [AutoEx search contract](../atf-test-auto-ex/README.md) and its permanent
+component tests define owned responses, fresh DOM, terminal queue-full behavior
+and preserved budgets. Existing controls keep their historical bases.
 
 <details>
 <summary><strong>Verified controls — initial J1 review base</strong></summary>
@@ -33,6 +33,48 @@ testChanges:
 The POM/library pair predates the search repair and is not promoted again.
 Reporting J18 acceptance (historical execution record) remains distinct from this
 consumer's fresh execution; no historical control is rebased or extended.
+
+</details>
+
+<details>
+<summary><strong>Verified control — undated verification-record governance</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DOC-VERIFICATION-RECORD-SCOPE-20261121
+    status: VERIFIED
+    base: 72c387e98735b03fe1afd65cab1913b76b1d86b4
+    expires: 2026-12-21
+    reason: Remove standalone verification reports after moving durable contracts to their owners; reject dated and undated report names and titles with negative fixtures.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=72c387e98735b03fe1afd65cab1913b76b1d86b4" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java
+```
+
+</details>
+
+<a id="recovery-extent-report-rendering"></a>
+<details>
+<summary><strong>Verified control — recovery Extent report rendering</strong></summary>
+
+```yaml
+testChanges:
+  - id: UI-RECOVERY-EXTENT-20261121
+    status: VERIFIED
+    base: 72c387e98735b03fe1afd65cab1913b76b1d86b4
+    expires: 2026-12-21
+    reason: Verify local recovered and exhausted Extent projections, including fixture-supplied parent labels, collapsed observations, expand-all behavior, ordered rows, and body/URL redaction; keep report selectors behind a test-scoped facade.
+    proof: mvn -B -ntp -pl atf-ui,atf-test-auto-ex,atf-test-practice-shop,atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=72c387e98735b03fe1afd65cab1913b76b1d86b4" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+```
+
+Both consumer report checks passed in EN and RO. The fixture supplies the local
+parent label, while J1's captured recovery records pass through the selected
+renderer. The Shop module remains exempt from protected-path controls; its
+protected architecture gate verifies that report selectors use a dedicated
+test-scoped facade.
 
 </details>
 
@@ -4679,8 +4721,8 @@ testChanges:
       - atf-ui/src/test/java/atf/ui/playwright/PlaywrightClickPostconditionComponentTest.java
 ```
 
-The [verification record](ATF_UI_First_Frame_Verification.md) retains the independent
-pixel, native-event and deadline oracles. AutoEx fixture edits keep the existing
+The [UI owner contract](../atf-ui/README.md) and permanent tests retain the
+independent pixel, native-event and deadline oracles. AutoEx fixture edits keep the existing
 `AUTOEX-SEARCH-LIVE-BASE-143` control at its original base; this control covers UI paths only.
 
 </details>
@@ -4700,9 +4742,8 @@ testChanges:
       - atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java
 ```
 
-The [capture contract](../atf-ui/README.md#full-context-screenshots) and
-[verification follow-up](ATF_UI_First_Frame_Verification.md#full-context-screenshot-follow-up)
-retain whole-frame PNG pixels, configured scale and independent viewer acceptance.
+The [capture contract](../atf-ui/README.md) and permanent tests retain
+whole-frame PNG pixels, configured scale and independent viewer acceptance.
 
 </details>
 

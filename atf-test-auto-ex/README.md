@@ -1314,11 +1314,9 @@ not expose the browser or API log. The main runtime composes `AutoExCatalogSearc
   the existing 5 s navigation budget before starting the 700 ms action. Decoded
   PNG dimensions, fixture URL and trusted activation remain auditable comparisons.
 - Preparation does not grant time to the document produced by Search; that
-  transition still shares the original action deadline. Driver/runtime
-  identity is recorded in [first-frame verification](../docs/ATF_UI_First_Frame_Verification.md).
-
-[Search verification](../docs/ATF_AutoEx_Search_Verification.md) separates the
-original queue-full PNG, later healthy API probes and fresh execution evidence.
+  transition still shares the original action deadline. The runner inherits the
+  SDK-selected Node runtime by default; the [build and execution contract](../docs/ATF_Build_And_Execution_Safety.md)
+  owns runtime selection and explicit override rules.
 
 The same composition is used in UI and UI+API. The inspector remains passive;
 the DOM postcondition does not invent an HTTP response or rewrite a FAIL already published.
@@ -1698,13 +1696,18 @@ and unknown operations are rejected before the browser starts.
 
 Assertions from these components remain in the standard `Component assertions`
 step, collapsed by default, with redaction before the configured limit, which
-defaults to 240 characters. These local component checks remain separate from
-generic rendering behavior supplied by the selected Reporting library.
+defaults to 240 characters. The component test creates local Extent projection
+probes for recovered and exhausted traces. Its test fixture supplies the
+aggregate parent step and attempt count; the renderer receives the recovery
+records produced by J1. One initially collapsed `Audit observations` group
+contains ordered INFO rows. Expansion shows the complete trace and policy
+source without the response body or local fixture URL. This checks J1's action
+evidence mapping and the selected renderer on local fixtures; it is not a
+suite-generated aggregate step or public-site E2E acceptance.
 
 </details>
 
-The deadline, rejections, and limits are in [UI](../atf-ui/README.md#backend-recovery-through-passive-observation);
-the aggregated recovery indicator remains in [audit feedback](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent).
+The deadline, rejections, and limits are in [UI](../atf-ui/README.md#backend-recovery-through-passive-observation).
 
 ## Run selection
 

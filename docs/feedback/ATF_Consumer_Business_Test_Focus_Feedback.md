@@ -2,8 +2,8 @@
 
 ## AutoEx search — delivered contract
 
-The [AutoEx search record](../ATF_AutoEx_Search_Verification.md) owns the
-GET/fresh-DOM contract, the original incident and the regression evidence.
+The [AutoEx consumer README](../../atf-test-auto-ex/README.md) owns the
+GET/fresh-DOM contract and its permanent regression coverage.
 
 <a id="autoex-catalog-evidence-146"></a>
 ## AUTOEX-CATALOG-EVIDENCE-146 — bind comparison evidence to its observed exchange
@@ -59,24 +59,24 @@ The source fix and focused component and local-browser report checks pass.
 <a id="shop-billing-sanity"></a>
 ## SHOP-BILLING-SANITY — attribute the lookup-race latency
 
-**Status: Open.** The original failure was not reproduced, but race-path latency remains unattributed.
+**Status: Verified and closed on 2026-11-21.** The lookup settlement interval is now measured separately from browser startup and fixture navigation; repeated local runs bound the race path inside its existing observation deadline.
 
 - During Console/Mock adoption, `ShopBillingSynchronizationComponentTest` had two assertion failures and one error among thirteen invocations.
 - The original race invocation took 122 seconds. A thread witness showed nested Playwright readiness/`isEnabled` during postal lookup selection; this is a lead, not a confirmed root cause.
 
 **Focused rechecks**
 
-- On 2026-11-19, all 13 invocations passed in 37.045 seconds.
-- On 2026-11-20, all 13 passed in 59.19 seconds. The `race,true,true` invocation took 16.986 seconds; the other invocations took 2.075–7.124 seconds. The selected test source hash matched the live checkout.
-- The timed JUnit invocation includes browser/session startup and fixture navigation. It does not establish that postal lookup itself consumed 16.986 seconds. The test asserts settled requests, final address values and no retyping, but has no elapsed-time oracle. Its local fixture uses a 300 ms input debounce and injects a 500 ms delayed application for `race`.
+- Three focused `ShopBillingSynchronizationComponentTest` executions passed 13/13 each (39 invocations), with no failures or errors.
+- The 2026-11-21 recheck also passed 13/13 in both fresh EN and RO worktrees, with no failures or errors.
+- A new test oracle measures the `Await visible` action after `inputsApplied`; successful settlement must remain within the configured 1,100 ms budget. Expected timeout refusals allow at most 25 ms for Playwright/recording completion, without changing the configured timeout.
+- Two measured `race,true,true` runs settled in 524 ms and 494 ms. Their browser startup and fixture navigation measured 11,904 ms and 9,233 ms separately. **Inference:** setup dominates the recent long race invocation; these measurements do not establish the cause of the historical 122-second event.
+- The local fixture retains its 300 ms input debounce and 500 ms delayed application for `race`. Request ownership, completion, final address values, and no-retyping assertions remain in place.
 
-**Remaining evidence**
+**Retained regression guard**
 
-- Measure browser startup/navigation separately from `inputsApplied` through request completion, DOM application and `ShopPostalLookup` settlement. Compare the input-to-settlement interval with the existing observation budget.
-- Keep the address, request ownership, completion and no-retyping oracles. Do not increase timeouts or add retries to hide the latency.
-- If a source change is warranted, rerun the 13-case matrix and inspect its component Extent evidence.
+- Keep the timing assertion with the existing request-ownership, completion, address, and no-retyping oracles. Do not increase timeouts or add retries to hide latency.
 
-The earlier broad Shop run stopped after preserving its failures and thread witness; neither focused pass establishes broad-suite acceptance. Close this item only after repeated race runs show bounded lookup settlement and any cold browser cost is reported separately.
+The earlier broad Shop run and historical 122-second race remain unreproduced and are not claimed as explained. Current evidence closes the measured settlement criterion only; it does not establish broad-suite acceptance.
 
 <a id="autoex-ui-cart-confirmation-2026-11-19"></a>
 
@@ -88,6 +88,7 @@ The earlier broad Shop run stopped after preserving its failures and thread witn
 - The wait for `#cartModal` timed out after 20 seconds while the modal remained hidden; the report contains the action sequence and diagnostics.
 - The test stopped before account registration and checkout. This run does not establish whether the site changed, the click failed to mutate the cart, or the confirmation locator is stale.
 - [`AutoExPurchaseBusinessComponentTest`](../../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/journey/AutoExPurchaseBusinessComponentTest.java) checks immediate and delayed modal evidence on local fixtures; it does not reproduce this public-site incident.
+- The 2026-11-21 review did not rerun the public journey; this finding remains active.
 
 - [ ] Reproduce with a fresh browser and capture the cart state and relevant network exchange immediately after the click.
 - [ ] Distinguish a public-site behavior change from a locator or readiness defect before changing the journey.

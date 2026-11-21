@@ -53,8 +53,8 @@ flowchart LR
 | Proof | Result |
 |---|---|
 | Focused consumer and catalog checks at initial closure | Shop 21/21, AutoEx 22/22, atf-tests 22/22; 65/65 per edition. The local AutoEx browser check expanded the generated Extent report. |
-| Latest whole-reactor governance re-verification | 190/190 in `main` at `e1504f69fdbfefe2670236024cb93f92b9f69ac5` and `main_RO` at `3520c2cae2481d1eba6d05c54559259ebd52c4e7`; no failures, errors, or skipped tests. |
-| Latest edition comparison and follow-up | The Git-backed TMP comparison reports 0 problems across 52 Markdown documents; Node tests pass 10/10; focused documentation governance passed 18/18 in each edition on 2026-11-21 after the feedback edits. |
+| Previous committed whole-reactor governance | 190/190 in `main` at `e1504f69fdbfefe2670236024cb93f92b9f69ac5` and `main_RO` at `3520c2cae2481d1eba6d05c54559259ebd52c4e7`; no failures, errors, or skipped tests. |
+| Final review worktree verification | `WholeAtfGovernanceSuiteTest` passes 190/190 in fresh EN and RO worktrees based on `72c387e98735b03fe1afd65cab1913b76b1d86b4` and `07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0`; Node tests pass 10/10 and the Git-backed comparison reports 0 problems across all 50 maintained Markdown documents. |
 
 Closure covers the documented J1 reactor and its consumed library contracts.
 The tests verify the selected binary artifacts and local integrations; they do
@@ -82,44 +82,43 @@ consumer-to-Extent flow, and one final library-index link.
 |---|---|
 | Focused documentation and change-control gates | 37/37 in EN and RO. |
 | Whole-reactor governance at initial overview closure | 187/187 in EN and RO; no failures, errors, or skipped tests. |
-| Latest whole-reactor re-verification | 190/190 in EN and RO at the live commits recorded above; no failures, errors, or skipped tests. |
-| Edition tooling and final feedback validation | Node tests pass 10/10; the Git-backed TMP comparison reports 0 problems across all 52 documents; focused documentation governance passes 18/18 in EN and RO on 2026-11-21. |
+| Previous committed whole-reactor re-verification | 190/190 in EN and RO at the live commits recorded above; no failures, errors, or skipped tests. |
+| Final edition tooling and worktree governance | Node tests pass 10/10; the Git-backed TMP comparison reports 0 problems across all 50 documents; final whole-reactor governance passes 190/190 in EN and RO review worktrees on 2026-11-21. |
 
 <a id="doc-context-artifact-governance-20261120"></a>
 
-## DOC-CONTEXT-ARTIFACT-GOVERNANCE-20261120 — prevent project maps and dated verification snapshots
+## DOC-CONTEXT-ARTIFACT-GOVERNANCE-20261120 — prevent project maps and standalone verification reports
 
 **Status: Implemented and verified on 2026-11-20 for the scoped patterns.**
-The four project-map/context and dated or library-versioned verification
-artifacts were removed. `DocumentationContextArtifactGovernanceTest` now scans
-maintained Markdown, checks links and provenance pointers, and includes
-negative fixtures for those patterns. The test is selected by
-`WholeAtfGovernanceSuiteTest`.
+Project maps and dated or library-versioned verification artifacts were
+removed. `DocumentationContextArtifactGovernanceTest` scans maintained
+Markdown, checks links and provenance pointers, and includes negative fixtures.
+The test is selected by `WholeAtfGovernanceSuiteTest`.
 
-The latest whole-reactor run passed 190/190 in both editions. The next item
-records the remaining scope question: the current rule does not reject a
-standalone verification document whose path and title have no date or library
-version.
+The latest whole-reactor run passed 190/190 in both editions at the time of this
+record. The follow-up below tightened the rule to reject standalone reports
+even when their paths and titles have no date or library version.
 
 <a id="doc-verification-record-scope-20261120"></a>
 
-## DOC-VERIFICATION-RECORD-SCOPE-20261120 — classify remaining standalone verification records
+## DOC-VERIFICATION-RECORD-SCOPE-20261120 — remove standalone verification records
 
-**Status: Open.** The current governance rule rejects project maps and dated or
-library-versioned verification/acceptance snapshots. It does not reject a
-generic undated verification document. The maintained
-[`ATF_AutoEx_Search_Verification.md`](../ATF_AutoEx_Search_Verification.md)
-and [`ATF_UI_First_Frame_Verification.md`](../ATF_UI_First_Frame_Verification.md)
-still combine durable consumer rules with run-specific history and provenance.
+**Status: Verified and closed on 2026-11-21.** The standalone AutoEx search and
+UI first-frame records were removed; their durable contracts remain in the
+[AutoEx consumer README](../../atf-test-auto-ex/README.md) and
+[UI owner README](../../atf-ui/README.md). Run-specific receipts stay in owned TMP.
 
-- Decide which behavior belongs in the owning AutoEx and UI READMEs.
-- Move disposable run receipts and local review URLs out of maintained docs.
-- If standalone verification records are out of scope, add an undated negative
-  fixture and make the governance test reject the generic form.
+The governance test rejects standalone report filenames and acceptance or
+verification record titles, including undated forms, and remains selected by
+`WholeAtfGovernanceSuiteTest`. Its change control is in the
+[test baseline](../ATF_Test_Changes_Baseline.md).
 
-Keep this open until the records are classified and the resulting rule is
-verified in both editions; the current 190/190 result only proves the narrower
-patterns already implemented.
+- AutoEx retains the owned GET, fresh-DOM and terminal queue-full contract.
+- UI retains fixture preparation, native action deadlines, screenshot context
+  and pixel oracles without committed execution snapshots.
+- The negative fixtures cover undated report filenames and acceptance-record
+  titles; `WholeAtfGovernanceSuiteTest` passed 190/190 in fresh TMP for both
+  editions on 2026-11-21.
 
 <a id="doc-edition-comparator-20261120"></a>
 
@@ -129,7 +128,7 @@ patterns already implemented.
 comparison of the existing live worktrees flagged the two documentation-edition
 `.mjs` files. Their Git blob IDs match between `main` and `main_RO`, and their
 text matches after CRLF normalization. A fresh Git-backed TMP comparison
-reported 0 problems across 52 Markdown documents; the Node suite passed 10/10.
+reported 0 problems across 50 Markdown documents; the Node suite passed 10/10.
 
 The discrepancy came from the pre-existing worktree line endings, not an edition
 content change. No code correction is indicated. If the same result recurs in a

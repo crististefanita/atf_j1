@@ -594,13 +594,18 @@ and unknown operations are rejected before the browser starts.
 
 Assertions for these components remain in the standard `Component assertions`
 step, collapsed by default, with redaction before the configured limit, 240
-characters by default. These Shop component checks remain separate from the
-shared rendering behavior supplied by the selected Reporting library.
+characters by default. The component test creates local Extent projection
+probes for recovered and exhausted traces. Its test fixture supplies the
+aggregate parent step and attempt count; the renderer receives the recovery
+records produced by J1. One initially collapsed `Audit observations` group
+contains ordered INFO rows. Expansion shows the complete trace and policy
+source without the response body or local fixture URL. This checks J1's action
+evidence mapping and the selected renderer on local fixtures; it is not a
+suite-generated aggregate step or public-site E2E acceptance.
 
 </details>
 
-The deadline, rejections, and limits are in [UI](../atf-ui/README.md#backend-recovery-through-passive-observation);
-the aggregate recovery indicator remains in the [audit feedback](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent).
+The deadline, rejections, and limits are in [UI](../atf-ui/README.md#backend-recovery-through-passive-observation).
 
 ## Module configuration
 
@@ -831,6 +836,9 @@ Observation uses the [UI scope](../atf-ui/README.md#observation-listener-scope)
 and the existing `awaitVisible` budget; it receives no additional timeout.
 `ShopPostalLookupComponentTest` checks the real page method, while
 `ShopBillingLookupTest` separately retains the address record contract.
+`ShopBillingSynchronizationComponentTest` measures settlement after
+`inputsApplied`, separately from browser startup and fixture navigation, and
+keeps successful settlement within its configured 1.1-second budget.
 
 ### Input synchronization
 
