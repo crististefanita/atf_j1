@@ -586,12 +586,13 @@ catalogul întârziat, epuizarea și captura lipsă. Scrierile prin GET și oper
 necunoscute sunt refuzate înaintea browserului.
 
 Aserțiunile acestor componente rămân în pasul standard `Component assertions`,
-colapsat implicit, cu redactare înaintea plafonului configurat, implicit 240 de caractere.
-Testul component creează probe locale de proiecție Extent pentru urmele
-recovered și exhausted. Fixture-ul testului furnizează pasul părinte agregat și
-numărul încercărilor; rendererul primește înregistrările recovery produse de J1.
-Un singur grup `Audit observations`, colapsat inițial, conține rândurile INFO în
-ordine. Expandarea afișează urma completă și sursa politicii, fără body-ul
+colapsat implicit, cu redactare înaintea plafonului configurat de 240 de
+caractere. Testul component creează probe locale de proiecție Extent pentru
+urmele recovered și exhausted. Construiește un scenariu sintetic pentru raport,
+cu un pas al cărui titlu include rezultatul și numărul de încercări; rendererul
+primește înregistrările recovery capturate de J1. Un singur grup
+`Audit observations`, colapsat inițial, conține rândurile INFO în ordine.
+Expandarea afișează urma completă și sursa politicii, fără body-ul
 răspunsului sau URL-ul fixture-ului local. Proba verifică maparea dovezilor de
 acțiune J1 și rendererul selectat pe fixture-uri locale; nu este un pas agregat
 generat de suite și nici acceptanță E2E pe site-ul public.

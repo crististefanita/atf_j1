@@ -11,21 +11,24 @@ generat ca dovadă.
 
 ## UI-RECOVERY-AUDIT-01 — toate observațiile de recovery trebuie inspectabile în Extent
 
-**Stare: verificată și închisă la 2026-11-21.** Consumerii J1 generează
-rapoarte Extent în care rezultatul recovery apare la pasul părinte, iar urma
-completă a încercărilor apare într-un singur disclosure `Audit observations`,
-colapsat inițial. Disclosure-ul este randat ca `details.atf-ui-observations`,
-nu ca pas recovery separat sau grup `atf-ui-action-sequence`.
+**Stare: verificată și închisă la 2026-11-21.** Testele component creează probe
+Extent locale din înregistrările recovery capturate de fiecare consumer.
+Fiecare probă construiește un scenariu sintetic și un pas cu rezultatul în
+titlu; înregistrările J1 ordonate sunt randate într-un singur disclosure
+`Audit observations`, colapsat inițial și expus ca
+`details.atf-ui-observations`. Proba verifică proiecția locală a consumerului
+și randarea, nu un pas agregat părinte generat de suită sau un raport E2E de pe
+site-ul public.
 
 | Dovadă în cod | Ce se înregistrează |
 |---|---|
 | UiBackendRecovery.recording | Un record informativ pentru fiecare observație, cu titlul încercării și operația |
 | UiRecoveryTrace.description | Decizia, motivul, sumarul semnalului capturat când există, duratele probe/backoff/total și sursa politicii |
-| README-ul curent al consumerului | Descrie probe locale de raportare componente și diferențiază explicit pasul părinte furnizat de fixture de un pas agregat generat de suite |
+| README-ul curent al consumerului | Descrie probe locale de raportare componente și diferențiază pasul sintetic cu rezultatul în titlu de raportul produs de o suită |
 | Verificări ale raportului 2026-11-21 | AutoExBackendRecoveryComponentTest a trecut 5/5, iar ShopBackendRecoveryComponentTest 6/6, în ambele ediții; generează rapoarte Extent locale și le deschide în Playwright |
 
 - [x] Rulează scenarii deterministe recuperate și terminal epuizate în ambii consumatori.
-- [x] Verifică rezultatul agregat la pasul părinte și încercările ordonate într-un singur disclosure de observații, colapsat inițial.
+- [x] Verifică titlul pasului cu rezultatul și încercările ordonate într-un singur disclosure de observații, colapsat inițial.
 - [x] Extinde disclosure-ul și verifică toate rândurile, deciziile, metadatele sigure ale semnalelor, duratele, sursa politicii și redactarea body-urilor și URL-urilor locale.
 - [x] Verifică starea inițial colapsată, comportamentul expand-all, vizibilitatea tuturor rândurilor și redactarea în testele locale component/browser.
 
@@ -33,8 +36,8 @@ nu ca pas recovery separat sau grup `atf-ui-action-sequence`.
 
 - Playwright confirmă că disclosure-ul pornește închis și rămâne închis după
   `Expand all nodes`; deschiderea lui afișează fiecare încercare în ordine.
-- Fixture-ul furnizează eticheta părintelui local; rândurile capturate de J1
-  trec prin rendererul Reporting selectat.
+- Testul component construiește un scenariu sintetic și un pas cu rezultatul în
+  titlu; rândurile capturate de J1 trec prin rendererul Reporting selectat.
 - Proba verifică proiecția locală a consumerului și randarea disclosure-ului.
   Nu verifică un pas părinte generat de suite sau un raport E2E public.
 - HTML-ul generat exclude URL-ul fixture-ului și body-ul privat al răspunsului.

@@ -64,7 +64,7 @@ testChanges:
     status: VERIFIED
     base: 07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0
     expires: 2026-12-21
-    reason: Verifică proiecțiile Extent locale pentru urme recovered și exhausted, inclusiv etichete părinte furnizate de fixture, observațiile colapsate, expand-all, rândurile ordonate și redactarea body-ului/URL-ului; păstrează selectorii raportului într-o fațadă dedicată de test.
+    reason: Verifică proiecțiile Extent locale pentru urme recovered și exhausted, inclusiv pași sintetici cu rezultatul în titlu, observațiile colapsate, expand-all, rândurile ordonate și redactarea body-ului/URL-ului; păstrează selectorii raportului într-o fațadă dedicată de test.
     proof: mvn -B -ntp -pl atf-ui,atf-test-auto-ex,atf-test-practice-shop,atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
