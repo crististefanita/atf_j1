@@ -43,18 +43,27 @@ live, fără eșecuri, erori sau teste omise:
 - După editarea feedback-ului, guvernanța focusată a documentației a trecut
   18/18 în ambele ediții la 2026-11-21.
 
-### Worktree-urile curente de revizie — 2026-11-21
+### Verificări focusate ale consumerilor — 2026-11-21
 
 Worktree-uri EN și RO proaspete, bazate pe reviziile de control
 (`72c387e98735b03fe1afd65cab1913b76b1d86b4` și
-`07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0`), au trecut verificările focusate
-ale consumerilor și guvernanța întregului reactor:
+`07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0`), au trecut verificările focusate:
 
 - `ShopBillingSynchronizationComponentTest`: 13/13.
 - `ShopBackendRecoveryComponentTest`: 6/6; `AutoExBackendRecoveryComponentTest`: 5/5.
-- `WholeAtfGovernanceSuiteTest`: 190/190, fără eșecuri, erori sau omisiuni.
-- Testele Node ale edițiilor documentației: 10/10; comparația finală a găsit
-  0 probleme în cele 50 de documente Markdown păstrate.
+
+### Guvernanța curentă a întregului reactor — 2026-11-21
+
+După corectarea documentației despre raportarea recovery, `WholeAtfGovernanceSuiteTest`
+a trecut cu 190/190, fără eșecuri, erori sau omisiuni, la aceste commit-uri:
+
+- `main`: `94434f1458171ada958e83f3577f9d6a9f776203`.
+- `main_RO`: `06709dde637f3a08929932d6bee8130bc1eefed8`.
+
+Controalele schimbărilor de teste au folosit bazele de review focusat de mai sus.
+Testele Node ale edițiilor au trecut apoi cu 10/10 în ambele ediții; comparația
+perechii în TMP cu Git curat a găsit 0 probleme în toate cele 50 de documente
+Markdown păstrate.
 
 Aceste rezultate acoperă fixture-uri locale și probe de randare a raportului.
 Constatarea coșului public AutoEx rămâne deschisă; nu se deduce o rulare E2E pe
