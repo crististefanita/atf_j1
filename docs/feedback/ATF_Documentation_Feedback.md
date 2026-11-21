@@ -83,7 +83,7 @@ consumer-to-Extent flow, and one final library-index link.
 | Focused documentation and change-control gates | 37/37 in EN and RO. |
 | Whole-reactor governance at initial overview closure | 187/187 in EN and RO; no failures, errors, or skipped tests. |
 | Previous committed whole-reactor re-verification | 190/190 in EN and RO at the live commits recorded above; no failures, errors, or skipped tests. |
-| Final edition tooling and worktree governance | Node tests pass 10/10; the Git-backed TMP comparison reports 0 problems across all 50 documents; final whole-reactor governance passes 190/190 in EN and RO review worktrees on 2026-11-21. |
+| Current feedback and edition verification | `WholeAtfGovernanceSuiteTest` passes 191/191 in both editions after the paired feedback update; Node tests pass 11/11 and the Git-backed comparison reports 0 problems across all 50 documents. |
 
 <a id="doc-context-artifact-governance-20261120"></a>
 

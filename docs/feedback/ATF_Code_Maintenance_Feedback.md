@@ -55,7 +55,7 @@ Fresh Git-backed EN and RO review worktrees based on
 - `ShopBillingSynchronizationComponentTest`: 13/13.
 - `ShopBackendRecoveryComponentTest`: 6/6; `AutoExBackendRecoveryComponentTest`: 5/5.
 
-### Current whole-reactor governance — 2026-11-21
+### Previously committed whole-reactor governance — 2026-11-21
 
 After the recovery-report documentation correction, `WholeAtfGovernanceSuiteTest`
 passed 190/190 with no failures, errors, or skips at these reviewed commits:
@@ -69,6 +69,19 @@ comparison found 0 problems across all 50 maintained Markdown documents.
 
 These results cover local fixtures and report-rendering probes. The public AutoEx
 cart finding remains open, and no public-site E2E suite result is inferred.
+
+### Current feedback verification — 2026-11-21
+
+After the paired feedback edits:
+
+- `WholeAtfGovernanceSuiteTest` passed 191/191 in both review worktrees, with no
+  failures, errors, or skipped tests. They were based on `main`
+  `225d58abe5f4d9859ab02bc2935e5ae44fa03850` and `main_RO`
+  `bb824283d7c5c83c3ca9fe05c94fb800df57aa8c`.
+- After direct source links were added to the new finding, focused prose, anchor,
+  target, and link governance passed 10/10 in each edition.
+- Documentation-edition Node tests passed 11/11; the Git-backed pair comparison
+  found 0 problems across all 50 maintained Markdown documents.
 
 <a id="oop-recovery-scenarios-2026-11-21"></a>
 ## OOP-RECOVERY-SCENARIOS-2026-11-21 — make component scenarios and report ownership explicit
@@ -106,3 +119,16 @@ The first post-update governance run flagged this entry's four-sentence
 paragraph against the rapid-scan prose limit. That text is now split into
 bullets. The final rerun passed 191/191 in both editions with no failures,
 errors, or skipped tests.
+
+<a id="j1-recovery-trace-typing-2026-11-21"></a>
+## J1-RECOVERY-TRACE-TYPING-2026-11-21 — keep recovery evidence typed through report projection
+
+**Status: Open; owners:** Shop and AutoEx component-test maintainers.
+
+This is a maintainability opportunity; no report defect has been observed.
+
+- **Observed:** [ShopBackendRecoveryComponentTest.java](../../atf-test-practice-shop/src/test/atf/shop/tests/component/recovery/ShopBackendRecoveryComponentTest.java) and [AutoExBackendRecoveryComponentTest.java](../../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java) duplicate the report mapping, rename the `BE observation` prefix with a regular expression, and parse probe/backoff/total timings from `row.observed()` text.
+- **Typed source:** [UiRecoveryTrace.java](../../atf-ui/src/main/java/atf/ui/recovery/UiRecoveryTrace.java) carries the operation and `Duration` values. The current test projection is coupled to display text.
+- **Next step:** Trace the typed record to the test-owned report boundary. Check whether a small local projection can preserve typed values without changing the public reporting API or adding a shared module. Keep Shop and AutoEx ownership separate unless a genuinely neutral contract emerges.
+- **Acceptance:** Derive operation and timings from typed fields rather than parsing `description()` or `observed()`. A focused test covers ordered attempts, distinct non-zero durations, and terminal outcomes. Existing Maven HTML artifacts must retain their disclosure state, ordering, redaction, and verdict in both consumer modules.
+- **Guardrail:** If typed values cannot be preserved without widening a stable API for no behavior gain, record that finding and close the refactor as unjustified.

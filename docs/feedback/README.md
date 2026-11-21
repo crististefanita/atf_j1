@@ -11,6 +11,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 | Finding | Local owner | Next evidence |
 |---|---|---|
 | [J1-RECOVERY-RUNNER-TRACE-2026-11-21](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21) | Shop/AutoEx component report projection | verify output-root parity and collapsed-trace rendering after IntelliJ; Maven reports pass in Playwright |
+| [J1-RECOVERY-TRACE-TYPING-2026-11-21](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21) | Shop/AutoEx recovery report projection | assess a typed trace-to-report seam to remove duplicated text parsing while preserving current artifacts |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Reporting metadata composition | capture the JUnit root and effective selection in audit metadata |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 
@@ -23,8 +24,8 @@ record library observations by coordinate, version, hash, and local reproducer.
 | Recovery trace in actual JUnit component reports | Maven acceptance passed for Shop 6/6 and AutoEx 5/5 in both editions; Playwright verified all four actual reports, independent trace disclosures, full attempt rows, and redaction. IntelliJ output-root parity remains active above. |
 | Shop postal lookup settlement timing | [Closed on 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); three 13-case runs pass, with race settlement measured at 494–524 ms against the 1,100 ms budget and browser startup/navigation measured separately |
 | AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
-| J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); latest Whole-ATF governance 190/190 in EN and RO; all maintained Markdown structures and link destinations match |
-| Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); latest governance 190/190 in EN and RO; Markdown edition structure remains aligned |
+| J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); current Whole-ATF governance is 191/191 in EN and RO; all maintained Markdown structures and link destinations match |
+| Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); current governance is 191/191 in EN and RO; Markdown edition structure remains aligned |
 | Project maps and standalone verification records | [Closed on 2026-11-21](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120); durable contracts remain with their owners and governance rejects dated and undated report forms |
 | Documentation edition review and worktree comparison | [Verified on 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); 50 documents pass the commit-pinned and live worktree checks, Node tests 11/11 cover CRLF/LF normalization and semantic drift, and library POMs remain byte-exact |
 | Screenshot evidence policy | [Evidence capture contract](../ATF_Evidence_Capture_Contract.md), the UI module guide, and native browser geometry tests define the current behavior |
