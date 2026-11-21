@@ -6,12 +6,15 @@ import atf.console.junit.AtfReportPathOptIn;
 import atf.core.reporting.console.AtfConsoleEvent;
 import atf.testkit.assertions.AssertionValueDisplay;
 import atf.testkit.assertions.ComponentAssertionAudit;
+import atf.testkit.assertions.ComponentAuditObservation;
 import atf.testkit.assertions.ComponentAuditAdapter;
 import atf.testkit.assertions.ComponentAuditExtension;
 import atf.reporting.audit.AssertionAuditReport;
 import atf.reporting.audit.AssertionAuditRun;
 import atf.reporting.contract.AtfAssertion;
 import atf.reporting.contract.AtfReportStatus;
+import atf.reporting.model.ReportField;
+import atf.reporting.model.ReportObservation;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.util.List;
@@ -48,14 +51,24 @@ public final class ShopExtentTestExtension implements ComponentAuditAdapter {
                 return new AssertionValueDisplay(owner.run().assertionMaxDisplayCharacters(), report::redactField);
             }
             @Override public void publish(ComponentAssertionAudit.Result result) {
-                for (var phase : result.phases()) report.phase(phase.phase().name().replace('_', ' '),
-                        phase.checks().stream().map(check -> new AtfAssertion(check.name(), check.expected(),
-                                check.actual(), check.passed())).toList(), status(phase.outcome()), phase.diagnostic(), phase.timing().map(value -> new atf.reporting.model.timing.ReportPhaseTiming(
-                                value.elapsed(), value.intervals())).orElse(null));
+                for (var phase : result.phases()) {
+                    var assertions = phase.checks().stream().map(check -> new AtfAssertion(check.name(),
+                            check.expected(), check.actual(), check.passed())).toList();
+                    var timing = phase.timing().map(value -> new atf.reporting.model.timing.ReportPhaseTiming(
+                            value.elapsed(), value.intervals())).orElse(null);
+                    report.phase(phase.phase().name().replace('_', ' '), assertions, status(phase.outcome()),
+                            phase.diagnostic(), timing, reportObservations(phase.observations()));
+                }
                 report.complete(status(result.outcome()));
             }
             @Override public void close() { report.close(); }
         };
+    }
+
+    private static List<ReportObservation> reportObservations(List<ComponentAuditObservation> observations) {
+        return observations.stream().map(observation -> new ReportObservation(observation.title(),
+                observation.fields().stream().map(field -> new ReportField(field.name(), field.value())).toList(),
+                List.of(), List.of())).toList();
     }
 
     private static AtfReportStatus status(ComponentAssertionAudit.Outcome outcome) {

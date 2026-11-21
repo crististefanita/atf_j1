@@ -23,12 +23,12 @@ public class DocumentedLibraryCatalogTest {
     void staleVersionInTheCatalogIsRejected() throws Exception {
         Path root = locateProjectRoot();
         String current = catalog(root);
-        String stale = current.replace("atf.api:atf-reporting:1.0.0-j25",
+        String stale = current.replace("atf.api:atf-reporting:1.0.0-j26",
                 "atf.api:atf-reporting:1.0.0-j24");
         assertTrue(!current.equals(stale), "the Reporting coordinate must be present in the catalog");
         var failures = inspect(root, stale, libraryIndex(root));
         assertTrue(failures.stream().anyMatch(failure ->
-                failure.contains("atf.api:atf-reporting:1.0.0-j25 rows=0; expected=1")));
+                failure.contains("atf.api:atf-reporting:1.0.0-j26 rows=0; expected=1")));
     }
 
     @Test

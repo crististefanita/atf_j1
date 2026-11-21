@@ -56,6 +56,7 @@ public static void publish(AssertionAuditRun run, String actual) {
 - Use the same settings/redactor in the run and renderer; the default preview is **240**, read through assertionMaxDisplayCharacters(). Full values precede the preview.
 - The example follows the session thread; AssertionAuditRun.extent(...) serializes publication for concurrent callers.
 - Kit collects the JUnit comparison, evaluated once; Reporting publishes it. The caller preserves the verdict, cause, and timing through phase(..., timing).
+- J26 accepts optional `ReportObservation` values through `phase(..., timing, observations)`. They publish as INFO facts in the same phase, separate from assertion rows and verdict; the consumer owns their mapping and safe values.
 - Fails indexes the terminal cause on the failed ACTION or OBSERVE row. Tests also retains the collapsible diagnostic, while independent comparisons remain distinct.
 - The PNG retains the full viewport/display; capture and zoom belong to the adapter. Identical screenshots from the same step retain one piece of evidence and the first caption.
 - After close, ReportArtifactInspector.inspect(path, profile) qualifies the inventory and embedded resources; diagnostics identify external dependencies. Text paths remain valid. The inspector is static; rendering and interactions are verified separately in a browser.

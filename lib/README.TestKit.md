@@ -32,6 +32,7 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 - Dependency: atf.api:atf-test-kit with the atf.testkit.version from the project POM. Use test scope in production; compile is justified only for main-scope support in a test module. Do not include Kit in an APK/application.
 - JUnit Jupiter API and Jackson are transitive. The runner declares the junit-jupiter-engine and its selection; the level annotation does not replace @Test or the consumer extension.
 - For Extent: the adapter sends checks to AssertionAuditReport; AssertionAuditRun owns the shared session. Kit does not copy the renderer. [Reporting integration](README.Reporting.md#scope-and-integration).
+- K3 `RecordedAssertions.observe(ComponentAuditObservation)` stores immutable facts with the current phase, separately from checks and assertion coverage. The consumer adapter decides whether and how to map them to Reporting; Kit has no Reporting dependency and publishes no renderer.
 - Inject the sanitizer through AssertionValueDisplay before preview. The comparison runs once; stored values are bounded and are not a complete archive. Pure units keep their own policy.
 - Scopes and resources are per invocation; close them and preserve the original cause. A local lock does not isolate global policies from external readers.
 

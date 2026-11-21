@@ -11,10 +11,10 @@ POM, artifact files, and provenance.
 | Library | Coordinate | Local pair |
 |---|---|---|
 | Core | `atf.api:atf-core:1.0.0-c4` | `lib/atf-core-1.0.0-c4.jar` + POM |
-| Reporting | `atf.api:atf-reporting:1.0.0-j25` | `lib/atf-reporting-1.0.0-j25.jar` + POM |
+| Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` + POM |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` + POM |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` + POM |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k2` | `lib/atf-test-kit-1.0.0-k2.jar` + POM |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k3` | `lib/atf-test-kit-1.0.0-k3.jar` + POM |
 
 The root POM selects the versions. `library-provenance.json` identifies the
 binary/POM hashes and retained package evidence.

@@ -26,10 +26,10 @@ the evidence that J1 can verify against the selected bytes.
 | Library | Coordinate selected by the root POM | Contract used in J1 |
 |---|---|---|
 | Core | `atf.api:atf-core:1.0.0-c4` | HTTP, configuration, JSON, and lifecycle primitives |
-| Reporting | `atf.api:atf-reporting:1.0.0-j25` | Extent/fallback publication and auditable report evidence |
+| Reporting | `atf.api:atf-reporting:1.0.0-j26` | Extent/fallback publication and auditable report evidence |
 | Console | `atf.api:atf-console:1.0.0-c2` | Neutral event formatting and diagnostics |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | Deterministic HTTP-port replacement |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k2` | JUnit classification, comparisons, and lifecycle support |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k3` | JUnit classification, comparisons, and lifecycle support |
 
 These are binary dependencies of the J1 reactor, not source modules in it.
 Describe a dependency by its coordinate, version, and observable contract.

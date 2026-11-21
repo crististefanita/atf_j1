@@ -28,7 +28,7 @@ a class name in a stack trace does not imply that source is available in J1.
 The API in use can be inspected from the binary:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j25.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j26.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
 The example uses the included version; after an upgrade, use the coordinate

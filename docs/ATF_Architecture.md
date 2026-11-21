@@ -34,10 +34,10 @@ The two application consumer modules declare Test Kit only for test code:
 | Library | Selected coordinate | J1 use |
 |---|---|---|
 | Core | atf.api:atf-core:1.0.0-c4 | API request, response, execution, and configuration contracts |
-| Reporting | atf.api:atf-reporting:1.0.0-j25 | Extent model and HTML report publication consumed by local tests |
+| Reporting | atf.api:atf-reporting:1.0.0-j26 | Extent model and HTML report publication consumed by local tests |
 | Console | atf.api:atf-console:1.0.0-c2 | Structured diagnostic output |
 | Mock | atf.api:atf-mock:1.0.0-m2 | Deterministic fake transport in governance and test scenarios |
-| Test Kit | atf.api:atf-test-kit:1.0.0-k2 | Test-level annotations, resolvers, and test support |
+| Test Kit | atf.api:atf-test-kit:1.0.0-k3 | Test-level annotations, resolvers, and test support |
 
 J1 verifies the exact selected JAR/POM bytes and the integrations exercised by its own tests. The library guides describe the available contract; local acceptance does not claim to execute a library's independent test suite.
 

@@ -1703,8 +1703,18 @@ count; the renderer receives J1's captured recovery records. One
 `Audit observations` group, initially collapsed, contains the ordered INFO
 rows. Expansion shows the complete trace and policy
 source without the response body or local fixture URL. This checks J1's action
-evidence mapping and the selected renderer on local fixtures; it is not a
-suite-generated aggregate step or public-site E2E acceptance.
+evidence mapping and the selected renderer on local fixtures.
+
+Separately, `AutoExExtentTestExtension` publishes the captured recovery trace
+in the real JUnit component report through Test Kit K3 phase observations and
+Reporting J26. The INFO trace is a sibling of `Component assertions` in
+`TEST BODY`; it keeps the normal assertion verdict and test count. Each attempt
+has one readable operation, policy, observation, measured probe/backoff/total
+timing, and INFO result. The trace disclosure starts closed and remains closed
+after `Expand all nodes`; opening it reveals each attempt once. The component
+test opens the actual suite HTML in Playwright and checks these states and the
+redaction of the fixture body and URL. This evidence covers the recovery
+component suite; it does not claim public-site E2E acceptance.
 
 </details>
 

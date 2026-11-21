@@ -18,10 +18,10 @@ records artifact hashes and package origin.
 | Library | Maven coordinate | JAR | POM |
 |---|---|---|---|
 | Core | `atf.api:atf-core:1.0.0-c4` | `lib/atf-core-1.0.0-c4.jar` | `lib/atf-core-1.0.0-c4.pom` |
-| Reporting | `atf.api:atf-reporting:1.0.0-j25` | `lib/atf-reporting-1.0.0-j25.jar` | `lib/atf-reporting-1.0.0-j25.pom` |
+| Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` | `lib/atf-reporting-1.0.0-j26.pom` |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` | `lib/atf-console-1.0.0-c2.pom` |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` | `lib/atf-mock-1.0.0-m2.pom` |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k2` | `lib/atf-test-kit-1.0.0-k2.jar` | `lib/atf-test-kit-1.0.0-k2.pom` |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k3` | `lib/atf-test-kit-1.0.0-k3.jar` | `lib/atf-test-kit-1.0.0-k3.pom` |
 
 The versions above must match the root POM properties and the filenames in
 `lib`. Library usage and dependency boundaries are described in the

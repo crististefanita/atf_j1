@@ -81,6 +81,31 @@ covered by its component test.
 </details>
 
 <details>
+<summary><strong>Verified control — recovery trace in actual JUnit reports</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-RECOVERY-RUNNER-TRACE-20261121
+    status: VERIFIED
+    base: ac4ec410eb6ad81ebcb56645331f926c03ad0989
+    expires: 2026-12-21
+    reason: Pin the physical Reporting J26/Test Kit K3 consumer pair and protect the AutoEx phase-observation projection; preserve assertions, verdict and test count, measured attempt fields, redaction, and independent trace disclosure. The Shop companion projection is covered by its focused component test.
+    proof: mvn -B -ntp -pl atf-tests,atf-test-auto-ex,atf-test-practice-shop -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,DocumentedLibraryCatalogTest,TestChangeGovernanceTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=ac4ec410eb6ad81ebcb56645331f926c03ad0989" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExExtentTestExtension.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+      - pom.xml
+```
+
+The Maven component and whole-reactor checks run in both editions. Playwright
+inspection of the actual HTML is recorded with the active recovery finding;
+IntelliJ output-root parity remains open.
+
+</details>
+
+<details>
 <summary><strong>Verified control — project maps and dated verification snapshots</strong></summary>
 
 ```yaml
