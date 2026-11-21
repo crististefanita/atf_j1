@@ -63,7 +63,7 @@ testChanges:
     status: VERIFIED
     base: 72c387e98735b03fe1afd65cab1913b76b1d86b4
     expires: 2026-12-21
-    reason: Verify local recovered and exhausted Extent projections, including synthetic outcome-bearing steps, collapsed observations, expand-all behavior, ordered rows, and body/URL redaction; keep report selectors behind a test-scoped facade.
+    reason: Verify local recovered and exhausted Extent projections, including synthetic outcome-bearing steps, collapsed observations, expand-all behavior, ordered rows, and body/URL redaction; keep Shop report selectors in their test-scoped facade.
     proof: mvn -B -ntp -pl atf-ui,atf-test-auto-ex,atf-test-practice-shop,atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=72c387e98735b03fe1afd65cab1913b76b1d86b4" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
