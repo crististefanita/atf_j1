@@ -124,12 +124,13 @@ verification record titles, including undated forms, and remains selected by
 
 ## DOC-EDITION-COMPARATOR-20261120 — distinguish worktree line endings from branch drift
 
-**Status: Verified on 2026-11-21; no branch content drift found.** A direct
-comparison of the existing live worktrees flagged the two documentation-edition
-`.mjs` files. Their Git blob IDs match between `main` and `main_RO`, and their
-text matches after CRLF normalization. A fresh Git-backed TMP comparison
-reported 0 problems across 50 Markdown documents; the Node suite passed 10/10.
+**Status: Corrected and verified on 2026-11-21.** The live worktree comparison
+flagged two `.mjs` files because the EN checkout uses CRLF and RO uses LF; their
+Git blobs match. The comparator's text-file list omitted `.mjs`.
 
-The discrepancy came from the pre-existing worktree line endings, not an edition
-content change. No code correction is indicated. If the same result recurs in a
-fresh Git-backed stage, reopen this item and add an LF/CRLF regression fixture.
+- The comparator now normalizes JavaScript text line endings and still rejects
+  semantic source drift.
+- The regression suite passes 11/11, including the LF/CRLF fixture; published
+  library POMs remain byte-exact.
+- The commit-pinned review verifies all 50 documents with no problems, and the
+  live worktree comparison now passes across EN and RO.

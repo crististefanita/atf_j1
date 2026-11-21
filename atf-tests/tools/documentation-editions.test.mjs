@@ -169,6 +169,21 @@ test('rejects structural drift and non-Markdown implementation drift', t => {
   assert.ok(result.problems.includes('Non-Markdown content differs: pom.xml'));
 });
 
+test('normalizes checkout line endings for JavaScript tools but detects code drift', t => {
+  const {english, romanian} = pair(t);
+  const englishTool = join(english, 'atf-tests/tools/documentation-editions.mjs');
+  const romanianTool = join(romanian, 'atf-tests/tools/documentation-editions.mjs');
+  mkdirSync(join(english, 'atf-tests/tools'), {recursive: true});
+  mkdirSync(join(romanian, 'atf-tests/tools'), {recursive: true});
+  writeFileSync(englishTool, 'const edition = "shared";\n');
+  writeFileSync(romanianTool, 'const edition = "shared";\r\n');
+  assert.deepEqual(compareDocumentationEditions(english, romanian).problems, []);
+
+  writeFileSync(romanianTool, 'const edition = "drift";\r\n');
+  assert.ok(compareDocumentationEditions(english, romanian).problems
+    .includes('Non-Markdown content differs: atf-tests/tools/documentation-editions.mjs'));
+});
+
 test('compares published library POM bytes because provenance hashes include line endings', t => {
   const {english, romanian} = pair(t);
   mkdirSync(join(english, 'lib'), {recursive: true});

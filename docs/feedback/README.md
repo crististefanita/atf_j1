@@ -26,7 +26,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 | J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); latest Whole-ATF governance 190/190 in EN and RO; all maintained Markdown structures and link destinations match |
 | Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); latest governance 190/190 in EN and RO; Markdown edition structure remains aligned |
 | Project maps and standalone verification records | [Closed on 2026-11-21](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120); durable contracts remain with their owners and governance rejects dated and undated report forms |
-| Documentation edition review and worktree comparison | [Verified on 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); focused governance 18/18 in EN and RO, Node tests 10/10, and clean TMP comparison across the maintained documents |
+| Documentation edition review and worktree comparison | [Verified on 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); 50 documents pass the commit-pinned and live worktree checks, Node tests 11/11 cover CRLF/LF normalization and semantic drift, and library POMs remain byte-exact |
 | Screenshot evidence policy | [Evidence capture contract](../ATF_Evidence_Capture_Contract.md), the UI module guide, and native browser geometry tests define the current behavior |
 | Consumer contracts | Module READMEs and executable tests define current behavior |
 

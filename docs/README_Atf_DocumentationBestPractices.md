@@ -88,6 +88,9 @@ link destinations between the `main` and `main_RO` worktrees using
 only when they result from localized headings. Test the tool with
 `node --test atf-tests/tools/documentation-editions.test.mjs`.
 
+- Non-Markdown text compares after CRLF/LF normalization. Published library
+  POMs and binary files remain byte-exact.
+
 <details>
 <summary><strong>Commit-pinned edition review</strong></summary>
 
