@@ -11,6 +11,7 @@ reproducere locală.
 
 | Constatare | Responsabil local | Dovada următoare |
 |---|---|---|
+| [J1-RECOVERY-RUNNER-TRACE-2026-11-21](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21) | Proiecția raportului component Shop/AutoEx | adaugă trace-ul recovery ordonat în artifactul JUnit real, ca disclosure colapsat; verifică extinderea în Maven și IntelliJ |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Compoziția metadatelor Reporting | capturează rădăcina JUnit și selecția efectivă în metadatele de audit |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | Journey-ul de cumpărare AutoEx | reproduce confirmarea coșului public cu un browser nou |
 

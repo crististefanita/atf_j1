@@ -45,6 +45,31 @@ site-ul public.
 Controlul verificat rămâne în
 [baseline](../ATF_Test_Changes_Baseline.md#recovery-extent-report-rendering).
 
+<a id="j1-recovery-runner-trace-2026-11-21"></a>
+
+## J1-RECOVERY-RUNNER-TRACE-2026-11-21 — urmele recovery în rapoartele reale ale componentelor
+
+**Status: Activ.** Probele locale ale rendererului recovery trec, iar rapoartele
+JUnit normale ale componentelor conțin clasa, metodele și pasul colapsabil
+`Component assertions`. Rapoartele reale nu includ disclosure-ul observațiilor
+recovery sau tabelul încercărilor exercitat de probele sintetice.
+
+| Dovada artifactului | Comportament observat |
+|---|---|
+| Raportul real Shop component | Playwright a deschis raportul publicat de `ShopExtentTestExtension`; cele 6 metode se extind la 18 noduri vizibile de clasă/body/aserțiuni. |
+| Raportul real AutoEx component | Playwright a deschis raportul publicat de `AutoExExtentTestExtension`; cele 5 metode se extind la 15 noduri vizibile de clasă/body/aserțiuni. |
+| Trace recovery în rapoartele reale | Numărul `details.atf-ui-observations` este zero și niciunul dintre rapoarte nu conține `table.atf-ui-action-table`. |
+| Scenariul terminal așteptat | `EXHAUSTED` apare în dovada aserțiunii, iar testul rămâne PASS deoarece epuizarea este rezultatul business așteptat. |
+
+- [ ] Publicați trace-ul recovery ordonat din fiecare rulare reală JUnit a
+  componentelor, într-un disclosure separat, colapsat inițial, cu operație,
+  politică, observație, timing măsurat, rezultat INFO și valori redactate.
+  Păstrați pasul standard de aserțiuni, verdictul testului și numărul testelor.
+- [ ] Deschideți artifactele reale generate după rulările Maven și IntelliJ în
+  Playwright. Verificați că `Expand all nodes` extinde ierarhia
+  clasă/body/aserțiuni, iar disclosure-ul trace rămâne expandabil independent;
+  deschiderea lui trebuie să arate fiecare încercare exact o dată.
+
 <a id="j1-launch-context-146"></a>
 
 ## J1-LAUNCH-CONTEXT-146 — înregistrarea domeniului real al lansării
