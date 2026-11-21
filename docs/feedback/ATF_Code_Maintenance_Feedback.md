@@ -68,3 +68,41 @@ Markdown păstrate.
 Aceste rezultate acoperă fixture-uri locale și probe de randare a raportului.
 Constatarea coșului public AutoEx rămâne deschisă; nu se deduce o rulare E2E pe
 site-ul public.
+
+<a id="oop-recovery-scenarios-2026-11-21"></a>
+## OOP-RECOVERY-SCENARIOS-2026-11-21 — scenarii component explicite și proprietatea raportului
+
+**Stare: Închis la 2026-11-21; responsabili:** responsabilii testelor component AutoEx și Shop.
+
+Testele componente de recovery transmiteau argumente primitive poziționale pentru
+statusul răspunsului, politica de captură, starea de pregătire așteptată, profilul
+de validare și randarea raportului. Acum transmit un record numit
+`RecoveryScenario`, cu enumerări pentru rezultat și fabrici pentru fiecare
+scenariu. Cazurile parametrizate de validare folosesc surse bazate pe enum, astfel
+încât intrările rămân tipizate de la declarație până la execuție.
+
+Selectorii paginii de raport AutoEx și verificările de expandare sunt acum în
+`AutoExRecoveryExtentReportProbe`, cu vizibilitate limitată la teste, alături de
+fațada de raport Shop existentă. `ConsumerModuleArchitectureGovernanceTest` impune
+această limită de proprietate. Modificarea privește doar organizarea testelor;
+comportamentul runtime al consumerilor și contractele de raportare nu s-au schimbat.
+
+Verificarea controlată a trecut pe starea sursei înregistrată în aceste commituri:
+
+| Ediție | Commit sursă | Test component recovery Shop | Test component recovery AutoEx | Guvernanță Whole-ATF |
+|---|---|---:|---:|---:|
+| EN | `9f55590530cef94999d4ca3cd34e916bbca5f440` | 6/6 | 5/5 | 191/191 |
+| RO | `0716679d7f2809b21ae8d395d623fc20d1249871` | 6/6 | 5/5 | 191/191 |
+
+- `ConsumerModuleArchitectureGovernanceTest` a trecut 14/14 în fiecare ediție,
+  inclusiv noua verificare a proprietății selectorilor.
+- Controlul protejat al schimbărilor de teste urmărește testul component AutoEx,
+  fațada raportului și verificarea de arhitectură.
+- Sursa testului component Shop rămâne în afara setului deja stabilit de căi
+  protejate. Rezultatul său de 6/6 este raportat separat, fără a-l prezenta ca
+  protejat de baseline.
+
+Prima rulare de guvernanță după actualizare a semnalat paragraful de patru
+propoziții din această înregistrare, peste limita pentru proza ușor de scanat.
+Textul este acum împărțit în puncte. Rerularea finală a trecut 191/191 în ambele
+ediții, fără eșecuri, erori sau teste omise.

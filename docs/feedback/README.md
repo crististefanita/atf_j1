@@ -18,6 +18,7 @@ reproducere locală.
 
 | Contract | Înregistrare curentă |
 |---|---|
+| Claritatea scenariilor recovery și proprietatea selectorilor raportului | [Închis la 2026-11-21](ATF_Code_Maintenance_Feedback.md#oop-recovery-scenarios-2026-11-21); scenariile numite și tipizate, cu selectorii raportului limitați la teste, au trecut verificările component: Shop 6/6, AutoEx 5/5 și guvernanța Whole-ATF 191/191 în ambele ediții |
 | Dovezi recovery în probele Extent locale ale consumerilor | [Închis la 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); ambii consumatori verifică starea colapsată, expand-all, rândurile ordonate și redactarea în ambele ediții; fiecare probă construiește un pas sintetic cu rezultatul în titlu și nu demonstrează raportul generat de suită |
 | Timpul de stabilizare al lookup-ului poștal Shop | [Închis la 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); trei rulări cu câte 13 cazuri trec, iar race se măsoară la 494–524 ms față de bugetul de 1.100 ms, cu pornirea/navigarea browserului măsurată separat |
 | Comparația catalogului AutoEx și dovezi Extent extensibile | [Închis la 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); probele component și browser ale raportului controlat au trecut |
