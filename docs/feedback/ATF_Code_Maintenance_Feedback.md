@@ -52,7 +52,7 @@ Worktree-uri EN și RO proaspete, bazate pe reviziile de control
 - `ShopBillingSynchronizationComponentTest`: 13/13.
 - `ShopBackendRecoveryComponentTest`: 6/6; `AutoExBackendRecoveryComponentTest`: 5/5.
 
-### Guvernanța curentă a întregului reactor — 2026-11-21
+### Guvernanța anterioară a întregului reactor, în commit-uri — 2026-11-21
 
 După corectarea documentației despre raportarea recovery, `WholeAtfGovernanceSuiteTest`
 a trecut cu 190/190, fără eșecuri, erori sau omisiuni, la aceste commit-uri:
@@ -68,6 +68,19 @@ Markdown păstrate.
 Aceste rezultate acoperă fixture-uri locale și probe de randare a raportului.
 Constatarea coșului public AutoEx rămâne deschisă; nu se deduce o rulare E2E pe
 site-ul public.
+
+### Verificarea curentă a feedback-ului — 2026-11-21
+
+După actualizarea feedback-ului pereche:
+
+- `WholeAtfGovernanceSuiteTest` a trecut cu 191/191 în ambele worktree-uri de
+  review, fără eșecuri, erori sau teste omise. Bazele au fost `main`
+  `225d58abe5f4d9859ab02bc2935e5ae44fa03850` și `main_RO`
+  `bb824283d7c5c83c3ca9fe05c94fb800df57aa8c`.
+- După adăugarea linkurilor directe către cod, guvernanța focusată de proză,
+  ancore, ținte și linkuri a trecut cu 10/10 în fiecare ediție.
+- Testele Node ale edițiilor documentației au trecut cu 11/11; comparația Git a
+  perechii a găsit 0 probleme în toate cele 50 de documente Markdown păstrate.
 
 <a id="oop-recovery-scenarios-2026-11-21"></a>
 ## OOP-RECOVERY-SCENARIOS-2026-11-21 — scenarii component explicite și proprietatea raportului
@@ -106,3 +119,16 @@ Prima rulare de guvernanță după actualizare a semnalat paragraful de patru
 propoziții din această înregistrare, peste limita pentru proza ușor de scanat.
 Textul este acum împărțit în puncte. Rerularea finală a trecut 191/191 în ambele
 ediții, fără eșecuri, erori sau teste omise.
+
+<a id="j1-recovery-trace-typing-2026-11-21"></a>
+## J1-RECOVERY-TRACE-TYPING-2026-11-21 — păstrarea dovezii recovery tipizate până la proiecția raportului
+
+**Stare: Deschisă; responsabili:** responsabilii testelor component Shop și AutoEx.
+
+Este o oportunitate de mentenanță; nu s-a observat un defect în raport.
+
+- **Observat:** [ShopBackendRecoveryComponentTest.java](../../atf-test-practice-shop/src/test/atf/shop/tests/component/recovery/ShopBackendRecoveryComponentTest.java) și [AutoExBackendRecoveryComponentTest.java](../../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java) dublează maparea raportului, redenumesc prefixul `BE observation` cu o expresie regulată și parsează timpii probe/backoff/total din textul `row.observed()`.
+- **Sursă tipizată:** [UiRecoveryTrace.java](../../atf-ui/src/main/java/atf/ui/recovery/UiRecoveryTrace.java) conține operația și valorile `Duration`. Proiecția curentă a testului depinde de textul de afișare.
+- **Pas următor:** Urmăriți recordul tipizat până la limita de raport deținută de teste. Verificați dacă o proiecție locală mică poate păstra valorile tipizate fără modificarea API-ului public de raportare sau adăugarea unui modul comun. Păstrați ownership-ul separat pentru Shop și AutoEx dacă nu apare un contract cu adevărat neutru.
+- **Acceptanță:** Derivați operația și timpii din câmpurile tipizate, fără parsarea textului din `description()` sau `observed()`. Un test focusat acoperă încercările ordonate, durate distincte nenule și rezultatele terminale. Artifactele HTML Maven existente păstrează disclosure-ul, ordinea, redactarea și verdictul în ambele module consumer.
+- **Limită:** Dacă valorile tipizate nu pot fi păstrate fără a lărgi un API stabil fără câștig comportamental, consemnați constatarea și închideți refactorizarea ca nejustificată.

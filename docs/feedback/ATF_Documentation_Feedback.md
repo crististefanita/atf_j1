@@ -85,7 +85,7 @@ bibliotecilor.
 | Verificări focusate de documentație și control al schimbărilor | 37/37 în EN și RO. |
 | Guvernanța întregului reactor la închiderea inițială a overview-ului | 187/187 în EN și RO; fără eșecuri, erori sau teste omise. |
 | Reverificarea anterioară a întregului reactor în commit-uri | 190/190 în EN și RO la commit-urile live de mai sus; fără eșecuri, erori sau teste omise. |
-| Instrumente ediții și guvernanța finală în worktree-uri | Testele Node trec 10/10; comparația din TMP raportează 0 probleme în toate cele 50 de documente; guvernanța întregului reactor trece 190/190 în worktree-urile EN și RO la 2026-11-21. |
+| Verificarea curentă a feedback-ului și edițiilor | `WholeAtfGovernanceSuiteTest` trece 191/191 în ambele ediții după actualizarea feedback-ului pereche; testele Node trec 11/11, iar comparația Git din TMP raportează 0 probleme în toate cele 50 de documente. |
 
 <a id="doc-context-artifact-governance-20261120"></a>
 
