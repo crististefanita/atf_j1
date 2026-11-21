@@ -11,21 +11,23 @@ report as evidence.
 
 ## UI-RECOVERY-AUDIT-01 — make every recovery observation inspectable in Extent
 
-**Status: Verified and closed on 2026-11-21.** The J1 consumers generate an
-Extent report with the recovery outcome in the parent step and the complete
-attempt trace in one collapsed `Audit observations` disclosure. The disclosure
-is rendered as `details.atf-ui-observations`, not as a separate recovery step
-or `atf-ui-action-sequence` group.
+**Status: Verified and closed on 2026-11-21.** The component checks create local
+Extent probes from each consumer's captured recovery records. Each probe builds
+a synthetic scenario and outcome-bearing step; the ordered J1 records render
+in one initially collapsed `Audit observations` disclosure, exposed as
+`details.atf-ui-observations`. This proves local consumer projection and
+rendering, not a suite-generated aggregate parent step or a public-site E2E
+report.
 
 | Code evidence | What is recorded |
 |---|---|
 | UiBackendRecovery.recording | One information record per observation, titled by attempt and labeled with the operation |
 | UiRecoveryTrace.description | Decision, reason, captured signal summary when available, probe/backoff/total durations, and policy source |
-| Current consumer README | Describes local component report probes and distinguishes their fixture-supplied parent from a suite-generated aggregate step |
+| Current consumer README | Describes local component report probes and distinguishes their synthetic outcome-bearing step from suite-generated report output |
 | 2026-11-21 report checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest 6/6 in both editions, generating local Extent reports and opening them in Playwright |
 
 - [x] Run deterministic recovered and terminal exhausted scenarios in both consumers.
-- [x] Verify the aggregate outcome in the parent step and the ordered attempts in one initially collapsed observations disclosure.
+- [x] Verify the outcome-bearing step title and ordered attempts in one initially collapsed observations disclosure.
 - [x] Expand the disclosure and verify all rows, decisions, safe signal metadata, durations, policy source, and redaction of request bodies and local URLs.
 - [x] Verify the initial collapsed state, expand-all behavior, full row visibility, and redaction in the local component/browser tests.
 
@@ -33,8 +35,8 @@ or `atf-ui-action-sequence` group.
 
 - Playwright confirms the disclosure starts closed and stays closed after
   `Expand all nodes`; opening it reveals every attempt in order.
-- The fixture supplies the local parent label; J1's captured rows pass through
-  the selected Reporting renderer.
+- The component check builds a synthetic scenario and outcome-bearing step;
+  J1's captured rows pass through the selected Reporting renderer.
 - This verifies local consumer projection and disclosure rendering. It does not
   verify a suite-generated parent step or public-site E2E report.
 - Generated HTML excludes the fixture URL and private response body.

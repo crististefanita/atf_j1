@@ -17,7 +17,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Contract | Current record |
 |---|---|
-| Recovery evidence in local consumer Extent probes | [Closed on 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); both consumers verify collapsed-state, expand-all, ordered trace rows, and redaction in both editions; the parent step is fixture-supplied, not suite-generated |
+| Recovery evidence in local consumer Extent probes | [Closed on 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); both consumers verify collapsed state, expand-all, ordered trace rows, and redaction in both editions; each local probe builds a synthetic outcome-bearing step and does not establish suite-generated report output |
 | Shop postal lookup settlement timing | [Closed on 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); three 13-case runs pass, with race settlement measured at 494–524 ms against the 1,100 ms budget and browser startup/navigation measured separately |
 | AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
 | J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); latest Whole-ATF governance 190/190 in EN and RO; all maintained Markdown structures and link destinations match |

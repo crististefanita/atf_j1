@@ -595,10 +595,11 @@ and unknown operations are rejected before the browser starts.
 Assertions for these components remain in the standard `Component assertions`
 step, collapsed by default, with redaction before the configured limit, 240
 characters by default. The component test creates local Extent projection
-probes for recovered and exhausted traces. Its test fixture supplies the
-aggregate parent step and attempt count; the renderer receives the recovery
-records produced by J1. One initially collapsed `Audit observations` group
-contains ordered INFO rows. Expansion shows the complete trace and policy
+probes for recovered and exhausted traces. The component test builds a
+synthetic report scenario whose step title carries the outcome and attempt
+count; the renderer receives J1's captured recovery records. One
+`Audit observations` group, initially collapsed, contains the ordered INFO
+rows. Expansion shows the complete trace and policy
 source without the response body or local fixture URL. This checks J1's action
 evidence mapping and the selected renderer on local fixtures; it is not a
 suite-generated aggregate step or public-site E2E acceptance.
