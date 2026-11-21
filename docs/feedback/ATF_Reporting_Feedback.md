@@ -49,26 +49,34 @@ Controlul verificat rămâne în
 
 ## J1-RECOVERY-RUNNER-TRACE-2026-11-21 — urmele recovery în rapoartele reale ale componentelor
 
-**Status: Activ.** Probele locale ale rendererului recovery trec, iar rapoartele
-JUnit normale ale componentelor conțin clasa, metodele și pasul colapsabil
-`Component assertions`. Rapoartele reale nu includ disclosure-ul observațiilor
-recovery sau tabelul încercărilor exercitat de probele sintetice.
+**Status: Activ — acceptanța Maven a trecut; verificarea IntelliJ rămâne
+deschisă.** J1 consumă acum Reporting J26 și Test Kit K3. Adaptoarele ambelor
+componente transmit observațiile recovery imuabile în faza JUnit reală
+`TEST BODY`, alături de pasul standard `Component assertions`.
 
 | Dovada artifactului | Comportament observat |
 |---|---|
-| Raportul real Shop component | Playwright a deschis raportul publicat de `ShopExtentTestExtension`; cele 6 metode se extind la 18 noduri vizibile de clasă/body/aserțiuni. |
-| Raportul real AutoEx component | Playwright a deschis raportul publicat de `AutoExExtentTestExtension`; cele 5 metode se extind la 15 noduri vizibile de clasă/body/aserțiuni. |
-| Trace recovery în rapoartele reale | Numărul `details.atf-ui-observations` este zero și niciunul dintre rapoarte nu conține `table.atf-ui-action-table`. |
-| Scenariul terminal așteptat | `EXHAUSTED` apare în dovada aserțiunii, iar testul rămâne PASS deoarece epuizarea este rezultatul business așteptat. |
+| Raportul real Shop component | `ShopExtentTestExtension` publică nodul INFO separat `Backend recovery trace · <outcome>`, lângă `Component assertions`; verdictul și numărul testelor rămân neschimbate. |
+| Raportul real AutoEx component | `AutoExExtentTestExtension` publică aceeași limită pentru suita component recovery. |
+| Rulări consumer Maven | Shop a trecut 6/6 și AutoEx 5/5 în EN și RO, folosind JAR-urile fizice J26/K3. |
+| Randare Playwright | Toate cele patru rapoarte reale au fost deschise. `Expand all nodes` extinde ierarhia normală, iar fiecare disclosure trace rămâne colapsat; deschiderea afișează încercările ordonate cu operație, politică, observație, timing măsurat probe/backoff/total și rezultat INFO, fiecare o singură dată. |
+| Siguranță și rezultat | Canary-ul body-ului și URL-ul fixture-ului lipsesc; `EXHAUSTED` rămâne un rezultat business așteptat într-un test care trece. |
 
-- [ ] Publicați trace-ul recovery ordonat din fiecare rulare reală JUnit a
+- [x] Publicați trace-ul recovery ordonat din fiecare rulare reală JUnit a
   componentelor, într-un disclosure separat, colapsat inițial, cu operație,
   politică, observație, timing măsurat, rezultat INFO și valori redactate.
   Păstrați pasul standard de aserțiuni, verdictul testului și numărul testelor.
-- [ ] Deschideți artifactele reale generate după rulările Maven și IntelliJ în
-  Playwright. Verificați că `Expand all nodes` extinde ierarhia
-  clasă/body/aserțiuni, iar disclosure-ul trace rămâne expandabil independent;
-  deschiderea lui trebuie să arate fiecare încercare exact o dată.
+- [x] Deschideți în Playwright artifactele generate de Maven. Verificați că
+  `Expand all nodes` extinde ierarhia normală clasă/body/aserțiuni, trace-ul
+  rămâne colapsat și încercările apar o singură dată după deschidere.
+- [ ] Deschideți artifactul real după o rulare IntelliJ. Verificați același
+  director de rapoarte, ierarhia de aserțiuni, trace-ul colapsat independent,
+  câmpurile ordonate ale încercărilor și redactarea în raportul IDE.
+
+**Dovada rămasă pentru închidere:** inspectarea raportului real după lansarea
+testelor componente din IntelliJ. Workspace-ul repo nu are un runner IntelliJ
+disponibil în mediul acestei verificări; succesul Maven nu închide paritatea
+directorului de output din IDE.
 
 <a id="j1-launch-context-146"></a>
 

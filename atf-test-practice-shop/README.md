@@ -594,8 +594,19 @@ primește înregistrările recovery capturate de J1. Un singur grup
 `Audit observations`, colapsat inițial, conține rândurile INFO în ordine.
 Expandarea afișează urma completă și sursa politicii, fără body-ul
 răspunsului sau URL-ul fixture-ului local. Proba verifică maparea dovezilor de
-acțiune J1 și rendererul selectat pe fixture-uri locale; nu este un pas agregat
-generat de suite și nici acceptanță E2E pe site-ul public.
+acțiune J1 și rendererul selectat pe fixture-uri locale.
+
+Separat, `ShopExtentTestExtension` publică urma recovery capturată în raportul
+JUnit real al suitei component, prin observațiile de fază din Test Kit K3 și
+Reporting J26. Nodul INFO este frate cu `Component assertions` în `TEST BODY`;
+verdictul aserțiunilor și numărul testelor rămân cele normale. Fiecare
+încercare are o operație lizibilă, politică, observație, timing măsurat
+probe/backoff/total și rezultat INFO. Disclosure-ul urmei pornește colapsat și
+rămâne colapsat după `Expand all nodes`; deschiderea lui afișează fiecare
+încercare o singură dată. Testul component deschide HTML-ul real al suitei în
+Playwright și verifică aceste stări și redactarea body-ului și URL-ului
+fixture-ului. Dovezile acoperă suita component recovery; nu afirmă acceptanță
+E2E pe site-ul public.
 
 </details>
 

@@ -26,10 +26,10 @@ dovezile pe care J1 le poate verifica față de octeții selectați.
 | Bibliotecă | Coordonata selectată de POM-ul rădăcină | Contract folosit în J1 |
 |---|---|---|
 | Core | `atf.api:atf-core:1.0.0-c4` | Primitive HTTP, configurație, JSON și lifecycle |
-| Reporting | `atf.api:atf-reporting:1.0.0-j25` | Publicare Extent/fallback și dovezi auditabile de raport |
+| Reporting | `atf.api:atf-reporting:1.0.0-j26` | Publicare Extent/fallback și dovezi auditabile de raport |
 | Console | `atf.api:atf-console:1.0.0-c2` | Formatare neutră a evenimentelor și diagnostice |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | Înlocuitor determinist al portului HTTP |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k2` | Clasificare JUnit, comparații și suport lifecycle |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k3` | Clasificare JUnit, comparații și suport lifecycle |
 
 Acestea sunt dependențe binare ale reactorului J1, nu module sursă din el.
 Descrie o dependență prin coordonată, versiune și contract observabil. Păstrează

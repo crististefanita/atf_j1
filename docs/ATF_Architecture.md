@@ -34,10 +34,10 @@ Cele două module consumer de aplicație declară Test Kit numai pentru codul de
 | Bibliotecă | Coordonată selectată | Utilizare în J1 |
 |---|---|---|
 | Core | atf.api:atf-core:1.0.0-c4 | Contracte API pentru cereri, răspunsuri, execuție și configurare |
-| Reporting | atf.api:atf-reporting:1.0.0-j25 | Modelul Extent și publicarea rapoartelor HTML consumate de testele locale |
+| Reporting | atf.api:atf-reporting:1.0.0-j26 | Modelul Extent și publicarea rapoartelor HTML consumate de testele locale |
 | Console | atf.api:atf-console:1.0.0-c2 | Ieșire diagnostică structurată |
 | Mock | atf.api:atf-mock:1.0.0-m2 | Transport fals determinist în guvernanță și scenarii de test |
-| Test Kit | atf.api:atf-test-kit:1.0.0-k2 | Adnotări pentru nivelul testelor, resolvere și suport de testare |
+| Test Kit | atf.api:atf-test-kit:1.0.0-k3 | Adnotări pentru nivelul testelor, resolvere și suport de testare |
 
 J1 verifică exact octeții JAR/POM selectați și integrările exercitate de propriile teste. Ghidurile bibliotecilor descriu contractele disponibile; acceptanța locală nu pretinde că rulează suita independentă de teste a unei biblioteci.
 

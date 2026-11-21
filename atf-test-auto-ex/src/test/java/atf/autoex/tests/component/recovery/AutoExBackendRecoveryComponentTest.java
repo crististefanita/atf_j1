@@ -14,6 +14,7 @@ import atf.reporting.extent.session.ExtentReportSession;
 import atf.reporting.ui.UiExtentReportSession;
 import atf.reporting.ui.validation.UiApiValidationEvidence;
 import atf.testkit.assertions.RecordedAssertions;
+import atf.testkit.assertions.ComponentAuditObservation;
 import atf.testkit.recovery.*;
 import atf.ui.playwright.PlaywrightActionSequence;
 import atf.ui.recovery.*;
@@ -147,10 +148,51 @@ class AutoExBackendRecoveryComponentTest {
                             .allMatch(row -> row.expected().contains("profile=read-only") && row.expected().contains("totalTimeout=PT3S")));
                 }
                 if (scenario.renderReport()) {
+                    recordRecoveryTrace(checks, actions.snapshot(), scenario.outcome().name());
+                    var measuredTimings = checks.observations().stream()
+                            .filter(observation -> observation.title().startsWith("Backend recovery trace · "))
+                            .flatMap(observation -> observation.fields().stream())
+                            .filter(field -> field.name().endsWith(" · Timing")).toList();
+                    checks.isTrue("Recovery observations retain measured probe, backoff, and total timing",
+                            !measuredTimings.isEmpty() && measuredTimings.stream().allMatch(field ->
+                                    field.value().contains("probe=") && field.value().contains("backoff=")
+                                            && field.value().contains("total=")));
+                    var operations = checks.observations().stream()
+                            .filter(observation -> observation.title().startsWith("Backend recovery trace · "))
+                            .flatMap(observation -> observation.fields().stream())
+                            .filter(field -> field.name().endsWith(" · Operation")).toList();
+                    checks.isTrue("Recovery operation labels are readable",
+                            !operations.isEmpty() && operations.stream().allMatch(field ->
+                                    field.value().startsWith("Backend observation #")));
                     verifyRenderedRecoveryReport(checks, configuration, actions, scenario.outcome().name());
                 }
             }
         }
+    }
+
+    private static void recordRecoveryTrace(RecordedAssertions checks, Iterable<?> records, String outcome) {
+        var fields = ReportModelAdapters.uiActions(records).stream().flatMap(row -> java.util.stream.Stream.of(
+                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Operation", readableRecoveryOperation(row.operation())),
+                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Policy", row.expected()),
+                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Observation", row.observed()),
+                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Timing", measuredRecoveryTiming(row)),
+                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Result", row.status().name())))
+                .toList();
+        checks.observe(new ComponentAuditObservation("Backend recovery trace · " + outcome, fields));
+    }
+
+    private static String readableRecoveryOperation(String operation) {
+        return operation.startsWith("BE observation #")
+                ? operation.replaceFirst("^BE observation", "Backend observation")
+                : operation;
+    }
+
+    private static String measuredRecoveryTiming(atf.reporting.ui.model.AtfUiActionRecord row) {
+        var timing = java.util.regex.Pattern.compile(
+                "probe=[^;]+;\\s*backoff=[^;]+;\\s*total=[^;]+", java.util.regex.Pattern.CASE_INSENSITIVE)
+                .matcher(row.observed());
+        if (timing.find()) return timing.group();
+        return row.durationMillis() > 0 ? row.durationText() : "not reported by recovery trace";
     }
 
     private void verifyRenderedRecoveryReport(RecordedAssertions checks,

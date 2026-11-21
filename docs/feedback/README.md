@@ -11,7 +11,7 @@ reproducere locală.
 
 | Constatare | Responsabil local | Dovada următoare |
 |---|---|---|
-| [J1-RECOVERY-RUNNER-TRACE-2026-11-21](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21) | Proiecția raportului component Shop/AutoEx | adaugă trace-ul recovery ordonat în artifactul JUnit real, ca disclosure colapsat; verifică extinderea în Maven și IntelliJ |
+| [J1-RECOVERY-RUNNER-TRACE-2026-11-21](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21) | Proiecția raportului component Shop/AutoEx | verifică paritatea directorului de output și randarea trace-ului colapsat după IntelliJ; rapoartele Maven trec în Playwright |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Compoziția metadatelor Reporting | capturează rădăcina JUnit și selecția efectivă în metadatele de audit |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | Journey-ul de cumpărare AutoEx | reproduce confirmarea coșului public cu un browser nou |
 
@@ -21,6 +21,7 @@ reproducere locală.
 |---|---|
 | Claritatea scenariilor recovery și proprietatea selectorilor raportului | [Închis la 2026-11-21](ATF_Code_Maintenance_Feedback.md#oop-recovery-scenarios-2026-11-21); scenariile numite și tipizate, cu selectorii raportului limitați la teste, au trecut verificările component: Shop 6/6, AutoEx 5/5 și guvernanța Whole-ATF 191/191 în ambele ediții |
 | Dovezi recovery în probele Extent locale ale consumerilor | [Închis la 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); ambii consumatori verifică starea colapsată, expand-all, rândurile ordonate și redactarea în ambele ediții; fiecare probă construiește un pas sintetic cu rezultatul în titlu și nu demonstrează raportul generat de suită |
+| Trace recovery în rapoartele JUnit reale ale componentelor | Acceptanță Maven trecută pentru Shop 6/6 și AutoEx 5/5 în ambele ediții; Playwright a verificat toate cele patru rapoarte reale, disclosure-urile independente, rândurile integrale ale încercărilor și redactarea. Paritatea output-ului IntelliJ rămâne activă mai sus. |
 | Timpul de stabilizare al lookup-ului poștal Shop | [Închis la 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); trei rulări cu câte 13 cazuri trec, iar race se măsoară la 494–524 ms față de bugetul de 1.100 ms, cu pornirea/navigarea browserului măsurată separat |
 | Comparația catalogului AutoEx și dovezi Extent extensibile | [Închis la 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); probele component și browser ale raportului controlat au trecut |
 | Faptele documentației J1 și perimetrul bibliotecilor consumate | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); ultima guvernanță Whole-ATF: 190/190 în EN și RO; structurile documentelor păstrate și destinațiile linkurilor coincid |

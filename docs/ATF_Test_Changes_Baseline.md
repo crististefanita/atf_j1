@@ -83,6 +83,32 @@ este acoperit de testul component.
 </details>
 
 <details>
+<summary><strong>Control verificat — urma recovery în rapoartele JUnit reale</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-RECOVERY-RUNNER-TRACE-20261121
+    status: VERIFIED
+    base: 29f50cf6ecf2742ea6eedf5fe5913523151f9449
+    expires: 2026-12-21
+    reason: Fixează perechea fizică Reporting J26/Test Kit K3 consumată și protejează proiecția observațiilor pe fază AutoEx; păstrează aserțiunile, verdictul și numărul testelor, câmpurile măsurate, redactarea și disclosure-ul trace independent. Proiecția Shop pereche rămâne acoperită de testul component focalizat.
+    proof: mvn -B -ntp -pl atf-tests,atf-test-auto-ex,atf-test-practice-shop -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,DocumentedLibraryCatalogTest,TestChangeGovernanceTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=29f50cf6ecf2742ea6eedf5fe5913523151f9449" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExExtentTestExtension.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+      - pom.xml
+```
+
+Verificările Maven ale componentelor și ale întregului reactor rulează în
+ambele ediții. Inspecția Playwright a HTML-urilor reale este consemnată în
+constatarea recovery activă; paritatea directorului de output IntelliJ rămâne
+deschisă.
+
+</details>
+
+<details>
 <summary><strong>Control verificat — hărți de proiect și snapshot-uri de verificare datate</strong></summary>
 
 ```yaml

@@ -30,7 +30,7 @@ sau versiuni ulterioare. Diagnosticul pornește de la versiunea
 API-ul folosit poate fi inspectat din binar:
 
 ```powershell
-javap -classpath lib/atf-reporting-1.0.0-j25.jar 'atf.reporting.contract.AtfReportPorts$Session'
+javap -classpath lib/atf-reporting-1.0.0-j26.jar 'atf.reporting.contract.AtfReportPorts$Session'
 ```
 
 Exemplul folosește versiunea inclusă; după upgrade folosește coordonata
