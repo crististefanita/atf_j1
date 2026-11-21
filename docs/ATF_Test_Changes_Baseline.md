@@ -63,18 +63,20 @@ testChanges:
     status: VERIFIED
     base: 72c387e98735b03fe1afd65cab1913b76b1d86b4
     expires: 2026-12-21
-    reason: Verify local recovered and exhausted Extent projections, including synthetic outcome-bearing steps, collapsed observations, expand-all behavior, ordered rows, and body/URL redaction; keep Shop report selectors in their test-scoped facade.
+    reason: Replace AutoEx recovery flags with named scenarios; verify its local recovered and exhausted Extent projections, collapsed observations, expand-all behavior, ordered rows, and body/URL redaction; keep both consumers' report selectors in test-scoped facades.
     proof: mvn -B -ntp -pl atf-ui,atf-test-auto-ex,atf-test-practice-shop,atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=72c387e98735b03fe1afd65cab1913b76b1d86b4" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryExtentReportProbe.java
       - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
 ```
 
-Both consumer report checks passed in EN and RO. The fixture supplies the local
-parent label, while J1's captured recovery records pass through the selected
-renderer. The Shop module remains exempt from protected-path controls; its
-protected architecture gate verifies that report selectors use a dedicated
-test-scoped facade.
+Both consumer report checks passed in EN and RO. Each component test builds a
+synthetic scenario and outcome-bearing step; J1's captured recovery records
+pass through the selected renderer. `ConsumerModuleArchitectureGovernanceTest`
+enforces the report-selector facade in AutoEx and the existing Shop facade.
+Shop component source remains outside protected test-change controls and is
+covered by its component test.
 
 </details>
 

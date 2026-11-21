@@ -164,6 +164,33 @@ public class ConsumerModuleArchitectureGovernanceTest {
     }
 
     @Test
+    void autoExRecoveryReportSelectorsStayInTestScopedFacade() throws IOException {
+        if (!consumer("atf-test-auto-ex")) return;
+        Path testRoot = module("atf-test-auto-ex").resolve("src/test/java/atf/autoex/tests");
+        Path reportUiFacade = testRoot.resolve("support/reporting/AutoExRecoveryExtentReportProbe.java")
+                .toAbsolutePath().normalize();
+        Path recoveryTestPath = testRoot.resolve("component/recovery/AutoExBackendRecoveryComponentTest.java");
+
+        assertTrue(Files.isRegularFile(reportUiFacade),
+                "AutoEx Extent report selectors must have a test-scoped facade");
+        String recoveryTest = Files.readString(recoveryTestPath);
+        assertTrue(recoveryTest.contains("AutoExRecoveryExtentReportProbe.verify("),
+                "AutoEx recovery report checks must delegate to the selector facade");
+        for (String reportSelector : List.of("#nav-test", "details.atf-ui-observations",
+                "atf-ui-action-table", "Expand all nodes", "p.name:text-is('AutoExRecoveryReport')")) {
+            assertFalse(recoveryTest.contains(reportSelector),
+                    "AutoEx recovery report selector escaped its facade: " + reportSelector);
+        }
+
+        String reportUi = Files.readString(reportUiFacade);
+        assertTrue(reportUi.contains("details.atf-ui-observations")
+                        && reportUi.contains("atf-ui-action-table")
+                        && reportUi.contains("Expand all nodes")
+                        && reportUi.contains("AutoExRecoveryReport"),
+                "The AutoEx recovery report facade must own the rendered report selectors");
+    }
+
+    @Test
     void shopLocalSelectionAndApiAuditKeepExplicitBoundaries() throws IOException {
         if (!consumer("atf-test-practice-shop")) return;
         Path tests = module("atf-test-practice-shop")
