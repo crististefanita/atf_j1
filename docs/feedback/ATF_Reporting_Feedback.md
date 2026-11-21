@@ -11,36 +11,45 @@ generat ca dovadă.
 
 ## UI-RECOVERY-AUDIT-01 — toate observațiile de recovery trebuie inspectabile în Extent
 
-**Stare:** Deschisă · **Responsabil:** dovezile recovery J1 și acceptanța raportului.
-Adaptorul local de înregistrare emite un singur record informativ per
-UiRecoveryTrace, iar documentația consumerilor descrie doar indicatorul agregat.
-Un raport randat nu a confirmat încă afișarea trace-ului complet într-un singur
-grup expandabil.
+**Stare: verificată și închisă la 2026-11-21.** Consumerii J1 generează
+rapoarte Extent în care rezultatul recovery apare la pasul părinte, iar urma
+completă a încercărilor apare într-un singur disclosure `Audit observations`,
+colapsat inițial. Disclosure-ul este randat ca `details.atf-ui-observations`,
+nu ca pas recovery separat sau grup `atf-ui-action-sequence`.
 
 | Dovadă în cod | Ce se înregistrează |
 |---|---|
 | UiBackendRecovery.recording | Un record informativ pentru fiecare observație, cu titlul încercării și operația |
 | UiRecoveryTrace.description | Decizia, motivul, sumarul semnalului capturat când există, duratele probe/backoff/total și sursa politicii |
-| README-ul consumatorului | Descrie un indicator agregat de recovery; nu specifică ierarhia vizibilă pentru întreaga secvență |
-| Verificări de componentă 2026-11-20 | AutoExBackendRecoveryComponentTest a trecut 5/5, iar ShopBackendRecoveryComponentTest 6/6; ambele verifică siguranța trace-ului și limitele dispatch-ului, dar niciuna nu generează raport Extent |
+| README-ul curent al consumerului | Descrie probe locale de raportare componente și diferențiază explicit pasul părinte furnizat de fixture de un pas agregat generat de suite |
+| Verificări ale raportului 2026-11-21 | AutoExBackendRecoveryComponentTest a trecut 5/5, iar ShopBackendRecoveryComponentTest 6/6, în ambele ediții; generează rapoarte Extent locale și le deschide în Playwright |
 
-- [ ] Rulează un scenariu determinist recuperat și unul terminal refuzat/epuizat în fiecare consumator care activează recovery.
-- [ ] Verifică raportul Extent generat: toate observațiile sunt grupate sub un singur pas recovery colapsat, în ordinea încercărilor, iar rezultatul agregat rămâne vizibil la părinte.
-- [ ] Extinde grupul și verifică decizia, motivul, metadatele sigure ale semnalului, durata și sursa politicii pentru fiecare încercare. Confirmă absența body-urilor și URL-urilor private.
-- [ ] Adaugă sau păstrează o aserțiune locală component/browser pentru starea inițial colapsată, expandarea tuturor, vizibilitatea completă a copiilor și redactare. Păstrează aserțiunile recovery separate de verdicturile business.
+- [x] Rulează scenarii deterministe recuperate și terminal epuizate în ambii consumatori.
+- [x] Verifică rezultatul agregat la pasul părinte și încercările ordonate într-un singur disclosure de observații, colapsat inițial.
+- [x] Extinde disclosure-ul și verifică toate rândurile, deciziile, metadatele sigure ale semnalelor, duratele, sursa politicii și redactarea body-urilor și URL-urilor locale.
+- [x] Verifică starea inițial colapsată, comportamentul expand-all, vizibilitatea tuturor rândurilor și redactarea în testele locale component/browser.
 
-**Închidere:** un raport J1 generat și o verificare locală a raportului randat
-dovedesc că toate încercările sunt accesibile dintr-un singur grup colapsat și
-rămân complete după expandare, inclusiv expand-all. Sunt acoperite rezultatul
-recuperat și cel terminal; nu se publică conținut sensibil al cererilor.
+**Dovezi de închidere:** ambele teste consumer trec în EN și RO.
+
+- Playwright confirmă că disclosure-ul pornește închis și rămâne închis după
+  `Expand all nodes`; deschiderea lui afișează fiecare încercare în ordine.
+- Fixture-ul furnizează eticheta părintelui local; rândurile capturate de J1
+  trec prin rendererul Reporting selectat.
+- Proba verifică proiecția locală a consumerului și randarea disclosure-ului.
+  Nu verifică un pas părinte generat de suite sau un raport E2E public.
+- HTML-ul generat exclude URL-ul fixture-ului și body-ul privat al răspunsului.
+
+Controlul verificat rămâne în
+[baseline](../ATF_Test_Changes_Baseline.md#recovery-extent-report-rendering).
 
 <a id="j1-launch-context-146"></a>
 
 ## J1-LAUNCH-CONTEXT-146 — înregistrarea domeniului real al lansării
 
-**Stare: Deschisă. Responsabil:** metadatele lansării J1 și compoziția
-consumerului. Verificările business și de randare trec; metadatele de audit nu
-conțin încă rădăcina JUnit și selecția efectivă a testelor.
+**Stare: Rămâne deschisă după reverificarea din 2026-11-21. Responsabil:**
+metadatele lansării J1 și compoziția consumerului. Verificările business și de
+randare trec; metadatele de audit nu conțin încă rădăcina JUnit și selecția
+efectivă a testelor.
 
 | Martor | Fapt observat |
 |---|---|
@@ -49,6 +58,9 @@ conțin încă rădăcina JUnit și selecția efectivă a testelor.
 | Nume de fișier ambiguu | `AutoExReportSession.fileName` derivă numele raportului din metodă, astfel o rulare directă a metodei și o rulare de suită pot avea același prefix |
 | Limită existentă | `ReportEnvironmentField.SUITE` este ascuns intenționat din System operațional; informația lansării aparține metadatelor secundare Tests/trace |
 | Verificare controlată 2026-11-20 | `AutoExE2eOverviewNarrativeComponentTest` a trecut două scenarii fixture UI/UI_API în scope de suită și a verificat expandarea raportului; nu verifică suita canonică rădăcină sau selecția efectivă |
+
+Verificările de recovery și guvernanța întregului reactor din 2026-11-21 nu
+afirmă identitatea lansării. Ele lasă deschisă această constatare despre metadate.
 
 - [ ] Capturează scope-ul imuabil al lansării, rădăcina canonică a suitei când
   este cunoscută, clasa/metoda selectată și numărul selecției efective la

@@ -1,11 +1,13 @@
-# Interacțiuni UI — referințe de verificare
+# Interacțiuni UI — contractele modulelor owner
 
 ## Contract verificat — UI-FIRST-PAINT-144
 
-Documentul de [verificare](../ATF_UI_First_Frame_Verification.md) păstrează
-configurarea limitată, eșecul inițial, comparația runtime și dovezile de acceptanță.
+[README-ul ownerului UI](../../atf-ui/README.md) definește pregătirea explicită
+a fixture-ului, bugetul comun de navigare, deadline-urile inputului nativ și
+contractele pentru captură cu context complet și pixelii PNG. Testele legate
+din acest README sunt criteriile durabile de acceptanță.
 
 ## Context verificat al capturilor de ecran
 
-Consultați [contractul de captură](../../atf-ui/README.md#capturi-de-ecran-cu-context-complet)
-și [dovezile de randare și regresie](../ATF_UI_First_Frame_Verification.md#urmărirea-capturilor-cu-context-complet).
+Viewportul complet, scara configurată, încadrarea imaginii și regresiile
+geometriei sunt documentate la owner în [README-ul UI](../../atf-ui/README.md).

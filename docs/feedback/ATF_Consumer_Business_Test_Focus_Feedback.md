@@ -2,7 +2,7 @@
 
 ## Căutarea AutoEx — contract livrat
 
-Documentul de [verificare a căutării AutoEx](../ATF_AutoEx_Search_Verification.md) păstrează contractul GET/DOM proaspăt, incidentul inițial și dovezile de regresie.
+Contractul de căutare și regresiile permanente sunt în [README-ul consumerului AutoEx](../../atf-test-auto-ex/README.md).
 
 <a id="autoex-catalog-evidence-146"></a>
 ## AUTOEX-CATALOG-EVIDENCE-146 — asocierea dovezii comparației cu schimbul observat
@@ -62,24 +62,24 @@ browserul local trec.
 <a id="shop-billing-sanity"></a>
 ## SHOP-BILLING-SANITY — atribuirea latenței cursei de lookup
 
-**Stare: deschisă.** Eșecul inițial nu s-a reprodus, dar latența traseului race nu are încă o cauză atribuită.
+**Stare: verificată și închisă la 2026-11-21.** Intervalul de stabilizare al lookup-ului este acum măsurat separat de pornirea browserului și navigarea fixture-ului; rulările locale repetate limitează traseul race în deadline-ul existent pentru observare.
 
 - În timpul adoptării Console/Mock, `ShopBillingSynchronizationComponentTest` a avut două eșecuri de aserțiune și o eroare în treisprezece invocări.
 - Invocarea inițială cu cursă a durat 122 de secunde. O urmă de thread a arătat verificări Playwright imbricate de disponibilitate/`isEnabled` în timpul selectării lookup-ului poștal; acesta este un indiciu, nu o cauză rădăcină confirmată.
 
 **Rerulări focalizate**
 
-- La 2026-11-19, toate cele 13 invocări au trecut în 37,045 secunde.
-- La 2026-11-20, toate cele 13 au trecut în 59,19 secunde. Invocarea `race,true,true` a durat 16,986 secunde; celelalte invocări au durat între 2,075 și 7,124 secunde. Hash-ul sursei testului selectat corespunde checkout-ului live.
-- Durata JUnit include pornirea browserului/sesiunii și navigarea la fixture. Nu dovedește că lookup-ul poștal a consumat 16,986 secunde. Testul verifică încheierea cererilor, valorile finale ale adresei și lipsa reintroducerii textului, dar nu are oracol pentru durată. Fixture-ul local folosește debounce de 300 ms și injectează o aplicare întârziată cu 500 ms în modul `race`.
+- Trei execuții focalizate ale `ShopBillingSynchronizationComponentTest` au trecut fiecare 13/13 (39 de invocări), fără eșecuri sau erori.
+- Reverificarea din 2026-11-21 a trecut, de asemenea, 13/13 în ambele worktree-uri EN și RO proaspete, fără eșecuri sau erori.
+- Un oracle nou măsoară acțiunea `Await visible` după `inputsApplied`; stabilizarea cu succes trebuie să rămână în bugetul configurat de 1.100 ms. Refuzurile așteptate prin timeout permit cel mult 25 ms pentru încheierea Playwright/înregistrării, fără modificarea timeout-ului configurat.
+- Două rulări măsurate `race,true,true` s-au stabilizat în 524 ms și 494 ms. Pornirea browserului și navigarea fixture-ului au măsurat separat 11.904 ms și 9.233 ms. **Inferență:** setup-ul domină invocarea race recentă, care a durat mai mult; măsurătorile acestea nu stabilesc cauza evenimentului istoric de 122 de secunde.
+- Fixture-ul local păstrează debounce-ul de 300 ms și aplicarea întârziată de 500 ms pentru `race`. Verificările ownership-ului requestului, completării, valorilor finale și lipsei reintroducerii textului rămân active.
 
-**Dovezi rămase**
+**Protecție de regresie păstrată**
 
-- Măsurați separat pornirea/navigarea browserului față de intervalul dintre `inputsApplied`, terminarea cererii, aplicarea în DOM și încheierea observării din `ShopPostalLookup`. Comparați intervalul de la input la încheiere cu bugetul de observare existent.
-- Păstrați oracolele pentru adresă, ownership-ul cererilor, completare și lipsa reintroducerii textului. Nu măriți timeout-urile și nu adăugați încercări repetate pentru a ascunde latența.
-- Dacă se justifică o schimbare de cod, rerulați matricea de 13 cazuri și inspectați dovada Extent a componentei.
+- Păstrați aserțiunea temporală împreună cu oracolele pentru ownership-ul requesturilor, completare, adresă și lipsa reintroducerii textului. Nu măriți timeout-urile și nu adăugați încercări repetate pentru a ascunde latența.
 
-Rularea Shop extinsă anterioară a fost oprită după păstrarea eșecurilor și a urmei de thread; niciuna dintre trecerile focalizate nu dovedește acceptanța suitei extinse. Închideți criteriul numai după ce rulări repetate ale cursei arată o încheiere limitată a lookup-ului, iar timpul de pornire rece al browserului este raportat separat.
+Rularea Shop extinsă anterioară și evenimentul istoric de 122 de secunde nu s-au reprodus și nu sunt prezentate ca explicate. Dovezile actuale închid numai criteriul de stabilizare măsurată; nu stabilesc acceptanța suitei extinse.
 
 <a id="autoex-ui-cart-confirmation-2026-11-19"></a>
 
@@ -95,6 +95,7 @@ Rularea Shop extinsă anterioară a fost oprită după păstrarea eșecurilor ș
   rulare nu stabilește dacă s-a schimbat site-ul, dacă apăsarea nu a modificat
   coșul sau dacă locatorul de confirmare este perimat.
 - [`AutoExPurchaseBusinessComponentTest`](../../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/journey/AutoExPurchaseBusinessComponentTest.java) verifică dovezile pentru modalul imediat și întârziat pe fixture-uri locale; nu reproduce incidentul de pe site-ul public.
+- Revizia din 2026-11-21 nu a rerulat journey-ul public; constatarea rămâne activă.
 
 - [ ] Reproduceți cu un browser nou și capturați starea coșului și schimbul de
       rețea relevant imediat după apăsare.

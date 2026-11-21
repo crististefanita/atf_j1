@@ -125,9 +125,19 @@ public class ConsumerModuleArchitectureGovernanceTest {
         Path sourceRoot = module.resolve("src/main/atf/shop");
         Path testRoot = module.resolve("src/test/atf/shop/tests");
         Path locatorRoot = sourceRoot.resolve("locators").toAbsolutePath().normalize();
+        Path reportUiFacade = testRoot.resolve("support/reporting/ShopRecoveryExtentReportProbe.java")
+                .toAbsolutePath().normalize();
+
+        assertTrue(Files.isRegularFile(reportUiFacade),
+                "Generated Extent report selectors must have a test-scoped facade");
+        String recoveryTest = Files.readString(testRoot.resolve(
+                "component/recovery/ShopBackendRecoveryComponentTest.java"));
+        assertTrue(recoveryTest.contains("ShopRecoveryExtentReportProbe.verify("),
+                "Recovery report UI checks must use the test-scoped selector facade");
 
         for (Path source : javaFiles(sourceRoot, testRoot)) {
             if (source.toAbsolutePath().normalize().startsWith(locatorRoot)) continue;
+            if (source.toAbsolutePath().normalize().equals(reportUiFacade)) continue;
             String text = Files.readString(source);
             assertFalse(text.contains("page.locator("), "raw locator escaped the facade: " + source);
             assertFalse(text.contains("getByText("), "text selector escaped the facade: " + source);
@@ -135,6 +145,12 @@ public class ConsumerModuleArchitectureGovernanceTest {
             assertFalse(text.matches("(?s).*pressKey\\(page,\\s*\"[^\"]+\",\\s*\"[^\"]+\".*"),
                     "keyboard actions must receive a locator-facade target: " + source);
         }
+
+        String reportUi = Files.readString(reportUiFacade);
+        assertTrue(reportUi.contains("details.atf-ui-observations")
+                        && reportUi.contains("atf-ui-action-table")
+                        && reportUi.contains("Expand all nodes"),
+                "The generated Extent report facade must own the recovery presentation selectors");
 
         String locators = Files.readString(sourceRoot.resolve("locators/ShopLocators.java"));
         assertTrue(locators.contains("HtmlElement.INPUT.attributeEquals(ID, \"email\")"));

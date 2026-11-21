@@ -2,10 +2,9 @@
 
 ## Răspunsul deținut al căutării AutoEx
 
-Documentul de [verificare a consumatorului](ATF_AutoEx_Search_Verification.md)
-înregistrează cauza terminală „queue full”, oracolele HTTP/DOM independente,
-bugetele păstrate și eșecurile de pregătire reținute. Controalele existente își
-păstrează bazele istorice.
+Contractul de căutare [AutoEx](../atf-test-auto-ex/README.md) și testele sale
+permanente definesc răspunsurile deținute, DOM-ul nou, comportamentul terminal
+queue-full și bugetele păstrate. Controalele existente își păstrează bazele istorice.
 
 <details>
 <summary><strong>Controale verificate — baza inițială de revizuire J1</strong></summary>
@@ -35,6 +34,48 @@ Perechea POM/bibliotecă este anterioară remedierii căutării și nu este prom
 din nou. Acceptanța Reporting J18 (înregistrarea istorică a execuției) rămâne
 distinctă de execuția nouă a acestui consumator; niciun control istoric nu este
 rebazat sau extins.
+
+</details>
+
+<details>
+<summary><strong>Control verificat — guvernanța înregistrărilor nedatate de verificare</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DOC-VERIFICATION-RECORD-SCOPE-20261121
+    status: VERIFIED
+    base: 07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0
+    expires: 2026-12-21
+    reason: Elimină rapoartele independente de verificare după mutarea contractelor durabile la owneri; respinge numele și titlurile datate și nedatate prin fixture-uri negative.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java
+```
+
+</details>
+
+<a id="recovery-extent-report-rendering"></a>
+<details>
+<summary><strong>Control verificat — randarea raportului Extent pentru recovery</strong></summary>
+
+```yaml
+testChanges:
+  - id: UI-RECOVERY-EXTENT-20261121
+    status: VERIFIED
+    base: 07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0
+    expires: 2026-12-21
+    reason: Verifică proiecțiile Extent locale pentru urme recovered și exhausted, inclusiv etichete părinte furnizate de fixture, observațiile colapsate, expand-all, rândurile ordonate și redactarea body-ului/URL-ului; păstrează selectorii raportului într-o fațadă dedicată de test.
+    proof: mvn -B -ntp -pl atf-ui,atf-test-auto-ex,atf-test-practice-shop,atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+```
+
+Verificările rapoartelor au trecut în ambii consumatori, în EN și RO. Fixture-ul
+furnizează eticheta părintelui local, iar înregistrările recovery capturate de J1
+trec prin rendererul selectat. Modulul Shop rămâne exceptat de la path-urile
+protejate; guvernanța arhitecturii, ea însăși protejată, verifică folosirea unei
+fațade dedicate de test pentru selectorii raportului.
 
 </details>
 
@@ -4685,7 +4726,7 @@ testChanges:
       - atf-ui/src/test/java/atf/ui/playwright/PlaywrightClickPostconditionComponentTest.java
 ```
 
-[Înregistrarea verificării](ATF_UI_First_Frame_Verification.md) păstrează
+Contractul UI din [README](../atf-ui/README.md) și testele permanente păstrează
 oracolele independente pentru pixeli, evenimente native și deadline. Modificările
 fixture-urilor AutoEx păstrează controlul existent `AUTOEX-SEARCH-LIVE-BASE-143`
 la baza sa inițială; acest control acoperă doar traseele UI.
@@ -4707,9 +4748,8 @@ testChanges:
       - atf-ui/src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java
 ```
 
-[Contractul de captură](../atf-ui/README.md#capturi-de-ecran-cu-context-complet) și
-[verificarea ulterioară](ATF_UI_First_Frame_Verification.md#urmărirea-capturilor-cu-context-complet)
-păstrează pixelii cadrului PNG complet, scalarea configurată și acceptanța independentă în viewer.
+Contractul UI din [README](../atf-ui/README.md) și testele sale păstrează
+pixelii cadrului PNG complet, scalarea configurată și acceptanța independentă în viewer.
 
 </details>
 

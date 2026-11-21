@@ -1009,9 +1009,8 @@ din jurul paginii. Parcursurile Shop și AutoEx folosesc zoom-ul configurat de
 | Test coverage | Pixel oracles verify all four corners at 70/100% and extra lower-page context at 70%; independent geometry-scale tests keep their own scales |
 
 The [native geometry regression](src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
-checks captured PNG pixels rather than configuration alone. The
-[verification record](../docs/ATF_UI_First_Frame_Verification.md#urmărirea-capturilor-cu-context-complet)
-separates capture, viewer and consumer acceptance.
+checks captured PNG pixels rather than configuration alone. This owner
+contract covers capture, viewer geometry and consumer context.
 
 ## Pregătirea explicită a fixture-ului
 
@@ -1033,9 +1032,6 @@ explicitly; ordinary runtime actions retain their existing behavior.
   target. Those refusals and a false postcondition keep their original action deadline.
 - Fixture preparation consumes one bounded navigation allowance across all
   stages; attachment and capture do not receive a renewed timeout.
-
-[First-frame verification](../docs/ATF_UI_First_Frame_Verification.md) separates
-fixture preparation, the actual driver runtime and the measured operation.
 
 ## Deadline determinist al clickului cu postcondiție
 

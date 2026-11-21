@@ -19,7 +19,7 @@ import static atf.api.tests.governance.AtfGovernanceTestSupport.locateProjectRoo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Keeps temporary project maps and release snapshots out of maintained J1 documentation. */
+/** Keeps project maps and standalone verification records out of maintained J1 documentation. */
 @AtfComponentTest
 public class DocumentationContextArtifactGovernanceTest {
     private static final Set<String> IGNORED_DIRECTORIES = Set.of(
@@ -36,17 +36,22 @@ public class DocumentationContextArtifactGovernanceTest {
     private static final Pattern RELEASE_SNAPSHOT = Pattern.compile(
             "(?i)(?=.*(?:verification|acceptance|verificare|acceptanță|acceptare))"
                     + "(?=.*(?:20\\d{2}-\\d{2}-\\d{2}|core\\s+c\\d+|reporting\\s+j\\d+)).*");
+    private static final Pattern STANDALONE_VERIFICATION_FILENAME = Pattern.compile(
+            "(?iu)(?:^|/)[^/]*(?:verification|acceptance|verificare|acceptare|acceptanță)\\.md$");
+    private static final Pattern STANDALONE_VERIFICATION_TITLE = Pattern.compile(
+            "(?iu)^#\\s+(?:verification|acceptance|verificare|acceptare|acceptanță)"
+                    + "\\s+(?:record|report|snapshot|evidence)\\s*$");
     private static final Pattern PROVENANCE_SNAPSHOT_REFERENCE = Pattern.compile(
             "(?i)\"docs/[^\"\\r\\n]*(?:verification|acceptance)[^\"\\r\\n]*\\.md\"");
 
     @Test
-    void maintainedDocumentationContainsNoProjectMapsOrReleaseSnapshots() throws Exception {
+    void maintainedDocumentationContainsNoProjectMapsOrVerificationRecords() throws Exception {
         DocumentationGovernanceSupport.assertNoViolations(
-                "project map and historical verification artifact governance", inspect(locateProjectRoot()));
+                "project map and standalone verification record governance", inspect(locateProjectRoot()));
     }
 
     @Test
-    void rejectsProjectMapsDatedAndVersionedSnapshotsAndProvenancePointers(@TempDir Path root)
+    void rejectsProjectMapsAndStandaloneVerificationRecords(@TempDir Path root)
             throws Exception {
         Path docs = Files.createDirectories(root.resolve("docs"));
         Path module = Files.createDirectories(root.resolve("module"));
@@ -62,6 +67,8 @@ public class DocumentationContextArtifactGovernanceTest {
                 "# J1 live screenshot acceptance — 2026-11-03\n");
         Files.writeString(docs.resolve("ATF_JSON_Binary_Verification.md"),
                 "# JSON and Core C2 / Reporting J9 Libraries — Acceptance\n");
+        Files.writeString(docs.resolve("ATF_Component_Verification.md"), "# Component verification\n");
+        Files.writeString(docs.resolve("evidence.md"), "# Acceptance record\n");
         Files.writeString(root.resolve("library-provenance.json"),
                 "{\"evidence\": \"docs/ATF_Reporting_J13_Verification.md\"}\n");
 
@@ -71,6 +78,9 @@ public class DocumentationContextArtifactGovernanceTest {
         assertEquals(2, violations.stream().filter(v -> v.code().equals("DOC-CONTEXT-REFERENCE")).count(),
                 violations::toString);
         assertEquals(3, violations.stream().filter(v -> v.code().equals("DOC-RELEASE-SNAPSHOT")).count(),
+                violations::toString);
+        assertEquals(5, violations.stream()
+                        .filter(v -> v.code().equals("DOC-STANDALONE-VERIFICATION")).count(),
                 violations::toString);
         assertTrue(violations.stream().anyMatch(v -> v.code().equals("DOC-PROVENANCE-SNAPSHOT")),
                 violations::toString);
@@ -128,6 +138,13 @@ public class DocumentationContextArtifactGovernanceTest {
                     "a dated or library-versioned verification/acceptance snapshot is present: " + title,
                     "execution evidence is temporary; durable behavior belongs to the owning contract and tests",
                     "remove the snapshot and keep any required run evidence in owned TMP/provenance");
+        }
+        if (STANDALONE_VERIFICATION_FILENAME.matcher(relative).find()
+                || STANDALONE_VERIFICATION_TITLE.matcher(title).matches()) {
+            add(violations, "DOC-STANDALONE-VERIFICATION", root, file, titleLine,
+                    "a standalone verification or acceptance record is maintained: " + relative,
+                    "durable behavior belongs in an owner contract; run-specific evidence belongs in owned TMP",
+                    "move stable rules to the owning README and remove the report from maintained documentation");
         }
         for (int index = 0; index < lines.size(); index++) {
             if (CONTEXT_REFERENCE.matcher(lines.get(index)).find()) {

@@ -397,9 +397,9 @@ An intentional `PLAYWRIGHT_NODEJS_PATH` override is a separate environment exper
 | Native operation | retain its original deadline, strict actionability, trusted-event and negative oracles |
 | Resource failures | capture, startup and cleanup remain distinct from an unconfirmed business postcondition |
 
-[First-frame verification](ATF_UI_First_Frame_Verification.md) records the
-same-code runtime comparison. A different runtime's result is not silently
-substituted for SDK-default Maven/IDE acceptance.
+[The UI owner README](../atf-ui/README.md) defines fixture preparation and
+native input limits. A different runtime's result is not silently substituted
+for SDK-default Maven/IDE acceptance.
 
 ## Ce se sincronizează și ce nu
 

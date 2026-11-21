@@ -11,21 +11,20 @@ reproducere locală.
 
 | Constatare | Responsabil local | Dovada următoare |
 |---|---|---|
-| [UI-RECOVERY-AUDIT-01](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent) | Dovezile recovery J1 și acceptanța raportului | randează cazurile recovered și terminale; verifică un singur grup restrâns care se extinde complet și rămâne redactat |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Compoziția metadatelor Reporting | capturează rădăcina JUnit și selecția efectivă în metadatele de audit |
-| [DOC-VERIFICATION-RECORD-SCOPE-20261120](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120) | Guvernanța artefactelor documentației | stabilește dacă înregistrările independente de verificare rămase sunt contracte durabile ale modulelor; altfel, mută dovezile rulărilor în afara documentației întreținute și respinge fixture-urile fără dată |
-| [SHOP-BILLING-SANITY](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity) | Journey-ul de billing Shop | separă pornirea browserului de timpul de stabilizare a lookup-ului |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | Journey-ul de cumpărare AutoEx | reproduce confirmarea coșului public cu un browser nou |
 
 ## Dovezi consumer livrate
 
 | Contract | Înregistrare curentă |
 |---|---|
+| Dovezi recovery în probele Extent locale ale consumerilor | [Închis la 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); ambii consumatori verifică starea colapsată, expand-all, rândurile ordonate și redactarea în ambele ediții; pasul părinte este furnizat de fixture, nu generat de suite |
+| Timpul de stabilizare al lookup-ului poștal Shop | [Închis la 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); trei rulări cu câte 13 cazuri trec, iar race se măsoară la 494–524 ms față de bugetul de 1.100 ms, cu pornirea/navigarea browserului măsurată separat |
 | Comparația catalogului AutoEx și dovezi Extent extensibile | [Închis la 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); probele component și browser ale raportului controlat au trecut |
-| Faptele documentației J1 și perimetrul bibliotecilor consumate | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); ultima guvernanță Whole-ATF: 190/190 în EN și RO; structura și destinațiile linkurilor coincid în toate cele 52 de documente Markdown |
+| Faptele documentației J1 și perimetrul bibliotecilor consumate | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); ultima guvernanță Whole-ATF: 190/190 în EN și RO; structurile documentelor păstrate și destinațiile linkurilor coincid |
 | Overview root local-first și inventarul modulelor | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); ultima guvernanță: 190/190 în EN și RO; structura edițiilor Markdown rămâne aliniată |
-| Hărți de proiect și instantanee de verificare datate sau versionate după bibliotecă | [Implementat la 2026-11-20](ATF_Documentation_Feedback.md#doc-context-artifact-governance-20261120); întrebarea despre înregistrările nedatate rămase este urmărită separat mai sus |
-| Revizia edițiilor documentației și comparația workspace-urilor | [Verificat la 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); guvernanță focusată 18/18 în EN și RO, testele Node 10/10 și comparație curată în TMP pentru 52 de documente |
+| Hărți de proiect și rapoarte independente de verificare | [Închis la 2026-11-21](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120); contractele durabile au rămas la owneri, iar guvernanța respinge rapoarte datate și nedatate |
+| Revizia edițiilor documentației și comparația workspace-urilor | [Verificat la 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); guvernanță focusată 18/18 în EN și RO, testele Node 10/10 și comparație curată în TMP pentru documentele păstrate |
 | Politica dovezilor screenshot | [Contractul de captură](../ATF_Evidence_Capture_Contract.md), ghidul modulului UI și testele native de geometrie browser definesc comportamentul curent |
 | Contractele consumerului | README-urile modulelor și testele executabile definesc comportamentul curent |
 

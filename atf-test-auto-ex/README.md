@@ -1307,12 +1307,10 @@ browserul sau jurnalul API. Runtime-ul main compune `AutoExCatalogSearch`.
   bugetul de navigare existent de 5 s, înainte de pornirea acțiunii de 700 ms.
   Dimensiunile PNG decodificate, URL-ul fixture-ului și activarea trusted rămân
   comparații auditabile.
-- Preparation does not grant time to the document produced by Search; that
-  transition still shares the original action deadline. Driver/runtime
-  identity is recorded in [first-frame verification](../docs/ATF_UI_First_Frame_Verification.md).
-
-[Search verification](../docs/ATF_AutoEx_Search_Verification.md) separates the
-original queue-full PNG, later healthy API probes and fresh execution evidence.
+- Pregătirea nu acordă timp suplimentar documentului produs de Search; tranziția
+  păstrează același deadline al acțiunii. Runner-ul moștenește implicit runtime-ul
+  Node selectat de SDK; regulile de configurare și override sunt în
+  [siguranța build-ului și execuției](../docs/ATF_Build_And_Execution_Safety.md).
 
 Aceeași compoziție este folosită în UI și UI+API. Inspectorul rămâne pasiv;
 postcondiția DOM nu inventează un răspuns HTTP și nu rescrie un FAIL deja publicat.
@@ -1682,13 +1680,18 @@ necunoscute sunt refuzate înaintea browserului.
 
 Aserțiunile acestor componente rămân în pasul standard `Component assertions`,
 colapsat implicit, cu redactare înaintea plafonului configurat, implicit 240 de caractere.
-Aceste verificări locale rămân separate de randarea generică furnizată de
-biblioteca Reporting selectată.
+Testul component creează probe locale de proiecție Extent pentru urmele
+recovered și exhausted. Fixture-ul testului furnizează pasul părinte agregat și
+numărul încercărilor; rendererul primește înregistrările recovery produse de J1.
+Un singur grup `Audit observations`, colapsat inițial, conține rândurile INFO în
+ordine. Expandarea afișează urma completă și sursa politicii, fără body-ul
+răspunsului sau URL-ul fixture-ului local. Proba verifică maparea dovezilor de
+acțiune J1 și rendererul selectat pe fixture-uri locale; nu este un pas agregat
+generat de suite și nici acceptanță E2E pe site-ul public.
 
 </details>
 
-Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă);
-indicatorul agregat de recuperare rămâne în [feedback-ul auditului](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent).
+Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă).
 
 ## Rulare
 

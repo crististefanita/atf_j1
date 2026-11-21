@@ -23,7 +23,7 @@ Verificarea inițială din 2026-11-20 a rulat `WholeAtfGovernanceSuiteTest` din 
 
 Aceste execuții au trecut cu 186/186 în fiecare ediție și sunt istorice; comenzile și bazele de mai sus păstrează dovada inițială.
 
-### Ultima reverificare — 2026-11-20
+### Reverificarea commit-urilor anterioare — 2026-11-20
 
 După curățarea artefactelor de context și actualizarea guvernanței, suita
 completă `WholeAtfGovernanceSuiteTest` a trecut cu 190/190 în ambele ediții
@@ -42,3 +42,20 @@ live, fără eșecuri, erori sau teste omise:
   consumerului rămân urmărite separat acolo unde sunt necesare artefacte la nivel de suită.
 - După editarea feedback-ului, guvernanța focusată a documentației a trecut
   18/18 în ambele ediții la 2026-11-21.
+
+### Worktree-urile curente de revizie — 2026-11-21
+
+Worktree-uri EN și RO proaspete, bazate pe reviziile de control
+(`72c387e98735b03fe1afd65cab1913b76b1d86b4` și
+`07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0`), au trecut verificările focusate
+ale consumerilor și guvernanța întregului reactor:
+
+- `ShopBillingSynchronizationComponentTest`: 13/13.
+- `ShopBackendRecoveryComponentTest`: 6/6; `AutoExBackendRecoveryComponentTest`: 5/5.
+- `WholeAtfGovernanceSuiteTest`: 190/190, fără eșecuri, erori sau omisiuni.
+- Testele Node ale edițiilor documentației: 10/10; comparația finală a găsit
+  0 probleme în cele 50 de documente Markdown păstrate.
+
+Aceste rezultate acoperă fixture-uri locale și probe de randare a raportului.
+Constatarea coșului public AutoEx rămâne deschisă; nu se deduce o rulare E2E pe
+site-ul public.

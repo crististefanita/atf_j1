@@ -587,13 +587,18 @@ necunoscute sunt refuzate înaintea browserului.
 
 Aserțiunile acestor componente rămân în pasul standard `Component assertions`,
 colapsat implicit, cu redactare înaintea plafonului configurat, implicit 240 de caractere.
-Aceste verificări componente Shop rămân separate de randarea comună furnizată
-de biblioteca Reporting selectată.
+Testul component creează probe locale de proiecție Extent pentru urmele
+recovered și exhausted. Fixture-ul testului furnizează pasul părinte agregat și
+numărul încercărilor; rendererul primește înregistrările recovery produse de J1.
+Un singur grup `Audit observations`, colapsat inițial, conține rândurile INFO în
+ordine. Expandarea afișează urma completă și sursa politicii, fără body-ul
+răspunsului sau URL-ul fixture-ului local. Proba verifică maparea dovezilor de
+acțiune J1 și rendererul selectat pe fixture-uri locale; nu este un pas agregat
+generat de suite și nici acceptanță E2E pe site-ul public.
 
 </details>
 
-Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă);
-indicatorul agregat de recuperare rămâne în [feedback-ul auditului](../docs/feedback/ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent).
+Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă).
 
 ## Configurația modulului
 
@@ -821,6 +826,9 @@ Observația folosește [scope-ul UI](../atf-ui/README.md#scope-ul-listener-elor-
 și bugetul existent `awaitVisible`; nu primește un timeout suplimentar.
 `ShopPostalLookupComponentTest` verifică metoda reală a paginii, iar
 `ShopBillingLookupTest` păstrează separat contractul recordului de adresă.
+`ShopBillingSynchronizationComponentTest` măsoară stabilizarea după
+`inputsApplied`, separat de pornirea browserului și navigarea fixture-ului, și
+păstrează stabilizarea cu succes în bugetul configurat de 1,1 secunde.
 
 ### Sincronizarea input-urilor
 
