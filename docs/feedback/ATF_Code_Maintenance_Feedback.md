@@ -46,18 +46,26 @@ failures, errors, or skipped tests:
 - After the feedback edits, focused documentation governance passed 18/18 in
   both editions on 2026-11-21.
 
-### Current review worktrees — 2026-11-21
+### Focused consumer checks — 2026-11-21
 
-Fresh Git-backed EN and RO worktrees were checked against their review bases
-(`72c387e98735b03fe1afd65cab1913b76b1d86b4` and
-`07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0`). Focused consumer checks and
-whole-reactor governance passed in each edition:
+Fresh Git-backed EN and RO review worktrees based on
+`72c387e98735b03fe1afd65cab1913b76b1d86b4` and
+`07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0` passed the focused consumer checks:
 
 - `ShopBillingSynchronizationComponentTest`: 13/13.
 - `ShopBackendRecoveryComponentTest`: 6/6; `AutoExBackendRecoveryComponentTest`: 5/5.
-- `WholeAtfGovernanceSuiteTest`: 190/190, with no failures, errors, or skips.
-- Documentation-edition Node tests: 10/10; the final edition comparison found
-  0 problems across all 50 maintained Markdown documents.
+
+### Current whole-reactor governance — 2026-11-21
+
+After the recovery-report documentation correction, `WholeAtfGovernanceSuiteTest`
+passed 190/190 with no failures, errors, or skips at these reviewed commits:
+
+- `main`: `94434f1458171ada958e83f3577f9d6a9f776203`.
+- `main_RO`: `06709dde637f3a08929932d6bee8130bc1eefed8`.
+
+The test-change controls used the focused-review bases above. Documentation
+edition Node tests then passed 10/10 in both editions; the Git-backed TMP pair
+comparison found 0 problems across all 50 maintained Markdown documents.
 
 These results cover local fixtures and report-rendering probes. The public AutoEx
 cart finding remains open, and no public-site E2E suite result is inferred.
