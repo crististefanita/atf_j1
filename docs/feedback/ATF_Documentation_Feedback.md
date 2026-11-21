@@ -129,14 +129,14 @@ nedatate, și rămâne selectat de `WholeAtfGovernanceSuiteTest`. Controlul este
 
 ## DOC-EDITION-COMPARATOR-20261120 — separarea terminatoarelor de linie din worktree de diferențele dintre ramuri
 
-**Stare: Verificat la 2026-11-21; nu s-au găsit diferențe de conținut între ramuri.**
-Comparația directă a worktree-urilor live a semnalat cele două fișiere `.mjs`
-ale instrumentelor edițiilor. ID-urile blob Git sunt identice în `main` și
-`main_RO`, iar textul coincide după normalizarea CRLF. O comparație nouă, în
-worktree-uri Git curate din TMP, a raportat 0 probleme în cele 50 de documente
-Markdown; suita Node a trecut 10/10.
+**Stare: Corectat și verificat la 2026-11-21.** Comparația worktree-urilor live
+a semnalat două fișiere `.mjs`, deoarece checkout-ul EN folosește CRLF, iar RO
+LF; blob-urile Git sunt identice. Comparatorul omitea `.mjs` din lista fișierelor
+text.
 
-Discrepanța provenea din terminatoarele de linie ale worktree-urilor existente,
-nu dintr-o diferență între ediții. Nu este necesară o corecție de cod. Dacă
-același rezultat reapare într-un stage Git curat, redeschide constatarea și
-adaugă un fixture de regresie LF/CRLF.
+- Comparatorul normalizează acum terminatoarele JavaScript și respinge în
+  continuare diferențele semantice din sursă.
+- Suita de regresie trece 11/11, inclusiv fixture-ul LF/CRLF; POM-urile
+  publicate ale bibliotecilor rămân identice octet cu octet.
+- Revizia fixată prin commit verifică toate cele 50 de documente fără probleme,
+  iar comparația worktree-urilor live trece acum în EN și RO.

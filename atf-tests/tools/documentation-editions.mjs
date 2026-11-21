@@ -210,7 +210,7 @@ function sameNonMarkdownTree(englishRoot, romanianRoot, problems) {
     const enBytes = readFileSync(join(englishRoot, path));
     const roBytes = readFileSync(join(romanianRoot, path));
     const publishedLibraryPom = /^lib\/[^/]+\.pom$/i.test(path);
-    const textFile = /\.(?:java|xml|pom|html|json|ya?ml|properties|txt|ps1|cmd|bat|md)$/i.test(path);
+    const textFile = /\.(?:java|xml|pom|html|json|ya?ml|properties|txt|ps1|cmd|bat|md|cjs|mjs|js)$/i.test(path);
     const equal = publishedLibraryPom ? enBytes.equals(roBytes) : textFile
       ? utf8.decode(enBytes).replaceAll('\r\n', '\n').replaceAll('\r', '\n')
           === utf8.decode(roBytes).replaceAll('\r\n', '\n').replaceAll('\r', '\n')

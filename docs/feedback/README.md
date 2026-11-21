@@ -27,7 +27,7 @@ reproducere locală.
 | Faptele documentației J1 și perimetrul bibliotecilor consumate | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); ultima guvernanță Whole-ATF: 190/190 în EN și RO; structurile documentelor păstrate și destinațiile linkurilor coincid |
 | Overview root local-first și inventarul modulelor | [Închis la 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); ultima guvernanță: 190/190 în EN și RO; structura edițiilor Markdown rămâne aliniată |
 | Hărți de proiect și rapoarte independente de verificare | [Închis la 2026-11-21](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120); contractele durabile au rămas la owneri, iar guvernanța respinge rapoarte datate și nedatate |
-| Revizia edițiilor documentației și comparația workspace-urilor | [Verificat la 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); guvernanță focusată 18/18 în EN și RO, testele Node 10/10 și comparație curată în TMP pentru documentele păstrate |
+| Revizia edițiilor documentației și comparația workspace-urilor | [Verificat la 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); 50 de documente trec verificarea fixată prin commit și comparația worktree-urilor live, testele Node 11/11 acoperă normalizarea CRLF/LF și diferențele semantice, iar POM-urile bibliotecilor rămân identice octet cu octet |
 | Politica dovezilor screenshot | [Contractul de captură](../ATF_Evidence_Capture_Contract.md), ghidul modulului UI și testele native de geometrie browser definesc comportamentul curent |
 | Contractele consumerului | README-urile modulelor și testele executabile definesc comportamentul curent |
 

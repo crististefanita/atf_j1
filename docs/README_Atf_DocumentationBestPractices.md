@@ -89,6 +89,9 @@ structura Markdown și destinațiile linkurilor dintre worktree-urile `main` și
 sunt permise numai când provin din titlul localizat. Probează instrumentul cu
 `node --test atf-tests/tools/documentation-editions.test.mjs`.
 
+- Fișierele text non-Markdown se compară după normalizarea CRLF/LF. POM-urile
+  publicate ale bibliotecilor și fișierele binare rămân identice octet cu octet.
+
 <details>
 <summary><strong>Revizuirea edițiilor legată de commit</strong></summary>
 
