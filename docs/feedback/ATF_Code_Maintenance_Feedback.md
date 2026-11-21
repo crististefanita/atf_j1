@@ -69,3 +69,40 @@ comparison found 0 problems across all 50 maintained Markdown documents.
 
 These results cover local fixtures and report-rendering probes. The public AutoEx
 cart finding remains open, and no public-site E2E suite result is inferred.
+
+<a id="oop-recovery-scenarios-2026-11-21"></a>
+## OOP-RECOVERY-SCENARIOS-2026-11-21 — make component scenarios and report ownership explicit
+
+**Status: Closed on 2026-11-21; owners:** AutoEx and Shop component-test maintainers.
+
+The recovery component tests used positional primitive arguments to represent
+response status, capture policy, expected readiness, validation mode, and report
+rendering. They now pass a named `RecoveryScenario` record with outcome enums and
+scenario factories. The parameterized validation cases use enum sources, so the
+test inputs stay typed from declaration through execution.
+
+AutoEx report-page selectors and disclosure checks now live in the test-scoped
+`AutoExRecoveryExtentReportProbe`, alongside the existing Shop report facade.
+`ConsumerModuleArchitectureGovernanceTest` enforces that ownership boundary.
+This is test-code organization only; consumer runtime behavior and reporting
+contracts were not changed.
+
+The controlled verification passed on the source state recorded in these commits:
+
+| Edition | Source commit | Shop recovery component | AutoEx recovery component | Whole-ATF governance |
+|---|---|---:|---:|---:|
+| EN | `9f55590530cef94999d4ca3cd34e916bbca5f440` | 6/6 | 5/5 | 191/191 |
+| RO | `0716679d7f2809b21ae8d395d623fc20d1249871` | 6/6 | 5/5 | 191/191 |
+
+- `ConsumerModuleArchitectureGovernanceTest` passed 14/14 in each edition,
+  including the new selector-ownership check.
+- The protected test-change control tracks the AutoEx component, its report
+  facade, and the architecture guard.
+- The Shop component source remains outside the control's established
+  protected-path set. Its 6/6 result is recorded separately and is not
+  described as baseline-protected.
+
+The first post-update governance run flagged this entry's four-sentence
+paragraph against the rapid-scan prose limit. That text is now split into
+bullets. The final rerun passed 191/191 in both editions with no failures,
+errors, or skipped tests.

@@ -17,6 +17,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Contract | Current record |
 |---|---|
+| Recovery scenario clarity and report-selector ownership | [Closed on 2026-11-21](ATF_Code_Maintenance_Feedback.md#oop-recovery-scenarios-2026-11-21); named typed scenarios and test-scoped report selectors passed component checks 6/6 Shop, 5/5 AutoEx, and Whole-ATF governance 191/191 in both editions |
 | Recovery evidence in local consumer Extent probes | [Closed on 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); both consumers verify collapsed state, expand-all, ordered trace rows, and redaction in both editions; each local probe builds a synthetic outcome-bearing step and does not establish suite-generated report output |
 | Shop postal lookup settlement timing | [Closed on 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); three 13-case runs pass, with race settlement measured at 494–524 ms against the 1,100 ms budget and browser startup/navigation measured separately |
 | AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
