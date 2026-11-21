@@ -21,10 +21,10 @@ report.
 
 | Code evidence | What is recorded |
 |---|---|
-| UiBackendRecovery.recording | One information record per observation, titled by attempt and labeled with the operation |
+| UiBackendRecovery.recording | Emits one INFO action per trace: ACTION is `BE observation #n`, TARGET is semantic `catalog-readiness`; the component audit currently projects ACTION as its `Operation` field and omits TARGET |
 | UiRecoveryTrace.description | Decision, reason, captured signal summary when available, probe/backoff/total durations, and policy source |
 | Current consumer README | Describes local component report probes and distinguishes their synthetic outcome-bearing step from suite-generated report output |
-| 2026-11-21 report checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest 6/6 in both editions, generating local Extent reports and opening them in Playwright |
+| 2026-11-21 report checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest 6/6 in both editions; each component test opens its own synthetic local Extent probe in Playwright, separately from the JUnit suite report |
 
 - [x] Run deterministic recovered and terminal exhausted scenarios in both consumers.
 - [x] Verify the outcome-bearing step title and ordered attempts in one initially collapsed observations disclosure.
@@ -48,26 +48,30 @@ The verified test-change control is retained in the
 
 ## J1-RECOVERY-RUNNER-TRACE-2026-11-21 — include recovery traces in actual component reports
 
-**Status: Active — Maven acceptance passed; IntelliJ acceptance remains open.**
+**Status: Active — Maven tests pass; actual-report browser acceptance is partial; IntelliJ acceptance remains open.**
 J1 now consumes Reporting J26 and Test Kit K3. Both component adapters carry
 the immutable recovery observations into the real JUnit `TEST BODY` phase,
 beside the ordinary `Component assertions` step.
 
 | Artifact evidence | Observed behavior |
 |---|---|
-| Actual Shop component report | `ShopExtentTestExtension` publishes a separate `Backend recovery trace · <outcome>` INFO node beside `Component assertions`; the test verdict and count are unchanged. |
-| Actual AutoEx component report | `AutoExExtentTestExtension` publishes the same trace boundary for the recovery component suite. |
+| Actual Shop component report | `ShopExtentTestExtension` publishes a separate `Backend recovery trace · <outcome>` INFO node beside `Component assertions`; its `Attempt N · Operation` value is `Backend observation #N`, not the semantic recovery operation. The test verdict and count are unchanged. |
+| Actual AutoEx component report | `AutoExExtentTestExtension` publishes the same trace boundary and currently uses the same event label in the `Operation` field. |
 | Maven consumer runs | Shop passed 6/6 and AutoEx 5/5 in EN and RO against the physical J26/K3 JARs. |
-| Playwright rendering | All four actual suite reports were opened. `Expand all nodes` opens the normal hierarchy while each trace disclosure stays closed; opening it shows ordered attempts with operation, policy, observation, measured probe/backoff/total timing, and INFO result exactly once. |
-| Safety and outcome | The response-body canary and fixture URL are absent; `EXHAUSTED` remains an expected business outcome in a passing test. |
+| Playwright rendering | Consumer-owned Playwright checks open only their synthetic local HTML. One separate browser check opened the actual Shop JUnit report and verified navigation, collapsed nested disclosures after `Expand all nodes`, visible `TEST BODY` and assertion table, and rendered observation rows; it then stopped at a fixture-specific `not captured` expectation. No actual AutoEx JUnit report was browser-checked. The semantic operation is not asserted in the component-audit projection; the synthetic action-table probe shows it only in TARGET. |
+| Safety and outcome | A source search of 17 generated Shop/AutoEx JUnit reports found neither the private response-body canary nor `127.0.0.1`; `EXHAUSTED` remains an expected business outcome in a passing test. Browser-based redaction acceptance of the actual AutoEx report remains open. |
 
 - [x] Publish the ordered recovery trace from each consumer's actual JUnit
-  component run in a separate disclosure, initially collapsed, with operation,
-  policy, observation, measured timing, INFO result, and redacted values. Keep
+  component run in a separate disclosure, initially collapsed, with the event
+  label, policy, observation, measured timing, INFO result, and redacted values. Keep
   the standard assertion step, test verdict, and test count intact.
-- [x] Open the artifacts from Maven runs in Playwright. Verify `Expand all nodes`
-  opens the regular class/body/assertion hierarchy while the trace disclosure
-  remains closed, and verify every attempt exactly once after opening it.
+- [x] Run each consumer-owned Playwright check against its synthetic local
+  recovery HTML. Verify `Expand all nodes`, independently collapsed evidence,
+  complete ordered rows, and redaction there.
+- [ ] Complete browser acceptance against the actual Shop and AutoEx JUnit
+  reports with a fixture-neutral owner/scenario oracle. The current Shop probe
+  reaches the assertion table and observation rows but stops at its hardcoded
+  `not captured` fixture marker; the actual AutoEx report has not been opened.
 - [ ] Open the actual generated artifact after an IntelliJ run. Verify the same
   report directory, assertion hierarchy, independently collapsed trace, ordered
   attempt fields, and redaction in the IDE-launched report.
@@ -76,6 +80,9 @@ beside the ordinary `Component assertions` step.
 IntelliJ launches the component tests. The repository workspace has no IntelliJ
 runner available in this verification environment, so Maven success does not
 close IDE output-root parity.
+
+The semantic-operation label gap and typed trace projection remain separately
+tracked in [J1-RECOVERY-TRACE-TYPING-2026-11-21](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
 
 <a id="j1-launch-context-146"></a>
 

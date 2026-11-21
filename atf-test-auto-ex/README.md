@@ -1709,11 +1709,15 @@ Separately, `AutoExExtentTestExtension` publishes the captured recovery trace
 in the real JUnit component report through Test Kit K3 phase observations and
 Reporting J26. The INFO trace is a sibling of `Component assertions` in
 `TEST BODY`; it keeps the normal assertion verdict and test count. Each attempt
-has one readable operation, policy, observation, measured probe/backoff/total
-timing, and INFO result. The trace disclosure starts closed and remains closed
-after `Expand all nodes`; opening it reveals each attempt once. The component
-test opens the actual suite HTML in Playwright and checks these states and the
-redaction of the fixture body and URL. This evidence covers the recovery
+shows a policy, observation, measured probe/backoff/total timing, and INFO
+result. Its `Attempt N · Operation` field currently contains the event label
+`Backend observation #N`, not the semantic recovery operation
+`catalog-readiness`. This report-field clarity gap is tracked in [J1 recovery
+feedback](../docs/feedback/ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
+The component test's Playwright probe opens only the separate synthetic HTML
+under `target/autoex-runtime-reports/recovery-audit`; it does not open the report
+produced by the JUnit extension. Actual suite-report inspection and the local
+renderer probe are separate evidence. This evidence covers the recovery
 component suite; it does not claim public-site E2E acceptance.
 
 </details>
