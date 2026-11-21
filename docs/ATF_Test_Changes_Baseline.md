@@ -64,18 +64,21 @@ testChanges:
     status: VERIFIED
     base: 07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0
     expires: 2026-12-21
-    reason: Verifică proiecțiile Extent locale pentru urme recovered și exhausted, inclusiv pași sintetici cu rezultatul în titlu, observațiile colapsate, expand-all, rândurile ordonate și redactarea body-ului/URL-ului; păstrează selectorii raportului Shop în fațada sa dedicată de test.
+    reason: Înlocuiește argumentele booleene poziționale din testul recovery AutoEx cu scenarii numite; verifică proiecțiile Extent locale AutoEx pentru urme recovered și exhausted, observațiile colapsate, expand-all, rândurile ordonate și redactarea body-ului/URL-ului; păstrează selectorii ambilor consumatori în fațade dedicate de test.
     proof: mvn -B -ntp -pl atf-ui,atf-test-auto-ex,atf-test-practice-shop,atf-tests -am "-Dmaven.repo.local=$env:ATF_MAVEN_LOCAL_REPO" "-Dtest=AutoExBackendRecoveryComponentTest,ShopBackendRecoveryComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=07a1fac012bbdab02916a2ef6d6cd8a735b3d3c0" "-Datf.test.heap.max=384m" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryExtentReportProbe.java
       - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
 ```
 
-Verificările rapoartelor au trecut în ambii consumatori, în EN și RO. Fixture-ul
-furnizează eticheta părintelui local, iar înregistrările recovery capturate de J1
-trec prin rendererul selectat. Modulul Shop rămâne exceptat de la path-urile
-protejate; guvernanța arhitecturii, ea însăși protejată, verifică folosirea unei
-fațade dedicate de test pentru selectorii raportului.
+Verificările rapoartelor au trecut în ambii consumatori, în EN și RO. Fiecare
+test component construiește un scenariu sintetic și un pas cu rezultatul în
+titlu; înregistrările recovery capturate de J1 trec prin rendererul selectat.
+`ConsumerModuleArchitectureGovernanceTest` impune fațada selectorilor raportului
+în AutoEx și păstrează controlul existent pentru Shop. Testul component Shop
+rămâne în afara căilor protejate ale schimbărilor de teste; comportamentul său
+este acoperit de testul component.
 
 </details>
 

@@ -1,6 +1,7 @@
 package atf.autoex.tests.component.recovery;
 
 import atf.autoex.tests.extension.AutoExComponentTest;
+import atf.autoex.tests.support.reporting.AutoExRecoveryExtentReportProbe;
 import atf.autoex.config.AutoExConfigurationLoader;
 import atf.autoex.runtime.recovery.AutoExBackendRecovery;
 import atf.reporting.api.ReportModelAdapters;
@@ -24,7 +25,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.*;
@@ -40,6 +41,36 @@ class AutoExBackendRecoveryComponentTest {
     private static final String ORIGIN = "http://127.0.0.1:8123";
     private static final String BODY_CANARY = "backend-private-body-must-not-be-captured";
     @TempDir Path temp;
+
+    private enum RecoveryOutcome {
+        RECOVERED, EXHAUSTED, CAPTURE_DISABLED
+    }
+
+    private enum ValidationMode {
+        UI_ONLY, UI_API
+    }
+
+    private record RecoveryScenario(int responseStatus, RecoveryOutcome outcome, ValidationMode validationMode) {
+        static RecoveryScenario catalog(ValidationMode mode) {
+            return new RecoveryScenario(200, RecoveryOutcome.RECOVERED, mode);
+        }
+
+        static RecoveryScenario exhausted() {
+            return new RecoveryScenario(503, RecoveryOutcome.EXHAUSTED, ValidationMode.UI_ONLY);
+        }
+
+        static RecoveryScenario captureDisabled() {
+            return new RecoveryScenario(200, RecoveryOutcome.CAPTURE_DISABLED, ValidationMode.UI_ONLY);
+        }
+
+        boolean captureBackendSignals() { return outcome != RecoveryOutcome.CAPTURE_DISABLED; }
+        boolean expectedReady() { return outcome == RecoveryOutcome.RECOVERED; }
+        boolean inspectNetwork() { return validationMode == ValidationMode.UI_API; }
+        boolean renderReport() {
+            return outcome == RecoveryOutcome.EXHAUSTED
+                    || expectedReady() && validationMode == ValidationMode.UI_ONLY;
+        }
+    }
 
     @Test void yamlAndAnnotationCannotExpandTheReadOnlyPolicy(RecordedAssertions checks) throws Exception {
         var packaged = AutoExConfigurationLoader.load().browser().recovery();
@@ -63,22 +94,24 @@ class AutoExBackendRecoveryComponentTest {
                 "Unknown recovery profile fails before resources");
     }
 
-    @ParameterizedTest(name = "Catalog recovery · {0}") @ValueSource(strings = {"UI_ONLY", "UI_API"})
-    void delayedCatalogIsReobservedWithoutAnotherClickOrRequest(String channel, RecordedAssertions checks) throws Exception {
-        runBrowser(checks, 200, true, true, channel.equals("UI_API"), channel.equals("UI_ONLY"));
+    @ParameterizedTest(name = "Catalog recovery · {0}") @EnumSource(ValidationMode.class)
+    void delayedCatalogIsReobservedWithoutAnotherClickOrRequest(ValidationMode validationMode,
+                                                                 RecordedAssertions checks) throws Exception {
+        runBrowser(checks, RecoveryScenario.catalog(validationMode));
     }
     @Test void exhaustedBackendKeepsOneDispatchAndAnExplicitReason(RecordedAssertions checks) throws Exception {
-        runBrowser(checks, 503, true, false, false, true);
+        runBrowser(checks, RecoveryScenario.exhausted());
     }
     @Test void missingCaptureRefusesEvenWhenRecoveryIsEnabled(RecordedAssertions checks) throws Exception {
-        runBrowser(checks, 200, false, false, false, false);
+        runBrowser(checks, RecoveryScenario.captureDisabled());
     }
 
-    private void runBrowser(RecordedAssertions checks, int status, boolean capture, boolean expectedReady,
-                           boolean uiApi, boolean renderReport) throws Exception {
-        try (var fixture = new CatalogFixture(status)) {
-            var configured = AutoExConfigurationLoader.load(yaml(capture, "read-only", "catalog-readiness", fixture.origin()));
-            var configuration = uiApi ? atf.autoex.runtime.AutoExE2eRun.withNetworkInspection(configured) : configured;
+    private void runBrowser(RecordedAssertions checks, RecoveryScenario scenario) throws Exception {
+        try (var fixture = new CatalogFixture(scenario.responseStatus())) {
+            var configured = AutoExConfigurationLoader.load(
+                    yaml(scenario.captureBackendSignals(), "read-only", "catalog-readiness", fixture.origin()));
+            var configuration = scenario.inspectNetwork()
+                    ? atf.autoex.runtime.AutoExE2eRun.withNetworkInspection(configured) : configured;
             checks.equals("Presentation preserves recovery policy", configured.browser().recovery(), configuration.browser().recovery());
 
             var actions = new PlaywrightActionSequence();
@@ -90,7 +123,7 @@ class AutoExBackendRecoveryComponentTest {
                     // Scope starts before the one dispatch; a readiness probe never receives an action.
                     page.setDefaultTimeout(scope.remaining().toMillis());
                     page.locator(atf.autoex.locator.AutoExSelectors.SEARCH_BUTTON).click();
-                    if (expectedReady) {
+                    if (scenario.expectedReady()) {
                         var result = scope.await(() -> page.locator(atf.autoex.locator.AutoExSelectors.SEARCH_RESULT_PRODUCT_NAME).isVisible() ? UiRecoveryTrace.Dom.READY : UiRecoveryTrace.Dom.PENDING);
                         checks.equals("Delayed catalog has recovered decision", UiRecoveryTrace.Decision.RECOVERED, result.decision());
                         checks.isTrue("First evaluation counted before reobservation", result.attempt() > 1);
@@ -98,7 +131,9 @@ class AutoExBackendRecoveryComponentTest {
                     } else {
                         var failure = assertThrows(UiRecoveryException.class,
                                 () -> scope.await(() -> UiRecoveryTrace.Dom.PENDING), "No unsafe fallback after refusal or exhaustion");
-                        checks.equals("Terminal recovery reason", capture ? UiRecoveryTrace.Reason.ATTEMPTS : UiRecoveryTrace.Reason.CAPTURE_DISABLED,
+                        checks.equals("Terminal recovery reason",
+                                scenario.captureBackendSignals()
+                                        ? UiRecoveryTrace.Reason.ATTEMPTS : UiRecoveryTrace.Reason.CAPTURE_DISABLED,
                                 failure.trace().reason());
                     }
                     checks.equals("Original pointer action count", 1, ((Number) page.evaluate("window.clicks")).intValue());
@@ -111,8 +146,9 @@ class AutoExBackendRecoveryComponentTest {
                     checks.isTrue("Policy and budget are published", actions.snapshot().stream()
                             .allMatch(row -> row.expected().contains("profile=read-only") && row.expected().contains("totalTimeout=PT3S")));
                 }
-                if (renderReport) verifyRenderedRecoveryReport(
-                        checks, configuration, actions, expectedReady ? "RECOVERED" : "EXHAUSTED");
+                if (scenario.renderReport()) {
+                    verifyRenderedRecoveryReport(checks, configuration, actions, scenario.outcome().name());
+                }
             }
         }
     }
@@ -143,42 +179,7 @@ class AutoExBackendRecoveryComponentTest {
         checks.isFalse("Rendered report excludes the private response body", html.contains(BODY_CANARY));
         checks.isFalse("Rendered report excludes the local fixture URL", html.contains("127.0.0.1"));
         try (var viewer = PlaywrightUiSession.open(configuration.browser())) {
-            var report = viewer.page();
-            report.navigate(reportPath.toUri().toString());
-            report.locator("#nav-test").click();
-            var reportTest = report.locator("p.name:text-is('AutoExRecoveryReport')");
-            checks.isTrue("The generated recovery Extent test is listed", reportTest.isVisible());
-            reportTest.locator("xpath=ancestor::li[contains(concat(' ', normalize-space(@class), ' '), ' test-item ')][1]")
-                    .click();
-            var detail = report.locator("#test-view .test-content-detail .detail-body");
-            var group = detail.locator("details.atf-ui-observations").last();
-            checks.equals("Recovery attempts render in one collapsed observation group", 1, group.count());
-            checks.isFalse("The recovery group starts collapsed",
-                    (Boolean) group.evaluate("element => element.open"));
-            report.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON,
-                    new com.microsoft.playwright.Page.GetByRoleOptions().setName("Expand all nodes")).click();
-            checks.isFalse("Expand all nodes preserves the observation disclosure state",
-                    (Boolean) group.evaluate("element => element.open"));
-            var step = detail.locator("a.node").filter(new com.microsoft.playwright.Locator.FilterOptions()
-                    .setHasText(stepTitle)).last();
-            checks.isTrue("The recovery outcome is visible at the parent step", step.isVisible());
-            var summary = group.locator("summary");
-            checks.isTrue("The collapsed summary identifies the attempt count",
-                    summary.innerText().contains(Integer.toString(records.size())));
-            summary.click();
-            var rows = group.locator("table.atf-ui-action-table tbody tr");
-            checks.equals("Expanding reveals every recovery attempt", records.size(), rows.count());
-            for (int index = 0; index < records.size(); index++) {
-                var cells = rows.nth(index).locator("td");
-                checks.equals("Attempt order and name are preserved: " + (index + 1),
-                        records.get(index).operation(), cells.nth(0).locator(".atf-ui-action-operation").innerText());
-                checks.equals("Policy source and budget appear once: " + (index + 1),
-                        records.get(index).expected(), cells.nth(2).innerText());
-                checks.equals("Complete decision, signal, reason, and timing appear once: " + (index + 1),
-                        records.get(index).observed(), cells.nth(3).innerText());
-                checks.equals("Recovery observation remains informational: " + (index + 1), "Info",
-                        cells.nth(4).locator(".atf-ui-action-result").getAttribute("aria-label"));
-            }
+            AutoExRecoveryExtentReportProbe.verify(viewer.page(), reportPath, stepTitle, records, checks);
         }
     }
     private Path yaml(boolean capture, String profile, String operation) throws Exception {

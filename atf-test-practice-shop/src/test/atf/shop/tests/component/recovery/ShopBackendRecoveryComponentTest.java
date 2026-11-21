@@ -3,6 +3,7 @@ package atf.shop.tests.component.recovery;
 import atf.shop.tests.support.ShopComponentTest;
 import atf.shop.tests.support.reporting.ShopRecoveryExtentReportProbe;
 import atf.shop.config.ShopConfigurationLoader;
+import atf.shop.config.ShopValidationProfile;
 import atf.shop.support.recovery.ShopBackendRecovery;
 import atf.reporting.api.ReportModelAdapters;
 import atf.reporting.contract.AtfAssertion;
@@ -25,7 +26,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.*;
@@ -41,6 +42,34 @@ class ShopBackendRecoveryComponentTest {
     private static final String ORIGIN = "http://127.0.0.1:8123";
     private static final String BODY_CANARY = "backend-private-body-must-not-be-captured";
     @TempDir Path temp;
+
+    private enum RecoveryOutcome {
+        RECOVERED, EXHAUSTED, CAPTURE_DISABLED
+    }
+
+    private record RecoveryScenario(int responseStatus, RecoveryOutcome outcome,
+                                    ShopValidationProfile validationProfile) {
+        static RecoveryScenario catalog(ShopValidationProfile profile) {
+            return new RecoveryScenario(200, RecoveryOutcome.RECOVERED, profile);
+        }
+
+        static RecoveryScenario exhausted() {
+            return new RecoveryScenario(503, RecoveryOutcome.EXHAUSTED,
+                    ShopValidationProfile.UI_ONLY);
+        }
+
+        static RecoveryScenario captureDisabled() {
+            return new RecoveryScenario(200, RecoveryOutcome.CAPTURE_DISABLED,
+                    ShopValidationProfile.UI_ONLY);
+        }
+
+        boolean captureBackendSignals() { return outcome != RecoveryOutcome.CAPTURE_DISABLED; }
+        boolean expectedReady() { return outcome == RecoveryOutcome.RECOVERED; }
+        boolean renderReport() {
+            return outcome == RecoveryOutcome.EXHAUSTED
+                    || expectedReady() && validationProfile == ShopValidationProfile.UI_ONLY;
+        }
+    }
 
     @Test void yamlAndAnnotationCannotExpandTheReadOnlyPolicy(RecordedAssertions checks) throws Exception {
         var packaged = ShopConfigurationLoader.load().browser().recovery();
@@ -64,15 +93,16 @@ class ShopBackendRecoveryComponentTest {
                 "Unknown recovery profile fails before resources");
     }
 
-    @ParameterizedTest(name = "Catalog recovery · {0}") @ValueSource(strings = {"UI_ONLY", "UI_API"})
-    void delayedCatalogIsReobservedWithoutAnotherClickOrRequest(String channel, RecordedAssertions checks) throws Exception {
-        runBrowser(checks, 200, true, true, channel.equals("UI_API"), channel.equals("UI_ONLY"));
+    @ParameterizedTest(name = "Catalog recovery · {0}") @EnumSource(ShopValidationProfile.class)
+    void delayedCatalogIsReobservedWithoutAnotherClickOrRequest(ShopValidationProfile validationProfile,
+                                                                 RecordedAssertions checks) throws Exception {
+        runBrowser(checks, RecoveryScenario.catalog(validationProfile));
     }
     @Test void exhaustedBackendKeepsOneDispatchAndAnExplicitReason(RecordedAssertions checks) throws Exception {
-        runBrowser(checks, 503, true, false, false, true);
+        runBrowser(checks, RecoveryScenario.exhausted());
     }
     @Test void missingCaptureRefusesEvenWhenRecoveryIsEnabled(RecordedAssertions checks) throws Exception {
-        runBrowser(checks, 200, false, false, false, false);
+        runBrowser(checks, RecoveryScenario.captureDisabled());
     }
 
     @Test void contextCannotAcquireAnotherControllerToRenewTheInvocationOwner(RecordedAssertions checks) throws Exception {
@@ -91,11 +121,11 @@ class ShopBackendRecoveryComponentTest {
                 "A closed context cannot reopen recovery");
     }
 
-    private void runBrowser(RecordedAssertions checks, int status, boolean capture, boolean expectedReady,
-                           boolean uiApi, boolean renderReport) throws Exception {
-        try (var fixture = new CatalogFixture(status)) {
-            var configured = ShopConfigurationLoader.load(yaml(capture, "read-only", "catalog-readiness", fixture.origin()));
-            var configuration = configured.withValidationProfile(uiApi ? atf.shop.config.ShopValidationProfile.UI_API : atf.shop.config.ShopValidationProfile.UI_ONLY);
+    private void runBrowser(RecordedAssertions checks, RecoveryScenario scenario) throws Exception {
+        try (var fixture = new CatalogFixture(scenario.responseStatus())) {
+            var configured = ShopConfigurationLoader.load(
+                    yaml(scenario.captureBackendSignals(), "read-only", "catalog-readiness", fixture.origin()));
+            var configuration = configured.withValidationProfile(scenario.validationProfile());
             checks.equals("Presentation preserves recovery policy", configured.browser().recovery(), configuration.browser().recovery());
             checks.equals("Authenticated profile preserves recovery", configuration.browser().recovery(),
                     configuration.forAuthenticatedE2e(configuration.accountFile(), true, 100).browser().recovery());
@@ -108,7 +138,7 @@ class ShopBackendRecoveryComponentTest {
                     // Scope starts before the one dispatch; a readiness probe never receives an action.
                     page.setDefaultTimeout(scope.remaining().toMillis());
                     new atf.shop.locators.ShopLocators().homeSearchSubmit(page).locator().click();
-                    if (expectedReady) {
+                    if (scenario.expectedReady()) {
                         var result = scope.await(() -> new atf.shop.locators.ShopLocators().productName(page).locator().isVisible() ? UiRecoveryTrace.Dom.READY : UiRecoveryTrace.Dom.PENDING);
                         checks.equals("Delayed catalog has recovered decision", UiRecoveryTrace.Decision.RECOVERED, result.decision());
                         checks.isTrue("First evaluation counted before reobservation", result.attempt() > 1);
@@ -116,7 +146,9 @@ class ShopBackendRecoveryComponentTest {
                     } else {
                         var failure = assertThrows(UiRecoveryException.class,
                                 () -> scope.await(() -> UiRecoveryTrace.Dom.PENDING), "No unsafe fallback after refusal or exhaustion");
-                        checks.equals("Terminal recovery reason", capture ? UiRecoveryTrace.Reason.ATTEMPTS : UiRecoveryTrace.Reason.CAPTURE_DISABLED,
+                        checks.equals("Terminal recovery reason",
+                                scenario.captureBackendSignals()
+                                        ? UiRecoveryTrace.Reason.ATTEMPTS : UiRecoveryTrace.Reason.CAPTURE_DISABLED,
                                 failure.trace().reason());
                     }
                     checks.equals("Original pointer action count", 1, ((Number) page.evaluate("window.clicks")).intValue());
@@ -129,8 +161,9 @@ class ShopBackendRecoveryComponentTest {
                     checks.isTrue("Policy and budget are published", actions.snapshot().stream()
                             .allMatch(row -> row.expected().contains("profile=read-only") && row.expected().contains("totalTimeout=PT3S")));
                 }
-                if (renderReport) verifyRenderedRecoveryReport(
-                        checks, configuration, actions, expectedReady ? "RECOVERED" : "EXHAUSTED");
+                if (scenario.renderReport()) {
+                    verifyRenderedRecoveryReport(checks, configuration, actions, scenario.outcome().name());
+                }
             }
         }
     }
