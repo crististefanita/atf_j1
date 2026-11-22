@@ -1719,6 +1719,15 @@ semantic operation, event label, ISO-8601 timings, INFO results, and body/URL
 redaction. It saves a viewport capture under `target`. The acceptance contract is in
 [AutoExRecoveryActualReportAcceptanceTest](src/test/java/atf/autoex/tests/component/recovery/AutoExRecoveryActualReportAcceptanceTest.java).
 
+```mermaid
+flowchart LR
+    Trace["UiRecoveryTrace + matching INFO action"] --> Projection["AutoExRecoveryReportObservation"]
+    Projection --> Phase["AutoExExtentTestExtension · Test Kit K3"]
+    Assertions["Component assertions"] --> Phase
+    Phase --> Html["Reporting J26 · Extent HTML"]
+    Html --> Acceptance["AutoExRecoveryActualReportAcceptanceTest"]
+```
+
 Generate a suite report and run actual-report acceptance in separate fresh
 staging areas, as required by the [build procedure](../docs/ATF_Build_And_Execution_Safety.md):
 

@@ -617,6 +617,15 @@ semantic operation, event label, ISO-8601 timings, INFO results, and body/URL
 redaction. It saves a viewport capture under `target`. The acceptance contract is in
 [ShopRecoveryActualReportAcceptanceTest](src/test/atf/shop/tests/component/recovery/ShopRecoveryActualReportAcceptanceTest.java).
 
+```mermaid
+flowchart LR
+    Trace["UiRecoveryTrace + matching INFO action"] --> Projection["ShopRecoveryReportObservation"]
+    Projection --> Phase["ShopExtentTestExtension · Test Kit K3"]
+    Assertions["Component assertions"] --> Phase
+    Phase --> Html["Reporting J26 · Extent HTML"]
+    Html --> Acceptance["ShopRecoveryActualReportAcceptanceTest"]
+```
+
 Generate a suite report and run actual-report acceptance in separate fresh
 staging areas, as required by the [build procedure](../docs/ATF_Build_And_Execution_Safety.md):
 
