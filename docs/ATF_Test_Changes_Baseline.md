@@ -4961,3 +4961,26 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Controlul modificării — planul real</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-LAUNCH-TESTPLAN-20261122
+    status: VERIFIED
+    base: a96c08ccdfb7ff56f4604d69898ab82b2d51b2b2
+    expires: 2026-12-22
+    reason: Consumă snapshot-ul neutru al planului și verifică selectorii, numerele și expandarea fără surse Kit paralele.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=a96c08ccdfb7ff56f4604d69898ab82b2d51b2b2" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExE2eReportPathComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExLaunchMetadataComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchMetadata.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchReportProbe.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+```
+
+</details>
