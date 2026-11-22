@@ -7,6 +7,25 @@ API evidence. It stays in main; the JUnit harness and suite selection stay in
 test. The Shop model is the consumer reference for this separation, not a rule
 for copying its endpoints or policies into AutoEx.
 
+
+## Execution and ownership
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Marker["Checkpoint<br/>boundary"] -->|bounds| Request["Request identity"]
+    Request -->|correlates| Response["Matching<br/>response"]
+    Response -->|selects for| Checks["Shop checks"]
+    Checks -->|publishes| Evidence["Scenario<br/>evidence"]
+```
+
+<details>
+<summary>Legend — scope, ownership and evidence</summary>
+
+The flow follows evidence membership, not a second HTTP execution. Request start identity and the checkpoint boundary select the response; Shop compares independent expected values before publication. A late response or toast alone cannot establish a new successful mutation.
+
+</details>
+
 ## Entry points and responsibilities
 
 Conversion in [ShopApiEvidenceMapper](api/ShopApiEvidenceMapper.java) retains

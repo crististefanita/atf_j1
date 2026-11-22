@@ -22,6 +22,13 @@ flowchart LR
   Governance[atf-tests] -.->|checks facts, links, and boundaries| Docs[English and Romanian documentation]
 ~~~
 
+<details>
+<summary>Legend — ownership and verification boundary</summary>
+
+The POM selects binary artifacts and declares local modules. Module tests supply evidence for their selected scenarios; governance checks documentation and boundaries, while rendered acceptance belongs to the test that owns the artifact.
+
+</details>
+
 The root POM is authoritative for the reactor and dependency versions. The
 module POMs define direct dependency scopes; the documentation explains how
 those dependencies are used and how local behavior is verified.

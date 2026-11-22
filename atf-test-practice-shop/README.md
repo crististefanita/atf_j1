@@ -1,8 +1,14 @@
 # ATF Test Practice Shop — UI/API Consumer
 
+
+`atf-test-practice-shop` verifies Practice Shop through application-owned API contracts, browser journeys and controlled component checks. Shop owns configuration, fixtures, page models, expected results and evidence selection; the shared runtime supplies transport, browser mechanics and report publication.
+
 ## At a glance
 
 **Local guide:** [support](src/main/atf/shop/support/README.md).
+
+<details>
+<summary>Diagnostics and publication ownership</summary>
 
 `ShopApiRunReport` owns the lifecycle and business verdict. Safe exception
 summarization is delegated to
@@ -10,53 +16,29 @@ summarization is delegated to
 with [Reporting library contract](../docs/ATF_Reporting_Library_Atlas.md).
 Shop proofs continue to verify configuration, exchange selection, and the real adapter.
 
+</details>
+
 **Quick links:** [Purchase journey](#purchase-journey) · [Fixture and billing](#module-configuration) · [Order proof](#current-order-proof) · [Suite report](#shared-report--consumer-state) · [Component or E2E](#quick-verification)
 
-`atf-test-practice-shop` is the consumer module that verifies the real UI and
-API of Practice Software Testing. It owns the application fixture,
-configuration, page objects, flows, and consumer proofs; it does not own the
-generic Playwright, Extent, or JUnit implementations.
-
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-    Config["Inputs"] -->|configure| Journey["Shop flow"]
-    Journey -->|uses| Screens["Pages + API"]
-    Screens -->|drives| Browser["atf-ui"]
-    Browser -->|visits| Site["Site UI"]
-    Browser -.->|observes| Inspector["Inspector"]
-    Inspector -->|records| Journal["Journal"]
-    Journal -->|selects| Checkpoint["Validation"]
-    Screens -->|validates| Checkpoint
-    Checkpoint -->|publishes| Reporting["Reporting"]
-    Journey -->|diagnoses| Console["Console"]
+    Inputs["Shop<br/>configuration"] -->|configures| Flow["Shop scenario"]
+    Flow -->|drives| UI["atf-ui"]
+    Flow -->|calls| API["Shop API"]
+    UI -->|observations| Checks["Shop checks"]
+    API -->|responses| Checks
+    Checks -->|assertions| Adapter["Shop report<br/>adapter"]
+    Adapter -->|publishes| Extent["Extent HTML"]
 ```
 
 <details>
-<summary><strong>Legend — module boundary</strong></summary>
+<summary>Legend — application checks and publication</summary>
 
-- `YAML + fixture` contains application-specific values and profiles;
-- `Shop flow` composes pages and checkpoints; pages know Practice Shop routes
-  and controls;
-- the dotted arrow is optional `UI_API` observation only; UI-only continues to
-  send normal application traffic but does not publish API evidence;
-- the journal retains observed traffic, and the mapper promotes only the
-  exchanges selected for checkpoints;
-- `atf-reporting` and `atf-console` remain the generic output owners; Shop owns
-  the mapping and business semantics.
-Short labels carry the following meanings:
-
-| In the diagram | Full meaning |
-|---|---|
-| Pages + API | pages + API client |
-| Inspector | network inspector |
-| Journal | Shop network journal |
-| Validation | Shop validation |
-| configure | configures |
-| observes | UI_API observes |
-| records | records |
-| selects | selects |
-| validates | validates UI |
+- This map describes execution and evidence. Direct API execution and browser journeys have separate entry points and share Shop-owned expectations.
+- UI_API adds selected traffic evidence to a browser journey. The journal retains observations; Shop selects checkpoint exchanges and verifies their request identity and payload.
+- The Shop adapter supplies explicit comparisons and the business outcome. Reporting renders those supplied results and closes the artifact at the owning run boundary.
+- [Shop support](src/main/atf/shop/support/README.md) owns causal evidence; [configuration](src/test/resources/atf-practice-shop.yaml) and the [testing guide](../docs/ATF_Testing_Guide.md) define selection and prerequisites.
 
 </details>
 
@@ -537,7 +519,7 @@ by `ShopBackendRecovery` in main to GET `/products`.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Yaml["YAML + annotation"] -->|restricts| Adapter["Adapter"]
+    Yaml["YAML +<br/>annotation"] -->|restricts| Adapter["Adapter"]
     Adapter -->|classifies| Scope["UI scope"]
     Scope -->|publishes| Evidence["INFO decision"]
 ```
@@ -619,11 +601,11 @@ redaction. It saves a viewport capture under `target`. The acceptance contract i
 
 ```mermaid
 flowchart LR
-    Trace["UiRecoveryTrace + matching INFO action"] -->|maps| Projection["ShopRecoveryReportObservation"]
-    Projection -->|publishes| Phase["ShopExtentTestExtension · Test Kit K3"]
-    Assertions["Component assertions"] -->|joins| Phase
-    Phase -->|renders| Html["Reporting J26 · Extent HTML"]
-    Acceptance["ShopRecoveryActualReportAcceptanceTest"] -->|opens| Html
+    Trace["Trace and<br/>INFO action"] -->|maps| Projection["Recovery<br/>projection"]
+    Projection -->|publishes| Phase["Lifecycle<br/>adapter"]
+    Assertions["Component<br/>assertions"] -->|joins| Phase
+    Phase -->|renders| Html["Extent HTML"]
+    Acceptance["Browser<br/>acceptance"] -->|opens| Html
 ```
 <details>
 <summary><strong>Legend — recovery-report flow</strong></summary>
@@ -667,11 +649,11 @@ provenance; disabling the SPI observer yields unavailable metadata.
 
 ```mermaid
 flowchart LR
-    Request["Launcher request"] -->|discovers| Plan["Filtered TestPlan"]
-    Plan -->|snapshots| Kit["Test Kit K4"]
+    Request["Launcher request"] -->|discovers| Plan["Filtered<br/>TestPlan"]
+    Plan -->|snapshots| Kit["Test Kit"]
     Kit -->|supplies| Adapter["Shop adapter"]
-    Adapter -->|publishes| Reporting["Reporting J26"]
-    Reporting -->|renders| Tests["Tests · Launch context"]
+    Adapter -->|publishes| Reporting["Reporting"]
+    Reporting -->|renders| Tests["Tests ·<br/>Launch context"]
 ```
 
 <details>
@@ -749,11 +731,11 @@ validator and the pre-mutation guard. `ShopLocators` owns the selectors, and
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Product["Configured product"] -->|observes| Stock["Stock and controls"]
+    Product["Configured<br/>product"] -->|observes| Stock["Stock and<br/>controls"]
     Stock -->|publishes| Check["Comparison"]
     Check -->|FAIL| Stop["Auditable stop"]
-    Check -->|PASS| Quantity["Observed quantity"]
-    Quantity -->|confirms value| Cart["Single add to cart"]
+    Check -->|PASS| Quantity["Observed<br/>quantity"]
+    Quantity -->|confirms value| Cart["Single add<br/>to cart"]
 ```
 
 <details>
@@ -924,10 +906,10 @@ keeps successful settlement within its configured 1.1-second budget.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Inputs["Country + code + number"] -->|single entry| Settle["Debounce + pending"]
+    Inputs["Country +<br/>code + number"] -->|single entry| Settle["Debounce<br/>+ pending"]
     Settle -->|configured-fields| Fill["Fill fixture"]
-    Settle -->|postal-lookup| Read["Current response + DOM"]
-    Fill -->|independent comparison| Audit["Expected / actual"]
+    Settle -->|postal-lookup| Read["Current<br/>response + DOM"]
+    Fill -->|independent comparison| Audit["Expected<br/>/ actual"]
     Read -->|independent observation| Audit
 ```
 
@@ -1025,10 +1007,10 @@ after the marker, then `ShopApiAssertions` evaluates the status and JSON. A
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Marker["Capture marker"] -->|precedes| Action["One UI click"]
-    Action -->|produces| Observed["Observed response"]
-    Observed -->|selects| Current["Method + route + order"]
+    Action -->|produces| Observed["Observed<br/>response"]
+    Observed -->|selects| Current["Method +<br/>route + order"]
     Current -->|evaluates| Verdict["API validation"]
-    Verdict -->|publishes| Report["Auditable checkpoint"]
+    Verdict -->|publishes| Report["Auditable<br/>checkpoint"]
 ```
 
 <details>
@@ -1112,13 +1094,13 @@ current candidate.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Fence["Confirm marker"] -->|delimits| Window["Eligible observations"]
+    Fence["Confirm marker"] -->|delimits| Window["Eligible<br/>observations"]
     Window -->|selects latest| Capture["Current capture"]
     Window -->|no capture| Empty["Empty selection"]
     Capture -->|replaces| Selection["ORDER checkpoint"]
     Empty -->|clears| Selection
     Selection -->|evaluates| Checks["Comparisons"]
-    Checks -->|publishes| Report["Extent / fallback"]
+    Checks -->|publishes| Report["Extent /<br/>fallback"]
 ```
 
 <details>
@@ -1652,7 +1634,7 @@ module or JAR; the presence of a Reporting checkout does not determine the desti
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
 flowchart LR
-    Start["Working directory"] -->|searches ancestors| Own["Shop POM"]
+    Start["Working<br/>directory"] -->|searches ancestors| Own["Shop POM"]
     Own -->|identifies| Root["Reactor"]
     Root -->|resolves| Output["UI / API output"]
 ```

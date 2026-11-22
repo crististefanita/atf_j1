@@ -25,9 +25,9 @@ the ATF infrastructure provides the browser and report publication.
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Inputs["YAML + selection"] -->|configures| Consumer["AutoEx consumer"]
-    Consumer -->|runs| Journey["UI / UI_API journey"]
-    Consumer -->|calls| Api["Live API contract"]
-    Consumer -->|verifies| Local["Offline components"]
+    Consumer -->|runs| Journey["UI / UI_API<br/>journey"]
+    Consumer -->|calls| Api["Live API<br/>contract"]
+    Consumer -->|verifies| Local["Offline<br/>components"]
     Journey -->|evidence| Report["Extent report"]
     Api -->|evidence| Report
     Local -->|audits| Report
@@ -75,8 +75,6 @@ local consumer tests verify only the behavior exercised by their scenarios.
 <details>
 <summary><strong>Contract, owners, and proofs — AutoEx boundary</strong></summary>
 
-<details>
-<summary><strong>Details — AutoEx boundary</strong></summary>
 
 | Area | Content specific to this consumer |
 |---|---|
@@ -199,7 +197,6 @@ while the browser and publication are in the main runtime. Revisit this decision
 if runtime callers change or if the architecture test no longer confirms this
 ownership; any generic extraction must be behaviorally proven in both consumers.
 
-</details>
 
 </details>
 
@@ -208,8 +205,6 @@ ownership; any generic extraction must be behaviorally proven in both consumers.
 <details>
 <summary><strong>Contract, owners, and proofs — AutoEx test contract</strong></summary>
 
-<details>
-<summary><strong>Details — AutoEx test contract</strong></summary>
 
 - `@AtfE2eTest` and `@AtfTestChannel(UI/UI_API)` classify tests by boundary and
   channel; UI is the usual business selection.
@@ -251,7 +246,7 @@ flowchart LR
     Identity -->|observes| Snapshot
     UI -->|operates| Page["CartPage"]
     Page -->|instruments| Recorder["Recorder"]
-    Business -->|compares| Snapshot["Expected / observed"]
+    Business -->|compares| Snapshot["Expected<br/>/ observed"]
     Business -->|publishes| Adapter["Assertions"]
 ```
 
@@ -369,7 +364,6 @@ The short labels retain these meanings:
 
 </details>
 
-</details>
 
 </details>
 
@@ -542,8 +536,8 @@ without query/fragment before the single native click.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Click["One native click"] -->|commit| Document["Observed document GET"]
-    Document -->|520, 525, or queue-full| Recover["Exact bounded GET"]
+    Click["One native click"] -->|commit| Document["Observed<br/>document GET"]
+    Document -->|520, 525, or queue-full| Recover["Exact<br/>bounded GET"]
     Recover -->|same attempts| Document
     Document -->|2xx + owned route| Product["Configured name"]
     Product -->|confirms| Audit["Action + verdict"]
@@ -928,9 +922,9 @@ Reporting's `ReportUiEnvironment` retains shared formatting.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Settings["YAML + annotations"] -->|resolves| Scenario["Scenario snapshot"]
-    Scenario -->|aggregates| Common["Common values / Mixed"]
-    Common -->|displays| System["Overview / System"]
+    Settings["YAML +<br/>annotations"] -->|resolves| Scenario["Scenario<br/>snapshot"]
+    Scenario -->|aggregates| Common["Common values<br/>/ Mixed"]
+    Common -->|displays| System["Overview<br/>/ System"]
 ```
 
 <details>
@@ -1043,8 +1037,6 @@ first, then run the selected business method or live suite separately.
 <details>
 <summary><strong>Contract, owners, and evidence — Direct API and the UI/API evidence boundary</strong></summary>
 
-<details>
-<summary><strong>Details — direct API and the UI/API evidence boundary</strong></summary>
 
 The public routes are listed in [API List](https://automationexercise.com/api_list).
 
@@ -1612,7 +1604,6 @@ the UI page uses `/products?search=...`, not the direct
 `POST /api/searchProduct` endpoint. This keeps API setup separate from causal
 traffic generated by browser interactions in the report.
 
-</details>
 
 </details>
 
@@ -1639,7 +1630,7 @@ and passive capture OFF. The only initial semantic operation is
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Yaml["YAML + annotation"] -->|constrains| Adapter["Adapter"]
+    Yaml["YAML +<br/>annotation"] -->|constrains| Adapter["Adapter"]
     Adapter -->|classifies| Scope["UI scope"]
     Scope -->|publishes| Evidence["INFO decision"]
 ```
@@ -1721,11 +1712,11 @@ redaction. It saves a viewport capture under `target`. The acceptance contract i
 
 ```mermaid
 flowchart LR
-    Trace["UiRecoveryTrace + matching INFO action"] -->|maps| Projection["AutoExRecoveryReportObservation"]
-    Projection -->|publishes| Phase["AutoExExtentTestExtension · Test Kit K3"]
-    Assertions["Component assertions"] -->|joins| Phase
-    Phase -->|renders| Html["Reporting J26 · Extent HTML"]
-    Acceptance["AutoExRecoveryActualReportAcceptanceTest"] -->|opens| Html
+    Trace["Trace and<br/>INFO action"] -->|maps| Projection["Recovery<br/>projection"]
+    Projection -->|publishes| Phase["Lifecycle<br/>adapter"]
+    Assertions["Component<br/>assertions"] -->|joins| Phase
+    Phase -->|renders| Html["Extent HTML"]
+    Acceptance["Browser<br/>acceptance"] -->|opens| Html
 ```
 <details>
 <summary><strong>Legend — recovery-report flow</strong></summary>
@@ -1769,11 +1760,11 @@ provenance; disabling the SPI observer yields unavailable metadata.
 
 ```mermaid
 flowchart LR
-    Request["Launcher request"] -->|discovers| Plan["Filtered TestPlan"]
-    Plan -->|snapshots| Kit["Test Kit K4"]
+    Request["Launcher request"] -->|discovers| Plan["Filtered<br/>TestPlan"]
+    Plan -->|snapshots| Kit["Test Kit"]
     Kit -->|supplies| Adapter["AutoEx adapter"]
-    Adapter -->|publishes| Reporting["Reporting J26"]
-    Reporting -->|renders| Tests["Tests · Launch context"]
+    Adapter -->|publishes| Reporting["Reporting"]
+    Reporting -->|renders| Tests["Tests ·<br/>Launch context"]
 ```
 
 <details>

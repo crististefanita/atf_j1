@@ -49,7 +49,7 @@ Those records do not claim those checks ran in J1.
 
 ~~~mermaid
 flowchart LR
-    Pin["Root POM<br/>Core coordinate"] --> Pair["lib/<br/>Core JAR + POM"]
+    Pin["Root POM<br/>Core coordinate"] -->|selects| Pair["lib/<br/>Core JAR + POM"]
     Pair -->|installs| Repo["Maven repository"]
     Repo -->|resolves for| Modules["J1 modules"]
     Modules -->|local acceptance| Evidence["Consumer evidence"]

@@ -271,6 +271,13 @@ flowchart LR
   Consumer -->|publishes| Report[Local Extent evidence]
 ~~~
 
+<details>
+<summary>Legend — ownership and verification boundary</summary>
+
+The consumer check exercises selected local behavior; artifact integrity independently verifies the chosen binary pair. Report output is evidence for the exercised scenarios and does not establish an independent producer test run.
+
+</details>
+
 - **Consumer gate:** run the affected module and required reactor dependencies
   with Maven -am, from the same staging copy.
 - **Governance gate:** run WholeAtfGovernanceSuiteTest after changing reactor,

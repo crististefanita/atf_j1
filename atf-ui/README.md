@@ -20,34 +20,22 @@ product page objects.
 ## Core diagram
 
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-    Tests["Tests"] -->|select| Config["Policy"]
-    Config -->|configures| Session["Session"]
-    Session -->|opens| Browser["Browser"]
-    Browser -->|produces| Evidence["Evidence"]
-    Evidence -->|feeds| Reporting["Reporting"]
+    Policy["Browser policy"] -->|configures| Session["PlaywrightUiSession"]
+    Session -->|owns| Browser["Browser and page"]
+    Browser -->|produces| Observation["Neutral<br/>observations"]
+    Observation -->|returns to| Consumer["Consumer adapter"]
+    Consumer -->|supplies verdict| Report["Reporting<br/>contract"]
 ```
 
 <details>
-<summary><strong>Legend — browser runtime without reporting</strong></summary>
+<summary>Legend — resource ownership and neutral observations</summary>
 
-- configuration describes the browser and generic evidence;
-- the session composes browser, context, and page, then records actions;
-- atf-ui delivers payloads to the consumer; it does not decide verdicts or build HTML/CSS/Extent;
-- the HTML publisher belongs to the selected Reporting library; `UiScreenAudit`
-  owns generic screen observation in UI, while local consumer tests verify the
-  artifacts their scenarios publish;
-- the concrete scenario and business verdict stay with the consumer.
-Short labels carry the following meanings:
-
-| In the diagram | Full meaning |
-|---|---|
-| Tests | consumer tests |
-| Policy | browser policy |
-| Session | Playwright session |
-| Browser | browser / page |
-| Evidence | action + screenshot |
+- The session acquires the driver, browser, context and inspector; it releases acquired resources in reverse ownership order, preserving the primary cause.
+- UI supplies actions, bounded observation and captures. The consumer supplies application expectations and maps the observations into its reporting contract.
+- The final arrow is consumer composition, not a runtime dependency from UI to Reporting. HTML rendering and publication remain with Reporting.
+- [Session implementation](src/main/java/atf/ui/playwright/PlaywrightUiSession.java), [Playwright guide](src/main/java/atf/ui/playwright/README.md) and [network guide](src/main/java/atf/ui/network/README.md) define the local seams.
 
 </details>
 
@@ -181,9 +169,9 @@ the `Viewport` row in Overview/System, without declaring an unmeasured capture.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Intent["Output + zoom"] -->|calculates| Geometry["CSS viewport + DPR"]
+    Intent["Output + zoom"] -->|calculates| Geometry["CSS viewport<br/>+ DPR"]
     Geometry -->|configures| Context["BrowserContext"]
-    Geometry -->|describes| System["Overview / System"]
+    Geometry -->|describes| System["Overview<br/>/ System"]
     Context -->|inherited by| Documents["Pages + iframes"]
 ```
 
@@ -233,7 +221,7 @@ the existing navigation budget, then tests the pointer with its native limit of
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Load["Navigation"] -->|same 5 s budget| Ready["Initialized documents"]
+    Load["Navigation"] -->|same 5 s budget| Ready["Initialized<br/>documents"]
     Ready -->|observes layout| Layout["Stable frames"]
     Layout -->|without input| Paint["Native capture"]
     Paint -->|single activation| Click["Pointer · 850 ms"]
@@ -346,10 +334,10 @@ The adapter does not use sleep, `force`, or selection events generated by script
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-28px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":24}}}%%
 flowchart LR
     Record["Recorder"] -->|click / fill| Native["Locator strict"]
-    Record -->|select| Observe["Read-only observation"]
+    Record -->|select| Observe["Read-only<br/>observation"]
     Observe -->|ready within budget| Native
     Observe -->|ambiguous or deadline| Fail["FAIL"]
-    Native -->|target ready| Activate["Single activation"]
+    Native -->|target ready| Activate["Single<br/>activation"]
     Native -->|ambiguous or timeout| Fail
     Activate -->|result confirmed| Pass["PASS"]
     Activate -->|select not confirmed| Fail
@@ -590,7 +578,7 @@ after the call, but does not interrupt a blocking callback. Nested waits use
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-28px); overflow: visible; } .node rect { rx: 6px; ry: 6px; } .edgeLabel [data-id=\"L_Observe_Gate_0\"] foreignObject { transform: translate(0px, 38px); } .edgeLabel [data-id=\"L_Gate_Stop_0\"] foreignObject { transform: translate(0px, -38px); }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":24}}}%%
 flowchart LR
     Config["Configuration"] -->|pins| Scope["Scope"]
-    Scope -->|bounds| Action["Single activation"]
+    Scope -->|bounds| Action["Single<br/>activation"]
     Action -->|produces| Gate["Signals"]
     Gate -->|transient| Observe["Reobserve"]
     Observe -->|reevaluates| Gate

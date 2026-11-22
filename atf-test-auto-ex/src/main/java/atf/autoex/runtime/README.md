@@ -6,6 +6,26 @@ This package composes the browser, checkpoints, and AutoEx publishing without
 JUnit annotations. The AutoEx consumer owns it; business rules stay in the
 flow/gate, and runner integration stays in `src/test`.
 
+
+## Execution and ownership
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Consumer["AutoEx policy"] -->|composes| Runtime["AutoExE2eRun"]
+    Runtime -->|observes| Browser["Browser"]
+    Browser -->|returns| Evidence["Typed<br/>observations"]
+    Evidence -->|maps for| Phase["Scenario phase"]
+    Runtime -->|delegates close| Lifecycle["AutoExRunLifecycle"]
+```
+
+<details>
+<summary>Legend — scope, ownership and evidence</summary>
+
+The runtime composes acquired resources and observation. AutoEx supplies expected values and evidence mapping; the lifecycle port keeps runner-specific finalization outside main. The source and starting tests below define acquisition, cleanup and cause preservation.
+
+</details>
+
 ## Entry points and responsibilities
 
 | When investigating | Read first | Boundary |

@@ -16,40 +16,25 @@ make HTTP calls, know about Extent, or build HTML/CSS.
 
 ## Core diagram
 
-The diagram shows data flow and runtime collaboration; it is not the Maven
-dependency graph. The module graph and arrow directions are in the root README
-and `docs/ATF_Architecture.md`.
+The diagram follows response evaluation and publication. Direct dependency scopes are documented in the [architecture guide](../docs/ATF_Architecture.md).
 
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-    Core["Core JAR"] -->|feeds| Validation["Validation"]
-    Tests["Local module tests"] -. fixtures .-> Validation
-    Validation -->|calculates| Decision["Typed verdict"]
-    Decision -->|publishes| Sink["Sink"]
-    Sink -->|adapts| Adapter["Adapter"]
-    Adapter -->|passes through| Reporting["Reporting"]
+    Response["ApiResponse"] -->|provides values| Evaluate["Evaluation"]
+    Rules["ResponseContract"] -->|declares rules| Evaluate
+    Evaluate -->|captures| Decision["ValidationDecision"]
+    Decision -->|publishes through| Sink["ValidationSink"]
+    Sink -->|adapts evidence| Consumer["Consumer adapter"]
 ```
 
 <details>
-<summary><strong>Legend — verdict without a renderer</strong></summary>
+<summary>Legend — evaluate once, publish the captured result</summary>
 
-- `atf-core` provides neutral models and ports;
-- `atf-validation` evaluates the contract and produces the typed decision;
-- `ValidationSink` is the only seam to publication;
-- the consumer adapter maps evidence to `atf-reporting` without changing the calculated verdict;
-- `atf-reporting` remains standalone and does not become dependent on `atf-validation`.
-Short labels carry the following meanings:
-
-| In the diagram | Full meaning |
-|---|---|
-| Core | core models |
-| Module tests | atf-validation unit and component tests |
-| Verdict typed | typed decision |
-| Sink | validation sink |
-| Adaptor | consumer adapter |
-| publishes | publishes through |
-| passes through | sends to |
+- The caller supplies the response and independent expectations. Core supplies neutral models and ports; it is a dependency rather than an execution stage.
+- Validation evaluates complete values before redaction or preview. The sink receives the captured comparisons and outcome without running the rules again.
+- The consumer chooses publication and the renderer. Shop and AutoEx keep their own application checks; this reusable module is a separate contract.
+- [ResponseContract](src/main/java/atf/validation/contract/ResponseContract.java) and [protocol tests](src/test/java/atf/validation/protocol/ValidationProtocolTest.java) own the evaluation/publication boundary.
 
 </details>
 

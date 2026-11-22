@@ -2,6 +2,7 @@ package atf.api.tests.governance.documentation;
 
 import atf.testkit.AtfComponentTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,11 +10,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static atf.api.tests.governance.AtfGovernanceTestSupport.locateProjectRoot;
 
 /** Checks the stable visual contract of Mermaid diagrams embedded in README files. */
 @AtfComponentTest
 public class DocumentationDiagramGovernanceTest {
+    private static final Pattern FENCE = Pattern.compile("^\\s*(`{3,}|~{3,})(.*)$");
     private static final int ROOT_MODULE_MAP_MAX_NODE_LABEL_CHARS = 18;
     private static final int ROOT_MODULE_MAP_MAX_EDGE_LABEL_CHARS = 12;
     private static final Pattern NODE_LABEL = Pattern.compile("^\\w+\\[(.+)]$");
@@ -32,19 +37,54 @@ public class DocumentationDiagramGovernanceTest {
         DocumentationGovernanceSupport.assertNoViolations("README diagram governance", violations);
     }
 
+    @Test
+    void bothFenceStylesRequireLabelsAndAnAdjacentLegend(@TempDir Path root) throws Exception {
+        Path file = root.resolve("guide.md");
+        for (String marker : List.of("```", "~~~", "````", "~~~~")) {
+            Files.writeString(file, marker + "mermaid\nflowchart LR\n A --> B\n" + marker + "\n");
+            var violations = new java.util.ArrayList<DocumentationGovernanceSupport.Violation>();
+            validate(file, root, violations);
+            assertTrue(violations.stream().anyMatch(v -> v.code().equals("DOC-DIAG-EDGE")), marker);
+            assertTrue(violations.stream().anyMatch(v -> v.code().equals("DOC-DIAG-LEGEND")), marker);
+            Files.writeString(file, marker + "mermaid\nflowchart LR\n A -->|checks| B\n" + marker + "\n\n"
+                    + "<details>\n<summary>Legend — boundary</summary>\n\nOne observed contract.\n</details>\n");
+            violations.clear();
+            validate(file, root, violations);
+            assertEquals(List.of(), violations, marker);
+        }
+    }
+
+    @Test
+    void literalNestedExamplesDoNotBecomeDiagramsAndShortClosuresDoNotTerminateThem(
+            @TempDir Path root) throws Exception {
+        Path file = root.resolve("guide.md");
+        Files.writeString(file, "````text\n~~~mermaid\nA --> B\n~~~\n````\n");
+        var violations = new java.util.ArrayList<DocumentationGovernanceSupport.Violation>();
+        validate(file, root, violations);
+        assertEquals(List.of(), violations);
+        Files.writeString(file, "~~~~mermaid\nflowchart LR\n A -->|checks| B\n~~~\n");
+        validate(file, root, violations);
+        assertTrue(violations.stream().anyMatch(v -> v.code().equals("DOC-DIAG-FENCE")));
+    }
+
     static void validate(Path path, Path root,
                          List<DocumentationGovernanceSupport.Violation> violations) {
         try {
             List<String> lines = Files.readAllLines(path);
             for (int index = 0; index < lines.size(); index++) {
-                if (!lines.get(index).trim().equals("```mermaid")) continue;
+                Matcher fence = FENCE.matcher(lines.get(index));
+                if (!fence.matches()) continue;
+                int closing = findClosingFence(lines, index + 1, fence.group(1));
+                if (!fence.group(2).trim().equals("mermaid")) {
+                    index = closing < 0 ? lines.size() : closing;
+                    continue;
+                }
 
-                int closing = findClosingFence(lines, index + 1);
                 if (closing < 0) {
                     violations.add(DocumentationGovernanceSupport.violation(
                             "DOC-DIAG-FENCE", root, path, index + 1,
                             "Mermaid fence is not closed",
-                            "Every Mermaid block must have a closing ``` fence",
+                            "Every Mermaid block closes with the same marker and at least the opening length",
                             "close the diagram before the next Markdown section"));
                     break;
                 }
@@ -62,9 +102,11 @@ public class DocumentationDiagramGovernanceTest {
         }
     }
 
-    private static int findClosingFence(List<String> lines, int start) {
+    private static int findClosingFence(List<String> lines, int start, String marker) {
         for (int index = start; index < lines.size(); index++) {
-            if (lines.get(index).trim().equals("```")) return index;
+            Matcher fence = FENCE.matcher(lines.get(index));
+            if (fence.matches() && fence.group(1).charAt(0) == marker.charAt(0)
+                    && fence.group(1).length() >= marker.length() && fence.group(2).isBlank()) return index;
         }
         return -1;
     }
@@ -90,12 +132,10 @@ public class DocumentationDiagramGovernanceTest {
                     "reorder the nodes left-to-right; keep TB only when the approved root baseline requires it"));
         }
 
-        int edges = 0;
         List<String> unlabeledEdges = new java.util.ArrayList<>();
         for (int index = opening + 2; index < closing; index++) {
             String line = lines.get(index).trim();
             if (isRelationshipLine(line)) {
-                edges++;
                 if (!line.contains("-->|")
                         && !line.contains("-.->|")
                         && !line.matches(".*-\\.\\s+.+\\s+\\.->.*")) {
@@ -103,7 +143,7 @@ public class DocumentationDiagramGovernanceTest {
                 }
             }
         }
-        if (edges >= 2 && !unlabeledEdges.isEmpty()) {
+        if (!unlabeledEdges.isEmpty()) {
             violations.add(DocumentationGovernanceSupport.violation(
                     "DOC-DIAG-EDGE", root, path, opening + 1,
                     unlabeledEdges.size() + " flowchart relationship(s) have no semantic edge label; examples: "

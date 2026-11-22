@@ -31,7 +31,7 @@ and the [local library index](../lib/README.md).
 
 ~~~mermaid
 flowchart LR
-    Coordinates["Root POM<br/>library versions"] --> Pair["lib/<br/>five JAR/POM pairs"]
+    Coordinates["Root POM<br/>library versions"] -->|selects| Pair["lib/<br/>five JAR/POM pairs"]
     Pair -->|validate installs| Maven["Maven local repository"]
     Maven -->|dependency resolution| Consumer["J1 modules"]
     Consumer -->|local scenarios| Acceptance["Component and integration evidence"]

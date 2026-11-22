@@ -6,6 +6,25 @@ This package is the generic browser adapter. It receives explicit configuration
 and a sink, records operations, and exposes observations; it does not decide a
 checkout outcome or own the renderer or JUnit runner.
 
+
+## Execution and ownership
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Budget["ObservationBudget"] -->|bounds| Ready["Readiness"]
+    Ready -->|permits| Native["One native<br/>action"]
+    Native -->|observes outcome| Result["Operation result"]
+    Result -->|records| Recorder["UiActionRecorder"]
+```
+
+<details>
+<summary>Legend — scope, ownership and evidence</summary>
+
+This flow describes mutating interactions that allow one native dispatch. Read-only readiness may observe again within the same remaining budget; an exception after dispatch does not authorize replay. The consumer separately checks the application effect and chooses evidence.
+
+</details>
+
 ## Inputs and responsibilities
 
 | When investigating | Read first | Boundary |

@@ -6,6 +6,25 @@ The package observes browser traffic and keeps a bounded journal. It does not
 send requests, assign business verdicts, or publish Extent nodes. The browser
 session owns the page; the inspector owns its listeners.
 
+
+## Execution and ownership
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Events["Browser events"] -->|observes| Inspector["UiNetworkInspector"]
+    Inspector -->|assigns scope| Identity["UiRequestIdentity"]
+    Identity -->|correlates| Journal["Bounded journal"]
+    Journal -->|delivers| Consumer["Consumer adapter"]
+```
+
+<details>
+<summary>Legend — scope, ownership and evidence</summary>
+
+The browser session owns the page and the inspector owns its listeners. Start identity, arrival order and journal retention are distinct; the consumer owns business selection and verdicts. Closed or partially attached listeners remain inert before touching browser objects.
+
+</details>
+
 ## Entry points and responsibilities
 
 | When investigating | Read first | Boundary |

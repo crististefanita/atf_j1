@@ -48,6 +48,23 @@ Short labels carry the following meanings:
 | Practice Shop purchase journey | `atf-test-practice-shop` | is not copied here |
 | Shop/AutoEx consumer report scenarios and assertions | their own consumer modules | remain with the consumer |
 
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Inputs["POM and sources"] -->|defines| Inventory["Local inventory"]
+    Inventory -->|selects| Rules["Governance rules"]
+    Rules -->|reports| Finding["Actionable<br/>diagnostic"]
+    Finding -->|routes to| Owner["Owning module"]
+```
+
+<details>
+<summary>Legend — governance observes local contracts</summary>
+
+The gate checks reactor membership, source boundaries, documentation and selected artifact identity. A diagnostic names the violated contract and its owner; behavior and rendered-report acceptance remain with their own tests. Negative fixtures establish that malformed or misleading inputs are rejected.
+
+</details>
+
 ## Choose the gate for the change
 
 | Change | Entry point | What it confirms |

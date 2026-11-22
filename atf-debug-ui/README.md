@@ -20,34 +20,29 @@ It is not a product browser and does not replace the E2E gate.
 ## Core diagram
 
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px","actorFontSize":"15px","messageFontSize":"12px","noteFontSize":"12px"},"themeCSS":".actor { font-size: 15px !important; } .messageText, .labelText, .loopText, .noteText { font-size: 12px !important; }","sequence":{"actorFontSize":15,"messageFontSize":12,"noteFontSize":12,"width":120,"height":42,"actorMargin":40,"messageMargin":24,"mirrorActors":false,"wrap":true,"wrapPadding":6}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 sequenceDiagram
-    participant A as Agent / IntelliJ
-    participant D as atf-debug-ui
-    participant P as Browser / MCP
-    participant H as HTML artifact
-
-    A->>D: starts the launcher with --html report.html
-    D->>D: validates the file and root
-    D-->>A: prints the loopback URL
-    A->>P: navigates to the displayed URL
-    P->>H: GET HTML/CSS/JS/read-only
-    P-->>A: snapshot, click, screenshot, console, network
+    participant Caller as Caller
+    participant Server as Loopback server
+    participant Browser as Inspector browser
+    participant File as Local artifact
+    Caller->>Server: Launch with explicit artifact path
+    Server->>Server: Validate file and allowed root
+    Server-->>Caller: Print effective loopback URL
+    Caller->>Browser: Open printed URL
+    Browser->>Server: Request artifact
+    Server->>File: Read allowed bytes
+    Server-->>Browser: Serve HTML and assets
+    Browser-->>Caller: Inspect DOM, controls and console
 ```
 
 <details>
-<summary><strong>Legend — read-only inspection</strong></summary>
+<summary>Legend — serving and inspection are separate responsibilities</summary>
 
-- the launcher validates the input and serves only over loopback;
-- Playwright/TAB MCP inspects the artifact; it does not repair or rewrite it;
-- HTML/CSS/JavaScript belongs to the artifact produced by atf-reporting;
-- the E2E test remains the gate for observable behavior, while Debug UI is an
-  exploration tool.
-The short labels have the following meanings:
-
-| In the diagram | Full meaning |
-|---|---|
-| Browser / MCP | Playwright / TAB MCP |
+- The launcher and [server](src/main/java/atf/debugui/DebugUiServer.java) confine file access and serve the existing artifact over loopback.
+- The browser requests bytes from the server. It does not read a separate report producer through an implicit network route.
+- An operator or acceptance test inspects tabs, nested disclosures, captures and console errors. The server supplies access; the artifact's owner supplies behavioral acceptance.
+- Startup, URI identity and connection shutdown have local component checks. The server neither creates an Extent report nor changes its result.
 
 </details>
 

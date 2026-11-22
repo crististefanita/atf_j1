@@ -32,11 +32,11 @@ binary/POM hashes and retained package evidence.
 
 ~~~mermaid
 flowchart LR
-    POM["J1 root POM"] -->|selects| Pair["five JAR/POM pairs in lib"]
+    POM["J1 root POM"] -->|selects| Pair["Library pairs"]
     Pair -->|resolved by| Reactor["J1 modules"]
-    Reactor -->|exercised by| Tests["consumer and governance tests"]
-    Tests -->|record| Evidence["provenance and rendered reports"]
-    Guard["artifact governance"] -. checks .-> Pair
+    Reactor -->|exercised by| Tests["Consumer checks"]
+    Tests -->|record| Evidence["Provenance<br/>and reports"]
+    Guard["artifact<br/>governance"] -. checks .-> Pair
 ~~~
 
 <details>

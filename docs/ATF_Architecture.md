@@ -88,6 +88,13 @@ flowchart LR
   Mock -.->|test| Governance
 ~~~
 
+<details>
+<summary>Legend — ownership and verification boundary</summary>
+
+Arrows run from a dependency to its consumer and carry the declared Maven scope. Dotted edges identify test dependencies of the governance module; they do not turn library implementations into local reactor modules. The POMs remain the factual source.
+
+</details>
+
 
 Governance also checks the local module graph and documentation. It does not change dependency scopes or replace module-level acceptance.
 
@@ -121,6 +128,13 @@ flowchart LR
   Reporting -->|renders| HTML
   HTML -->|is inspected when selected| Checks
 ~~~
+
+<details>
+<summary>Legend — ownership and verification boundary</summary>
+
+The UI module returns neutral observations to the application adapter. Shop and AutoEx own expectations, comparisons and scenario evidence; Reporting renders their supplied model, and selected consumer tests inspect the resulting artifact. These are runtime/evidence relationships rather than dependency arrows.
+
+</details>
 
 - Shop and AutoEx keep application journeys, setup baselines, business expectations, and verdicts in their local modules.
 - `atf-ui` owns generic browser execution and neutral observations; it does not select business assertions or publish HTML.
