@@ -43,3 +43,8 @@ Console depends on Core; Kit is optional for JUnit integration. The projection i
 ---
 
 Record Console findings against its Maven coordinate, version, and JAR/POM hashes. Keep consumer-adapter findings with the affected J1 module.
+
+<a id="shared-library-source"></a>
+
+> **Library source:** [Console · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Console.md).
+> This project’s POM, provenance and tests define the consumed version and local acceptance.

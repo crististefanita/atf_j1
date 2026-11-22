@@ -46,3 +46,8 @@ var response = mock.send(ApiRequest.of("GET", "/health"),
 ---
 
 Record Mock findings against its Maven coordinate, version, and JAR/POM hashes. Keep fixture intent and consumer behavior with the affected J1 module.
+
+<a id="shared-library-source"></a>
+
+> **Library source:** [Mock · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Mock.md).
+> This project’s POM, provenance and tests define the consumed version and local acceptance.

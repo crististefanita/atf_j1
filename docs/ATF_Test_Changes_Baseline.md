@@ -4976,3 +4976,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary>Canonical library-source navigation</summary>
+
+```yaml
+testChanges:
+  - id: J1-LIBRARY-SOURCE-NOTE-20261122
+    status: VERIFIED
+    base: cd83a98fb657b8f07495d08861ff1d7be36ab47b
+    expires: 2026-12-22
+    reason: Allow only the requested canonical source note in direct library guides, retaining negative controls for unrelated projects, wrong routes, fenced examples and other documents.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=cd83a98fb657b8f07495d08861ff1d7be36ab47b" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java
+```
+
+</details>

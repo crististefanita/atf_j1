@@ -54,3 +54,8 @@ SPI; the JUnit launcher is an optional dependency supplied by the runner.
 
 Kit depends on neither Reporting nor UI and launches no tests. The consumer owns
 snapshot publication and verifies the selected binary through its own report.
+
+<a id="shared-library-source"></a>
+
+> **Library source:** [Test Kit · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.TestKit.md).
+> This project’s POM, provenance and tests define the consumed version and local acceptance.

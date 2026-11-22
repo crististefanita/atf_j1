@@ -178,9 +178,10 @@ keeps ownership of its application scenarios:
   of visible Markdown prose and Mermaid labels across all documents, while
   preserving identifiers, commands, and code examples;
 - `governance.documentation.relationship.DocumentationDirectRelationshipGovernanceTest` — checks
-  every current J1 Markdown line, including fenced examples, and `AGENTS.md` for
-  references to other ATF workspaces; only the historical
-  test-change baseline is excluded and retains its original audit identifiers;
+  every current Markdown line, fenced example, baseline and `AGENTS.md` for
+  references outside the local library contract. Only the marked canonical source
+  note in each direct `lib` guide is allowed; wrong routes, extra project text
+  and source notes elsewhere remain rejected;
 - `governance.documentation.DocumentationStyleGovernanceTest` — ATF semantic style:
   typed fences, headings without skipped levels, `-` bullets, and no font/CSS/HTML
   presentation markup in READMEs or the canonical architecture document;

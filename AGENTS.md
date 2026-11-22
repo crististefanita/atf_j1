@@ -37,3 +37,7 @@
   required. Do not commit project-wide orientation maps or dated/library-
   versioned verification and acceptance reports in docs or `lib`; maintain
   durable contracts at their owners.
+
+- Library guides in `lib` may end with one marked canonical source note.
+  Keep the consumed version and acceptance local; this navigation exception
+  does not allow workspace catalogs or other project references elsewhere.

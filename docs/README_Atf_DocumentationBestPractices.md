@@ -481,6 +481,10 @@ Links from the root should naturally answer “where can I learn more?” withou
 introducing a second version of the same map. A good reference has a semantic
 label and a clear question, not just a path.
 
+The six library guides in `lib` may end with one marked source note linking
+to the corresponding canonical library guide. The local POM, provenance and
+tests define the consumed version and acceptance; the root remains local-first.
+
 ## Naming, links, and durability
 
 The module README remains `README.md`. Descriptive documents use

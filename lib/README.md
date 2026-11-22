@@ -52,3 +52,8 @@ JAR/POM SHA-256 values. Include a minimal reproducer and expected/observed
 behavior. Keep adapter findings with the affected consumer module; describe
 shared library behavior through the relevant published contract instead of
 duplicating unresolved library criteria in a consumer README.
+
+<a id="shared-library-source"></a>
+
+> **Library sources:** [Catalog · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.md).
+> This project’s POM, provenance and tests define the consumed version and local acceptance.
