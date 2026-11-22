@@ -31,6 +31,7 @@ hash-urile binar/POM și dovezile păstrate despre pachete.
 ## Fluxul dovezilor
 
 ~~~mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
     POM["POM rădăcină J1"] -->|selectează| Pair["cinci perechi<br/>JAR/POM în lib"]
     Pair -->|rezolvate de| Reactor["Module J1"]

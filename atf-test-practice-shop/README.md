@@ -591,6 +591,7 @@ Salvează o captură a viewport-ului sub `target`. Contractul este în
 [ShopRecoveryActualReportAcceptanceTest](src/test/atf/shop/tests/component/recovery/ShopRecoveryActualReportAcceptanceTest.java).
 
 ```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
     Trace["Trasă și<br/>acțiune INFO"] -->|proiectează| Projection["Proiecție<br/>recovery"]
     Projection -->|publică| Phase["Adaptor ciclu<br/>de viață"]
@@ -639,6 +640,7 @@ Un plan executat în altă sesiune păstrează inventarul/numărul și marcheaz�
 dezactivarea observerului SPI produce metadate indisponibile.
 
 ```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
     Request["Cererea lansării"] -->|descoperă| Plan["TestPlan filtrat"]
     Plan -->|capturează| Kit["Test Kit"]

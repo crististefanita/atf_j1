@@ -15,6 +15,7 @@ Acest index descrie reactorul J1 cu șase module și cele cinci biblioteci versi
 | Actualizarea sigură a documentației | [Bune practici pentru documentație](README_Atf_DocumentationBestPractices.md) și [siguranța build-ului](ATF_Build_And_Execution_Safety.md) |
 
 ~~~mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
   POM[POM rădăcină] -->|selectează versiunile| Libraries[Cinci perechi JAR/POM]
   POM -->|declară| Modules[Șase module locale J1]
