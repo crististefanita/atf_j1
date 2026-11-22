@@ -12,6 +12,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 |---|---|---|
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Launcher metadata integration | source class/method and suite ancestry are delivered; supply actual launcher selectors and discovered count through a neutral per-launch snapshot |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
+| [J1-RECOVERY-IDE-REPORT-PARITY-2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22) | Consumer launch configuration | run both recovery components from IntelliJ and validate those emitted artifacts with the existing browser acceptance |
 
 ## Delivered consumer evidence
 
