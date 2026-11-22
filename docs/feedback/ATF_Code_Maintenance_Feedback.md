@@ -123,13 +123,10 @@ errors, or skipped tests.
 <a id="j1-recovery-trace-typing-2026-11-21"></a>
 ## J1-RECOVERY-TRACE-TYPING-2026-11-21 — keep recovery evidence typed through report projection
 
-**Status: Open; owners:** Shop and AutoEx component-test maintainers.
+**Status: Verified and closed on 2026-11-22; owners:** Shop and AutoEx component-test maintainers.
 
-This finding combines a report-field clarity gap with a small maintainability opportunity; it does not indicate a defect in the shared renderer.
-
-- **Observed field mismatch:** [UiBackendRecovery.java](../../atf-ui/src/main/java/atf/ui/playwright/recovery/UiBackendRecovery.java) records `BE observation #<attempt>` as the UI event operation and the semantic recovery operation (currently `catalog-readiness`) as its target. Both consumer tests then label `row.operation()` as `Attempt N · Operation`, replace the prefix with `Backend observation`, and assert only that ordinal label. The field therefore names the observation event, not the recovery operation; the semantic target is not asserted by the rendered-report probe.
-- **Repeated text projection:** [ShopBackendRecoveryComponentTest.java](../../atf-test-practice-shop/src/test/atf/shop/tests/component/recovery/ShopBackendRecoveryComponentTest.java) and [AutoExBackendRecoveryComponentTest.java](../../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java) duplicate the mapping and parse probe/backoff/total timings from `row.observed()` text.
-- **Typed source and seam:** [UiRecoveryTrace.java](../../atf-ui/src/main/java/atf/ui/recovery/UiRecoveryTrace.java) carries the semantic operation, attempt, decision, reason, and `Duration` values. `UiBackendRecovery` already accepts a `Consumer<UiRecoveryTrace>`, so first assess a consumer-local typed projection; no public Reporting API or shared module is needed for that experiment.
-- **Next step:** Make the displayed field truthful: show and assert the semantic recovery operation, or label the ordinal value as an observation event and expose the target separately. Keep attempt order explicit. Project timings and terminal decisions from typed trace values rather than parsing `description()` or `observed()`. Preserve separate ownership in Shop and AutoEx.
-- **Acceptance:** Cover the exact `catalog-readiness` value, attempt order, distinct measured durations, and terminal outcomes. Inspect the actual Maven HTML reports in both consumer modules; preserve disclosure state, full row count, redaction, and verdict. Extend the browser check to confirm the semantic target instead of accepting the ordinal event label as the operation.
-- **Guardrail:** Do not widen a stable API or add a shared abstraction unless the typed callback proves insufficient and there is a neutral contract to share.
+- `ShopRecoveryReportObservation` and `AutoExRecoveryReportObservation` project the consumer-owned `UiRecoveryTrace` into each JUnit `TEST BODY` observation. `Operation` is the semantic `catalog-readiness`; `Event` is the ordinal `Backend observation #N`.
+- The projections align action and trace counts, attempt order, semantic target, and INFO status. Decision, reason, signal, and probe/backoff/total durations come from the typed trace; timing text is no longer parsed from `observed()`.
+- Both component checks cover recovered and exhausted outcomes, ordered fields, redaction, and the synthetic action-table target. Opt-in actual-report Playwright checks cover both outcomes in the Maven-generated JUnit reports, including the collapsed disclosure after `Expand all nodes`.
+- `ConsumerModuleArchitectureGovernanceTest` keeps each projection and its report selectors inside its owning consumer. `atf-ui` and the published Reporting API remain unchanged.
+- IntelliJ output-root parity is tracked separately in [J1 recovery IDE report parity](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22).

@@ -21,9 +21,11 @@ report.
 
 | Code evidence | What is recorded |
 |---|---|
-| UiBackendRecovery.recording | Emits one INFO action per trace: ACTION is `BE observation #n`, TARGET is semantic `catalog-readiness`; the component audit currently projects ACTION as its `Operation` field and omits TARGET |
+| `UiBackendRecovery.recording` | Emits one INFO action per trace: ACTION is `BE observation #n`, TARGET is semantic `catalog-readiness` |
+| Synthetic consumer probe | Shows the event and target in separate action-table columns and asserts the semantic target |
+| Actual JUnit report projection | The typed consumer observation displays `Operation = catalog-readiness` and keeps `Event = Backend observation #n` separate; see [actual recovery reports](#j1-recovery-runner-trace-2026-11-21) |
 | UiRecoveryTrace.description | Decision, reason, captured signal summary when available, probe/backoff/total durations, and policy source |
-| Current consumer README | Describes local component report probes and distinguishes their synthetic outcome-bearing step from suite-generated report output |
+| Current consumer README | Describes the synthetic renderer probe and opt-in actual Maven report acceptance; IntelliJ output parity remains separate |
 | 2026-11-21 report checks | AutoExBackendRecoveryComponentTest passed 5/5 and ShopBackendRecoveryComponentTest 6/6 in both editions; each component test opens its own synthetic local Extent probe in Playwright, separately from the JUnit suite report |
 
 - [x] Run deterministic recovered and terminal exhausted scenarios in both consumers.
@@ -37,8 +39,9 @@ report.
   `Expand all nodes`; opening it reveals every attempt in order.
 - The component check builds a synthetic scenario and outcome-bearing step;
   J1's captured rows pass through the selected Reporting renderer.
-- This verifies local consumer projection and disclosure rendering. It does not
-  verify a suite-generated parent step or public-site E2E report.
+- This finding verifies the synthetic action-table projection and disclosure.
+  Suite-generated report acceptance is tracked separately below; neither check
+  claims public-site E2E acceptance.
 - Generated HTML excludes the fixture URL and private response body.
 
 The verified test-change control is retained in the
@@ -48,41 +51,48 @@ The verified test-change control is retained in the
 
 ## J1-RECOVERY-RUNNER-TRACE-2026-11-21 — include recovery traces in actual component reports
 
-**Status: Active — Maven tests pass; actual-report browser acceptance is partial; IntelliJ acceptance remains open.**
-J1 now consumes Reporting J26 and Test Kit K3. Both component adapters carry
-the immutable recovery observations into the real JUnit `TEST BODY` phase,
-beside the ordinary `Component assertions` step.
+**Status: Verified and closed for Maven component reports on 2026-11-22.**
+Both consumer projections now publish semantic and typed recovery data in the
+real JUnit `TEST BODY` phase, beside the ordinary `Component assertions` step.
 
 | Artifact evidence | Observed behavior |
 |---|---|
-| Actual Shop component report | `ShopExtentTestExtension` publishes a separate `Backend recovery trace · <outcome>` INFO node beside `Component assertions`; its `Attempt N · Operation` value is `Backend observation #N`, not the semantic recovery operation. The test verdict and count are unchanged. |
-| Actual AutoEx component report | `AutoExExtentTestExtension` publishes the same trace boundary and currently uses the same event label in the `Operation` field. |
-| Maven consumer runs | Shop passed 6/6 and AutoEx 5/5 in EN and RO against the physical J26/K3 JARs. |
-| Playwright rendering | Consumer-owned Playwright checks open only their synthetic local HTML. One separate browser check opened the actual Shop JUnit report and verified navigation, collapsed nested disclosures after `Expand all nodes`, visible `TEST BODY` and assertion table, and rendered observation rows; it then stopped at a fixture-specific `not captured` expectation. No actual AutoEx JUnit report was browser-checked. The semantic operation is not asserted in the component-audit projection; the synthetic action-table probe shows it only in TARGET. |
-| Safety and outcome | A source search of 17 generated Shop/AutoEx JUnit reports found neither the private response-body canary nor `127.0.0.1`; `EXHAUSTED` remains an expected business outcome in a passing test. Browser-based redaction acceptance of the actual AutoEx report remains open. |
+| Actual Shop component report | `Operation` displays `catalog-readiness`; `Event` displays `Backend observation #N`. Attempts remain ordered and INFO, with policy, decision, reason, signal, and typed probe/backoff/total durations. |
+| Actual AutoEx component report | The same consumer-owned fields and terminal outcomes appear through `AutoExExtentTestExtension`; assertions, verdict, and count remain intact. |
+| Maven consumer runs | Shop passed 6/6 and AutoEx 5/5 against the pinned Reporting J26/Test Kit K3 artifacts. |
+| Playwright rendering | Opt-in consumer checks open the actual suite-generated HTML for both `RECOVERED` and `EXHAUSTED`. They verify owner, `TEST BODY`, standard assertions, collapsed disclosure after `Expand all nodes`, complete attempt fields and ISO-8601 timings, INFO result, body/URL redaction, and a viewport capture. Synthetic renderer checks separately verify action-table targets. |
+| Safety and outcome | Report acceptance reads an explicitly supplied artifact path and does not overwrite that input. Screenshots stay under staging `target`; the response body and local fixture address remain absent. |
 
-- [x] Publish the ordered recovery trace from each consumer's actual JUnit
-  component run in a separate disclosure, initially collapsed, with the event
-  label, policy, observation, measured timing, INFO result, and redacted values. Keep
-  the standard assertion step, test verdict, and test count intact.
-- [x] Run each consumer-owned Playwright check against its synthetic local
-  recovery HTML. Verify `Expand all nodes`, independently collapsed evidence,
-  complete ordered rows, and redaction there.
-- [ ] Complete browser acceptance against the actual Shop and AutoEx JUnit
-  reports with a fixture-neutral owner/scenario oracle. The current Shop probe
-  reaches the assertion table and observation rows but stops at its hardcoded
-  `not captured` fixture marker; the actual AutoEx report has not been opened.
-- [ ] Open the actual generated artifact after an IntelliJ run. Verify the same
-  report directory, assertion hierarchy, independently collapsed trace, ordered
-  attempt fields, and redaction in the IDE-launched report.
+- [x] Keep semantic operation, event label, and typed durations as separate
+  consumer-owned fields.
+- [x] Verify recovered and exhausted traces in both actual Maven-generated
+  reports, including disclosure state, row completeness, redaction, and verdict.
+- [x] Keep selector and projection ownership local to each consumer under
+  architecture governance.
 
-**Remaining closure evidence:** repeat the actual report inspection after
-IntelliJ launches the component tests. The repository workspace has no IntelliJ
-runner available in this verification environment, so Maven success does not
-close IDE output-root parity.
+IntelliJ output-root parity is a separate open item in
+[J1 recovery IDE report parity](#j1-recovery-ide-report-parity-2026-11-22).
 
-The semantic-operation label gap and typed trace projection remain separately
-tracked in [J1-RECOVERY-TRACE-TYPING-2026-11-21](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
+<a id="j1-recovery-ide-report-parity-2026-11-22"></a>
+
+## J1-RECOVERY-IDE-REPORT-PARITY-2026-11-22 — verify IntelliJ's report path
+
+**Status: Open; owner:** J1 consumer test-launch configuration.
+
+The new Playwright acceptance opens an actual report by explicit path and
+verifies the Maven-generated Shop and AutoEx artifacts. No IntelliJ-launched
+report has yet been checked with that same oracle.
+
+- Run each recovery component test from IntelliJ with its normal run
+  configuration and preserve the emitted report path.
+- Open each IDE-generated artifact with the matching
+  `ShopRecoveryActualReportAcceptanceTest` or
+  `AutoExRecoveryActualReportAcceptanceTest` property.
+- Confirm the same owner, `TEST BODY`, standard assertions, collapsed trace,
+  ordered semantic operation/event/timing fields, redaction, and verdict.
+
+Keep this finding open until both IDE-generated artifacts pass the same browser
+acceptance as the Maven reports.
 
 <a id="j1-launch-context-146"></a>
 

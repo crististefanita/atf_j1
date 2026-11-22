@@ -2,6 +2,7 @@ package atf.shop.tests.component.recovery;
 
 import atf.shop.tests.support.ShopComponentTest;
 import atf.shop.tests.support.reporting.ShopRecoveryExtentReportProbe;
+import atf.shop.tests.support.reporting.ShopRecoveryReportObservation;
 import atf.shop.config.ShopConfigurationLoader;
 import atf.shop.config.ShopValidationProfile;
 import atf.shop.support.recovery.ShopBackendRecovery;
@@ -15,9 +16,9 @@ import atf.reporting.extent.session.ExtentReportSession;
 import atf.reporting.ui.UiExtentReportSession;
 import atf.reporting.ui.validation.UiApiValidationEvidence;
 import atf.testkit.assertions.RecordedAssertions;
-import atf.testkit.assertions.ComponentAuditObservation;
 import atf.testkit.recovery.*;
 import atf.ui.playwright.PlaywrightActionSequence;
+import atf.ui.playwright.recovery.UiBackendRecovery;
 import atf.ui.recovery.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -32,10 +33,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import static atf.testkit.assertions.AuditedAssertions.assertThrows;
 import static atf.testkit.recovery.AtfUiRecovery.Mode.*;
+import static atf.shop.support.recovery.ShopBackendRecovery.CATALOG_READINESS;
 
 @ShopComponentTest
 class ShopBackendRecoveryComponentTest {
@@ -131,10 +134,12 @@ class ShopBackendRecoveryComponentTest {
             checks.equals("Authenticated profile preserves recovery", configuration.browser().recovery(),
                     configuration.forAuthenticatedE2e(configuration.accountFile(), true, 100).browser().recovery());
             var actions = new PlaywrightActionSequence();
+            var typedTraces = new ArrayList<UiRecoveryTrace>();
             try (var browser = PlaywrightUiSession.open(configuration.browser())) {
                 var page = browser.page();
                 page.navigate(fixture.origin());
-                try (var recovery = ShopBackendRecovery.open(page, configuration, actions);
+                try (var recovery = openRecovery(page, configuration, actions,
+                        scenario.renderReport() ? typedTraces : null);
                      var scope = recovery.begin(ShopBackendRecovery.CATALOG_READINESS)) {
                     // Scope starts before the one dispatch; a readiness probe never receives an action.
                     page.setDefaultTimeout(scope.remaining().toMillis());
@@ -163,51 +168,53 @@ class ShopBackendRecoveryComponentTest {
                             .allMatch(row -> row.expected().contains("profile=read-only") && row.expected().contains("totalTimeout=PT3S")));
                 }
                 if (scenario.renderReport()) {
-                    recordRecoveryTrace(checks, actions.snapshot(), scenario.outcome().name());
-                    var measuredTimings = checks.observations().stream()
-                            .filter(observation -> observation.title().startsWith("Backend recovery trace · "))
-                            .flatMap(observation -> observation.fields().stream())
-                            .filter(field -> field.name().endsWith(" · Timing")).toList();
-                    checks.isTrue("Recovery observations retain measured probe, backoff, and total timing",
-                            !measuredTimings.isEmpty() && measuredTimings.stream().allMatch(field ->
-                                    field.value().contains("probe=") && field.value().contains("backoff=")
-                                            && field.value().contains("total=")));
-                    var operations = checks.observations().stream()
-                            .filter(observation -> observation.title().startsWith("Backend recovery trace · "))
-                            .flatMap(observation -> observation.fields().stream())
-                            .filter(field -> field.name().endsWith(" · Operation")).toList();
-                    checks.isTrue("Recovery operation labels are readable",
-                            !operations.isEmpty() && operations.stream().allMatch(field ->
-                                    field.value().startsWith("Backend observation #")));
+                    var records = actions.snapshot();
+                    var observation = ShopRecoveryReportObservation.create(typedTraces, records);
+                    checks.equals("Observation title exposes the terminal recovery outcome",
+                            "Backend recovery trace · " + scenario.outcome(), observation.title());
+                    checks.equals("One typed recovery observation maps to each INFO action", typedTraces.size(), records.size());
+                    checks.equals("All attempts have six explicit report fields", typedTraces.size() * 6,
+                            observation.fields().size());
+                    for (int index = 0; index < typedTraces.size(); index++) {
+                        var trace = typedTraces.get(index);
+                        var fields = observation.fields();
+                        int firstField = index * 6;
+                        checks.equals("Semantic recovery operation is explicit: attempt " + trace.attempt(),
+                                CATALOG_READINESS, fields.get(firstField).value());
+                        checks.equals("Observation event is labeled separately: attempt " + trace.attempt(),
+                                "Backend observation #" + trace.attempt(), fields.get(firstField + 1).value());
+                        checks.equals("Typed timings retain their measured durations: attempt " + trace.attempt(),
+                                "probe=" + trace.probeTime() + "; backoff=" + trace.backoffTime()
+                                        + "; total=" + trace.totalTime(), fields.get(firstField + 4).value());
+                        checks.equals("Recovery trace stays informational: attempt " + trace.attempt(),
+                                "INFO", fields.get(firstField + 5).value());
+                    }
+                    checks.equals("Report label agrees with terminal decision", scenario.outcome().name(),
+                            typedTraces.getLast().decision().name());
+                    checks.isFalse("Typed report projection excludes the private response body",
+                            observation.fields().toString().contains(BODY_CANARY));
+                    checks.observe(observation);
                     verifyRenderedRecoveryReport(checks, configuration, actions, scenario.outcome().name());
                 }
             }
         }
     }
 
-    private static void recordRecoveryTrace(RecordedAssertions checks, Iterable<?> records, String outcome) {
-        var fields = ReportModelAdapters.uiActions(records).stream().flatMap(row -> java.util.stream.Stream.of(
-                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Operation", readableRecoveryOperation(row.operation())),
-                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Policy", row.expected()),
-                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Observation", row.observed()),
-                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Timing", measuredRecoveryTiming(row)),
-                new ComponentAuditObservation.Field("Attempt " + row.sequence() + " · Result", row.status().name())))
-                .toList();
-        checks.observe(new ComponentAuditObservation("Backend recovery trace · " + outcome, fields));
-    }
-
-    private static String readableRecoveryOperation(String operation) {
-        return operation.startsWith("BE observation #")
-                ? operation.replaceFirst("^BE observation", "Backend observation")
-                : operation;
-    }
-
-    private static String measuredRecoveryTiming(atf.reporting.ui.model.AtfUiActionRecord row) {
-        var timing = java.util.regex.Pattern.compile(
-                "probe=[^;]+;\\s*backoff=[^;]+;\\s*total=[^;]+", java.util.regex.Pattern.CASE_INSENSITIVE)
-                .matcher(row.observed());
-        if (timing.find()) return timing.group();
-        return row.durationMillis() > 0 ? row.durationText() : "not reported by recovery trace";
+    private static UiBackendRecovery openRecovery(com.microsoft.playwright.Page page,
+                                                 atf.shop.config.ShopConfiguration configuration,
+                                                 PlaywrightActionSequence actions,
+                                                 List<UiRecoveryTrace> typedTraces) {
+        if (typedTraces == null) return ShopBackendRecovery.open(page, configuration, actions);
+        var policy = configuration.browser().recovery();
+        var operation = new UiRecoveryOperation(CATALOG_READINESS, UiRecoveryOperation.Safety.READ_ONLY,
+                configuration.baseUrl(), configuration.api().endpoint().resolve("/products"), "GET");
+        return new UiBackendRecovery(page, policy, List.of(operation), trace -> {
+            typedTraces.add(trace);
+            actions.information("BE observation #" + trace.attempt(), trace.operation(),
+                    "profile=" + policy.profile() + "; maxAttempts=" + policy.maxAttempts()
+                            + "; totalTimeout=" + policy.totalTimeout() + "; source=" + policy.source(),
+                    trace.description());
+        });
     }
 
     private void verifyRenderedRecoveryReport(RecordedAssertions checks,

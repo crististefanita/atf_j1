@@ -99,9 +99,30 @@ testChanges:
       - pom.xml
 ```
 
-The Maven component and whole-reactor checks run in both editions. Playwright
-inspection of the actual HTML is recorded with the active recovery finding;
-IntelliJ output-root parity remains open.
+The Maven component and whole-reactor checks run in both editions. Actual-report
+Maven acceptance is closed in the recovery runner finding; IntelliJ output-root
+parity remains open as a separate item.
+
+</details>
+
+<details>
+<summary><strong>Verified control — typed recovery report projection</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-RECOVERY-REPORT-PROJECTION-20261122
+    status: VERIFIED
+    base: 79f177117dfef986c98ce3846766fe89ff138a98
+    expires: 2026-12-22
+    reason: Keep typed semantic operation and duration projection, actual report browser acceptance, and consumer-owned selectors protected in AutoEx and governance.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopBackendRecoveryComponentTest,AutoExBackendRecoveryComponentTest,ConsumerModuleArchitectureGovernanceTest,TestChangeGovernanceTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=79f177117dfef986c98ce3846766fe89ff138a98" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExRecoveryActualReportAcceptanceTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryExtentReportProbe.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryReportObservation.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+```
 
 </details>
 

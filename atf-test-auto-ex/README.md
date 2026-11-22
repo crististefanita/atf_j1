@@ -1696,29 +1696,37 @@ and unknown operations are rejected before the browser starts.
 
 Assertions from these components remain in the standard `Component assertions`
 step, collapsed by default, with redaction before the configured limit, which
-defaults to 240 characters. The component test creates local Extent projection
-probes for recovered and exhausted traces. The component test builds a
-synthetic report scenario whose step title carries the outcome and attempt
-count; the renderer receives J1's captured recovery records. One
-`Audit observations` group, initially collapsed, contains the ordered INFO
-rows. Expansion shows the complete trace and policy
-source without the response body or local fixture URL. This checks J1's action
-evidence mapping and the selected renderer on local fixtures.
+defaults to 240 characters. The consumer-owned
+[AutoExRecoveryReportObservation](src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryReportObservation.java)
+projects each typed `UiRecoveryTrace` beside its matching INFO action record.
+`Operation` shows `catalog-readiness`; `Event` separately shows
+`Backend observation #N`. Decision, reason, signal, three measured `Duration`
+values, policy, and INFO result stay in attempt order. Timing uses the typed
+values and does not parse the action's display text.
 
-Separately, `AutoExExtentTestExtension` publishes the captured recovery trace
-in the real JUnit component report through Test Kit K3 phase observations and
-Reporting J26. The INFO trace is a sibling of `Component assertions` in
-`TEST BODY`; it keeps the normal assertion verdict and test count. Each attempt
-shows a policy, observation, measured probe/backoff/total timing, and INFO
-result. Its `Attempt N · Operation` field currently contains the event label
-`Backend observation #N`, not the semantic recovery operation
-`catalog-readiness`. This report-field clarity gap is tracked in [J1 recovery
-feedback](../docs/feedback/ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
-The component test's Playwright probe opens only the separate synthetic HTML
-under `target/autoex-runtime-reports/recovery-audit`; it does not open the report
-produced by the JUnit extension. Actual suite-report inspection and the local
-renderer probe are separate evidence. This evidence covers the recovery
-component suite; it does not claim public-site E2E acceptance.
+`AutoExExtentTestExtension` publishes this observation through Test Kit K3
+phase observations and Reporting J26. The INFO trace is a sibling of
+`Component assertions` in `TEST BODY`; the normal assertions, verdict, and test
+count remain intact. The synthetic Playwright probe checks the action-table
+target and its collapsed local disclosure. The opt-in
+`AutoExRecoveryActualReportAcceptanceTest` opens an actual suite report and
+checks its owner, `TEST BODY`, assertion step, collapsed state after
+`Expand all nodes`, complete recovered and exhausted traces, semantic operation,
+event label, ISO-8601 timings, INFO results, and body/URL redaction. It saves a
+viewport capture under `target`. The acceptance contract is in
+[AutoExRecoveryActualReportAcceptanceTest](src/test/java/atf/autoex/tests/component/recovery/AutoExRecoveryActualReportAcceptanceTest.java).
+
+Generate a suite report and run actual-report acceptance in separate fresh
+staging areas, as required by the [build procedure](../docs/ATF_Build_And_Execution_Safety.md):
+
+```powershell
+mvn -B -ntp -pl atf-test-auto-ex -am "-Dtest=AutoExBackendRecoveryComponentTest" "-Datf.autoex.component.report-directory=target/recovery-suite-report" "-Dsurefire.failIfNoSpecifiedTests=false" test
+mvn -B -ntp -pl atf-test-auto-ex -am "-Dtest=AutoExRecoveryActualReportAcceptanceTest" "-Datf.autoex.recovery.actual-report=<configured-report-file>" "-Datf.autoex.component.report-directory=target/recovery-report-acceptance" "-Dsurefire.failIfNoSpecifiedTests=false" test
+```
+
+The acceptance test is inactive when `atf.autoex.recovery.actual-report` is not
+set. This verifies a Maven-generated component report; it does not claim an
+IntelliJ-launched report check or public-site E2E acceptance.
 
 </details>
 

@@ -134,6 +134,19 @@ public class ConsumerModuleArchitectureGovernanceTest {
                 "component/recovery/ShopBackendRecoveryComponentTest.java"));
         assertTrue(recoveryTest.contains("ShopRecoveryExtentReportProbe.verify("),
                 "Recovery report UI checks must use the test-scoped selector facade");
+        Path recoveryProjection = testRoot.resolve("support/reporting/ShopRecoveryReportObservation.java");
+        assertTrue(Files.isRegularFile(recoveryProjection),
+                "Shop recovery report projection must remain owned by the consumer test module");
+        String projection = Files.readString(recoveryProjection);
+        assertTrue(projection.contains("trace.operation()") && projection.contains("trace.probeTime()")
+                        && projection.contains("trace.backoffTime()") && projection.contains("trace.totalTime()"),
+                "Shop report fields must come from the typed recovery trace");
+        assertTrue(recoveryTest.contains("ShopRecoveryReportObservation.create(")
+                        && recoveryTest.contains("new UiBackendRecovery("),
+                "Shop report coverage must use the typed consumer callback");
+        Path actualReportAcceptance = testRoot.resolve("component/recovery/ShopRecoveryActualReportAcceptanceTest.java");
+        assertTrue(Files.readString(actualReportAcceptance).contains("ShopRecoveryExtentReportProbe.verifyActualComponentReport("),
+                "Shop actual-report acceptance must delegate selectors to its consumer facade");
 
         for (Path source : javaFiles(sourceRoot, testRoot)) {
             if (source.toAbsolutePath().normalize().startsWith(locatorRoot)) continue;
@@ -149,7 +162,10 @@ public class ConsumerModuleArchitectureGovernanceTest {
         String reportUi = Files.readString(reportUiFacade);
         assertTrue(reportUi.contains("details.atf-ui-observations")
                         && reportUi.contains("atf-ui-action-table")
-                        && reportUi.contains("Expand all nodes"),
+                        && reportUi.contains("Expand all nodes")
+                        && reportUi.contains("details.atf-observation-evidence")
+                        && reportUi.contains("helm-evidence-table")
+                        && reportUi.contains("catalog-readiness"),
                 "The generated Extent report facade must own the recovery presentation selectors");
 
         String locators = Files.readString(sourceRoot.resolve("locators/ShopLocators.java"));
@@ -176,6 +192,19 @@ public class ConsumerModuleArchitectureGovernanceTest {
         String recoveryTest = Files.readString(recoveryTestPath);
         assertTrue(recoveryTest.contains("AutoExRecoveryExtentReportProbe.verify("),
                 "AutoEx recovery report checks must delegate to the selector facade");
+        Path recoveryProjection = testRoot.resolve("support/reporting/AutoExRecoveryReportObservation.java");
+        assertTrue(Files.isRegularFile(recoveryProjection),
+                "AutoEx recovery report projection must remain owned by the consumer test module");
+        String projection = Files.readString(recoveryProjection);
+        assertTrue(projection.contains("trace.operation()") && projection.contains("trace.probeTime()")
+                        && projection.contains("trace.backoffTime()") && projection.contains("trace.totalTime()"),
+                "AutoEx report fields must come from the typed recovery trace");
+        assertTrue(recoveryTest.contains("AutoExRecoveryReportObservation.create(")
+                        && recoveryTest.contains("new UiBackendRecovery("),
+                "AutoEx report coverage must use the typed consumer callback");
+        Path actualReportAcceptance = testRoot.resolve("component/recovery/AutoExRecoveryActualReportAcceptanceTest.java");
+        assertTrue(Files.readString(actualReportAcceptance).contains("AutoExRecoveryExtentReportProbe.verifyActualComponentReport("),
+                "AutoEx actual-report acceptance must delegate selectors to its consumer facade");
         for (String reportSelector : List.of("#nav-test", "details.atf-ui-observations",
                 "atf-ui-action-table", "Expand all nodes", "p.name:text-is('AutoExRecoveryReport')")) {
             assertFalse(recoveryTest.contains(reportSelector),
@@ -186,6 +215,9 @@ public class ConsumerModuleArchitectureGovernanceTest {
         assertTrue(reportUi.contains("details.atf-ui-observations")
                         && reportUi.contains("atf-ui-action-table")
                         && reportUi.contains("Expand all nodes")
+                        && reportUi.contains("details.atf-observation-evidence")
+                        && reportUi.contains("helm-evidence-table")
+                        && reportUi.contains("catalog-readiness")
                         && reportUi.contains("AutoExRecoveryReport"),
                 "The AutoEx recovery report facade must own the rendered report selectors");
     }
