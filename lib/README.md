@@ -54,3 +54,8 @@ așteptat/observat. Păstrează constatările despre adaptor lângă modulul con
 afectat; descrie comportamentul bibliotecii comune prin contractul publicat
 relevant, fără a duplica în README-ul consumerului criterii nerezolvate despre
 bibliotecă.
+
+<a id="shared-library-source"></a>
+
+> **Sursa bibliotecilor:** [Catalog · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.md).
+> POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

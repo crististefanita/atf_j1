@@ -41,3 +41,7 @@
   în proveniență când este necesar. Nu adăuga hărți generale ale proiectului
   sau rapoarte de verificare/acceptanță datate ori legate de versiuni în docs
   sau `lib`; păstrează contractele durabile la ownerii lor.
+
+- Ghidurile bibliotecilor din `lib` pot încheia cu o singură notă marcată către sursa canonică.
+  Păstrează versiunea consumată și acceptanța locale; această excepție de navigare
+  nu permite cataloage de workspace-uri sau referințe la alte proiecte în alte documente.

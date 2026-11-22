@@ -46,3 +46,8 @@ var response = mock.send(ApiRequest.of("GET", "/health"),
 ---
 
 Înregistrează constatările Mock după coordonata Maven, versiune și hash-urile JAR/POM. Păstrează intenția fixture-ului și comportamentul consumerului în modulul J1 afectat.
+
+<a id="shared-library-source"></a>
+
+> **Sursa bibliotecii:** [Mock · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Mock.md).
+> POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

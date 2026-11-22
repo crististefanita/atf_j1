@@ -1,6 +1,7 @@
 package atf.api.tests.governance.documentation.relationship;
 
 import atf.api.tests.governance.documentation.DocumentationGovernanceSupport;
+import atf.api.tests.governance.documentation.links.MarkdownAnchorIndex;
 import atf.testkit.AtfComponentTest;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +24,10 @@ public class DocumentationDirectRelationshipGovernanceTest {
     private static final Pattern OTHER_ATF_PROJECT = Pattern.compile(
             "(?i)(?<![\\p{L}\\p{N}])(?:ATF[-_ ]?J(?:0|[2-9]|[1-9]\\d+)|atf[_-]j(?:0|[2-9]|[1-9]\\d+)|J0)(?![\\p{L}\\p{N}])");
     private static final String HISTORICAL_BASELINE = "docs/ATF_Test_Changes_Baseline.md";
+    private static final String SOURCE_MARKER = "<a id=\"shared-library-source\"></a>";
+    private static final List<String> LIBRARY_GUIDES = List.of(
+            "README.md", "README.Core.md", "README.Reporting.md", "README.Console.md",
+            "README.Mock.md", "README.TestKit.md");
     private static final List<String> IGNORED_DIRECTORIES = List.of(
             ".git", "target", "artifacts", ".idea", "migration-copy-rejected",
             "migration-quarantine", ".presentation-build", "node_modules", "dist");
@@ -133,13 +138,62 @@ public class DocumentationDirectRelationshipGovernanceTest {
                 v.file().toString().replace('\\', '/').equals("module/AGENTS.md")));
     }
 
+    @Test
+    void canonicalSourceNotesAreAllowedOnlyForTheirLibraryGuides(@org.junit.jupiter.api.io.TempDir Path root)
+            throws Exception {
+        Files.createDirectories(root.resolve("lib"));
+        for (String guide : LIBRARY_GUIDES) {
+            String name = guide.equals("README.md") ? "Catalog"
+                    : guide.substring(7, guide.length() - 3).replace("TestKit", "Test Kit");
+            String link = "[" + name + " · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/" + guide + ").";
+            for (String label : guide.equals("README.md") ? List.of("Library sources", "Sursa bibliotecilor")
+                    : List.of("Library source", "Sursa bibliotecii")) {
+                Files.writeString(root.resolve("lib/" + guide), "# Library\n\n" + SOURCE_MARKER
+                        + "\n\n> **" + label + ":** " + link + "\n");
+                assertEquals(List.of(), inspect(root), guide + ": " + label);
+            }
+        }
+    }
+
+    @Test
+    void sourceNoteCannotHideWrongRoutesFencedExamplesOrOtherWorkspaceText(
+            @org.junit.jupiter.api.io.TempDir Path root) throws Exception {
+        Path guide = Files.createDirectories(root.resolve("lib")).resolve("README.Core.md");
+        String note = SOURCE_MARKER + "\n\n> **Library source:** [Core · ATF J0]"
+                + "(https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Core.md).\n";
+        for (String invalid : List.of(note.replace(SOURCE_MARKER, ""),
+                note.replace("/README.Core.md", "/README.Reporting.md"),
+                "~~~markdown\n" + note + "~~~\n", note + "\n" + SOURCE_MARKER + "\n",
+                note.replace("atf_j0/blob", "atf_j2/blob"), note.replace(").", "). ATF-J2"),
+                note + "\nATF-J4 owns another contract.\n")) {
+            Files.writeString(guide, "# Library\n\n" + invalid);
+            assertTrue(!inspect(root).isEmpty(), invalid);
+        }
+    }
+
+    @Test
+    void canonicalSourceNoteDoesNotAuthorizeRootOrNestedLibraryDirectories(
+            @org.junit.jupiter.api.io.TempDir Path folder) throws Exception {
+        String note = "# Libraries\n\n" + SOURCE_MARKER + "\n\n> **Library sources:** [Catalog · ATF J0]"
+                + "(https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.md).\n";
+        for (String file : List.of("README.md", "docs/lib/README.md", "lib/nested/README.md")) {
+            Path root = Files.createTempDirectory(folder, "boundary-");
+            Path guide = root.resolve(file);
+            Files.createDirectories(guide.getParent());
+            Files.writeString(guide, note);
+            assertTrue(!inspect(root).isEmpty(), file);
+        }
+    }
+
     public static List<DocumentationGovernanceSupport.Violation> inspect(Path root) throws IOException {
         var violations = new ArrayList<DocumentationGovernanceSupport.Violation>();
         try (var files = Files.walk(root)) {
             for (Path path : files.filter(Files::isRegularFile).toList()) {
                 if (!isCurrentDocumentation(root, path)) continue;
                 List<String> lines = Files.readAllLines(path);
+                List<String> visible = MarkdownAnchorIndex.withoutFences(lines);
                 for (int index = 0; index < lines.size(); index++) {
+                    if (isLibrarySourceNote(root.relativize(path), index, visible)) continue;
                     Matcher matcher = OTHER_ATF_PROJECT.matcher(lines.get(index));
                     while (matcher.find()) {
                         String project = matcher.group().toUpperCase(java.util.Locale.ROOT).replace('_', '-');
@@ -153,6 +207,19 @@ public class DocumentationDirectRelationshipGovernanceTest {
             }
         }
         return List.copyOf(violations);
+    }
+
+    private static boolean isLibrarySourceNote(Path relative, int index, List<String> visible) {
+        if (relative.getNameCount() != 2 || !relative.getName(0).toString().equals("lib")) return false;
+        String guide = relative.getFileName().toString();
+        if (!LIBRARY_GUIDES.contains(guide) || index < 2 || !visible.get(index - 1).isBlank()
+                || !visible.get(index - 2).equals(SOURCE_MARKER)
+                || visible.stream().filter(SOURCE_MARKER::equals).count() != 1) return false;
+        boolean catalog = guide.equals("README.md");
+        String library = catalog ? "Catalog" : guide.substring(7, guide.length() - 3).replace("TestKit", "Test Kit");
+        String link = "[" + library + " · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/" + guide + ").";
+        return visible.get(index).equals("> **" + (catalog ? "Library sources" : "Library source") + ":** " + link)
+                || visible.get(index).equals("> **" + (catalog ? "Sursa bibliotecilor" : "Sursa bibliotecii") + ":** " + link);
     }
 
     private static boolean isCurrentDocumentation(Path root, Path path) {

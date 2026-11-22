@@ -167,9 +167,10 @@ fiecare consumer păstrează responsabilitatea scenariilor proprii:
   prozei Markdown vizibile și a etichetelor Mermaid pentru toate documentele,
   păstrând identificatorii, comenzile și exemplele de cod;
 - `governance.documentation.relationship.DocumentationDirectRelationshipGovernanceTest` —
-  verifică toate liniile Markdown curente J1, inclusiv exemplele delimitate prin
-  fence, și `AGENTS.md` pentru referințe în afara relației directe J1–biblioteca consumată; doar
-  baseline-ul istoric al controalelor este exclus și își păstrează identificatorii;
+  verifică toate liniile Markdown curente, exemplele delimitate, baseline-ul și
+  `AGENTS.md` pentru referințe în afara contractului local al bibliotecilor. Este
+  permisă doar nota marcată cu sursa canonică din fiecare ghid direct din `lib`;
+  rutele greșite, textul suplimentar despre alte proiecte și notele din alte locuri sunt respinse;
 - `governance.documentation.DocumentationStyleGovernanceTest` — stil semantic ATF:
   fence-uri tipizate, headings fără salturi, bullets `-` și fără font/CSS/HTML
   prezentational în README-uri și în documentul arhitectural canonic;

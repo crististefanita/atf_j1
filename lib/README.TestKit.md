@@ -54,3 +54,8 @@ SPI; launcherul JUnit este o dependență opțională furnizată de runner.
 
 Kit nu depinde de Reporting ori UI și nu lansează teste. Consumerul decide cum
 publică snapshot-ul și verifică binarul selectat în raportul său.
+
+<a id="shared-library-source"></a>
+
+> **Sursa bibliotecii:** [Test Kit · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.TestKit.md).
+> POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

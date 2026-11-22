@@ -492,6 +492,10 @@ Linkurile din root trebuie să răspundă natural la „unde aprofundez?” și 
 introducă o a doua versiune a aceleiași hărți. O referință bună are o etichetă
 semantică și o întrebare clară, nu doar un path.
 
+Cele șase ghiduri din `lib` pot încheia cu o singură notă marcată către ghidul
+canonic al bibliotecii corespunzătoare. POM-ul, proveniența și testele locale
+stabilesc versiunea consumată și acceptanța; pagina principală prezintă proiectul local.
+
 ## Denumiri, linkuri și durabilitate
 
 README-ul unui modul rămâne `README.md`. Documentele descriptive folosesc

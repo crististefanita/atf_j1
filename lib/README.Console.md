@@ -43,3 +43,8 @@ Console depinde de Core; Kit este opțional pentru legătura JUnit. Proiecția r
 ---
 
 Înregistrează constatările Console după coordonata Maven, versiune și hash-urile JAR/POM. Păstrează constatările despre adaptor lângă modulul J1 afectat.
+
+<a id="shared-library-source"></a>
+
+> **Sursa bibliotecii:** [Console · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Console.md).
+> POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

@@ -42,3 +42,8 @@ var total = body.path("total").decimalValue();
 ---
 
 Înregistrează constatările Core după coordonata Maven, versiune și hash-urile JAR/POM. Ghidul local descrie contractul consumat; proveniența identifică octeții inspectați.
+
+<a id="shared-library-source"></a>
+
+> **Sursa bibliotecii:** [Core · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Core.md).
+> POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

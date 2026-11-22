@@ -4984,3 +4984,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary>Navigare către sursa canonică a bibliotecilor</summary>
+
+```yaml
+testChanges:
+  - id: J1-LIBRARY-SOURCE-NOTE-20261122
+    status: VERIFIED
+    base: 446d81b6d1c1fd263115e6847ec68632b0bbdcb2
+    expires: 2026-12-22
+    reason: Permite exclusiv nota cerută către sursa canonică în ghidurile directe ale bibliotecilor, păstrând controale negative pentru alte proiecte, rute greșite, exemple delimitate și alte documente.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=446d81b6d1c1fd263115e6847ec68632b0bbdcb2" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java
+```
+
+</details>
