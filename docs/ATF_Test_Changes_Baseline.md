@@ -100,8 +100,9 @@ testChanges:
 ```
 
 The Maven component and whole-reactor checks run in both editions. Actual-report
-Maven acceptance is closed in the recovery runner finding; IntelliJ output-root
-parity remains open as a separate item.
+browser acceptance runs separately in a fresh stage using the generated HTML
+path, as documented in each consumer README. IntelliJ output-root parity remains
+open as a separate item.
 
 </details>
 

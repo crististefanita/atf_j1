@@ -125,8 +125,8 @@ errors, or skipped tests.
 
 **Status: Verified and closed on 2026-11-22; owners:** Shop and AutoEx component-test maintainers.
 
-- `ShopRecoveryReportObservation` and `AutoExRecoveryReportObservation` project the consumer-owned `UiRecoveryTrace` into each JUnit `TEST BODY` observation. `Operation` is the semantic `catalog-readiness`; `Event` is the ordinal `Backend observation #N`.
+- `ShopRecoveryReportObservation` and `AutoExRecoveryReportObservation` project the consumer-owned `UiRecoveryTrace` into each actual JUnit component report. `Operation` is the semantic `catalog-readiness`; `Event` is the ordinal `Backend observation #N`.
 - The projections align action and trace counts, attempt order, semantic target, and INFO status. Decision, reason, signal, and probe/backoff/total durations come from the typed trace; timing text is no longer parsed from `observed()`.
-- Both component checks cover recovered and exhausted outcomes, ordered fields, redaction, and the synthetic action-table target. Opt-in actual-report Playwright checks cover both outcomes in the Maven-generated JUnit reports, including the collapsed disclosure after `Expand all nodes`.
+- Both component checks cover recovered and exhausted outcomes, ordered fields, redaction, and the synthetic action-table target. Opt-in actual-report Playwright checks cover both outcomes in the Maven-generated JUnit reports, expand the component result, `TEST BODY`, and assertions, and independently verify the collapsed recovery disclosure after `Expand all nodes`.
 - `ConsumerModuleArchitectureGovernanceTest` keeps each projection and its report selectors inside its owning consumer. `atf-ui` and the published Reporting API remain unchanged.
 - IntelliJ output-root parity is tracked separately in [J1 recovery IDE report parity](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22).

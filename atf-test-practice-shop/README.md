@@ -603,15 +603,18 @@ values, policy, and INFO result stay in attempt order. Timing uses the typed
 values and does not parse the action's display text.
 
 `ShopExtentTestExtension` publishes this observation through Test Kit K3
-phase observations and Reporting J26. The INFO trace is a sibling of
-`Component assertions` in `TEST BODY`; the normal assertions, verdict, and test
-count remain intact. The synthetic Playwright probe checks the action-table
-target and its collapsed local disclosure. The opt-in
+phase observations and Reporting J26. In the rendered component result,
+`TEST BODY` contains separate expandable `Component assertions` and INFO
+recovery-trace steps. The normal assertions, verdict, and test count remain
+intact.
+The synthetic Playwright probe checks the action-table target and its
+collapsed local disclosure. The opt-in
 `ShopRecoveryActualReportAcceptanceTest` opens an actual suite report and
-checks its owner, `TEST BODY`, assertion step, collapsed state after
-`Expand all nodes`, complete recovered and exhausted traces, semantic operation,
-event label, ISO-8601 timings, INFO results, and body/URL redaction. It saves a
-viewport capture under `target`. The acceptance contract is in
+checks its owner, expands the component result and `TEST BODY`, expands the
+standard assertion step, and independently checks the recovery disclosure
+after `Expand all nodes`. It verifies complete recovered and exhausted traces,
+semantic operation, event label, ISO-8601 timings, INFO results, and body/URL
+redaction. It saves a viewport capture under `target`. The acceptance contract is in
 [ShopRecoveryActualReportAcceptanceTest](src/test/atf/shop/tests/component/recovery/ShopRecoveryActualReportAcceptanceTest.java).
 
 Generate a suite report and run actual-report acceptance in separate fresh

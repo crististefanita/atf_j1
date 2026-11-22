@@ -53,14 +53,15 @@ The verified test-change control is retained in the
 
 **Status: Verified and closed for Maven component reports on 2026-11-22.**
 Both consumer projections now publish semantic and typed recovery data in the
-real JUnit `TEST BODY` phase, beside the ordinary `Component assertions` step.
+real JUnit component result. The rendered `TEST BODY` phase contains separate
+expandable `Component assertions` and INFO recovery-trace steps.
 
 | Artifact evidence | Observed behavior |
 |---|---|
 | Actual Shop component report | `Operation` displays `catalog-readiness`; `Event` displays `Backend observation #N`. Attempts remain ordered and INFO, with policy, decision, reason, signal, and typed probe/backoff/total durations. |
 | Actual AutoEx component report | The same consumer-owned fields and terminal outcomes appear through `AutoExExtentTestExtension`; assertions, verdict, and count remain intact. |
 | Maven consumer runs | Shop passed 6/6 and AutoEx 5/5 against the pinned Reporting J26/Test Kit K3 artifacts. |
-| Playwright rendering | Opt-in consumer checks open the actual suite-generated HTML for both `RECOVERED` and `EXHAUSTED`. They verify owner, `TEST BODY`, standard assertions, collapsed disclosure after `Expand all nodes`, complete attempt fields and ISO-8601 timings, INFO result, body/URL redaction, and a viewport capture. Synthetic renderer checks separately verify action-table targets. |
+| Playwright rendering | Opt-in consumer checks open the actual suite-generated HTML for both `RECOVERED` and `EXHAUSTED`. They expand the component result, `TEST BODY`, and standard assertion step, then independently verify the recovery disclosure remains collapsed after `Expand all nodes`; all attempt fields, ISO-8601 timings, INFO result, body/URL redaction, and a viewport capture are checked. Synthetic renderer checks separately verify action-table targets. |
 | Safety and outcome | Report acceptance reads an explicitly supplied artifact path and does not overwrite that input. Screenshots stay under staging `target`; the response body and local fixture address remain absent. |
 
 - [x] Keep semantic operation, event label, and typed durations as separate
@@ -88,8 +89,9 @@ report has yet been checked with that same oracle.
 - Open each IDE-generated artifact with the matching
   `ShopRecoveryActualReportAcceptanceTest` or
   `AutoExRecoveryActualReportAcceptanceTest` property.
-- Confirm the same owner, `TEST BODY`, standard assertions, collapsed trace,
-  ordered semantic operation/event/timing fields, redaction, and verdict.
+- Confirm the same owner and expanded `TEST BODY` phase, with separate assertion
+  and trace steps, a collapsed trace, ordered semantic operation/event/timing
+  fields, redaction, and verdict.
 
 Keep this finding open until both IDE-generated artifacts pass the same browser
 acceptance as the Maven reports.

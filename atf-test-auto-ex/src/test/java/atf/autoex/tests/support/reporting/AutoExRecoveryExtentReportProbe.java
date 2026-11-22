@@ -87,15 +87,29 @@ public final class AutoExRecoveryExtentReportProbe {
                 new Page.GetByRoleOptions().setName("Expand all nodes")).click();
         checks.isFalse("Expand all nodes preserves the recovery disclosure state",
                 (Boolean) group.evaluate("element => element.open"));
-        var phase = group.locator("xpath=ancestor::div[contains(@class, 'card')][2]");
-        checks.isTrue("The actual recovery observation belongs to TEST BODY",
-                phase.locator("a.node:text-is('TEST BODY')").isVisible());
-        var assertionNode = phase.locator("a.node:text-is('Component assertions')");
-        checks.isTrue("The actual report retains the standard Component assertions step", assertionNode.isVisible());
-        var assertions = assertionNode.locator("xpath=ancestor::div[contains(@class, 'card')][1]")
-                .locator("table.helm-validation-table tbody tr");
+        var phaseCandidates = group.locator("xpath=ancestor::div[contains(@class, 'card')]")
+                .filter(new Locator.FilterOptions().setHasText("TEST BODY"));
+        var phase = phaseCandidates.last();
+        var componentResult = phase.locator("xpath=ancestor::div[contains(@class, 'card')][1]");
+        var resultNode = componentResult.locator("xpath=./div[contains(@class, 'card-header')]//a[contains(@class, 'node')]");
+        var bodyNode = phase.locator("xpath=./div[contains(@class, 'card-header')]//a[contains(@class, 'node') and normalize-space(.)='TEST BODY']");
+        checks.isTrue("The actual recovery trace remains inside a TEST BODY phase", phaseCandidates.count() > 0);
+        checks.equals("The actual recovery trace remains under its component result", 1, resultNode.count());
+        checks.equals("The actual recovery trace remains inside TEST BODY", 1, bodyNode.count());
+        if (!bodyNode.isVisible()) resultNode.click();
+        checks.isTrue("Expanding the component result exposes TEST BODY", bodyNode.isVisible());
+        var assertionNode = phase.locator("a.node")
+                .filter(new Locator.FilterOptions().setHasText("Component assertions"));
+        checks.equals("TEST BODY exposes its Component assertions child", 1, assertionNode.count());
+        checks.isTrue("The component result exposes its assertion step", assertionNode.isVisible());
+        var phaseContent = phase.locator(":scope > .collapse");
+        if (!phaseContent.isVisible()) bodyNode.click();
+        checks.isTrue("Expanding TEST BODY exposes its phase content", phaseContent.isVisible());
+        checks.isTrue("Expanded TEST BODY exposes the recovery trace", group.isVisible());
+        var assertions = phase.locator("table.helm-validation-table tbody tr");
         if (!assertions.first().isVisible()) assertionNode.click();
-        checks.isTrue("Expanding the assertion step reveals all assertion rows", assertions.count() > 0);
+        checks.isTrue("Expanding the assertion step reveals all assertion rows",
+                assertions.count() > 0 && assertions.first().isVisible());
         for (int index = 0; index < assertions.count(); index++) {
             checks.isTrue("Component assertion remains PASS: " + (index + 1),
                     assertions.nth(index).locator("td").nth(3).innerText().contains("✅"));
