@@ -1703,12 +1703,20 @@ Salvează o captură a viewport-ului sub `target`. Contractul este în
 
 ```mermaid
 flowchart LR
-    Trace["UiRecoveryTrace tipizat + acțiune INFO asociată"] --> Projection["AutoExRecoveryReportObservation"]
-    Projection --> Phase["AutoExExtentTestExtension · Test Kit K3"]
-    Assertions["Component assertions"] --> Phase
-    Phase --> Html["Reporting J26 · HTML Extent"]
-    Html --> Acceptance["AutoExRecoveryActualReportAcceptanceTest"]
+    Trace["UiRecoveryTrace tipizat + acțiune INFO asociată"] -->|proiectează| Projection["AutoExRecoveryReportObservation"]
+    Projection -->|publică| Phase["AutoExExtentTestExtension · Test Kit K3"]
+    Assertions["Component assertions"] -->|se alătură| Phase
+    Phase -->|randează| Html["Reporting J26 · HTML Extent"]
+    Acceptance["AutoExRecoveryActualReportAcceptanceTest"] -->|deschide| Html
 ```
+<details>
+<summary><strong>Legendă — fluxul raportului recovery</strong></summary>
+
+Consumerul proiectează local încercările tipizate; K3 publică pașii separați ai
+aserțiunilor și trace-ului în `TEST BODY`, Reporting randează HTML-ul, iar
+acceptanța opt-in deschide artefactul.
+
+</details>
 
 Generează raportul suitei și rulează acceptanța raportului real în două zone de
 staging proaspete, conform [procedurii de build](../docs/ATF_Build_And_Execution_Safety.md):
