@@ -619,12 +619,20 @@ redaction. It saves a viewport capture under `target`. The acceptance contract i
 
 ```mermaid
 flowchart LR
-    Trace["UiRecoveryTrace + matching INFO action"] --> Projection["ShopRecoveryReportObservation"]
-    Projection --> Phase["ShopExtentTestExtension · Test Kit K3"]
-    Assertions["Component assertions"] --> Phase
-    Phase --> Html["Reporting J26 · Extent HTML"]
-    Html --> Acceptance["ShopRecoveryActualReportAcceptanceTest"]
+    Trace["UiRecoveryTrace + matching INFO action"] -->|maps| Projection["ShopRecoveryReportObservation"]
+    Projection -->|publishes| Phase["ShopExtentTestExtension · Test Kit K3"]
+    Assertions["Component assertions"] -->|joins| Phase
+    Phase -->|renders| Html["Reporting J26 · Extent HTML"]
+    Acceptance["ShopRecoveryActualReportAcceptanceTest"] -->|opens| Html
 ```
+<details>
+<summary><strong>Legend — recovery-report flow</strong></summary>
+
+The consumer maps typed attempts locally; K3 publishes the separate assertion
+and trace steps in `TEST BODY`, Reporting renders HTML, and opt-in acceptance
+opens that artifact.
+
+</details>
 
 Generate a suite report and run actual-report acceptance in separate fresh
 staging areas, as required by the [build procedure](../docs/ATF_Build_And_Execution_Safety.md):
