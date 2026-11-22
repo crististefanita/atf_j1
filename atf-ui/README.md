@@ -9,7 +9,7 @@ publisherul Extent sau page objects de produs.
 
 **Ghiduri locale:** [playwright](src/main/java/atf/ui/playwright/README.md) · [network](src/main/java/atf/ui/network/README.md).
 
-**Trasee rapide:** [Acțiuni](#acțiuni-și-locatori) · [Politica BE](#recuperare-be-prin-observație-pasivă) · [Captură și limite](#inspectorul-de-rețea--limită-generică-de-responsabilitate) · [Probă locală](#verificare-rapidă)
+**Trasee rapide:** [Acțiuni](#acțiuni-și-locatori) · [Politica BE](#recuperare-be-prin-observație-pasivă) · [Captură și limite](#inspectorul-de-rețea--limită-generică-de-responsabilitate) · [Probă locală](#verificare-rapidă) · [Capturi complete](#full-context-screenshots)
 
 | Input | Output | Boundary |
 |---|---|---|
@@ -992,6 +992,8 @@ trecerea întregului modul. Retenția completă nu probează livrarea tuturor su
 
 </details>
 
+<a id="full-context-screenshots"></a>
+<a id="capturi-de-ecran-cu-context-complet"></a>
 ## Capturi de ecran cu context complet
 
 Fiecare captură de ecran folosită drept dovadă a unui test păstrează contextul
