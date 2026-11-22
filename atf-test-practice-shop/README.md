@@ -587,29 +587,38 @@ necunoscute sunt refuzate înaintea browserului.
 
 Aserțiunile acestor componente rămân în pasul standard `Component assertions`,
 colapsat implicit, cu redactare înaintea plafonului configurat de 240 de
-caractere. Testul component creează probe locale de proiecție Extent pentru
-urmele recovered și exhausted. Construiește un scenariu sintetic pentru raport,
-cu un pas al cărui titlu include rezultatul și numărul de încercări; rendererul
-primește înregistrările recovery capturate de J1. Un singur grup
-`Audit observations`, colapsat inițial, conține rândurile INFO în ordine.
-Expandarea afișează urma completă și sursa politicii, fără body-ul
-răspunsului sau URL-ul fixture-ului local. Proba verifică maparea dovezilor de
-acțiune J1 și rendererul selectat pe fixture-uri locale.
+caractere. Ownerul consumerului
+[ShopRecoveryReportObservation](src/test/atf/shop/tests/support/reporting/ShopRecoveryReportObservation.java)
+proiectează fiecare `UiRecoveryTrace` tipizat lângă înregistrarea sa INFO.
+`Operation` afișează `catalog-readiness`; `Event` afișează separat
+`Backend observation #N`. Decizia, motivul, semnalul, cele trei valori
+`Duration` măsurate, politica și rezultatul INFO rămân în ordinea încercărilor.
+Timpii folosesc valorile tipizate și nu sunt parsați din textul acțiunii.
 
-Separat, `ShopExtentTestExtension` publică urma recovery capturată în raportul
-JUnit real al suitei component, prin observațiile de fază din Test Kit K3 și
-Reporting J26. Nodul INFO este frate cu `Component assertions` în `TEST BODY`;
-verdictul aserțiunilor și numărul testelor rămân cele normale. Fiecare
-încercare afișează politica, observația, timing-ul măsurat probe/backoff/total
-și rezultatul INFO. Câmpul `Attempt N · Operation` conține acum eticheta
-evenimentului `Backend observation #N`, nu operația semantică de recovery
-`catalog-readiness`. Neclaritatea câmpului este urmărită în [feedback-ul de
-recovery J1](../docs/feedback/ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21).
-Proba Playwright a testului component deschide doar HTML-ul sintetic separat din
-`target/shop-runtime-reports/recovery-audit`; nu deschide raportul produs de
-extensia JUnit. Inspectarea raportului real al suitei și proba locală a
-rendererului sunt dovezi distincte. Dovezile acoperă suita component recovery;
-nu afirmă acceptanță E2E pe site-ul public.
+`ShopExtentTestExtension` publică observația prin fazele Test Kit K3 și
+Reporting J26. În raportul component randat, `TEST BODY` conține pașii
+expandabili separați `Component assertions` și trace-ul INFO. Aserțiunile
+normale, verdictul și numărul testelor rămân intacte. Proba Playwright sintetică verifică
+ținta tabelului de acțiuni și disclosure-ul local colapsat. Testul opt-in
+`ShopRecoveryActualReportAcceptanceTest` deschide un raport real al suitei,
+extinde rezultatul component și `TEST BODY`, extinde pasul standard de
+aserțiuni și verifică independent disclosure-ul recovery după `Expand all
+nodes`. Verifică urmele complete recovered și exhausted, operația semantică,
+eticheta evenimentului, timpii ISO-8601, rezultatul INFO și redactarea body/URL.
+Salvează o captură a viewport-ului sub `target`. Contractul este în
+[ShopRecoveryActualReportAcceptanceTest](src/test/atf/shop/tests/component/recovery/ShopRecoveryActualReportAcceptanceTest.java).
+
+Generează raportul suitei și rulează acceptanța raportului real în două zone de
+staging proaspete, conform [procedurii de build](../docs/ATF_Build_And_Execution_Safety.md):
+
+```powershell
+mvn -B -ntp -pl atf-test-practice-shop -am "-Dtest=ShopBackendRecoveryComponentTest" "-Datf.practice.api-report-directory=target/recovery-suite-report" "-Dsurefire.failIfNoSpecifiedTests=false" test
+mvn -B -ntp -pl atf-test-practice-shop -am "-Dtest=ShopRecoveryActualReportAcceptanceTest" "-Datf.shop.recovery.actual-report=<configured-report-file>" "-Datf.practice.api-report-directory=target/recovery-report-acceptance" "-Dsurefire.failIfNoSpecifiedTests=false" test
+```
+
+Acceptanța este inactivă dacă `atf.shop.recovery.actual-report` nu este setată.
+Verificarea folosește un raport component generat de Maven; nu afirmă verificarea
+unui raport lansat din IntelliJ sau acceptanța E2E pe site-ul public.
 
 </details>
 

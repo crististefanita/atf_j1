@@ -102,9 +102,31 @@ testChanges:
 ```
 
 Verificările Maven ale componentelor și ale întregului reactor rulează în
-ambele ediții. Inspecția Playwright a HTML-urilor reale este consemnată în
-constatarea recovery activă; paritatea directorului de output IntelliJ rămâne
-deschisă.
+ambele ediții. Acceptanța browserului pe raportul real rulează separat, într-un
+staging proaspăt, folosind calea HTML generată, conform instrucțiunilor din
+README-urile modulelor. Paritatea directorului de output IntelliJ rămâne
+deschisă separat.
+
+</details>
+
+<details>
+<summary><strong>Control verificat — proiecția tipizată a trace-ului recovery</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-RECOVERY-REPORT-PROJECTION-20261122
+    status: VERIFIED
+    base: 447da3cb49f631838cfa554ec66e11e8984cfd3b
+    expires: 2026-12-22
+    reason: Păstrează proiecția tipizată a operației semantice și duratelor, acceptanța browserului pe raportul real și selectorii deținuți de consumatori în AutoEx și guvernanță.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopBackendRecoveryComponentTest,AutoExBackendRecoveryComponentTest,ConsumerModuleArchitectureGovernanceTest,TestChangeGovernanceTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=447da3cb49f631838cfa554ec66e11e8984cfd3b" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExRecoveryActualReportAcceptanceTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryExtentReportProbe.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExRecoveryReportObservation.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+```
 
 </details>
 

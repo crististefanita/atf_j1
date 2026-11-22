@@ -123,13 +123,23 @@ ediții, fără eșecuri, erori sau teste omise.
 <a id="j1-recovery-trace-typing-2026-11-21"></a>
 ## J1-RECOVERY-TRACE-TYPING-2026-11-21 — păstrarea dovezii recovery tipizate până la proiecția raportului
 
-**Stare: Deschisă; responsabili:** responsabilii testelor component Shop și AutoEx.
+**Stare: Verificată și închisă la 2026-11-22; responsabili:** responsabilii
+testelor component Shop și AutoEx.
 
-Constatarea combină o neclaritate într-un câmp al raportului cu o oportunitate mică de mentenanță; nu indică un defect în rendererul comun.
-
-- **Neconcordanță observată:** [UiBackendRecovery.java](../../atf-ui/src/main/java/atf/ui/playwright/recovery/UiBackendRecovery.java) înregistrează `BE observation #<attempt>` drept operația evenimentului UI și operația semantică de recovery (acum `catalog-readiness`) drept țintă. Ambele teste consumer etichetează apoi `row.operation()` cu `Attempt N · Operation`, schimbă prefixul în `Backend observation` și verifică doar ordinalul. Câmpul descrie astfel evenimentul de observație, nu operația recovery; proba raportului randat nu verifică ținta semantică.
-- **Proiecție textuală duplicată:** [ShopBackendRecoveryComponentTest.java](../../atf-test-practice-shop/src/test/atf/shop/tests/component/recovery/ShopBackendRecoveryComponentTest.java) și [AutoExBackendRecoveryComponentTest.java](../../atf-test-auto-ex/src/test/java/atf/autoex/tests/component/recovery/AutoExBackendRecoveryComponentTest.java) dublează maparea și parsează timpii probe/backoff/total din textul `row.observed()`.
-- **Sursă și limită tipizate:** [UiRecoveryTrace.java](../../atf-ui/src/main/java/atf/ui/recovery/UiRecoveryTrace.java) conține operația semantică, încercarea, decizia, motivul și valorile `Duration`. `UiBackendRecovery` acceptă deja un `Consumer<UiRecoveryTrace>`; evaluați mai întâi o proiecție tipizată, locală consumerului, fără API public Reporting sau modul comun.
-- **Pas următor:** Faceți câmpul vizibil corect: afișați și verificați operația semantică de recovery sau numiți valoarea ordinală drept eveniment de observație și expuneți separat ținta. Păstrați ordinea încercărilor explicită. Derivați timpii și deciziile terminale din valorile tipizate, nu din parsarea `description()` sau `observed()`. Mențineți ownerii separați în Shop și AutoEx.
-- **Acceptanță:** Verificați valoarea exactă `catalog-readiness`, ordinea încercărilor, durate măsurate distincte și rezultatele terminale. Inspectați rapoartele HTML Maven reale din ambele module; păstrați starea disclosure-urilor, numărul complet de rânduri, redactarea și verdictul. Extindeți verificarea browserului să confirme ținta semantică, nu doar eticheta ordinală a evenimentului.
-- **Limită:** Nu lărgiți API-ul stabil și nu adăugați o abstracție comună dacă callback-ul tipizat este suficient; cereți un contract neutru înaintea oricărei reutilizări.
+- `ShopRecoveryReportObservation` și `AutoExRecoveryReportObservation`
+  proiectează `UiRecoveryTrace` deținut de consumer în fiecare raport component
+  JUnit real. `Operation` este `catalog-readiness`, iar `Event` este
+  `Backend observation #N`.
+- Proiecțiile aliniază numărul și ordinea acțiunilor cu trace-ul, ținta semantică
+  și nivelul INFO. Decizia, motivul, semnalul și timpii probe/backoff/total vin
+  din trace-ul tipizat; textul din `observed()` nu mai este parsată pentru timpi.
+- Testele ambilor consumatori verifică rezultatele recovered și exhausted,
+  câmpurile ordonate, redactarea și ținta tabelului sintetic de acțiuni. Testele
+  Playwright opt-in verifică ambele rezultate în rapoartele JUnit Maven reale,
+  extind rezultatul component, `TEST BODY` și aserțiunile și verifică independent
+  disclosure-ul colapsat după `Expand all nodes`.
+- `ConsumerModuleArchitectureGovernanceTest` păstrează proiecția și selectorii
+  raportului în consumerul proprietar. `atf-ui` și API-ul Reporting publicat nu
+  s-au modificat.
+- Paritatea directorului de output IntelliJ este urmărită separat în
+  [J1 recovery IDE report parity](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22).
