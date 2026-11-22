@@ -8183,7 +8183,8 @@
         "nativeEvidence": "C:/work/j1/kit_k4_publication.log",
         "physicalBinaryEvidence": "C:/work/j1/kit_k4_binary_contracts.log",
         "consumerEvidence": "C:/work/j1/j1_testplan_third.log",
-        "consumerScope": "Shop and AutoEx launch metadata 4/4 each, controlled E2E report/resource checks 1/1 each; EN/RO final governance tracked separately.",
+        "verificationNote": "C:/work/j1/kit_k4_publication_20261122/verification.md",
+        "consumerScope": "Shop and AutoEx launch metadata 4/4 each and controlled E2E report/resource checks 1/1 each in both editions; final EN/RO governance and binary identity checks are recorded in currentConsumerAcceptance.",
         "defaultAssertionPreviewCharacters": 240
       },
       "history": [
@@ -8670,7 +8671,7 @@
     }
   },
   "currentConsumerAcceptance": {
-    "status": "SCOPED_EVIDENCE",
+    "status": "PASSED_SCOPED",
     "workspace": "atf_j1",
     "reportingBinarySha256": "A76969FC211FBB9E33D9CCD1547878105F09265668302BF677ED0288BFC1F6BB",
     "testKitBinarySha256": "4327E00DDC8690AE178F19BDAFA0215D558AE389287F5BE51953CD02D6C2102B",
@@ -8678,8 +8679,32 @@
     "evidence": {
       "native": "C:/work/j1/kit_k4_publication.log",
       "physicalBinary": "C:/work/j1/kit_k4_binary_contracts.log",
-      "english": "C:/work/j1/j1_testplan_en_final.log",
-      "romanian": "C:/work/j1/j1_testplan_ro_final.log"
+      "englishConsumer": "C:/work/j1/j1_testplan_third.log",
+      "englishGovernance": "C:/work/j1/j1_testplan_en_checked.log",
+      "englishBinaryIdentity": "C:/work/j1/j1_k4_binary_selection.log",
+      "romanianConsumerAndGovernance": "C:/work/j1/j1_testplan_ro_final.log",
+      "sourceGovernance": "C:/work/j1/j0_testplan_checked.log",
+      "verificationNote": "C:/work/j1/kit_k4_publication_20261122/verification.md"
+    },
+    "editions": {
+      "main": {
+        "launchMetadataComponents": 8,
+        "controlledE2eReportChecks": 2,
+        "governanceTests": 192,
+        "binaryIdentityChecks": 8,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      },
+      "main_RO": {
+        "launchMetadataComponents": 8,
+        "controlledE2eReportChecks": 2,
+        "governanceTests": 192,
+        "binaryIdentityChecks": 8,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      }
     },
     "statusLimit": "IntelliJ output-root parity remains a separate open finding; no public-site E2E claim."
   },

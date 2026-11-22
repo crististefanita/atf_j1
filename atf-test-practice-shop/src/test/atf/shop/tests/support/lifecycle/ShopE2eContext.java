@@ -573,5 +573,3 @@ public final class ShopE2eContext implements AutoCloseable {
 
     }
 }
-
-
