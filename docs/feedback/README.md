@@ -19,23 +19,14 @@ record library observations by coordinate, version, hash, and local reproducer.
 criteria, outside the current maintenance priority order. The delivered
 comparator is separate from the proposed ledger, lifecycle and report projection.
 
-## Delivered consumer evidence
+## Current contract owners
 
-| Contract | Current record |
+| Contract | Owner |
 |---|---|
-| Actual JUnit discovery plan | [Closed on 2026-11-22](ATF_Reporting_Feedback.md#j1-launch-context-146); Kit K4 supplies selection and discovery count, with complete report expansion and isolated scopes |
-| Recovery scenario clarity and report-selector ownership | [Closed on 2026-11-21](ATF_Code_Maintenance_Feedback.md#oop-recovery-scenarios-2026-11-21); named typed scenarios and test-scoped report selectors passed component checks 6/6 Shop, 5/5 AutoEx, and Whole-ATF governance 191/191 in both editions |
-| Recovery evidence in local consumer Extent probes | [Closed on 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); both consumers verify collapsed state, expand-all, ordered trace rows, and redaction in both editions; each local probe builds a synthetic outcome-bearing step and does not establish suite-generated report output |
-| Typed recovery evidence projection | [Closed on 2026-11-22](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21); consumer-owned projections separate semantic operation from event and use typed durations; common UI and Reporting APIs are unchanged |
-| Actual Maven recovery component reports | [Closed on 2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21); Shop and AutoEx browser acceptance checks both outcomes, expanded assertion rows, ordered trace fields, disclosure behavior, redaction, and verdict. IntelliJ output-root parity remains a separate open finding |
-| Shop postal lookup settlement timing | [Closed on 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); three 13-case runs pass, with race settlement measured at 494–524 ms against the 1,100 ms budget and browser startup/navigation measured separately |
-| AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
-| J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); the closure record includes Whole-ATF governance 191/191 in EN and RO; all maintained Markdown structures and link destinations match |
-| Local-first root overview and module inventory | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-root-overview-20261120); the closure record includes governance 191/191 in EN and RO; Markdown edition structure remains aligned |
-| Project maps and standalone verification records | [Closed on 2026-11-21](ATF_Documentation_Feedback.md#doc-verification-record-scope-20261120); durable contracts remain with their owners and governance rejects dated and undated report forms |
-| Documentation edition review and worktree comparison | [Verified on 2026-11-21](ATF_Documentation_Feedback.md#doc-edition-comparator-20261120); 50 documents pass the commit-pinned and live worktree checks, Node tests 11/11 cover CRLF/LF normalization and semantic drift, and library POMs remain byte-exact |
-| Screenshot evidence policy | [Evidence capture contract](../ATF_Evidence_Capture_Contract.md), the UI module guide, and native browser geometry tests define the current behavior |
-| Consumer contracts | Module READMEs and executable tests define current behavior |
+| Library identity and local acceptance | [Library catalog](../../lib/README.md) and module tests |
+| Reporting and launch evidence | [Testing guide](../ATF_Testing_Guide.md) and consumer module READMEs |
+| Complete screenshot evidence | [Capture contract](../ATF_Evidence_Capture_Contract.md) |
+| Documentation and language editions | [Documentation standard](../README_Atf_DocumentationBestPractices.md) |
 
 ## Record a library observation
 

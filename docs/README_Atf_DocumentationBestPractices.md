@@ -603,3 +603,8 @@ Run the [governance](../atf-tests/README.md#quick-verification) command in
 staging; inspect rendered Markdown artifacts in the MCP tab. The editorial
 rubric remains the one [above](#editorial-review-rubric), with no thresholds
 or exceptions introduced for a particular review.
+
+The active feedback index keeps open gaps and links to current contract owners.
+Remove completed run journals, dated closure rows and acceptance counts; preserve
+original evidence in Git history or owned artifacts. Documentation governance
+checks both language editions while allowing dates in active finding identifiers.

@@ -4993,3 +4993,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary>Active feedback index hygiene</summary>
+
+```yaml
+testChanges:
+  - id: J1-FEEDBACK-INDEX-HYGIENE-20261122
+    status: VERIFIED
+    base: 4c908e977f5f3562d4d04bb2a052467a7dfaab50
+    expires: 2026-12-22
+    reason: Reject delivered-result journals in the active index while preserving dated open finding identities, owner links and literal examples.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4c908e977f5f3562d4d04bb2a052467a7dfaab50" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java
+```
+
+</details>
