@@ -5038,10 +5038,12 @@ testChanges:
     status: VERIFIED
     base: be5b8e907727cd3dda66681178c0f0641a487ccc
     expires: 2026-12-22
-    reason: Govern Mermaid blocks with both Markdown fence styles, retain literal nested examples, require semantic labels for every flow edge, and reject incomplete closures.
+    reason: Recognize both Mermaid fence styles and literal examples, retain labelled relationships and adjacent legends, and align the governed distribution source README with the same visual contract.
     proof: mvn -B -ntp -pl atf-tests -am test "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=be5b8e907727cd3dda66681178c0f0641a487ccc" "-Dsurefire.failIfNoSpecifiedTests=false"
     paths:
       - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+
 ```
 
 </details>
