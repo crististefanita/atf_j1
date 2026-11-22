@@ -600,6 +600,7 @@ redaction. It saves a viewport capture under `target`. The acceptance contract i
 [ShopRecoveryActualReportAcceptanceTest](src/test/atf/shop/tests/component/recovery/ShopRecoveryActualReportAcceptanceTest.java).
 
 ```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
     Trace["Trace and<br/>INFO action"] -->|maps| Projection["Recovery<br/>projection"]
     Projection -->|publishes| Phase["Lifecycle<br/>adapter"]
@@ -648,6 +649,7 @@ A plan executed in another session retains its inventory/count and explicitly id
 provenance; disabling the SPI observer yields unavailable metadata.
 
 ```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
     Request["Launcher request"] -->|discovers| Plan["Filtered<br/>TestPlan"]
     Plan -->|snapshots| Kit["Test Kit"]

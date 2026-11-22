@@ -15,6 +15,7 @@ This index describes the six-module J1 reactor and the five versioned libraries 
 | Update documentation safely | [Documentation best practices](README_Atf_DocumentationBestPractices.md) and [build safety](ATF_Build_And_Execution_Safety.md) |
 
 ~~~mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
   POM[Root POM] -->|selects versions| Libraries[Five library JAR/POM pairs]
   POM -->|declares| Modules[Six local J1 modules]
