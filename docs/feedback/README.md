@@ -13,6 +13,7 @@ reproducere locală.
 |---|---|---|
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Integrarea metadatelor lansării | clasa/metoda sursă și ascendența suitei sunt livrate; furnizează selectorii reali și numărul descoperit printr-un snapshot neutru per lansare |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | Journey-ul de cumpărare AutoEx | reproduce confirmarea coșului public cu un browser nou |
+| [J1-RECOVERY-IDE-REPORT-PARITY-2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22) | Configurarea lansării consumerilor | rulează componentele recovery din IntelliJ și validează artefactele emise cu acceptanța browser existentă |
 
 ## Dovezi consumer livrate
 
