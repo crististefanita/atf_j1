@@ -136,4 +136,3 @@ class AutoExLaunchMetadataComponentTest {
     @Suite @SelectClasses({First.class, Second.class}) @IncludeTags("launch-selected")
     public static class FilteredSuite { }
 }
-

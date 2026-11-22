@@ -49,4 +49,3 @@ public record ShopLaunchMetadata(Optional<String> rootSuite, String testClass, S
         }
     }
 }
-

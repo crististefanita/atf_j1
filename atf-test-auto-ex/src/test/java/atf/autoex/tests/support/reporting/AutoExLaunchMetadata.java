@@ -49,4 +49,3 @@ public record AutoExLaunchMetadata(Optional<String> rootSuite, String testClass,
         }
     }
 }
-
