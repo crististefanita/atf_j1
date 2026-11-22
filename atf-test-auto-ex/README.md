@@ -1736,35 +1736,36 @@ Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperar
 
 ## Identitatea lansării JUnit
 
-O fază separată și colapsată `Launch context` păstrează clasa și metoda canonică
-pentru fiecare invocare și suita exterioară expusă în ascendența ID-ului JUnit.
-Modelul imuabil `AutoExLaunchMetadata` este capturat de extensia consumerului și
-publicat prin contractul existent `ReportObservation` din Reporting. Titlurile
-afișate și numele fișierelor nu determină această identitate.
+O fază INFO colapsată `Launch context` păstrează clasa/metoda canonică și suita
+exterioară expusă de ascendența JUnit. `AutoExLaunchMetadata` proiectează snapshot-ul
+imuabil `TestLaunchContext.capture(context)` furnizat de Test Kit K4. Publică
+selectorii reali, inventarul filtrat și numărul exact de teste descoperite prin
+contractul existent de observații Reporting.
 
-`Launcher selection` și `Effective selection count` rămân explicit necunoscute:
-`ExtensionContext` nu furnizează selectorii lansării sau un `TestPlan` descoperit.
-Un raport partajat sau o singură metodă executată nu demonstrează aceste valori.
-System operațional, titlurile pașilor de business, verdictele și previzualizarea
-configurată a aserțiunilor respectă în continuare contractele existente.
+Numărul este măsurat la începutul planului, include teste dezactivate și exclude
+înregistrările dinamice ulterioare. Numărul lor la captură este un câmp separat.
+Valorile nu sunt reconstruite din teste terminate sau trecute. Un plan executat
+în altă sesiune păstrează inventarul/numărul și marchează explicit lipsa cererii;
+dezactivarea observerului SPI produce metadate indisponibile.
 
 ```mermaid
 flowchart LR
-    JUnit["Context JUnit"] -->|capturează| Identity["Identitate imuabilă"]
-    Identity -->|publică| Adapter["Adapter AutoEx"]
-    Adapter -->|observă| Reporting["Reporting J26"]
+    Request["Cererea lansării"] -->|descoperă| Plan["TestPlan filtrat"]
+    Plan -->|capturează| Kit["Test Kit K4"]
+    Kit -->|furnizează| Adapter["Adapter AutoEx"]
+    Adapter -->|publică| Reporting["Reporting J26"]
     Reporting -->|randează| Tests["Tests · Launch context"]
 ```
 
 <details>
-<summary><strong>Legendă — interacțiunea modulelor și faptele disponibile</strong></summary>
+<summary><strong>Legendă — interacțiunea modulelor și semantica numărării</strong></summary>
 
-- JUnit furnizează identitatea sursei; consumerul deține captura și publicarea.
-- Reporting randează observația INFO cu expandare independentă.
-- Test Kit rămâne biblioteca de lifecycle; nu furnizează puntea spre planul descoperit.
-- `AutoExLaunchMetadataComponentTest` verifică lansările de clasă/metodă, suita
-  canonică, suita filtrată prin tag, titlurile identice, numele înșelătoare,
-  lansările repetate și expandarea în browser a tuturor celor șase câmpuri.
+- Kit observă callback-urile publice; nu pornește teste, browser sau raport.
+- Consumerul deține proiecția imuabilă în raport și fațada selectorilor săi.
+- Selectorii păstrează sursa reală; titlurile și numele fișierelor nu definesc selecția.
+- `AutoExLaunchMetadataComponentTest` verifică lansări de clasă/metodă și suite
+  canonice sau filtrate prin tag, titluri identice, lansări repetate, numere exacte,
+  selectorii originali, sursele selectate și expandarea în browser a fiecărui câmp.
 
 </details>
 

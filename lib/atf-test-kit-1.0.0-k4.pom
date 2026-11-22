@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>atf.api</groupId>
     <artifactId>atf-test-kit</artifactId>
-    <version>1.0.0-k3</version>
+    <version>1.0.0-k4</version>
     <name>ATF Test Kit</name>
     <description>Renderer-neutral JUnit audit, classification and test lifecycle support.</description>
     <properties>
@@ -42,7 +42,7 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit.platform.version}</version>
-            <scope>test</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -9,7 +9,7 @@ import static atf.testkit.assertions.AuditedAssertions.*;
 public final class ShopLaunchReportProbe {
     private ShopLaunchReportProbe() { }
 
-    public static void verify(Path report) throws Exception {
+    public static void verify(Path report, int expected, String selector) throws Exception {
         try (var viewer = PlaywrightUiSession.open(UiBrowserConfiguration.defaults())) {
             var page = viewer.page();
             page.navigate(report.toUri().toString());
@@ -28,7 +28,13 @@ public final class ShopLaunchReportProbe {
             if (!group.isVisible()) phaseNode.click();
             group.locator("summary").click();
             var rows = group.locator("table.helm-evidence-table tbody tr");
-            assertEquals(6, rows.count(), "All launch fields expand");
+            assertEquals(9 + expected, rows.count(), "All discovery fields and selected sources expand");
+            assertEquals(Integer.toString(expected), rows.filter(new com.microsoft.playwright.Locator.FilterOptions()
+                    .setHasText("EFFECTIVE SELECTION COUNT")).locator("td").nth(1).innerText());
+            assertEquals(selector, rows.filter(new com.microsoft.playwright.Locator.FilterOptions()
+                    .setHasText("SELECTOR #1")).locator("td").nth(1).innerText());
+            assertEquals("0", rows.filter(new com.microsoft.playwright.Locator.FilterOptions()
+                    .setHasText("DYNAMIC REGISTRATIONS AT CAPTURE")).locator("td").nth(1).innerText());
             for (int index = 0; index < rows.count(); index++) {
                 rows.nth(index).scrollIntoViewIfNeeded();
                 assertTrue(rows.nth(index).isVisible(), "Every metadata row is readable");

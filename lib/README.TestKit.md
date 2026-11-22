@@ -39,3 +39,18 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 ---
 
 Înregistrează constatările Test Kit după coordonata Maven, versiune și hash-urile JAR/POM. Păstrează comportamentul de adopție și verificările de păstrare a valorilor în modulul J1 afectat.
+
+## Planul descoperit al lansării
+
+Test Kit K4 oferă `TestLaunchContext.capture(context)` și snapshot-ul imuabil
+`TestLaunchSnapshot`. Observerul `LauncherSessionListener` este descoperit prin
+SPI; launcherul JUnit este o dependență opțională furnizată de runner.
+
+- Selectorii sunt asociați configurației planului; o cerere străină nu este reutilizată.
+- Inventarul și numărul provin din `TestPlan` după filtre, la începutul execuției.
+- Testele dezactivate sunt incluse; înregistrările dinamice ulterioare se numără separat.
+- Scope-urile se restaurează la lansări imbricate și se izolează la lansări concurente.
+- Un plan din altă sesiune păstrează inventarul, dar declară lipsa cererii; fără observer, captura este absentă.
+
+Kit nu depinde de Reporting ori UI și nu lansează teste. Consumerul decide cum
+publică snapshot-ul și verifică binarul selectat în raportul său.

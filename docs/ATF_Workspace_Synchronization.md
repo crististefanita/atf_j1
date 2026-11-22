@@ -22,7 +22,7 @@ proveniența pachetelor.
 | Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` | `lib/atf-reporting-1.0.0-j26.pom` |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` | `lib/atf-console-1.0.0-c2.pom` |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` | `lib/atf-mock-1.0.0-m2.pom` |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k3` | `lib/atf-test-kit-1.0.0-k3.jar` | `lib/atf-test-kit-1.0.0-k3.pom` |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k4` | `lib/atf-test-kit-1.0.0-k4.jar` | `lib/atf-test-kit-1.0.0-k4.pom` |
 
 Versiunile de mai sus trebuie să corespundă proprietăților din POM-ul rădăcină
 și numelor de fișier din `lib`. Utilizarea bibliotecilor și limitele

@@ -14,7 +14,7 @@ fișierele artifactelor și proveniența din acest checkout.
 | Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` + POM |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` + POM |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` + POM |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k3` | `lib/atf-test-kit-1.0.0-k3.jar` + POM |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k4` | `lib/atf-test-kit-1.0.0-k4.jar` + POM |
 
 POM-ul rădăcină selectează versiunile. `library-provenance.json` identifică
 hash-urile binar/POM și dovezile păstrate despre pachete.

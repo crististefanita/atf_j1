@@ -99,36 +99,36 @@ acceptanță în browser ca rapoartele Maven.
 
 <a id="j1-launch-context-146"></a>
 
-## J1-LAUNCH-CONTEXT-146 — completarea metadatelor planului descoperit
+## J1-LAUNCH-CONTEXT-146 — selecție și plan real
 
-**Stare: Livrat parțial la 2026-11-22; responsabil pentru rest:** integrarea lansării cu consumerul.
+**Stare: Verificat și închis la 2026-11-22.** Kit K4 furnizează selectorii cererii,
+inventarul filtrat și numărul descoperit. Proiecțiile locale păstrează identitatea
+JUnit și publică aceste fapte în `Launch context`, în afara System operațional.
 
-- Livrat: clasa/metoda imuabilă și suita exterioară din ascendența ID-ului JUnit, publicate în faza INFO colapsată `Launch context` din Tests. System operațional și pașii de business își păstrează contractele.
-- Verificat: clasă/metodă directă, suită canonică, suită filtrată prin tag, titluri identice, nume de fișiere înșelătoare, lansări repetate și expandarea tuturor celor șase câmpuri în ambii consumatori. Verificările E2E existente pe fixture-uri reale păstrează proprietatea raportului partajat, eșecurile originale și izolarea scenariilor.
-- Rămas: expunerea selectorilor reali și a numărului descoperit printr-un contract neutru per lansare. `ExtensionContext` nu furnizează aceste date; ambele câmpuri spun explicit `unknown`. Numele raportului, durata root-store-ului sau numărul testelor terminate nu demonstrează selecția descoperită.
-- Reproducere: rulează `ShopLaunchMetadataComponentTest` sau `AutoExLaunchMetadataComponentTest`; cazul unei metode descoperă o invocare, dar păstrează corect selectorul/numărul necunoscut în observația consumerului. Furnizează un snapshot imuabil al planului la granița JUnit înainte de înlocuirea markerilor; acoperă lansări concurente și imbricate, filtre și teste dinamice.
-- Test Kit selectat: `atf.api:atf-test-kit:1.0.0-k3`; JAR SHA-256 `7304152b14aef03f4e81dca9bf9f6421c8f17e554bdfc92dbca38b3d32bcf7bc`, POM SHA-256 `0533a3f67c59c491a22b48df61f71dbe74009a5f839900a085e07eaad0a2a766`. API-ul de scope nu oferă puntea spre planul descoperit; lipsește o capabilitate de integrare, nu este un defect de renderer.
-
-**Pentru închidere:** selecția reală și numărul descoperit devin inspectabile în rapoartele directe și de suită filtrată. Păstrează constatarea deschisă până există această sursă; nu reconstrui selecția din rezultatele execuției.
+- Acceptanța verifică numere exacte și selectorii originali pentru clasă, metodă, suită canonică și suită filtrată, apoi extinde fiecare câmp din raport în browser.
+- Probe native pe sursă și JAR fizic verifică lansări repetate, paralele și imbricate, planuri executate ulterior, teste dezactivate, înregistrări dinamice și listener dezactivat.
+- Numărul descoperit și înregistrările dinamice la captură rămân distincte; nu se deduce un total din rezultatele execuției. Lipsa observerului sau a cererii este explicită.
+- Implementarea neutră rămâne în bibliotecă; consumerii păstrează proiecția și oracolele. Controlul anterior este reținut în [baseline](../ATF_Test_Changes_Baseline.md).
 
 <details>
-<summary><strong>Controlul modificării — identitatea lansării consumerului</strong></summary>
+<summary><strong>Controlul modificării — planul real</strong></summary>
 
 ```yaml
 testChanges:
-  - id: J1-LAUNCH-IDENTITY-20261122
+  - id: J1-LAUNCH-TESTPLAN-20261122
     status: ACTIVE
-    base: 4189144639e87441339b7b6feefbd6de2f8545a8
+    base: a96c08ccdfb7ff56f4604d69898ab82b2d51b2b2
     expires: 2026-12-22
-    reason: Publică local identitatea imuabilă JUnit, verifică explicit lipsa datelor descoperite și guvernează proprietatea consumerului.
-    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4189144639e87441339b7b6feefbd6de2f8545a8" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    reason: Consumă snapshot-ul neutru al planului și verifică selectorii, numerele și expandarea fără surse Kit paralele.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=a96c08ccdfb7ff56f4604d69898ab82b2d51b2b2" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
+      - pom.xml
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExE2eReportPathComponentTest.java
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExLaunchMetadataComponentTest.java
-      - atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExRunFactory.java
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchMetadata.java
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchReportProbe.java
       - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
 ```
 
 </details>

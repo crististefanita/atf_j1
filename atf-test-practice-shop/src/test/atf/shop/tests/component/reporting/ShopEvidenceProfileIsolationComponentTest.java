@@ -99,7 +99,8 @@ class ShopEvidenceProfileIsolationComponentTest {
         for (var owner : owners) assertTrue(html.contains(owner.getSimpleName()));
         assertTrue(html.contains("JUnit launch identity"), "Real E2E composition publishes source identity");
         for (var owner : owners) assertTrue(html.contains(owner.getName()), "Canonical owner is retained");
-        assertTrue(html.contains("unknown (TestPlan unavailable)"), "Shared report does not imply discovery count");
+        assertTrue(html.contains("EFFECTIVE SELECTION COUNT"), "Real E2E reports include discovery metadata");
+        assertFalse(html.contains("unavailable (no active TestPlan)"), "The Kit listener is active in the real composition");
         assertTrue(html.contains("Profile HTTP response"));
         assertTrue(html.contains("500"));
         assertTrue(html.contains("data-atf-evidence-status=\"fail\""));
