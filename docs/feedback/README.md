@@ -14,6 +14,12 @@ reproducere locală.
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | Journey-ul de cumpărare AutoEx | reproduce confirmarea coșului public cu un browser nou |
 | [J1-RECOVERY-IDE-REPORT-PARITY-2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22) | Configurarea lansării consumerilor | rulează componentele recovery din IntelliJ și validează artefactele emise cu acceptanța browser existentă |
 
+## Backlog de proiectare AI amânat
+
+[Lacunele evaluatorului și workflow-ului AI](README_AI_Evaluation.md) rămân
+criterii de proiectare deschise, în afara ordinii curente de mentenanță. Comparatorul
+livrat este separat de registrul, lifecycle-ul și proiecția în raport propuse.
+
 ## Dovezi consumer livrate
 
 | Contract | Înregistrare curentă |
