@@ -1004,34 +1004,34 @@ din jurul paginii. Parcursurile Shop și AutoEx folosesc zoom-ul configurat de
 | Captură | Folosește viewport-ul complet al paginii; păstrează navigarea, conținutul din jur și toate marginile cadrului |
 | Zoom | Păstrează scara configurată în contextul browserului; Shop/AutoEx folosesc 70% pentru a expune mai mult context |
 | Detalii suplimentare | Un prim-plan al unei regiuni sau al unui element poate completa imaginea cu contextul original, dar nu o poate înlocui |
-| Report viewer | Fit the complete source image to the available screen, preserving aspect ratio and every edge |
-| Full document | Explicit full-page capture preserves document height; the configured output height does not crop it |
-| Test coverage | Pixel oracles verify all four corners at 70/100% and extra lower-page context at 70%; independent geometry-scale tests keep their own scales |
+| Viewer-ul raportului | Încadrează imaginea sursă integrală în ecranul disponibil, păstrând proporțiile și toate marginile |
+| Document integral | Captura explicită full-page păstrează înălțimea documentului; înălțimea configurată pentru output nu o decupează |
+| Acoperirea probelor | Oracolele de pixeli verifică toate cele patru colțuri la 70/100% și contextul suplimentar din partea de jos la 70%; testele independente de geometrie își păstrează scările proprii |
 
-The [native geometry regression](src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
-checks captured PNG pixels rather than configuration alone. This owner
-contract covers capture, viewer geometry and consumer context.
+[Regresia geometriei native](src/test/java/atf/ui/playwright/geometry/PlaywrightPointerGeometryComponentTest.java)
+verifică pixelii PNG capturați, nu numai configurația. Contractul acestui owner
+acoperă captura, geometria viewer-ului și contextul consumerului.
 
 ## Pregătirea explicită a fixture-ului
 
 [`PlaywrightPagePreparation`](src/main/java/atf/ui/playwright/PlaywrightPagePreparation.java)
-prepares a document before a measured native operation. Callers choose it
-explicitly; ordinary runtime actions retain their existing behavior.
+pregătește documentul înaintea unei operații native măsurate. Apelanții o aleg
+explicit; acțiunile runtime obișnuite își păstrează comportamentul existent.
 
-| Phase | Native operation | Budget and authority |
+| Fază | Operație nativă | Buget și autoritate |
 |---|---|---|
-| Document load | `navigate` or `setContent` | existing navigation budget starts once |
-| Current document context | attach `:root` | remaining navigation budget; no target selection or mutation |
-| Rendered viewport | native PNG, animations allowed | same remaining budget; no click, fill or forced action |
-| Native input and postcondition | existing recorder | original action budget; strict visibility/stability/hit testing and no replay |
+| Încărcarea documentului | `navigate` sau `setContent` | bugetul de navigare existent pornește o singură dată |
+| Contextul documentului curent | atașare `:root` | bugetul de navigare rămas; fără selectarea sau mutarea țintei |
+| Viewport randat | PNG nativ, animații permise | același buget rămas; fără click, fill sau acțiune forțată |
+| Input nativ și postcondiție | recorderul existent | bugetul original al acțiunii; vizibilitate/stabilitate/hit testing stricte și fără replay |
 
-- The receipt exposes fresh viewport PNG bytes, elapsed preparation time and
-  the document URL. PNG bytes are defensive copies; capture failure or late
-  completion cannot authorize input.
-- A painted document does not certify a disabled, covered, moving or readonly
-  target. Those refusals and a false postcondition keep their original action deadline.
-- Fixture preparation consumes one bounded navigation allowance across all
-  stages; attachment and capture do not receive a renewed timeout.
+- Receipt-ul expune octeții PNG proaspeți ai viewport-ului, durata pregătirii și
+  URL-ul documentului. Octeții sunt copiați defensiv; eșecul capturii sau
+  finalizarea întârziată nu autorizează input.
+- Un document randat nu certifică o țintă dezactivată, acoperită, în mișcare sau
+  readonly. Aceste refuzuri și postcondiția falsă păstrează deadline-ul original al acțiunii.
+- Pregătirea fixture-ului consumă un singur buget finit de navigare în toate
+  etapele; atașarea și captura nu primesc timeout reînnoit.
 
 ## Deadline determinist al clickului cu postcondiție
 

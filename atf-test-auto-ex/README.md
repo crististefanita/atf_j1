@@ -1297,12 +1297,12 @@ browserul sau jurnalul API. Runtime-ul main compune `AutoExCatalogSearch`.
   deținute, numărul navigărilor, poarta așteptată și starea DOM observată.
   Clickul temporizat își păstrează PASS/FAIL; metadatele răspunsului nu inventează
   o aserțiune business.
-- The passive observer uses `UiListenerScope` and detaches on success or failure.
-  It ignores XHR/subframes and rejects a second main-frame request in its scope.
-- `AutoExSearchReadinessComponentTest` retains delayed product, replaced
-  document, wrong-query/product and one-click oracles at the original 700 ms.
-  `AutoExSearchResponseComponentTest` adds terminal HTTP/DOM, stale-DOM,
-  independent API and transport-failure regressions.
+- Observerul pasiv folosește `UiListenerScope` și se detașează la succes sau eșec.
+  Ignoră XHR/subframe-uri și refuză un al doilea request main-frame în scope-ul său.
+- `AutoExSearchReadinessComponentTest` păstrează oracolele pentru produs întârziat,
+  document înlocuit, query/produs greșit și un singur click la bugetul original de 700 ms.
+  `AutoExSearchResponseComponentTest` adaugă regresii pentru HTTP/DOM terminal,
+  DOM vechi, API independent și transport eșuat.
 - Ambele fixture-uri de browser pregătesc explicit viewportul nativ inițial în
   bugetul de navigare existent de 5 s, înainte de pornirea acțiunii de 700 ms.
   Dimensiunile PNG decodificate, URL-ul fixture-ului și activarea trusted rămân
