@@ -608,6 +608,15 @@ eticheta evenimentului, timpii ISO-8601, rezultatul INFO și redactarea body/URL
 Salvează o captură a viewport-ului sub `target`. Contractul este în
 [ShopRecoveryActualReportAcceptanceTest](src/test/atf/shop/tests/component/recovery/ShopRecoveryActualReportAcceptanceTest.java).
 
+```mermaid
+flowchart LR
+    Trace["UiRecoveryTrace tipizat + acțiune INFO asociată"] --> Projection["ShopRecoveryReportObservation"]
+    Projection --> Phase["ShopExtentTestExtension · Test Kit K3"]
+    Assertions["Component assertions"] --> Phase
+    Phase --> Html["Reporting J26 · HTML Extent"]
+    Html --> Acceptance["ShopRecoveryActualReportAcceptanceTest"]
+```
+
 Generează raportul suitei și rulează acceptanța raportului real în două zone de
 staging proaspete, conform [procedurii de build](../docs/ATF_Build_And_Execution_Safety.md):
 
