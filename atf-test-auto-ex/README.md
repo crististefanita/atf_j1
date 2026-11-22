@@ -1762,8 +1762,9 @@ and exact discovery count through Reporting's existing observation boundary.
 
 The count is measured at plan start, includes disabled tests, and excludes later
 dynamic registrations. Their count at capture is a separate field. Neither value
-is reconstructed from completed or successful tests. A plan executed in another
-session retains its inventory/count and explicitly identifies missing request
+is reconstructed from completed or successful tests.
+
+A plan executed in another session retains its inventory/count and explicitly identifies missing request
 provenance; disabling the SPI observer yields unavailable metadata.
 
 ```mermaid

@@ -4953,3 +4953,26 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Change control — actual discovery plan</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-LAUNCH-TESTPLAN-20261122
+    status: VERIFIED
+    base: 0547b7b012813bd4d3075cfa211d1c06b84e750c
+    expires: 2026-12-22
+    reason: Consume the neutral plan snapshot and verify selectors, counts, and rendering without parallel Kit source.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=0547b7b012813bd4d3075cfa211d1c06b84e750c" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - pom.xml
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExE2eReportPathComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExLaunchMetadataComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchMetadata.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchReportProbe.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+```
+
+</details>
