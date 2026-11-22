@@ -652,35 +652,36 @@ The deadline, rejections, and limits are in [UI](../atf-ui/README.md#backend-rec
 
 ## JUnit launch identity
 
-A separate collapsed `Launch context` phase records each invocation's canonical
-class and method and the outermost suite exposed by JUnit unique-ID ancestry.
-The immutable `ShopLaunchMetadata` is captured by the consumer extension and
-published through Reporting's existing `ReportObservation` boundary. Display
-titles and artifact filenames never determine this identity.
+A collapsed INFO `Launch context` phase records the canonical class/method and
+outermost suite exposed by JUnit ancestry. `ShopLaunchMetadata` projects the
+immutable `TestLaunchContext.capture(context)` snapshot supplied by Test Kit K4.
+It publishes the actual launcher selectors, filtered discovered-test inventory,
+and exact discovery count through Reporting's existing observation boundary.
 
-`Launcher selection` and `Effective selection count` explicitly remain unknown:
-`ExtensionContext` does not supply launcher selectors or a discovered `TestPlan`.
-A shared report or a single executed method cannot establish either value.
-Operational System, business step titles, verdicts, and the configured assertion
-preview remain governed by their existing contracts.
+The count is measured at plan start, includes disabled tests, and excludes later
+dynamic registrations. Their count at capture is a separate field. Neither value
+is reconstructed from completed or successful tests. A plan executed in another
+session retains its inventory/count and explicitly identifies missing request
+provenance; disabling the SPI observer yields unavailable metadata.
 
 ```mermaid
 flowchart LR
-    JUnit["JUnit context"] -->|captures| Identity["Immutable identity"]
-    Identity -->|publishes| Adapter["Shop adapter"]
-    Adapter -->|observes| Reporting["Reporting J26"]
+    Request["Launcher request"] -->|discovers| Plan["Filtered TestPlan"]
+    Plan -->|snapshots| Kit["Test Kit K4"]
+    Kit -->|supplies| Adapter["Shop adapter"]
+    Adapter -->|publishes| Reporting["Reporting J26"]
     Reporting -->|renders| Tests["Tests · Launch context"]
 ```
 
 <details>
-<summary><strong>Legend — module interaction and available facts</strong></summary>
+<summary><strong>Legend — module interaction and count semantics</strong></summary>
 
-- JUnit supplies source identity; the consumer owns capture and publication.
-- Reporting renders the INFO observation with an independent disclosure.
-- Test Kit remains the lifecycle library; it supplies no discovery-plan bridge.
-- `ShopLaunchMetadataComponentTest` exercises direct class/method, canonical
-  suite, tag-filtered suite, duplicate display titles, misleading filenames,
-  repeated launches, and browser expansion of all six fields.
+- Kit observes public launcher callbacks; it starts no tests, browser, or report.
+- The consumer owns the immutable report projection and its selector facade.
+- Launcher selectors retain source identity; display titles and filenames do not define selection.
+- `ShopLaunchMetadataComponentTest` verifies direct class/method and canonical
+  or tag-filtered suites, duplicate titles, repeated launches, exact counts,
+  original selectors, selected sources, and browser expansion of every field.
 
 </details>
 

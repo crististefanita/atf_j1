@@ -39,3 +39,18 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 ---
 
 Record Test Kit findings against its Maven coordinate, version, and JAR/POM hashes. Keep adoption behavior and value-retention checks with the affected J1 module.
+
+## Discovered launch plan
+
+Test Kit K4 provides `TestLaunchContext.capture(context)` and the immutable
+`TestLaunchSnapshot`. The `LauncherSessionListener` observer is discovered through
+SPI; the JUnit launcher is an optional dependency supplied by the runner.
+
+- Selectors are associated with the plan configuration; an unrelated request is never reused.
+- Inventory and count come from the filtered `TestPlan` at execution start.
+- Disabled tests are included; later dynamic registrations are counted separately.
+- Scopes restore across nested launches and remain isolated across concurrent launches.
+- A plan from another session retains its inventory but declares missing request provenance; without the observer, capture is absent.
+
+Kit depends on neither Reporting nor UI and launches no tests. The consumer owns
+snapshot publication and verifies the selected binary through its own report.

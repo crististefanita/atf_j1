@@ -4931,3 +4931,25 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary><strong>Change control — consumer launch identity</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-LAUNCH-IDENTITY-20261122
+    status: VERIFIED
+    base: e0647199fec5bf64120ceedb9700f5302f212ab3
+    expires: 2026-12-22
+    reason: Publish immutable JUnit source identity locally, verify unavailable discovery facts explicitly, and govern consumer ownership.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=e0647199fec5bf64120ceedb9700f5302f212ab3" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExE2eReportPathComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExLaunchMetadataComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExRunFactory.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchMetadata.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchReportProbe.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+```
+
+</details>

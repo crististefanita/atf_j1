@@ -98,36 +98,36 @@ acceptance as the Maven reports.
 
 <a id="j1-launch-context-146"></a>
 
-## J1-LAUNCH-CONTEXT-146 — complete discovery-plan metadata
+## J1-LAUNCH-CONTEXT-146 — actual selection and discovery plan
 
-**Status: Partially delivered on 2026-11-22; remaining owner:** launcher-to-consumer integration.
+**Status: Verified and closed on 2026-11-22.** Kit K4 supplies request selectors,
+filtered inventory, and discovery count. Local projections retain JUnit source
+identity and publish these facts in `Launch context`, outside operational System.
 
-- Delivered: immutable source class/method and outermost suite from JUnit unique-ID ancestry, published in the collapsed INFO `Launch context` phase in Tests. Operational System and business steps retain their contracts.
-- Verified: direct class/method, canonical suite, tag-filtered suite, duplicate display titles, misleading filenames, repeated launches, and expansion of all six metadata fields in both consumers. Existing real E2E fixture checks retain shared-report ownership, original failures, and scenario isolation.
-- Remaining: expose the actual launcher selectors and discovered selection count through a neutral per-launch contract. `ExtensionContext` supplies neither; both fields explicitly say `unknown`. A report filename, root-store lifetime, or completed-test count is not discovery evidence.
-- Reproducer: run `ShopLaunchMetadataComponentTest` or `AutoExLaunchMetadataComponentTest`; the method-only case discovers one invocation but correctly keeps selector/count unknown in the consumer observation. Pass a captured immutable plan snapshot at the JUnit boundary before replacing those markers; cover concurrent and nested launches, filters, and dynamic tests.
-- Selected Test Kit: `atf.api:atf-test-kit:1.0.0-k3`; JAR SHA-256 `7304152b14aef03f4e81dca9bf9f6421c8f17e554bdfc92dbca38b3d32bcf7bc`, POM SHA-256 `0533a3f67c59c491a22b48df61f71dbe74009a5f839900a085e07eaad0a2a766`. Its scope API has no discovery-plan bridge; this is a missing integration capability, not a renderer failure.
-
-**Closure still required:** actual launcher selection and discovered count become inspectable in direct and filtered suite reports. Keep this item open until that source exists; do not reconstruct selection from execution results.
+- Acceptance checks exact counts and original selectors for class, method, canonical suite, and filtered suite, then expands every report field in the browser.
+- Native source and physical-JAR probes cover repeated, parallel and nested launches, subsequently executed plans, disabled tests, dynamic registrations, and disabled listener.
+- Discovery count and dynamic registrations at capture stay distinct; execution outcomes never define a total. Missing observer or request provenance remains explicit.
+- The neutral implementation stays in the library; consumers keep projection and oracles. The preceding control is retained in the [baseline](../ATF_Test_Changes_Baseline.md).
 
 <details>
-<summary><strong>Change control — consumer launch identity</strong></summary>
+<summary><strong>Change control — actual discovery plan</strong></summary>
 
 ```yaml
 testChanges:
-  - id: J1-LAUNCH-IDENTITY-20261122
+  - id: J1-LAUNCH-TESTPLAN-20261122
     status: ACTIVE
-    base: e0647199fec5bf64120ceedb9700f5302f212ab3
+    base: 0547b7b012813bd4d3075cfa211d1c06b84e750c
     expires: 2026-12-22
-    reason: Publish immutable JUnit source identity locally, verify unavailable discovery facts explicitly, and govern consumer ownership.
-    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=e0647199fec5bf64120ceedb9700f5302f212ab3" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    reason: Consume the neutral plan snapshot and verify selectors, counts, and rendering without parallel Kit source.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=0547b7b012813bd4d3075cfa211d1c06b84e750c" "-Dsurefire.failIfNoSpecifiedTests=false" test
     paths:
+      - pom.xml
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExE2eReportPathComponentTest.java
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExLaunchMetadataComponentTest.java
-      - atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExRunFactory.java
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchMetadata.java
       - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchReportProbe.java
       - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
 ```
 
 </details>

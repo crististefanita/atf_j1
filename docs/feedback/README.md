@@ -10,7 +10,6 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Finding | Local owner | Next evidence |
 |---|---|---|
-| [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Launcher metadata integration | source class/method and suite ancestry are delivered; supply actual launcher selectors and discovered count through a neutral per-launch snapshot |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 | [J1-RECOVERY-IDE-REPORT-PARITY-2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22) | Consumer launch configuration | run both recovery components from IntelliJ and validate those emitted artifacts with the existing browser acceptance |
 
@@ -18,6 +17,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Contract | Current record |
 |---|---|
+| Actual JUnit discovery plan | [Closed on 2026-11-22](ATF_Reporting_Feedback.md#j1-launch-context-146); Kit K4 supplies selection and discovery count, with complete report expansion and isolated scopes |
 | Recovery scenario clarity and report-selector ownership | [Closed on 2026-11-21](ATF_Code_Maintenance_Feedback.md#oop-recovery-scenarios-2026-11-21); named typed scenarios and test-scoped report selectors passed component checks 6/6 Shop, 5/5 AutoEx, and Whole-ATF governance 191/191 in both editions |
 | Recovery evidence in local consumer Extent probes | [Closed on 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); both consumers verify collapsed state, expand-all, ordered trace rows, and redaction in both editions; each local probe builds a synthetic outcome-bearing step and does not establish suite-generated report output |
 | Typed recovery evidence projection | [Closed on 2026-11-22](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21); consumer-owned projections separate semantic operation from event and use typed durations; common UI and Reporting APIs are unchanged |

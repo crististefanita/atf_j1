@@ -31,9 +31,13 @@ public class ConsumerModuleArchitectureGovernanceTest {
             assertTrue(Files.isRegularFile(metadata), "Launch metadata belongs to the consumer's test scope");
             String source = Files.readString(metadata);
             for (String forbidden : List.of("System.getProperty", "Class.forName", "getDisplayName",
-                    "getFileName", "atf.ui.", "com.microsoft.playwright", "org.junit.platform.launcher")) {
+                    "getFileName", "atf.ui.", "com.microsoft.playwright", "org.junit.platform.launcher",
+                    "SummaryGeneratingListener", "getTestsSucceededCount", "getTestsFoundCount")) {
                 assertFalse(source.contains(forbidden), "Launch facts must not infer runner state or acquire resources: " + forbidden);
             }
+            assertTrue(source.contains("TestLaunchContext.capture(context)")
+                            && source.contains("discoveredTestCount()"),
+                    "Consumer discovery facts must come from the neutral Kit snapshot");
             Path acceptance = tests.resolve("component/reporting/" + name + "LaunchMetadataComponentTest.java");
             assertTrue(Files.isRegularFile(acceptance), "Direct and suite metadata need executable consumer acceptance");
             Path probe = tests.resolve("support/reporting/" + name + "LaunchReportProbe.java");

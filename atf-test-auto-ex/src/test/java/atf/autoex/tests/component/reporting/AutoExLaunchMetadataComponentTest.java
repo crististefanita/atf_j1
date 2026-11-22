@@ -80,9 +80,11 @@ class AutoExLaunchMetadataComponentTest {
             default -> "unknown (no suite ancestor exposed)";
         };
         assertTrue(html.contains(suite), "Suite identity comes from JUnit unique-ID ancestry");
-        assertTrue(html.contains("unknown (TestPlan unavailable)"), "Executed tests never become a claimed discovery count");
-        assertTrue(html.contains("unknown (launcher selectors unavailable)"), "A class with one method does not identify the launcher selector");
-        AutoExLaunchReportProbe.verify(reports.getFirst());
+        assertFalse(html.contains("unavailable (no active TestPlan)"), "The physical Kit service captures discovery");
+        String requested = selection.equals("METHOD") ? "method: " + First.class.getName() + "#local()"
+                : "class: " + (selection.equals("SUITE") ? CanonicalSuite.class.getName()
+                : selection.equals("FILTERED_SUITE") ? FilteredSuite.class.getName() : First.class.getName());
+        AutoExLaunchReportProbe.verify(reports.getFirst(), expected, requested);
     }
 
     private static void restore(String key, String value) {
