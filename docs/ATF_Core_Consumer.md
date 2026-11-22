@@ -50,7 +50,7 @@ native ale bibliotecii. Aceste înregistrări nu afirmă că verificările au ru
 
 ~~~mermaid
 flowchart LR
-    Pin["POM rădăcină<br/>coordonata Core"] --> Pair["lib/<br/>JAR + POM Core"]
+    Pin["POM rădăcină<br/>coordonata Core"] -->|selectează| Pair["lib/<br/>JAR + POM Core"]
     Pair -->|instalează| Repo["Repository Maven"]
     Repo -->|rezolvă pentru| Modules["Module J1"]
     Modules -->|acceptanță locală| Evidence["Dovezi consumer"]

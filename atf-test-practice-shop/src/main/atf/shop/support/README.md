@@ -7,6 +7,25 @@ API. Rămâne în main; harness-ul JUnit și selecția suitei rămân în test.
 Modelul Shop este reperul consumer pentru această separare, nu o regulă de
 copiere a endpoint-urilor sau a politicilor sale în AutoEx.
 
+
+## Execuție și responsabilitate
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Marker["Limita<br/>checkpointului"] -->|delimitează| Request["Identitatea<br/>cererii"]
+    Request -->|corelează| Response["Răspuns<br/>corespunzător"]
+    Response -->|selectează pentru| Checks["Verificări Shop"]
+    Checks -->|publică| Evidence["Dovezi ale<br/>scenariului"]
+```
+
+<details>
+<summary>Legendă — domeniu, responsabilitate și dovezi</summary>
+
+Fluxul urmărește apartenența dovezilor, fără o a doua execuție HTTP. Identitatea cererii la pornire și limita checkpointului selectează răspunsul; Shop compară valori așteptate independente înaintea publicării. Un răspuns întârziat sau un toast nu demonstrează singur o mutație nouă reușită.
+
+</details>
+
 ## Intrări și responsabilități
 
 Conversia din [ShopApiEvidenceMapper](api/ShopApiEvidenceMapper.java) păstrează

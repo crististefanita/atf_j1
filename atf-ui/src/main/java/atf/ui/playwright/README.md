@@ -6,6 +6,25 @@ Pachetul este adaptorul browser generic. Primește configurație și sink explic
 înregistrează operații și expune observații; nu decide rezultatul unui checkout
 și nu deține rendererul sau runnerul JUnit.
 
+
+## Execuție și responsabilitate
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Budget["ObservationBudget"] -->|delimitează| Ready["Pregătire"]
+    Ready -->|permite| Native["O acțiune nativă"]
+    Native -->|observă rezultatul| Result["Rezultat<br/>operație"]
+    Result -->|înregistrează| Recorder["UiActionRecorder"]
+```
+
+<details>
+<summary>Legendă — domeniu, responsabilitate și dovezi</summary>
+
+Fluxul descrie interacțiunile cu mutație care permit o singură execuție nativă. Pregătirea doar pentru citire poate observa din nou în același buget rămas; o excepție după execuție nu autorizează repetarea. Aplicația verifică separat efectul de business și alege dovezile.
+
+</details>
+
 ## Intrări și responsabilități
 
 | Când investighezi | Citește întâi | Limita |
@@ -60,4 +79,3 @@ Contractul scope-ului este la [UI](../../../../../../README.md#scope-ul-listener
 inspectorul de rețea își păstrează separat ownership-ul și ordinea de release.
 
 Continuă orientarea în [ghidul modulului UI](../../../../../../../atf-ui/README.md).
-

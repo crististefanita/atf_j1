@@ -32,7 +32,7 @@ care le dețin. Detaliile bibliotecilor sunt rezumate în
 
 ~~~mermaid
 flowchart LR
-    Coordinates["POM rădăcină<br/>versiunile bibliotecilor"] --> Pair["lib/<br/>cinci perechi JAR/POM"]
+    Coordinates["POM rădăcină<br/>versiunile bibliotecilor"] -->|selectează| Pair["lib/<br/>cinci perechi JAR/POM"]
     Pair -->|validate instalează| Maven["Repository Maven local"]
     Maven -->|rezolvarea dependențelor| Consumer["Module J1"]
     Consumer -->|scenarii locale| Acceptance["Dovezi component și integrare"]

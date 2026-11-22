@@ -32,11 +32,11 @@ hash-urile binar/POM și dovezile păstrate despre pachete.
 
 ~~~mermaid
 flowchart LR
-    POM["POM rădăcină J1"] -->|selectează| Pair["cinci perechi JAR/POM în lib"]
+    POM["POM rădăcină J1"] -->|selectează| Pair["cinci perechi<br/>JAR/POM în lib"]
     Pair -->|rezolvate de| Reactor["Module J1"]
-    Reactor -->|exercitate de| Tests["teste consumer și guvernanță"]
-    Tests -->|înregistrează| Evidence["proveniență și rapoarte randate"]
-    Guard["guvernanța artifactelor"] -. verifică .-> Pair
+    Reactor -->|exercitate de| Tests["teste consumer<br/>și guvernanță"]
+    Tests -->|înregistrează| Evidence["proveniență și<br/>rapoarte randate"]
+    Guard["guvernanța<br/>artifactelor"] -. verifică .-> Pair
 ~~~
 
 <details>

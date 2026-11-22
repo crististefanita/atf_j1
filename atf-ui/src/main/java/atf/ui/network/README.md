@@ -6,6 +6,25 @@ Pachetul observă traficul browserului și păstrează un jurnal bounded. Nu tri
 request-uri, nu atribuie verdict business și nu publică noduri Extent.
 Sesiunea de browser deține pagina; inspectorul deține propriile listener-e.
 
+
+## Execuție și responsabilitate
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Events["Evenimente<br/>browser"] -->|observă| Inspector["UiNetworkInspector"]
+    Inspector -->|atribuie domeniu| Identity["UiRequestIdentity"]
+    Identity -->|corelează| Journal["Jurnal delimitat"]
+    Journal -->|livrează| Consumer["Adaptorul<br/>aplicației"]
+```
+
+<details>
+<summary>Legendă — domeniu, responsabilitate și dovezi</summary>
+
+Sesiunea browserului deține pagina, iar inspectorul deține listenerii săi. Identitatea de pornire, ordinea sosirii și păstrarea în jurnal sunt distincte; aplicația deține selecția de business și verdictele. Listenerii închiși sau atașați parțial rămân inerți înaintea accesării obiectelor browserului.
+
+</details>
+
 ## Intrări și responsabilități
 
 | Când investighezi | Citește întâi | Limita |

@@ -20,34 +20,22 @@ publisherul Extent sau page objects de produs.
 ## Diagramă de bază
 
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-    Tests["Teste"] -->|selectează| Config["Policy"]
-    Config -->|configurează| Session["Sesiune"]
-    Session -->|deschide| Browser["Browser"]
-    Browser -->|produce| Evidence["Dovezi"]
-    Evidence -->|alimentează| Reporting["Reporting"]
+    Policy["Politică browser"] -->|configurează| Session["PlaywrightUiSession"]
+    Session -->|deține| Browser["Browser<br/>și pagină"]
+    Browser -->|produce| Observation["Observații<br/>neutre"]
+    Observation -->|întoarce către| Consumer["Adaptorul<br/>aplicației"]
+    Consumer -->|oferă verdict| Report["Contract de<br/>raportare"]
 ```
 
 <details>
-<summary><strong>Legendă — runtime browser fără reporting</strong></summary>
+<summary>Legendă — responsabilitatea resurselor și observații neutre</summary>
 
-- configurația descrie browserul și evidence-ul generic;
-- sesiunea compune browser, context și page, apoi înregistrează acțiuni;
-- atf-ui livrează payload-ul către consumer, nu decide verdictul și nu construiește HTML/CSS/Extent;
-- publisherul HTML aparține bibliotecii Reporting selectate; `UiScreenAudit`
-  deține observația generică a ecranului în UI, iar testele locale ale consumerului
-  verifică artifactele publicate de scenariile lor;
-- scenariul concret și verdictul business rămân la consumer.
-Etichetele scurte păstrează următorul sens:
-
-| În schemă | Sens complet |
-|---|---|
-| Teste | consumer tests |
-| Policy | browser policy |
-| Sesiune | Playwright session |
-| Browser | browser / page |
-| Dovezi | action + screenshot |
+- Sesiunea achiziționează driverul, browserul, contextul și inspectorul; eliberează resursele achiziționate în ordinea inversă a responsabilității, păstrând cauza principală.
+- UI oferă acțiuni, observație delimitată și capturi. Aplicația oferă așteptările de domeniu și mapează observațiile în contractul său de raportare.
+- Ultima săgeată reprezintă compunerea aplicației, fără a crea o dependență runtime de la UI spre Reporting. Randarea HTML și publicarea rămân la Reporting.
+- [Implementarea sesiunii](src/main/java/atf/ui/playwright/PlaywrightUiSession.java), [ghidul Playwright](src/main/java/atf/ui/playwright/README.md) și [ghidul de rețea](src/main/java/atf/ui/network/README.md) definesc limitele locale.
 
 </details>
 
@@ -184,10 +172,10 @@ rândul `Viewport` din Overview/System, fără să declare o captură nemăsurat
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Intent["Ieșire + zoom"] -->|calculează| Geometry["Viewport CSS + DPR"]
+    Intent["Ieșire + zoom"] -->|calculează| Geometry["Viewport<br/>CSS + DPR"]
     Geometry -->|configurează| Context["BrowserContext"]
-    Geometry -->|descrie| System["Overview / System"]
-    Context -->|moștenesc| Documents["Pagini + iframe-uri"]
+    Geometry -->|descrie| System["Overview<br/>/ System"]
+    Context -->|moștenesc| Documents["Pagini +<br/>iframe-uri"]
 ```
 
 <details>
@@ -237,7 +225,7 @@ Fixture-ul UI pregătește cele cinci documente, layout-ul și captura nativă
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Load["Navigare"] -->|același buget 5 s| Ready["Documente inițializate"]
+    Load["Navigare"] -->|același buget 5 s| Ready["Documente<br/>inițializate"]
     Ready -->|observă layout-ul| Layout["Cadre stabile"]
     Layout -->|fără input| Paint["Captură nativă"]
     Paint -->|o singură activare| Click["Pointer · 850 ms"]
@@ -350,7 +338,7 @@ Adaptorul nu folosește sleep, force sau evenimente de selecție generate prin s
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-28px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":24}}}%%
 flowchart LR
     Record["Recorder"] -->|click / fill| Native["Locator strict"]
-    Record -->|select| Observe["Observație read-only"]
+    Record -->|select| Observe["Observație<br/>read-only"]
     Observe -->|pregătit în buget| Native
     Observe -->|ambiguitate sau deadline| Fail["FAIL"]
     Native -->|țintă pregătită| Activate["Activare unică"]

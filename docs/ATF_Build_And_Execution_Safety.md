@@ -274,6 +274,13 @@ flowchart LR
   Consumer -->|publică| Report[Dovezi Extent locale]
 ~~~
 
+<details>
+<summary>Legendă — responsabilitate și limita verificării</summary>
+
+Verificarea aplicației exercită comportamentul local selectat; integritatea artefactelor verifică independent perechea binară aleasă. Raportul este dovadă pentru scenariile exercitate și nu demonstrează o rulare independentă a testelor producătorului.
+
+</details>
+
 - **Gate consumator:** rulează modulul afectat și dependențele necesare din
   reactor cu Maven -am, folosind aceeași copie de staging.
 - **Gate de guvernanță:** rulează WholeAtfGovernanceSuiteTest după modificarea

@@ -88,6 +88,13 @@ flowchart LR
   Mock -.->|test| Governance
 ~~~
 
+<details>
+<summary>Legendă — responsabilitate și limita verificării</summary>
+
+Săgețile pleacă de la dependență spre consumator și poartă scopul Maven declarat. Muchiile punctate identifică dependențe de test ale modulului de guvernanță; nu transformă implementările bibliotecilor în module locale ale reactorului. POM-urile rămân sursa factuală.
+
+</details>
+
 
 Guvernanța verifică și graful modulelor locale, precum și documentația. Nu schimbă scope-urile dependențelor și nu înlocuiește acceptanța la nivel de modul.
 
@@ -121,6 +128,13 @@ flowchart LR
   Reporting -->|randează| HTML
   HTML -->|este inspectat când este selectat| Checks
 ~~~
+
+<details>
+<summary>Legendă — responsabilitate și limita verificării</summary>
+
+Modulul UI întoarce observații neutre adaptorului aplicației. Shop și AutoEx dețin așteptările, comparațiile și dovezile scenariului; Reporting randează modelul primit, iar testele selectate ale aplicației inspectează artefactul rezultat. Aceste relații descriu execuția și dovezile, fără a reprezenta dependențe.
+
+</details>
 
 - Shop și AutoEx păstrează fluxurile aplicațiilor, baseline-urile de setup, așteptările business și verdicturile în modulele locale.
 - `atf-ui` deține execuția generică a browserului și observațiile neutre; nu selectează aserțiuni business și nu publică HTML.

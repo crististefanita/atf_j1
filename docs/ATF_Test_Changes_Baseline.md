@@ -5035,3 +5035,21 @@ testChanges:
 ```
 
 </details>
+
+
+<details>
+<summary>Guvernanța diagramelor — fence-uri acceptate și exemple literale</summary>
+
+```yaml
+testChanges:
+  - id: J1-README-DIAGRAM-FENCES-20261122
+    status: VERIFIED
+    base: 9276561131b16de54130b987189e54ebab6d37d5
+    expires: 2026-12-22
+    reason: Guvernează blocurile Mermaid cu ambele forme de fence Markdown, păstrează exemplele literale imbricate, cere etichete semantice pentru fiecare relație și respinge închiderile incomplete.
+    proof: mvn -B -ntp -pl atf-tests -am test "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=9276561131b16de54130b987189e54ebab6d37d5" "-Dsurefire.failIfNoSpecifiedTests=false"
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationDiagramGovernanceTest.java
+```
+
+</details>

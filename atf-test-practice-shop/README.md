@@ -1,61 +1,43 @@
 # ATF Test Practice Shop — consumer UI/API
 
+
+`atf-test-practice-shop` verifică Practice Shop prin contracte API deținute de aplicație, scenarii de browser și verificări controlate de componentă. Shop deține configurația, fixture-urile, modelele paginilor, rezultatele așteptate și selecția dovezilor; infrastructura comună oferă transportul, mecanismele de browser și publicarea raportului.
+
 ## Pe scurt
 
 **Ghid local:** [support](src/main/atf/shop/support/README.md).
+
+<details>
+<summary>Responsabilitatea diagnosticelor și publicării</summary>
 
 `ShopApiRunReport` păstrează lifecycle-ul și verdictul business. Sumarul sigur
 al excepției este delegat către
 [Reporting](../docs/ATF_Reporting_Library_Atlas.md#diagnostice-și-navigare),
 cu [contractul bibliotecii Reporting](../docs/ATF_Reporting_Library_Atlas.md) și verificări locale Shop pentru configurație, selecția exchange-ului și adaptorul real.
 
+</details>
+
 **Trasee rapide:** [Journey](#traseul-de-achiziție) · [Fixture și billing](#configurația-modulului) · [Dovada order](#dovada-comenzii-curente) · [Raport per suită](#raport-partajat--starea-consumerului) · [Componentă sau E2E](#verificare-rapidă)
 
-`atf-test-practice-shop` este modulul consumer care verifică UI-ul și API-ul
-real al aplicației Practice Software Testing. El deține fixture-ul aplicației,
-configurația, page objects, flow-urile și probele consumer; nu deține
-implementarea generică Playwright, Extent sau JUnit.
-
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-    Config["Inputs"] -->|setează| Journey["Shop flow"]
-    Journey -->|folosește| Screens["Pages + API"]
-    Screens -->|conduce| Browser["atf-ui"]
-    Browser -->|vizitează| Site["Site UI"]
-    Browser -.->|observă| Inspector["Inspector"]
-    Inspector -->|reține| Journal["Journal"]
-    Journal -->|alege| Checkpoint["Validation"]
-    Screens -->|validează| Checkpoint
-    Checkpoint -->|publică| Reporting["Reporting"]
-    Journey -->|diagnostică| Console["Console"]
+    Inputs["Configurație<br/>Shop"] -->|configurează| Flow["Scenariu Shop"]
+    Flow -->|controlează| UI["atf-ui"]
+    Flow -->|apelează| API["API Shop"]
+    UI -->|observații| Checks["Verificări Shop"]
+    API -->|răspunsuri| Checks
+    Checks -->|aserțiuni| Adapter["Adaptor<br/>raport Shop"]
+    Adapter -->|publică| Extent["Extent HTML"]
 ```
 
 <details>
-<summary><strong>Legendă — boundary-ul modulului</strong></summary>
+<summary>Legendă — verificările aplicației și publicare</summary>
 
-- `YAML + fixture` conține valori și profile specifice aplicației;
-- `Shop flow` compune paginile și checkpoint-urile; paginile cunosc rutele și
-  controalele Practice Shop;
-- săgeata punctată reprezintă numai observarea opțională `UI_API`; testele doar UI continuă să
-  trimită traficul normal al aplicației, dar nu publică dovezi API;
-- jurnalul păstrează traficul observat, iar maparea promovează doar
-  schimburile selectate pentru punctele de verificare;
-- `atf-reporting` și `atf-console` rămân ownerii generici ai output-ului; Shop
-  deține mapping-ul și semantica business.
-Etichetele scurte păstrează următorul sens:
-
-| În schemă | Sens complet |
-|---|---|
-| Pages + API | pages + API client |
-| Inspector | network inspector |
-| Journal | Shop network journal |
-| Validation | Shop validation |
-| setează | configurează |
-| observă | UI_API observă |
-| reține | înregistrează |
-| alege | selectează |
-| validează | validează UI |
+- Harta descrie execuția și dovezile. Execuția API directă și scenariile de browser au intrări separate și folosesc așteptări deținute de Shop.
+- UI_API adaugă dovezi de trafic selectate unui scenariu de browser. Jurnalul păstrează observațiile; Shop selectează schimburile checkpointului și verifică identitatea cererii și payload-ul.
+- Adaptorul Shop oferă comparații explicite și rezultatul de business. Reporting randează rezultatele primite și încheie artefactul la limita responsabilității rulării.
+- [Suportul Shop](src/main/atf/shop/support/README.md) deține dovezile cauzale; [configurația](src/test/resources/atf-practice-shop.yaml) și [ghidul de testare](../docs/ATF_Testing_Guide.md) definesc selecția și prerechizitele.
 
 </details>
 
@@ -610,11 +592,11 @@ Salvează o captură a viewport-ului sub `target`. Contractul este în
 
 ```mermaid
 flowchart LR
-    Trace["UiRecoveryTrace tipizat + acțiune INFO asociată"] -->|proiectează| Projection["ShopRecoveryReportObservation"]
-    Projection -->|publică| Phase["ShopExtentTestExtension · Test Kit K3"]
-    Assertions["Component assertions"] -->|se alătură| Phase
-    Phase -->|randează| Html["Reporting J26 · HTML Extent"]
-    Acceptance["ShopRecoveryActualReportAcceptanceTest"] -->|deschide| Html
+    Trace["Trasă și<br/>acțiune INFO"] -->|proiectează| Projection["Proiecție<br/>recovery"]
+    Projection -->|publică| Phase["Adaptor ciclu<br/>de viață"]
+    Assertions["Component<br/>assertions"] -->|se alătură| Phase
+    Phase -->|randează| Html["Reporting J26<br/>· HTML Extent"]
+    Acceptance["Acceptanță<br/>în browser"] -->|deschide| Html
 ```
 <details>
 <summary><strong>Legendă — fluxul raportului recovery</strong></summary>
@@ -659,10 +641,10 @@ dezactivarea observerului SPI produce metadate indisponibile.
 ```mermaid
 flowchart LR
     Request["Cererea lansării"] -->|descoperă| Plan["TestPlan filtrat"]
-    Plan -->|capturează| Kit["Test Kit K4"]
+    Plan -->|capturează| Kit["Test Kit"]
     Kit -->|furnizează| Adapter["Adapter Shop"]
-    Adapter -->|publică| Reporting["Reporting J26"]
-    Reporting -->|randează| Tests["Tests · Launch context"]
+    Adapter -->|publică| Reporting["Reporting"]
+    Reporting -->|randează| Tests["Tests ·<br/>Launch context"]
 ```
 
 <details>
@@ -739,10 +721,10 @@ nu substituie produsul și nu modifică stocul prin API pentru a obține PASS.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Product["Produs configurat"] -->|observă| Stock["Stoc și controale"]
+    Product["Produs<br/>configurat"] -->|observă| Stock["Stoc și<br/>controale"]
     Stock -->|publică| Check["Comparație"]
-    Check -->|FAIL| Stop["Oprire auditabilă"]
-    Check -->|PASS| Quantity["Cantitate observată"]
+    Check -->|FAIL| Stop["Oprire<br/>auditabilă"]
+    Check -->|PASS| Quantity["Cantitate<br/>observată"]
     Quantity -->|confirmă valoarea| Cart["Add to cart unic"]
 ```
 
@@ -912,10 +894,10 @@ păstrează stabilizarea cu succes în bugetul configurat de 1,1 secunde.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Inputs["Țară + cod + număr"] -->|o singură introducere| Settle["Debounce + pending"]
-    Settle -->|configured-fields| Fill["Completează fixture-ul"]
-    Settle -->|postal-lookup| Read["Răspuns curent + DOM"]
-    Fill -->|compară independent| Audit["Expected / actual"]
+    Inputs["Țară + cod<br/>+ număr"] -->|o singură introducere| Settle["Debounce<br/>+ pending"]
+    Settle -->|configured-fields| Fill["Completează<br/>fixture-ul"]
+    Settle -->|postal-lookup| Read["Răspuns<br/>curent + DOM"]
+    Fill -->|compară independent| Audit["Expected<br/>/ actual"]
     Read -->|observă independent| Audit
 ```
 
@@ -1013,9 +995,9 @@ Un răspuns 400/500 rămâne dovada curentă, inclusiv când body-ul seamănă c
 flowchart LR
     Marker["Marcaj captură"] -->|precedă| Action["Un click UI"]
     Action -->|produce| Observed["Răspuns observat"]
-    Observed -->|selectează| Current["Metodă + rută + ordine"]
+    Observed -->|selectează| Current["Metodă +<br/>rută + ordine"]
     Current -->|evaluează| Verdict["Validare API"]
-    Verdict -->|publică| Report["Checkpoint auditabil"]
+    Verdict -->|publică| Report["Checkpoint<br/>auditabil"]
 ```
 
 <details>
@@ -1095,13 +1077,13 @@ Statusul și body-ul sunt evaluate după selecție; nu filtrează candidatul cur
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Fence["Marcaj Confirm"] -->|delimitează| Window["Observații eligibile"]
+    Fence["Marcaj Confirm"] -->|delimitează| Window["Observații<br/>eligibile"]
     Window -->|alege ultima| Capture["Captură curentă"]
     Window -->|fără captură| Empty["Selecție goală"]
     Capture -->|înlocuiește| Selection["Checkpoint ORDER"]
     Empty -->|golește| Selection
     Selection -->|evaluează| Checks["Comparații"]
-    Checks -->|publică| Report["Extent / fallback"]
+    Checks -->|publică| Report["Extent /<br/>fallback"]
 ```
 
 <details>
@@ -1625,7 +1607,7 @@ modul sursă sau JAR; prezența unui checkout Reporting nu decide destinația.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":24,"padding":6,"diagramPadding":20}}}%%
 flowchart LR
-    Start["Working directory"] -->|caută în strămoși| Own["POM Shop"]
+    Start["Working<br/>directory"] -->|caută în strămoși| Own["POM Shop"]
     Own -->|identifică| Root["Reactor"]
     Root -->|rezolvă| Output["UI / API output"]
 ```

@@ -17,40 +17,25 @@ HTML/CSS.
 
 ## Diagramă de bază
 
-Diagrama arată fluxul de date și colaborarea runtime; nu este graful de
-dependențe Maven. Graful de module și sensul săgeților sunt în README-ul
-rădăcină și în `docs/ATF_Architecture.md`.
+Diagrama urmărește evaluarea răspunsului și publicarea. Scopurile dependențelor directe sunt documentate în [ghidul de arhitectură](../docs/ATF_Architecture.md).
 
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":40,"padding":10,"diagramPadding":16}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-    Core["Core JAR"] -->|alimentează| Validation["Validation"]
-    Tests["Teste locale ale modulului"] -. fixture-uri .-> Validation
-    Validation -->|calculează| Decision["Verdict typed"]
-    Decision -->|publică| Sink["Sink"]
-    Sink -->|adaptează| Adapter["Adaptor"]
-    Adapter -->|transmite| Reporting["Reporting"]
+    Response["ApiResponse"] -->|oferă valori| Evaluate["Evaluare"]
+    Rules["ResponseContract"] -->|declară reguli| Evaluate
+    Evaluate -->|păstrează| Decision["ValidationDecision"]
+    Decision -->|publică prin| Sink["ValidationSink"]
+    Sink -->|adaptează dovezi| Consumer["Adaptorul<br/>aplicației"]
 ```
 
 <details>
-<summary><strong>Legendă — verdict fără renderer</strong></summary>
+<summary>Legendă — evaluare unică, publicarea rezultatului păstrat</summary>
 
-- `atf-core` oferă modele și porturi neutre;
-- `atf-validation` evaluează contractul și produce decizia typed;
-- `ValidationSink` este singurul seam către publicare;
-- adapterul consumerului mapează evidence-ul spre `atf-reporting`, fără să schimbe verdictul calculat;
-- `atf-reporting` rămâne standalone și nu devine dependent de `atf-validation`.
-Etichetele scurte păstrează următorul sens:
-
-| În schemă | Sens complet |
-|---|---|
-| Core | core models |
-| Teste de modul | teste unitare și componente atf-validation |
-| Verdict typed | typed decision |
-| Sink | validation sink |
-| Adaptor | consumer adapter |
-| publică | publică prin |
-| transmite | trimite către |
+- Apelantul oferă răspunsul și așteptările independente. Core oferă modele și porturi neutre; este o dependență, fără a fi o etapă de execuție.
+- Validation evaluează valorile complete înaintea redactării sau previzualizării. Portul primește comparațiile și rezultatul păstrate, fără a rula din nou regulile.
+- Aplicația alege publicarea și rendererul. Shop și AutoEx își păstrează propriile verificări de aplicație; acest modul reutilizabil are un contract separat.
+- [ResponseContract](src/main/java/atf/validation/contract/ResponseContract.java) și [testele protocolului](src/test/java/atf/validation/protocol/ValidationProtocolTest.java) dețin limita dintre evaluare și publicare.
 
 </details>
 

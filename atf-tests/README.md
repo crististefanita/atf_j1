@@ -48,6 +48,23 @@ Etichetele scurte păstrează următorul sens:
 | Practice Shop purchase journey | `atf-test-practice-shop` | nu se copiază aici |
 | Scenarii și aserțiuni de raportare ale consumatorilor Shop/AutoEx | modulele lor consumatoare | rămân la consumator |
 
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Inputs["POM și surse"] -->|definesc| Inventory["Inventar local"]
+    Inventory -->|selectează| Rules["Reguli de<br/>guvernanță"]
+    Rules -->|raportează| Finding["Diagnostic<br/>acționabil"]
+    Finding -->|trimite către| Owner["Modul<br/>responsabil"]
+```
+
+<details>
+<summary>Legendă — guvernanța observă contractele locale</summary>
+
+Gate-ul verifică apartenența la reactor, limitele codului, documentația și identitatea artefactelor selectate. Diagnosticul numește contractul încălcat și responsabilul său; acceptanța comportamentului și a raportului randat rămân la testele proprii. Fixture-urile negative demonstrează respingerea intrărilor incorecte sau înșelătoare.
+
+</details>
+
 ## Alege gate-ul după schimbare
 
 | Schimbare | Intrare | Ce confirmă |

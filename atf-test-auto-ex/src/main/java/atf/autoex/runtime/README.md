@@ -6,6 +6,26 @@ Acest pachet compune browserul, checkpoint-urile și publicarea AutoEx fără
 adnotări JUnit. Ownerul este consumerul AutoEx; regula business rămâne la flow/gate,
 iar integrarea runnerului rămâne în `src/test`.
 
+
+## Execuție și responsabilitate
+
+```mermaid
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
+flowchart LR
+    Consumer["Politică AutoEx"] -->|compune| Runtime["AutoExE2eRun"]
+    Runtime -->|observă| Browser["Browser"]
+    Browser -->|întoarce| Evidence["Observații<br/>tipizate"]
+    Evidence -->|mapează pentru| Phase["Faza scenariului"]
+    Runtime -->|deleagă închiderea| Lifecycle["AutoExRunLifecycle"]
+```
+
+<details>
+<summary>Legendă — domeniu, responsabilitate și dovezi</summary>
+
+Runtime-ul compune resursele achiziționate și observația. AutoEx oferă valorile așteptate și maparea dovezilor; portul ciclului de viață păstrează finalizarea specifică runnerului în afara codului main. Sursele și testele de mai jos definesc achiziția, cleanup-ul și păstrarea cauzei.
+
+</details>
+
 ## Intrări și responsabilități
 
 | Când investighezi | Citește întâi | Limita |

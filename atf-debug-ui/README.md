@@ -19,33 +19,29 @@ Nu este browser de produs și nu înlocuiește gate-ul E2E.
 ## Diagramă de bază
 
 ```mermaid
-%%{init: {"themeVariables":{"fontSize":"15px","actorFontSize":"15px","messageFontSize":"12px","noteFontSize":"12px"},"themeCSS":".actor { font-size: 15px !important; } .messageText, .labelText, .loopText, .noteText { font-size: 12px !important; }","sequence":{"actorFontSize":15,"messageFontSize":12,"noteFontSize":12,"width":120,"height":42,"actorMargin":40,"messageMargin":24,"mirrorActors":false,"wrap":true,"wrapPadding":6}}}%%
+%%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 sequenceDiagram
-    participant A as Agent / IntelliJ
-    participant D as atf-debug-ui
-    participant P as Browser / MCP
-    participant H as HTML artifact
-
-    A->>D: pornește launcher-ul cu --html report.html
-    D->>D: validează fișierul și root-ul
-    D-->>A: afișează URL loopback
-    A->>P: navighează la URL-ul afișat
-    P->>H: GET HTML/CSS/JS/doar-citire
-    P-->>A: snapshot, click, screenshot, console, network
+    participant Caller as Apelant
+    participant Server as Server loopback
+    participant Browser as Browser de inspectare
+    participant File as Artefact local
+    Caller->>Server: Pornește cu o cale explicită de artefact
+    Server->>Server: Validează fișierul și rădăcina permisă
+    Server-->>Caller: Afișează URL-ul loopback efectiv
+    Caller->>Browser: Deschide URL-ul afișat
+    Browser->>Server: Cere artefactul
+    Server->>File: Citește octeții permiși
+    Server-->>Browser: Servește HTML și resurse
+    Browser-->>Caller: Inspectează DOM, controale și consolă
 ```
 
 <details>
-<summary><strong>Legendă — investigație read-only</strong></summary>
+<summary>Legendă — servirea și inspectarea au responsabilități separate</summary>
 
-- launcher-ul validează inputul și publică numai loopback;
-- Playwright/TAB MCP observă artifactul, nu îl repară și nu îl rescrie;
-- HTML/CSS/JavaScript-ul aparține artifactului produs de atf-reporting;
-- testul E2E rămâne gate-ul pentru comportamentul observabil, iar debug UI este instrumentul de explorare.
-Etichetele scurte păstrează următorul sens:
-
-| În schemă | Sens complet |
-|---|---|
-| Browser / MCP | Playwright / TAB MCP |
+- Lansatorul și [serverul](src/main/java/atf/debugui/DebugUiServer.java) limitează accesul la fișiere și servesc artefactul existent prin loopback.
+- Browserul cere octeții serverului. Nu citește un producător separat de rapoarte printr-un traseu de rețea implicit.
+- Un operator sau un test de acceptanță inspectează taburi, expandări imbricate, capturi și erori de consolă. Serverul oferă accesul; responsabilul artefactului oferă acceptanța comportamentului.
+- Pornirea, identitatea URI și închiderea conexiunilor au verificări locale de componentă. Serverul nu creează un raport Extent și nu îi schimbă rezultatul.
 
 </details>
 

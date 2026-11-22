@@ -22,6 +22,13 @@ flowchart LR
   Governance[atf-tests] -.->|verifică fapte, linkuri și limite| Docs[Documentație în engleză și română]
 ~~~
 
+<details>
+<summary>Legendă — responsabilitate și limita verificării</summary>
+
+POM-ul selectează artefactele binare și declară modulele locale. Testele modulelor oferă dovezi pentru scenariile selectate; guvernanța verifică documentația și limitele, iar acceptanța randată aparține testului care deține artefactul.
+
+</details>
+
 POM-ul rădăcină este sursa normativă pentru reactor și versiunile dependențelor. POM-urile modulelor definesc scope-urile dependențelor directe; documentația explică utilizarea acestor dependențe și verificarea comportamentului local.
 
 ## Ordine de lectură

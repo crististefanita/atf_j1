@@ -25,9 +25,9 @@ browserul și publicarea raportului sunt furnizate de infrastructura ATF.
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
     Inputs["YAML + selecție"] -->|configurează| Consumer["Consumer AutoEx"]
-    Consumer -->|rulează| Journey["Journey UI / UI_API"]
-    Consumer -->|apelează| Api["Contract API live"]
-    Consumer -->|verifică| Local["Componente offline"]
+    Consumer -->|rulează| Journey["Journey UI<br/>/ UI_API"]
+    Consumer -->|apelează| Api["Contract<br/>API live"]
+    Consumer -->|verifică| Local["Componente<br/>offline"]
     Journey -->|dovezi| Report["Raport Extent"]
     Api -->|dovezi| Report
     Local -->|audit| Report
@@ -75,8 +75,6 @@ testele locale verifică doar comportamentul folosit de scenariile lor.
 <details>
 <summary><strong>Contract, owneri și probe — Boundary-ul AutoEx</strong></summary>
 
-<details>
-<summary><strong>Detalii — boundary-ul autoex</strong></summary>
 
 | Zonă | Conținut specific acestui consumer |
 |---|---|
@@ -201,7 +199,6 @@ se schimbă apelanții runtime sau dacă
 testul de arhitectură nu mai confirmă acest ownership; orice extracție generică
 trebuie demonstrată comportamental în ambii consumatori.
 
-</details>
 
 </details>
 
@@ -210,8 +207,6 @@ trebuie demonstrată comportamental în ambii consumatori.
 <details>
 <summary><strong>Contract, owneri și probe — Contractul testelor AutoEx</strong></summary>
 
-<details>
-<summary><strong>Detalii — contractul testelor autoex</strong></summary>
 
 - `@AtfE2eTest` și `@AtfTestChannel(UI/UI_API)` clasifică testele după
   boundary și canal; varianta UI este selecția uzuală de business.
@@ -249,11 +244,11 @@ flowchart LR
     Journey["Journey"] -->|cere checkout| Business["Cart flow"]
     Business -->|observă| Port["Cart port"]
     Port -->|implementat de| UI["Adaptor UI"]
-    UI -->|așteaptă bounded| Identity["Identitate vizibilă"]
+    UI -->|așteaptă bounded| Identity["Identitate<br/>vizibilă"]
     Identity -->|observă| Snapshot
     UI -->|operează| Page["CartPage"]
     Page -->|instrumentează| Recorder["Recorder"]
-    Business -->|compară| Snapshot["Expected / observed"]
+    Business -->|compară| Snapshot["Expected<br/>/ observed"]
     Business -->|publică| Adapter["Assertions"]
 ```
 
@@ -369,7 +364,6 @@ Etichetele scurte păstrează următorul sens:
 
 </details>
 
-</details>
 
 </details>
 
@@ -542,11 +536,11 @@ query/fragment înaintea singurului click nativ.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Click["Un click nativ"] -->|commit| Document["Document GET observat"]
-    Document -->|520, 525 sau queue-full| Recover["GET exact, bounded"]
+    Click["Un click nativ"] -->|commit| Document["Document<br/>GET observat"]
+    Document -->|520, 525 sau queue-full| Recover["GET exact,<br/>bounded"]
     Recover -->|aceleași încercări| Document
-    Document -->|2xx + ruta deținută| Product["Numele configurat"]
-    Product -->|confirmă| Audit["Acțiune + verdict"]
+    Document -->|2xx + ruta deținută| Product["Numele<br/>configurat"]
+    Product -->|confirmă| Audit["Acțiune<br/>+ verdict"]
 ```
 
 <details>
@@ -926,9 +920,9 @@ AutoEx și Shop publică același vocabular operațional în Overview/System.
 ```mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".nodeLabel, .nodeLabel p { font-size: 15px !important; line-height: 1.35 !important; } .edgeLabel, .edgeLabel p { font-size: 12px !important; font-weight: 400 !important; line-height: 1.2 !important; } .edgeLabel .labelBkg, .edgeLabel p { background: transparent !important; } .edgeLabel foreignObject { transform: translateY(-18px); overflow: visible; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":16,"padding":10,"diagramPadding":16}}}%%
 flowchart LR
-    Settings["YAML + adnotări"] -->|rezolvă| Scenario["Snapshot scenariu"]
-    Scenario -->|agregă| Common["Valori comune / Mixed"]
-    Common -->|afișează| System["Overview / System"]
+    Settings["YAML + adnotări"] -->|rezolvă| Scenario["Snapshot<br/>scenariu"]
+    Scenario -->|agregă| Common["Valori comune<br/>/ Mixed"]
+    Common -->|afișează| System["Overview<br/>/ System"]
 ```
 
 <details>
@@ -1040,8 +1034,6 @@ Un selector Surefire de metodă (`Clasă#metodă`) se execută separat de clasel
 <details>
 <summary><strong>Contract, owneri și probe — API direct și limita evidence-ului UI/API</strong></summary>
 
-<details>
-<summary><strong>Detalii — api direct și limita evidence-ului ui/api</strong></summary>
 
 Rutele publice sunt inventariate în [API List](https://automationexercise.com/api_list).
 
@@ -1600,7 +1592,6 @@ pagina UI folosește `/products?search=...`, nu endpoint-ul direct
 `POST /api/searchProduct`. Astfel raportul nu amestecă setup-ul API cu traficul
 cauzal al interacțiunilor browserului.
 
-</details>
 
 </details>
 
@@ -1703,11 +1694,11 @@ Salvează o captură a viewport-ului sub `target`. Contractul este în
 
 ```mermaid
 flowchart LR
-    Trace["UiRecoveryTrace tipizat + acțiune INFO asociată"] -->|proiectează| Projection["AutoExRecoveryReportObservation"]
-    Projection -->|publică| Phase["AutoExExtentTestExtension · Test Kit K3"]
-    Assertions["Component assertions"] -->|se alătură| Phase
-    Phase -->|randează| Html["Reporting J26 · HTML Extent"]
-    Acceptance["AutoExRecoveryActualReportAcceptanceTest"] -->|deschide| Html
+    Trace["Trasă și<br/>acțiune INFO"] -->|proiectează| Projection["Proiecție<br/>recovery"]
+    Projection -->|publică| Phase["Adaptor ciclu<br/>de viață"]
+    Assertions["Component<br/>assertions"] -->|se alătură| Phase
+    Phase -->|randează| Html["Reporting J26<br/>· HTML Extent"]
+    Acceptance["Acceptanță<br/>în browser"] -->|deschide| Html
 ```
 <details>
 <summary><strong>Legendă — fluxul raportului recovery</strong></summary>
@@ -1752,10 +1743,10 @@ dezactivarea observerului SPI produce metadate indisponibile.
 ```mermaid
 flowchart LR
     Request["Cererea lansării"] -->|descoperă| Plan["TestPlan filtrat"]
-    Plan -->|capturează| Kit["Test Kit K4"]
+    Plan -->|capturează| Kit["Test Kit"]
     Kit -->|furnizează| Adapter["Adapter AutoEx"]
-    Adapter -->|publică| Reporting["Reporting J26"]
-    Reporting -->|randează| Tests["Tests · Launch context"]
+    Adapter -->|publică| Reporting["Reporting"]
+    Reporting -->|randează| Tests["Tests ·<br/>Launch context"]
 ```
 
 <details>
