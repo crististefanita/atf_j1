@@ -1752,6 +1752,40 @@ IntelliJ-launched report check or public-site E2E acceptance.
 
 The deadline, rejections, and limits are in [UI](../atf-ui/README.md#backend-recovery-through-passive-observation).
 
+## JUnit launch identity
+
+A separate collapsed `Launch context` phase records each invocation's canonical
+class and method and the outermost suite exposed by JUnit unique-ID ancestry.
+The immutable `AutoExLaunchMetadata` is captured by the consumer extension and
+published through Reporting's existing `ReportObservation` boundary. Display
+titles and artifact filenames never determine this identity.
+
+`Launcher selection` and `Effective selection count` explicitly remain unknown:
+`ExtensionContext` does not supply launcher selectors or a discovered `TestPlan`.
+A shared report or a single executed method cannot establish either value.
+Operational System, business step titles, verdicts, and the configured assertion
+preview remain governed by their existing contracts.
+
+```mermaid
+flowchart LR
+    JUnit["JUnit context"] -->|captures| Identity["Immutable identity"]
+    Identity -->|publishes| Adapter["AutoEx adapter"]
+    Adapter -->|observes| Reporting["Reporting J26"]
+    Reporting -->|renders| Tests["Tests · Launch context"]
+```
+
+<details>
+<summary><strong>Legend — module interaction and available facts</strong></summary>
+
+- JUnit supplies source identity; the consumer owns capture and publication.
+- Reporting renders the INFO observation with an independent disclosure.
+- Test Kit remains the lifecycle library; it supplies no discovery-plan bridge.
+- `AutoExLaunchMetadataComponentTest` exercises direct class/method, canonical
+  suite, tag-filtered suite, duplicate display titles, misleading filenames,
+  repeated launches, and browser expansion of all six fields.
+
+</details>
+
 ## Run selection
 
 <details>

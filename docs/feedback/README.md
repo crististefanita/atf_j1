@@ -10,7 +10,7 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Finding | Local owner | Next evidence |
 |---|---|---|
-| [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Reporting metadata composition | capture the JUnit root and effective selection in audit metadata |
+| [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Launcher metadata integration | source class/method and suite ancestry are delivered; supply actual launcher selectors and discovered count through a neutral per-launch snapshot |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 
 ## Delivered consumer evidence
