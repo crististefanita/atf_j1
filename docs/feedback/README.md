@@ -10,8 +10,6 @@ record library observations by coordinate, version, hash, and local reproducer.
 
 | Finding | Local owner | Next evidence |
 |---|---|---|
-| [J1-RECOVERY-RUNNER-TRACE-2026-11-21](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21) | Shop/AutoEx component report projection | consumer probes pass on synthetic HTML; actual Shop report browser check is partial, AutoEx and IntelliJ output-root acceptance remain open |
-| [J1-RECOVERY-TRACE-TYPING-2026-11-21](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21) | Shop/AutoEx recovery report projection | correct the misleading `Operation` field and trace typed attempt values without changing the shared report API |
 | [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Reporting metadata composition | capture the JUnit root and effective selection in audit metadata |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 
@@ -21,7 +19,8 @@ record library observations by coordinate, version, hash, and local reproducer.
 |---|---|
 | Recovery scenario clarity and report-selector ownership | [Closed on 2026-11-21](ATF_Code_Maintenance_Feedback.md#oop-recovery-scenarios-2026-11-21); named typed scenarios and test-scoped report selectors passed component checks 6/6 Shop, 5/5 AutoEx, and Whole-ATF governance 191/191 in both editions |
 | Recovery evidence in local consumer Extent probes | [Closed on 2026-11-21](ATF_Reporting_Feedback.md#ui-recovery-audit-01--inspectable-attempts-in-extent); both consumers verify collapsed state, expand-all, ordered trace rows, and redaction in both editions; each local probe builds a synthetic outcome-bearing step and does not establish suite-generated report output |
-| Recovery trace in actual JUnit component reports | Maven acceptance passed for Shop 6/6 and AutoEx 5/5 in both editions. Consumer Playwright probes cover synthetic HTML; one actual Shop report browser check reached its observation rows but stopped at a fixture-specific marker, and the actual AutoEx report has not been browser-checked. The `Operation` field names the observation event (`Backend observation #n`) and omits the semantic operation; see the active finding above. IntelliJ output-root parity remains active. |
+| Typed recovery evidence projection | [Closed on 2026-11-22](ATF_Code_Maintenance_Feedback.md#j1-recovery-trace-typing-2026-11-21); consumer-owned projections separate semantic operation from event and use typed durations; common UI and Reporting APIs are unchanged |
+| Actual Maven recovery component reports | [Closed on 2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-runner-trace-2026-11-21); Shop and AutoEx browser acceptance checks both outcomes, expanded assertion rows, ordered trace fields, disclosure behavior, redaction, and verdict. IntelliJ output-root parity remains a separate open finding |
 | Shop postal lookup settlement timing | [Closed on 2026-11-21](ATF_Consumer_Business_Test_Focus_Feedback.md#shop-billing-sanity); three 13-case runs pass, with race settlement measured at 494–524 ms against the 1,100 ms budget and browser startup/navigation measured separately |
 | AutoEx catalog comparison and expandable Extent evidence | [Closed on 2026-11-20](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-catalog-evidence-146); controlled component and browser report checks passed |
 | J1 documentation facts and consumed-library scope | [Closed on 2026-11-20](ATF_Documentation_Feedback.md#doc-library-contracts-147); current Whole-ATF governance is 191/191 in EN and RO; all maintained Markdown structures and link destinations match |
