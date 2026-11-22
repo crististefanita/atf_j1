@@ -479,9 +479,11 @@ Pentru pagina principală a proiectului:
 - Primul ecran numește produsul, modulele și ownership-ul local. Nu introduce
   workspace-uri surori și nu face din proveniența bibliotecilor partajate
   subiectul paginii.
-- Tabelul modulelor urmează POM-ul rădăcină; este suficientă o singură diagramă
-  locală a fluxului dovezilor. Boundary-urile dependențelor trimit la ownerul
-  arhitecturii.
+- Tabelul modulelor urmează POM-ul rădăcină. Păstrează trei diagrame complementare în README-ul principal:
+  execuția deținută de aplicație, ciclul raportului și verificarea guvernată.
+  Fiecare răspunde unei întrebări, are legendă colapsabilă imediată și nu inventează dependențe.
+  Trimite la ghidul de arhitectură pentru scopurile dependențelor; prezentarea respectă
+  limita de dimensiune impusă de guvernanța README-ului principal.
 - Dacă artefactele binare au nevoie de index, adaugă o singură notă scurtă la
   final cu link către lib/README.md; versiunile și detaliile acceptanței rămân
   în catalog și documentele ownerilor.

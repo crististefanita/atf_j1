@@ -5018,3 +5018,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary>Prezentarea principală — diagrame complementare și responsabilitatea reală a dovezilor</summary>
+
+```yaml
+testChanges:
+  - id: J1-ROOT-OVERVIEW-20261122
+    status: VERIFIED
+    base: df325b64b194e4810c95071d662f98f9d4ee459d
+    expires: 2026-12-22
+    reason: Aplică prezentarea aprofundată cerută explicit, păstrând scopul local și o pagină delimitată; protejează verificările deținute efectiv de aplicație prin probe pentru săgeți inversate, trasee inventate, perspective repetate și etichete localizate.
+    proof: mvn -B -ntp -pl atf-tests -am test "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=df325b64b194e4810c95071d662f98f9d4ee459d" "-Dsurefire.failIfNoSpecifiedTests=false"
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java
+```
+
+</details>

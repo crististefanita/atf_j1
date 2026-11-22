@@ -19,10 +19,10 @@ import static atf.api.tests.governance.AtfGovernanceTestSupport.locateProjectRoo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Keeps the root README local-first, concise, and complete from purpose through report evidence. */
+/** Protects the local overview, factual evidence boundaries, and three complementary diagram perspectives. */
 @AtfComponentTest
 public class RootReadmeGovernanceTest {
-    private static final int MAX_LINES = 110;
+    private static final int MAX_LINES = 240;
     private static final int FIRST_SCREEN_LINES = 20;
     private static final Pattern H1 = Pattern.compile("^#\\s+[^#].*$");
     private static final Pattern H2 = Pattern.compile("^##\\s+(.+?)\\s*$");
@@ -41,7 +41,7 @@ public class RootReadmeGovernanceTest {
             "atf-test-practice-shop", "atf-test-auto-ex", "atf-tests");
 
     @Test
-    void liveRootReadmeIsACompactLocalOverviewWithOneFinalLibraryIndex() throws Exception {
+    void liveRootReadmeExplainsLocalOwnershipEvidenceAndVerification() throws Exception {
         Path root = locateProjectRoot();
         String readme = Files.readString(root.resolve("README.md"));
         List<DocumentationGovernanceSupport.Violation> violations =
@@ -104,10 +104,29 @@ public class RootReadmeGovernanceTest {
         assertTrue(reportViolations.stream().anyMatch(v -> v.code().equals("DOC-ROOT-REPORT-CONTRACT")),
                 reportViolations.toString());
 
-        String disconnected = fixture("en").replace("  Evidence -->|renders as| Report", "  Evidence --- Report");
+        String disconnected = fixture("en").replace("  Evidence -->|renders as| Report", "  Report -->|renders as| Evidence");
         var flowViolations = inspect(root, disconnected, "en", Set.copyOf(LOCAL_MODULES));
         assertTrue(flowViolations.stream().anyMatch(v -> v.code().equals("DOC-ROOT-FLOW-CONTENT")),
                 flowViolations.toString());
+    }
+
+    @Test
+    void inventedValidationRouteAndRepeatedPerspectiveAreRejected(@TempDir Path root) {
+        String invented = fixture("en").replace("  API -->|returns responses| Checks",
+                "  API -->|validates| Validation\n  Validation -->|passes| Checks");
+        assertTrue(inspect(root, invented, "en", Set.copyOf(LOCAL_MODULES)).stream()
+                .anyMatch(v -> v.code().equals("DOC-ROOT-FLOW-CONTENT")));
+        String repeated = fixture("en") + "\n" + String.valueOf((char) 96).repeat(3)
+                + "mermaid\nflowchart LR\n  A -->|duplicates| B\n" + String.valueOf((char) 96).repeat(3);
+        assertTrue(inspect(root, repeated, "en", Set.copyOf(LOCAL_MODULES)).stream()
+                .anyMatch(v -> v.code().equals("DOC-ROOT-FLOW")));
+    }
+
+    @Test
+    void edgeLabelsMayBeLocalizedWithoutChangingOwnership(@TempDir Path root) {
+        String localized = fixture("ro").replace("|returns responses|", "|întoarce răspunsuri|")
+                .replace("|binds expectations|", "|asociază așteptări|");
+        assertEquals(List.of(), inspect(root, localized, "ro", Set.copyOf(LOCAL_MODULES)));
     }
 
     static List<DocumentationGovernanceSupport.Violation> inspect(
@@ -169,21 +188,15 @@ public class RootReadmeGovernanceTest {
         }
 
         String diagram = mermaidDiagram(lines);
-        List<String> flowTerms = language.equals("ro")
-                ? List.of("practice shop", "autoex", "api", "ui", "atf-validation", "atf-ui",
-                        "extent html", "atf-debug-ui", "atf-tests",
-                        "api -->|validează prin| validation", "browser -->|folosește| ui",
-                        "evidence -->|formează| report", "report -->|se inspectează în| inspector")
-                : List.of("practice shop", "autoex", "api", "ui", "atf-validation", "atf-ui",
-                        "extent html", "atf-debug-ui", "atf-tests",
-                        "api -->|checks| validation", "browser -->|uses| ui",
-                        "evidence -->|renders as| report", "report -->|opens in| inspector");
-        if (!containsAll(diagram, flowTerms)) {
+        Set<String> expectedFlow = Set.of("App -> API", "App -> Browser", "API -> Checks",
+                "Browser -> Checks", "Checks -> Evidence", "Evidence -> Report", "Report -> Inspector");
+        if (!flowEdges(diagram).equals(expectedFlow)
+                || !containsAll(diagram, List.of("shop", "autoex", "atf-ui", "extent html", "atf-debug-ui"))) {
             add(violations, root, readme, "DOC-ROOT-FLOW-CONTENT", 1,
-                    "root flow does not connect consumers, API/UI execution, evidence, reports, and governance",
-                    "the diagram explains how a local test becomes inspectable Extent evidence",
-                    "connect both application consumers through API validation and browser execution "
-                            + "to Extent and read-only inspection");
+                    "root flow does not preserve consumer-owned checks and the evidence path",
+                    "API responses and neutral browser observations reach domain checks before report publication",
+                    "connect the consumer through API/browser observations and its own checks to Extent inspection; "
+                            + "do not invent an automatic atf-validation stage");
         }
 
         int librarySection = headingLines.isEmpty() ? -1 : headingLines.getLast() - 1;
@@ -229,11 +242,13 @@ public class RootReadmeGovernanceTest {
         }
 
         long diagrams = lines.stream().filter(line -> MERMAID_FENCE.matcher(line).matches()).count();
-        if (diagrams != 1) {
+        if (diagrams != 3
+                || !sectionBody(lines, headings(language).get(2)).contains("sequenceDiagram")
+                || !sectionBody(lines, headings(language).get(4)).contains("flowchart LR")) {
             add(violations, root, readme, "DOC-ROOT-FLOW", 1,
-                    "root README contains " + diagrams + " local evidence-flow diagrams",
-                    "one diagram shows the project-level evidence path without duplicating architecture",
-                    "keep one compact local evidence-flow diagram");
+                    "root README does not contain the three complementary overview perspectives",
+                    "execution, report lifecycle and governed changes answer different reader questions",
+                    "keep one execution flow, one report sequence and one verification flow within the page budget");
         }
 
         for (String module : declaredModules) {
@@ -350,47 +365,34 @@ public class RootReadmeGovernanceTest {
         String fence = String.valueOf((char) 96).repeat(3);
         String[] diagram = {
                 "flowchart LR",
-                "  subgraph Consumers[\"Application consumers\"]",
-                "    Shop[\"Practice Shop\"]",
-                "    AutoEx[\"Automation Exercise\"]",
-                "  end",
-                "  Shop -->|runs| API[\"API scenarios\"]",
-                "  AutoEx -->|runs| API",
-                "  Shop -->|runs| Browser[\"UI and E2E scenarios\"]",
-                "  AutoEx -->|runs| Browser",
-                "  API -->|checks| Validation[\"atf-validation\"]",
-                "  Browser -->|uses| UI[\"atf-ui\"]",
-                "  Validation -->|publishes| Evidence[\"scenario evidence and assertions\"]",
-                "  UI -->|adds| Evidence",
-                "  Evidence -->|renders as| Report[\"Extent HTML report\"]",
-                "  Report -->|opens in| Inspector[\"atf-debug-ui read-only inspection\"]",
-                "  Governance[\"atf-tests\"] -.->|checks| Reactor[\"six local modules\"]"
+                "  App[\"Shop · AutoEx\"]",
+                "  API[\"API execution\"]",
+                "  Browser[\"atf-ui\"]",
+                "  Checks[\"Domain checks\"]",
+                "  Evidence[\"Scenario evidence\"]",
+                "  Report[\"Extent HTML\"]",
+                "  Inspector[\"atf-debug-ui\"]",
+                "  App -->|calls| API", "  App -->|drives| Browser",
+                "  API -->|returns responses| Checks", "  Browser -->|returns observations| Checks",
+                "  Checks -->|binds expectations| Evidence",
+                "  Evidence -->|renders as| Report", "  Report -->|opens in| Inspector"
         };
-        if (romanian) {
-            diagram[1] = "  subgraph Consumers[\"Modulele care testează aplicațiile\"]";
-            diagram[5] = "  Shop -->|rulează| API[\"Scenarii API\"]";
-            diagram[6] = "  AutoEx -->|rulează| API";
-            diagram[7] = "  Shop -->|rulează| Browser[\"Scenarii UI și E2E\"]";
-            diagram[8] = "  AutoEx -->|rulează| Browser";
-            diagram[9] = "  API -->|validează prin| Validation[\"atf-validation\"]";
-            diagram[10] = "  Browser -->|folosește| UI[\"atf-ui\"]";
-            diagram[11] = "  Validation -->|publică| Evidence[\"dovezi și aserțiuni\"]";
-            diagram[12] = "  UI -->|adaugă| Evidence";
-            diagram[13] = "  Evidence -->|formează| Report[\"Raport Extent HTML\"]";
-            diagram[14] = "  Report -->|se inspectează în| Inspector[\"atf-debug-ui inspectare doar pentru citire\"]";
-            diagram[15] = "  Governance[\"atf-tests\"] -.->|verifică| Reactor[\"șase module locale\"]";
-        }
         lines.addAll(List.of("", "## " + headings(language).get(2), "", fence + "mermaid"));
         lines.addAll(List.of(diagram));
         lines.addAll(List.of(fence, "", "<details>",
                 "<summary><strong>" + detailsTitle + "</strong></summary>", "",
-                detailsText, "", "</details>", "", "## " + headings(language).get(3), "",
+                detailsText, "", "</details>", "", fence + "mermaid",
+                "sequenceDiagram", "  Test->>Session: publish assertions", fence, "",
+                "<details>", "<summary>Legend — report lifecycle</summary>", "", detailsText,
+                "", "</details>", "", "## " + headings(language).get(3), "",
                 layerHeader, "|---|---|---|"));
         lines.addAll(List.of(layerRows));
         lines.addAll(List.of("", layerIntro, "", "## " + headings(language).get(4), "",
                 verifyText, "", fence + "powershell",
                 "mvn -B -ntp -pl atf-tests -Dtest=WholeAtfGovernanceSuiteTest test",
-                fence, "", "## " + headings(language).get(5), "",
+                fence, "", fence + "mermaid", "flowchart LR", "  Contract -->|verify| Evidence", fence, "",
+                "<details>", "<summary>Legend — governed changes</summary>", "", detailsText,
+                "", "</details>", "", "## " + headings(language).get(5), "",
                 architectureLink, "", "## " + headings(language).get(6), "", libraryNote));
         return String.join("\n", lines);
     }
@@ -434,6 +436,14 @@ public class RootReadmeGovernanceTest {
         String closingFence = String.valueOf((char) 96).repeat(3);
         while (end < lines.size() && !lines.get(end).trim().equals(closingFence)) end++;
         return String.join("\n", lines.subList(start, Math.min(end, lines.size())));
+    }
+
+    private static Set<String> flowEdges(String diagram) {
+        var edges = new java.util.LinkedHashSet<String>();
+        Matcher matcher = Pattern.compile("(?m)^\\h*([A-Za-z]\\w*)\\h*-->\\|[^|]+\\|\\h*([A-Za-z]\\w*)")
+                .matcher(diagram);
+        while (matcher.find()) edges.add(matcher.group(1) + " -> " + matcher.group(2));
+        return Set.copyOf(edges);
     }
 
     private static boolean containsAll(String text, List<String> requiredTerms) {

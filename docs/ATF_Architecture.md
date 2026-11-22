@@ -22,12 +22,12 @@ Reactorul păstrează exact cele 6 module existente.
 | atf-test-auto-ex | Configurația AutoEx, fluxuri API/UI și dovezi specifice aplicației | Suite de componentă, API, UI și E2E opționale |
 | atf-tests | Guvernanța arhitecturii, documentației, dependențelor și împachetării acestui reactor | Suite de guvernanță |
 
-Cele două module consumer de aplicație declară Test Kit numai pentru codul de test:
+Cele două module ale aplicațiilor păstrează Test Kit în scopul de test. Dependențele lor ATF directe sunt:
 
 | Consumator | `compile` | `test` |
 |---|---|---|
-| Shop | Core | Test Kit |
-| AutoEx | Core | Test Kit |
+| Shop | Core, Console, Reporting, UI | Test Kit |
+| AutoEx | Core, Reporting, UI | Console, Test Kit |
 
 ## Biblioteci consumate
 
@@ -37,13 +37,13 @@ Cele două module consumer de aplicație declară Test Kit numai pentru codul de
 | Reporting | atf.api:atf-reporting:1.0.0-j26 | Modelul Extent și publicarea rapoartelor HTML consumate de testele locale |
 | Console | atf.api:atf-console:1.0.0-c2 | Ieșire diagnostică structurată |
 | Mock | atf.api:atf-mock:1.0.0-m2 | Transport fals determinist în guvernanță și scenarii de test |
-| Test Kit | atf.api:atf-test-kit:1.0.0-k3 | Adnotări pentru nivelul testelor, resolvere și suport de testare |
+| Test Kit | atf.api:atf-test-kit:1.0.0-k4 | Adnotări pentru nivelul testelor, resolvere și suport de testare |
 
 J1 verifică exact octeții JAR/POM selectați și integrările exercitate de propriile teste. Ghidurile bibliotecilor descriu contractele disponibile; acceptanța locală nu pretinde că rulează suita independentă de teste a unei biblioteci.
 
 ## Diagrama dependențelor
 
-Săgețile continue indică dependențe Maven directe și scope-urile declarate. Săgețile punctate indică verificări de guvernanță, nu dependențe Maven.
+Săgețile pleacă de la dependență spre consumator; etichetele arată scopul Maven declarat. Săgețile punctate identifică dependențele de test ale modulului `atf-tests`. Verificările de guvernanță sunt descrise separat.
 
 ~~~mermaid
 flowchart LR
