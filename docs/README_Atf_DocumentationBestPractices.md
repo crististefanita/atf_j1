@@ -469,8 +469,11 @@ For the root entry page:
 
 - The first screen names the local product, modules, and ownership. It does not
   introduce sibling workspaces or make shared-library provenance its subject.
-- The module table follows the root POM; one local evidence-flow diagram is
-  enough. Link to the architecture owner for dependency scopes.
+- The module table follows the root POM. Keep three complementary root diagrams:
+  consumer-owned execution, report lifecycle, and governed verification.
+  Each has one question, an adjacent collapsed legend, and no invented dependency.
+  Link to the architecture owner for dependency scopes; the overview stays within
+  the root governance page budget.
 - If binary dependencies need an index, add one short final note linking
   lib/README.md; keep versions and acceptance detail in the catalog and owner
   documents.

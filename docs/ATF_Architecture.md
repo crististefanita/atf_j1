@@ -22,12 +22,12 @@ The reactor retains exactly 6 existing modules.
 | atf-test-auto-ex | AutoEx configuration, API/UI journeys, and application-specific evidence | Component, API, UI, and opt-in E2E suites |
 | atf-tests | Architecture, documentation, dependency, and packaging governance for this reactor | Governance suites |
 
-The two application consumer modules declare Test Kit only for test code:
+The two application modules keep Test Kit in test scope. Their direct ATF dependencies are:
 
 | Consumer | `compile` | `test` |
 |---|---|---|
-| Shop | Core | Test Kit |
-| AutoEx | Core | Test Kit |
+| Shop | Core, Console, Reporting, UI | Test Kit |
+| AutoEx | Core, Reporting, UI | Console, Test Kit |
 
 ## Consumed library artifacts
 
@@ -37,13 +37,13 @@ The two application consumer modules declare Test Kit only for test code:
 | Reporting | atf.api:atf-reporting:1.0.0-j26 | Extent model and HTML report publication consumed by local tests |
 | Console | atf.api:atf-console:1.0.0-c2 | Structured diagnostic output |
 | Mock | atf.api:atf-mock:1.0.0-m2 | Deterministic fake transport in governance and test scenarios |
-| Test Kit | atf.api:atf-test-kit:1.0.0-k3 | Test-level annotations, resolvers, and test support |
+| Test Kit | atf.api:atf-test-kit:1.0.0-k4 | Test-level annotations, resolvers, and test support |
 
 J1 verifies the exact selected JAR/POM bytes and the integrations exercised by its own tests. The library guides describe the available contract; local acceptance does not claim to execute a library's independent test suite.
 
 ## Dependency map
 
-Solid arrows are direct Maven dependencies with their declared scopes. Dotted arrows show a governance check, not a Maven dependency.
+Arrows run from a dependency to its consumer; labels show the declared Maven scope. Dotted arrows identify the test-scoped dependencies of `atf-tests`. Governance checks are described separately.
 
 ~~~mermaid
 flowchart LR

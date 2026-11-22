@@ -5010,3 +5010,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary>Root overview — complementary diagrams and factual evidence ownership</summary>
+
+```yaml
+testChanges:
+  - id: J1-ROOT-OVERVIEW-20261122
+    status: VERIFIED
+    base: 8dffe1b3d3f8d5188cdd71e1ef7f73eab298034c
+    expires: 2026-12-22
+    reason: Apply the explicitly requested deeper overview while retaining local scope and a bounded page; protect real consumer-owned checks with reversed-edge, invented-route, repeated-perspective and localized-label controls.
+    proof: mvn -B -ntp -pl atf-tests -am test "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=8dffe1b3d3f8d5188cdd71e1ef7f73eab298034c" "-Dsurefire.failIfNoSpecifiedTests=false"
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java
+```
+
+</details>
