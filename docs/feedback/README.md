@@ -13,6 +13,12 @@ record library observations by coordinate, version, hash, and local reproducer.
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | AutoEx purchase journey | reproduce the public cart confirmation with a fresh browser |
 | [J1-RECOVERY-IDE-REPORT-PARITY-2026-11-22](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22) | Consumer launch configuration | run both recovery components from IntelliJ and validate those emitted artifacts with the existing browser acceptance |
 
+## Deferred AI design backlog
+
+[AI evaluator and workflow gaps](README_AI_Evaluation.md) remain open design
+criteria, outside the current maintenance priority order. The delivered
+comparator is separate from the proposed ledger, lifecycle and report projection.
+
 ## Delivered consumer evidence
 
 | Contract | Current record |

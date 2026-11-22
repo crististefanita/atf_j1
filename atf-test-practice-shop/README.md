@@ -692,8 +692,8 @@ flowchart LR
 <summary><strong>Details — module configuration</strong></summary>
 
 The canonical source is
-[`atf-practice-shop.yaml`](src/test/resources/atf-practice-shop.yaml). Loaderul
-which the loader reads from the classpath, with a fallback for launches from
+[`atf-practice-shop.yaml`](src/test/resources/atf-practice-shop.yaml). The loader
+reads it from the classpath, with a fallback for launches from
 IntelliJ or the module checkout.
 
 | YAML key | Relevant default | Effect in this consumer |
