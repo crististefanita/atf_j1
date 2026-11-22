@@ -1,6 +1,7 @@
 package atf.api.tests.governance.documentation.structure;
 
 import atf.api.tests.governance.documentation.DocumentationGovernanceSupport;
+import atf.api.tests.governance.documentation.links.MarkdownAnchorIndex;
 import atf.testkit.AtfComponentTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -43,6 +44,10 @@ public class DocumentationContextArtifactGovernanceTest {
                     + "\\s+(?:record|report|snapshot|evidence)\\s*$");
     private static final Pattern PROVENANCE_SNAPSHOT_REFERENCE = Pattern.compile(
             "(?i)\"docs/[^\"\\r\\n]*(?:verification|acceptance)[^\"\\r\\n]*\\.md\"");
+    private static final Pattern FEEDBACK_RESULT_JOURNAL = Pattern.compile(
+            "(?iu)(?:^#{1,6}\\s+(?:delivered\\s+(?:consumer\\s+)?evidence"
+                    + "|dovezi\\s+(?:consumer\\s+)?livrate)\\s*$"
+                    + "|^\\|.*\\[(?:closed|verified|închis|verificat)\\s+(?:on|la)\\s+20\\d{2}-\\d{2}-\\d{2}\\])");
 
     @Test
     void maintainedDocumentationContainsNoProjectMapsOrVerificationRecords() throws Exception {
@@ -86,6 +91,30 @@ public class DocumentationContextArtifactGovernanceTest {
                 violations::toString);
     }
 
+    @Test
+    void activeFeedbackRejectsClosureSectionsAndDatedResultRows(@TempDir Path root) throws Exception {
+        Path index = Files.createDirectories(root.resolve("docs/feedback")).resolve("README.md");
+        for (String archive : List.of("## Delivered consumer evidence", "## Dovezi consumer livrate",
+                "| Catalog | [Closed on 2026-11-22](owner.md) | 191/191 |",
+                "| Catalog | [Verificat la 2026-11-22](owner.md) | 191/191 |")) {
+            Files.writeString(index, "# Feedback\n\n" + archive + "\n");
+            var violations = inspect(root);
+            assertEquals(1, violations.size(), archive);
+            assertEquals("DOC-FEEDBACK-JOURNAL", violations.getFirst().code());
+            assertTrue(violations.getFirst().toString().replace('\\', '/').contains("docs/feedback/README.md:3"));
+        }
+    }
+
+    @Test
+    void activeFeedbackAllowsDatedFindingIdsOwnerLinksAndLiteralExamples(@TempDir Path root) throws Exception {
+        Path index = Files.createDirectories(root.resolve("docs/feedback")).resolve("README.md");
+        Files.writeString(index, "# Feedback\n\n## Active findings\n\n"
+                + "| [ISSUE-2026-11-22](owner.md#issue) | Open: reproduce the local failure. |\n\n"
+                + "## Current owners\n\n[Library contract](../../lib/README.md)\n\n"
+                + "~~~markdown\n## Delivered consumer evidence\n~~~\n");
+        assertEquals(List.of(), inspect(root));
+    }
+
     private static List<DocumentationGovernanceSupport.Violation> inspect(Path root) throws IOException {
         List<DocumentationGovernanceSupport.Violation> violations = new ArrayList<>();
         try (Stream<Path> paths = Files.walk(root)) {
@@ -116,6 +145,16 @@ public class DocumentationContextArtifactGovernanceTest {
         List<String> lines = Files.readAllLines(file);
         String relative = root.toAbsolutePath().normalize().relativize(file.toAbsolutePath().normalize())
                 .toString().replace('\\', '/');
+        if (relative.equals("docs/feedback/README.md")) {
+            var visible = MarkdownAnchorIndex.withoutFences(lines);
+            for (int index = 0; index < visible.size(); index++) {
+                if (FEEDBACK_RESULT_JOURNAL.matcher(visible.get(index)).find())
+                    add(violations, "DOC-FEEDBACK-JOURNAL", root, file, index + 1,
+                            "active feedback contains a delivered-result journal",
+                            "the active index keeps open gaps and links to current contract owners",
+                            "remove closed run rows and link the durable owner; keep original evidence outside the index");
+            }
+        }
         String identity = relative.replace('_', ' ').replace('-', ' ');
         int titleLine = 1;
         String title = "";

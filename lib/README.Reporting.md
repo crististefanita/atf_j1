@@ -49,25 +49,25 @@ public static void publish(AssertionAuditRun run, String actual) {
 
 | Owner | Închidere și limită |
 |---|---|
-| AssertionAuditRun | Deține sesiunea; close publică HTML-ul final. |
-| run.open(identity) | Împrumută sesiunea; close închide scenariul invocării. |
-| Constructorul AssertionAuditReport(session, ...) | Deține și închide sesiunea proprie. |
+| `AssertionAuditRun` | Deține sesiunea; close publică HTML-ul final. |
+| `run.open(identity)` | Împrumută sesiunea; close închide scenariul invocării. |
+| Constructorul `AssertionAuditReport(session, ...)` | Deține și închide sesiunea proprie. |
 
-- Aceleași settings/redactor în run și renderer; preview implicit **240**, citit prin assertionMaxDisplayCharacters(). Valorile complete preced preview-ul.
-- Exemplul urmează thread-ul sesiunii; AssertionAuditRun.extent(...) serializează publicarea pentru apelanți concurenți.
-- Kit colectează comparația JUnit evaluată o dată; Reporting publică. Callerul păstrează verdictul, cauza și timing-ul prin phase(..., timing).
-- J26 primește valori opționale `ReportObservation` prin `phase(..., timing, observations)`. Le publică drept fapte INFO în aceeași fază, separat de rândurile aserțiunilor și verdict; consumerul deține maparea și valorile sigure.
+- Aceleași settings/redactor în run și renderer; preview implicit **240**, citit prin `assertionMaxDisplayCharacters()`. Valorile complete preced preview-ul.
+- Exemplul urmează thread-ul sesiunii; `AssertionAuditRun.extent(...)` serializează publicarea pentru apelanți concurenți.
+- Kit colectează comparația JUnit evaluată o dată; Reporting publică. Callerul păstrează verdictul, cauza și timing-ul prin `phase(..., timing)`.
+- API-ul Reporting consumat primește valori opționale `ReportObservation` prin `phase(..., timing, observations)`. Le publică drept fapte INFO în aceeași fază, separat de rândurile aserțiunilor și verdict; consumerul deține maparea și valorile sigure.
 - Fails indexează cauza terminală la rândul ACTION sau OBSERVE care a eșuat. Tests păstrează și diagnosticul colapsabil, iar comparațiile independente rămân distincte.
 - PNG-ul păstrează întregul viewport/display; captura și zoom-ul aparțin adaptorului. Capturile identice din același pas păstrează o singură dovadă și primul caption.
-- După close, ReportArtifactInspector.inspect(path, profile) califică inventarul și resursele embedded; diagnosticul localizează dependențele externe. Căile text rămân valide. Inspectorul este static; randarea și interacțiunile se verifică separat în browser.
-- Titlurile se publică drept text literal în Extent și fallback. Profilul acceptă etichetele originale, inclusiv multiline. ReportArtifactProfile.visibleLabel(label) oferă aceeași proiecție de spații ca inspectorul.
+- După close, `ReportArtifactInspector.inspect(path, profile)` califică inventarul și resursele embedded; diagnosticul localizează dependențele externe. Căile text rămân valide. Inspectorul este static; randarea și interacțiunile se verifică separat în browser.
+- Titlurile se publică drept text literal în Extent și fallback. Profilul acceptă etichetele originale, inclusiv multiline. `ReportArtifactProfile.visibleLabel(label)` oferă aceeași proiecție de spații ca inspectorul.
 - Browserul aparține callerului: separați diagnosticul de discovery JUnit de execuție, închideți contextul înaintea browserului și păstrați cauza inițială la cleanup.
 
 Durata HTTP provine din `ReportResponse.duration()`; `detail(...)` păstrează textul callerului, fără să îl transforme într-o măsurătoare de transport.
 
 ---
 
-Detaliile de întreținere și feedback sunt în [indexul bibliotecii](README.md#maintenance-and-feedback).
+Artifact consumat: [identitate și feedback local](README.md#maintenance-and-feedback).
 
 <a id="shared-library-source"></a>
 

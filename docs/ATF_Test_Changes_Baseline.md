@@ -5001,3 +5001,20 @@ testChanges:
 ```
 
 </details>
+
+<details>
+<summary>Igiena indexului de feedback activ</summary>
+
+```yaml
+testChanges:
+  - id: J1-FEEDBACK-INDEX-HYGIENE-20261122
+    status: VERIFIED
+    base: 199c4fcd2859ff5967250c82070045ab0c691887
+    expires: 2026-12-22
+    reason: Respinge jurnalele rezultatelor livrate din indexul activ, păstrând identificatorii datați ai lacunelor deschise, linkurile responsabililor și exemplele literale.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=199c4fcd2859ff5967250c82070045ab0c691887" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/DocumentationContextArtifactGovernanceTest.java
+```
+
+</details>

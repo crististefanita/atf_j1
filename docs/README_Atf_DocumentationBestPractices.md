@@ -613,3 +613,8 @@ Comanda de [guvernanță](../atf-tests/README.md#verificare-rapidă) se rulează
 staging; artifactele Markdown randate se inspectează în TAB MCP. Rubrica
 editorială rămâne cea [de mai sus](#rubrica-reviziei-editoriale), fără praguri
 sau excepții introduse pentru o revizie particulară.
+
+Indexul feedback-ului activ păstrează lacune deschise și linkuri către responsabilii contractelor curente.
+Elimină jurnalele rulărilor închise, rândurile datate de închidere și numărătorile acceptanței; păstrează
+dovezile originale în istoricul Git sau lângă artefactele proprii. Guvernanța documentară
+verifică ambele ediții, permițând datele din identificatorii constatărilor active.
