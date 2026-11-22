@@ -11,7 +11,7 @@ reproducere locală.
 
 | Constatare | Responsabil local | Dovada următoare |
 |---|---|---|
-| [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Compoziția metadatelor Reporting | capturează rădăcina JUnit și selecția efectivă în metadatele de audit |
+| [J1-LAUNCH-CONTEXT-146](ATF_Reporting_Feedback.md#j1-launch-context-146) | Integrarea metadatelor lansării | clasa/metoda sursă și ascendența suitei sunt livrate; furnizează selectorii reali și numărul descoperit printr-un snapshot neutru per lansare |
 | [AUTOEX-UI-CART-CONFIRMATION-2026-11-19](ATF_Consumer_Business_Test_Focus_Feedback.md#autoex-ui-cart-confirmation-2026-11-19) | Journey-ul de cumpărare AutoEx | reproduce confirmarea coșului public cu un browser nou |
 
 ## Dovezi consumer livrate

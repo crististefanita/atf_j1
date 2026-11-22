@@ -1734,6 +1734,40 @@ verificarea unui raport lansat din IntelliJ sau acceptanța E2E pe site-ul publi
 
 Deadline-ul, refuzurile și limitele sunt în [UI](../atf-ui/README.md#recuperare-be-prin-observație-pasivă).
 
+## Identitatea lansării JUnit
+
+O fază separată și colapsată `Launch context` păstrează clasa și metoda canonică
+pentru fiecare invocare și suita exterioară expusă în ascendența ID-ului JUnit.
+Modelul imuabil `AutoExLaunchMetadata` este capturat de extensia consumerului și
+publicat prin contractul existent `ReportObservation` din Reporting. Titlurile
+afișate și numele fișierelor nu determină această identitate.
+
+`Launcher selection` și `Effective selection count` rămân explicit necunoscute:
+`ExtensionContext` nu furnizează selectorii lansării sau un `TestPlan` descoperit.
+Un raport partajat sau o singură metodă executată nu demonstrează aceste valori.
+System operațional, titlurile pașilor de business, verdictele și previzualizarea
+configurată a aserțiunilor respectă în continuare contractele existente.
+
+```mermaid
+flowchart LR
+    JUnit["Context JUnit"] -->|capturează| Identity["Identitate imuabilă"]
+    Identity -->|publică| Adapter["Adapter AutoEx"]
+    Adapter -->|observă| Reporting["Reporting J26"]
+    Reporting -->|randează| Tests["Tests · Launch context"]
+```
+
+<details>
+<summary><strong>Legendă — interacțiunea modulelor și faptele disponibile</strong></summary>
+
+- JUnit furnizează identitatea sursei; consumerul deține captura și publicarea.
+- Reporting randează observația INFO cu expandare independentă.
+- Test Kit rămâne biblioteca de lifecycle; nu furnizează puntea spre planul descoperit.
+- `AutoExLaunchMetadataComponentTest` verifică lansările de clasă/metodă, suita
+  canonică, suita filtrată prin tag, titlurile identice, numele înșelătoare,
+  lansările repetate și expandarea în browser a tuturor celor șase câmpuri.
+
+</details>
+
 ## Rulare
 
 <details>

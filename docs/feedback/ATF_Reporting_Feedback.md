@@ -99,38 +99,36 @@ acceptanță în browser ca rapoartele Maven.
 
 <a id="j1-launch-context-146"></a>
 
-## J1-LAUNCH-CONTEXT-146 — înregistrarea domeniului real al lansării
+## J1-LAUNCH-CONTEXT-146 — completarea metadatelor planului descoperit
 
-**Stare: Rămâne deschisă după reverificarea din 2026-11-21. Responsabil:**
-metadatele lansării J1 și compoziția consumerului. Verificările business și de
-randare trec; metadatele de audit nu conțin încă rădăcina JUnit și selecția
-efectivă a testelor.
+**Stare: Livrat parțial la 2026-11-22; responsabil pentru rest:** integrarea lansării cu consumerul.
 
-| Martor | Fapt observat |
-|---|---|
-| Compoziția AutoEx | `AutoExRunFactory` partajează o resursă de raport din store-ul rădăcină JUnit, dar denumește raportul după metoda de test și fiecare scenariu după clasa/display name al copilului; nu publică suita rădăcină sau selecția efectivă |
-| Compoziția Shop | `ShopE2eTestSupport` partajează un raport din store-ul rădăcină; `ShopRunReportFactory` primește configurația, profilul de dovezi și mediul, nu identitatea lansării JUnit |
-| Nume de fișier ambiguu | `AutoExReportSession.fileName` derivă numele raportului din metodă, astfel o rulare directă a metodei și o rulare de suită pot avea același prefix |
-| Limită existentă | `ReportEnvironmentField.SUITE` este ascuns intenționat din System operațional; informația lansării aparține metadatelor secundare Tests/trace |
-| Verificare controlată 2026-11-20 | `AutoExE2eOverviewNarrativeComponentTest` a trecut două scenarii fixture UI/UI_API în scope de suită și a verificat expandarea raportului; nu verifică suita canonică rădăcină sau selecția efectivă |
+- Livrat: clasa/metoda imuabilă și suita exterioară din ascendența ID-ului JUnit, publicate în faza INFO colapsată `Launch context` din Tests. System operațional și pașii de business își păstrează contractele.
+- Verificat: clasă/metodă directă, suită canonică, suită filtrată prin tag, titluri identice, nume de fișiere înșelătoare, lansări repetate și expandarea tuturor celor șase câmpuri în ambii consumatori. Verificările E2E existente pe fixture-uri reale păstrează proprietatea raportului partajat, eșecurile originale și izolarea scenariilor.
+- Rămas: expunerea selectorilor reali și a numărului descoperit printr-un contract neutru per lansare. `ExtensionContext` nu furnizează aceste date; ambele câmpuri spun explicit `unknown`. Numele raportului, durata root-store-ului sau numărul testelor terminate nu demonstrează selecția descoperită.
+- Reproducere: rulează `ShopLaunchMetadataComponentTest` sau `AutoExLaunchMetadataComponentTest`; cazul unei metode descoperă o invocare, dar păstrează corect selectorul/numărul necunoscut în observația consumerului. Furnizează un snapshot imuabil al planului la granița JUnit înainte de înlocuirea markerilor; acoperă lansări concurente și imbricate, filtre și teste dinamice.
+- Test Kit selectat: `atf.api:atf-test-kit:1.0.0-k3`; JAR SHA-256 `7304152b14aef03f4e81dca9bf9f6421c8f17e554bdfc92dbca38b3d32bcf7bc`, POM SHA-256 `0533a3f67c59c491a22b48df61f71dbe74009a5f839900a085e07eaad0a2a766`. API-ul de scope nu oferă puntea spre planul descoperit; lipsește o capabilitate de integrare, nu este un defect de renderer.
 
-Verificările de recovery și guvernanța întregului reactor din 2026-11-21 nu
-afirmă identitatea lansării. Ele lasă deschisă această constatare despre metadate.
+**Pentru închidere:** selecția reală și numărul descoperit devin inspectabile în rapoartele directe și de suită filtrată. Păstrează constatarea deschisă până există această sursă; nu reconstrui selecția din rezultatele execuției.
 
-- [ ] Capturează scope-ul imuabil al lansării, rădăcina canonică a suitei când
-  este cunoscută, clasa/metoda selectată și numărul selecției efective la
-  limita JUnit; păstrează o valoare unknown explicită când informația lipsește.
-- [ ] Publică aceste fapte sigure prin limita neutră existentă pentru metadate,
-  în afara System operațional; păstrează titlurile pașilor business, un raport
-  per suită și preview-ul de 240 de caractere.
-- [ ] Adaugă teste J1 pentru lansări directe și filtrate ale suitei canonice,
-  inclusiv clase cu același titlu și nume de fișier înșelătoare. Nu deduce
-  scope-ul din numele artefactelor sau textul afișat al pașilor.
-- [ ] Dacă contractul Test Kit selectat nu expune contextul necesar, notează
-  coordonata exactă a bibliotecii și o reproducere J1 minimală; păstrează
-  achiziția browserului și comportamentul aplicației în afara acestui item.
+<details>
+<summary><strong>Controlul modificării — identitatea lansării consumerului</strong></summary>
 
-**Închidere:** cititorul identifică suita-rădăcină JUnit, selecția efectivă și
-testele selectate din fiecare raport HTML fără checkout de surse sau loguri ale
-launcherului. Lansările directe și filtrate trec testele pozitive și negative;
-testele business sau de randare singure nu închid această lacună de metadate.
+```yaml
+testChanges:
+  - id: J1-LAUNCH-IDENTITY-20261122
+    status: ACTIVE
+    base: 4189144639e87441339b7b6feefbd6de2f8545a8
+    expires: 2026-12-22
+    reason: Publică local identitatea imuabilă JUnit, verifică explicit lipsa datelor descoperite și guvernează proprietatea consumerului.
+    proof: mvn -B -ntp -pl atf-test-practice-shop,atf-test-auto-ex,atf-tests -am "-Dtest=ShopLaunchMetadataComponentTest,AutoExLaunchMetadataComponentTest,ShopEvidenceProfileIsolationComponentTest,AutoExE2eReportPathComponentTest,WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4189144639e87441339b7b6feefbd6de2f8545a8" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExE2eReportPathComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/component/reporting/AutoExLaunchMetadataComponentTest.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/extension/AutoExRunFactory.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchMetadata.java
+      - atf-test-auto-ex/src/test/java/atf/autoex/tests/support/reporting/AutoExLaunchReportProbe.java
+      - atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java
+```
+
+</details>

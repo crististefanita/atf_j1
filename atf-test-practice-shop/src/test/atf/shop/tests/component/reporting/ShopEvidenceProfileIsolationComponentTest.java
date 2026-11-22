@@ -97,6 +97,9 @@ class ShopEvidenceProfileIsolationComponentTest {
         assertEquals(1, reports.size(), "one HTML per individual or shared launch");
         String html = Files.readString(reports.getFirst()).replaceAll("(?is)<script\\b[^>]*>.*?</script>|<style\\b[^>]*>.*?</style>", "");
         for (var owner : owners) assertTrue(html.contains(owner.getSimpleName()));
+        assertTrue(html.contains("JUnit launch identity"), "Real E2E composition publishes source identity");
+        for (var owner : owners) assertTrue(html.contains(owner.getName()), "Canonical owner is retained");
+        assertTrue(html.contains("unknown (TestPlan unavailable)"), "Shared report does not imply discovery count");
         assertTrue(html.contains("Profile HTTP response"));
         assertTrue(html.contains("500"));
         assertTrue(html.contains("data-atf-evidence-status=\"fail\""));
