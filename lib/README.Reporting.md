@@ -71,5 +71,5 @@ Consumed artifact: [identity and local feedback](README.md#maintenance-and-feedb
 
 <a id="shared-library-source"></a>
 
-> **Library source:** [Reporting · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Reporting.md).
+> **Library source:** [Reporting · ATF J0](https://github.com/crististefanita/atf_j0/blob/main/lib/README.Reporting.md).
 > This project’s POM, provenance and tests define the consumed version and local acceptance.

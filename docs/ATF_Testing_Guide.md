@@ -192,7 +192,7 @@ Cells show only levels that exist in the current executable suites.
 | Console library | — | — | — | — | structured diagnostic output consumed by local modules |
 | Mock library | — | — | — | — | deterministic fake transport used by local tests |
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | generic Playwright policy and adapter |
-| [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | read-only server and launcher for inspection |
+| [Debug UI library](../lib/README.DebugUi.md) | — | ✅ | — | — | Producer-owned, test-scoped inspector for existing HTML; not a report producer |
 | Selected Reporting library | — | — | — | — | versioned binary dependency; its source tests are outside this reactor |
 | J1 Reporting consumer evidence | — | ✅ | ✅ | ✅ | local adapters, scenarios, and rendered report behavior |
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumer: contracts, API, flows, and browser journeys |

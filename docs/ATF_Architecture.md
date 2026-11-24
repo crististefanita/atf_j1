@@ -1,13 +1,14 @@
 # ATF J1 Architecture
 
-This document describes the ATF J1 Maven reactor in this checkout. Its six local modules and their tests are the subject of the architecture. Five versioned ATF libraries are consumed as binary dependencies selected by the root POM.
+This document describes the ATF J1 Maven reactor in this checkout. Its five local modules and their tests are the subject of the architecture. Six versioned ATF libraries are selected as binary dependencies by the root POM.
 
-The reactor retains exactly 6 existing modules.
+The reactor retains exactly 5 existing modules.
 
 ## At a glance
 
-- The reactor contains six modules: Validation, UI, Debug UI, Practice Shop, AutoEx, and governance tests.
-- Core, Reporting, Console, Mock, and Test Kit are consumed from the versioned JAR/POM pairs under lib.
+- The reactor contains five modules: Validation, UI, Practice Shop, AutoEx, and governance tests.
+- Core, Reporting, Console, Mock, Test Kit, and Debug UI are consumed from versioned JAR/POM pairs under `lib`.
+- Debug UI remains producer-owned and appears only on the `atf-tests` test classpath; no Debug UI source module is present in J1.
 - The root POM and each module POM are authoritative for module membership, versions, and dependency scopes.
 - [Library synchronization](ATF_Workspace_Synchronization.md#consumed-library-catalog) records the selected artifacts; [library guides](../lib/README.md) describe their consumer-facing contracts.
 
@@ -17,7 +18,6 @@ The reactor retains exactly 6 existing modules.
 |---|---|---|
 | atf-validation | Response contracts, validation rules, and verdict publication through the local validation port | Unit and component tests |
 | atf-ui | Shared Playwright adapter and browser policies used by local consumers | Unit and component tests |
-| atf-debug-ui | Read-only local server for inspecting generated HTML artifacts | Component and browser checks |
 | atf-test-practice-shop | Practice Shop configuration, pages, API/UI journeys, and application-specific evidence | Component, API, UI, and E2E suites |
 | atf-test-auto-ex | AutoEx configuration, API/UI journeys, and application-specific evidence | Component, API, UI, and opt-in E2E suites |
 | atf-tests | Architecture, documentation, dependency, and packaging governance for this reactor | Governance suites |
@@ -37,7 +37,8 @@ The two application modules keep Test Kit in test scope. Their direct ATF depend
 | Reporting | atf.api:atf-reporting:1.0.0-j26 | Extent model and HTML report publication consumed by local tests |
 | Console | atf.api:atf-console:1.0.0-c2 | Structured diagnostic output |
 | Mock | atf.api:atf-mock:1.0.0-m2 | Deterministic fake transport in governance and test scenarios |
-| Test Kit | atf.api:atf-test-kit:1.0.0-k4 | Test-level annotations, resolvers, and test support |
+| Test Kit | atf.api:atf-test-kit:1.0.0-k5 | Test-level annotations, resolvers, source-language governance, and test support |
+| Debug UI | atf.api:atf-debug-ui:1.0.0-d1 | Read-only inspection of existing report artifacts from `atf-tests` test scope |
 
 J1 verifies the exact selected JAR/POM bytes and the integrations exercised by its own tests. The library guides describe the available contract; local acceptance does not claim to execute a library's independent test suite.
 
@@ -53,12 +54,12 @@ flowchart LR
     Console[Console]
     Mock[Mock]
     Kit[Test Kit]
+    DebugUI[Debug UI · producer library]
   end
 
-  subgraph Reactor[Six local J1 modules]
+  subgraph Reactor[Five local J1 modules]
     Validation[atf-validation]
     UI[atf-ui]
-    Debug[atf-debug-ui]
     Shop[atf-test-practice-shop]
     AutoEx[atf-test-auto-ex]
     Governance[atf-tests]
@@ -68,8 +69,7 @@ flowchart LR
   Kit -->|test| Validation
   Core -->|compile| UI
   Kit -->|test| UI
-  Console -->|compile| Debug
-  Kit -->|test| Debug
+  DebugUI -.->|test| Governance
   Core -->|compile| Shop
   Console -->|compile| Shop
   Reporting -->|compile| Shop

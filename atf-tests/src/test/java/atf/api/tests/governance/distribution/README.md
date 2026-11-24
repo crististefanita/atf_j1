@@ -2,7 +2,7 @@
 
 ## At a glance
 
-This package verifies the J1 reactor declared by its root POM and the five
+This package verifies the J1 reactor declared by its root POM and the six
 versioned library artifacts consumed from `lib`. It reads only this checkout's
 POM, artifact files, and provenance.
 
@@ -14,7 +14,8 @@ POM, artifact files, and provenance.
 | Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` + POM |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` + POM |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` + POM |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k4` | `lib/atf-test-kit-1.0.0-k4.jar` + POM |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k5` | `lib/atf-test-kit-1.0.0-k5.jar` + POM |
+| Debug UI | `atf.api:atf-debug-ui:1.0.0-d1` | `lib/atf-debug-ui-1.0.0-d1.jar` + POM; test-scoped inspector, not a report producer |
 
 The root POM selects the versions. `library-provenance.json` identifies the
 binary/POM hashes and retained package evidence.
@@ -43,7 +44,7 @@ flowchart LR
 <details>
 <summary><strong>Legend — local artifact evidence</strong></summary>
 
-- The POM defines local modules and the five selected library versions.
+- The POM defines local modules and the six selected library versions.
 - Governance verifies artifact coordinates, bytes, dependency boundaries, and
   loaded identity without reading an adjacent workspace.
 - A native-test catalog in provenance records package evidence; it does not

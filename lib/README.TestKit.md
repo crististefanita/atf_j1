@@ -12,6 +12,7 @@ Kit provides annotations, evaluated comparisons, and a neutral lifecycle. The JA
 | Full values | `AssertionValueDisplay` can receive a `Projection` observer with the expected/actual role and redacted text before preview; the consumer owns retention. |
 | Phases and cleanup | `ComponentAuditExtension` / `ComponentAuditAdapter`, `TestRunInitialization`, `FailureAwareCleanup`. |
 | Policies and resources | `Atf*Policy` resolvers; `readResourceUtf8` for classpath/JAR, `requiredPath` for a real file. |
+| Source-language governance | `AtfSourceLanguageScanner` in the selected Test Kit artifact; deterministic Java/MJS comments, identifiers, and recognized diagnostic strings with path/line/construct findings; no file inventory or project-specific exceptions. |
 
 ## Minimal example
 
@@ -35,6 +36,7 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 - `RecordedAssertions.observe(ComponentAuditObservation)` stores immutable facts with the current phase, separately from checks and assertion coverage. The consumer adapter decides whether and how to map them to Reporting; Kit has no Reporting dependency and publishes no renderer.
 - Inject the sanitizer through `AssertionValueDisplay` before preview. The comparison runs once; stored values are bounded and are not a complete archive. Pure units keep their own policy.
 - Scopes and resources are per invocation; close them and preserve the original cause. A local lock does not isolate global policies from external readers.
+- The source-language scanner is used by governance tests only; it is not an application dependency. Each consumer owns its source inventory, localized-data exceptions, and adoption test.
 
 ---
 
@@ -57,5 +59,5 @@ snapshot publication and verifies the selected binary through its own report.
 
 <a id="shared-library-source"></a>
 
-> **Library source:** [Test Kit · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.TestKit.md).
+> **Library source:** [Test Kit · ATF J0](https://github.com/crististefanita/atf_j0/blob/main/lib/README.TestKit.md).
 > This project’s POM, provenance and tests define the consumed version and local acceptance.

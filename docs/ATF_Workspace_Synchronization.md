@@ -1,6 +1,6 @@
 # ATF J1 — library artifact synchronization
 
-This guide records how this J1 reactor selects, installs, and verifies its five
+This guide records how this J1 reactor selects, installs, and verifies its six
 consumed libraries. The reactor and its acceptance criteria remain local to this
 checkout; dependencies are identified by Maven coordinates and artifact bytes.
 
@@ -21,7 +21,8 @@ records artifact hashes and package origin.
 | Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` | `lib/atf-reporting-1.0.0-j26.pom` |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` | `lib/atf-console-1.0.0-c2.pom` |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` | `lib/atf-mock-1.0.0-m2.pom` |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k4` | `lib/atf-test-kit-1.0.0-k4.jar` | `lib/atf-test-kit-1.0.0-k4.pom` |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k5` | `lib/atf-test-kit-1.0.0-k5.jar` | `lib/atf-test-kit-1.0.0-k5.pom` |
+| Debug UI | `atf.api:atf-debug-ui:1.0.0-d1` | `lib/atf-debug-ui-1.0.0-d1.jar` | `lib/atf-debug-ui-1.0.0-d1.pom` |
 
 The versions above must match the root POM properties and the filenames in
 `lib`. Library usage and dependency boundaries are described in the
@@ -62,10 +63,14 @@ mvn -B -ntp -N validate
 mvn -B -ntp -DskipTests test-compile
 ~~~
 
-The root `validate` phase installs the five adjacent JAR/POM pairs. Reload the
+The root `validate` phase installs the six adjacent JAR/POM pairs. Reload the
 root POM in IntelliJ after selecting the same JDK, settings file, and local
 repository. Do not add library source modules to this reactor to satisfy
 imports.
+
+Debug UI is selected only in `atf-tests` test scope. The producer owns its source and
+shared feedback; J1 owns the selected dependency and its physical-artifact
+acceptance. Shop and AutoEx do not depend on the inspector.
 
 ## Change and evidence handling
 

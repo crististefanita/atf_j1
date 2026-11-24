@@ -44,6 +44,7 @@ Short labels carry the following meanings:
 | reactor, POM, and dependency direction | `atf-tests` | does not modify production code |
 | source/package ownership and module placement | `ArchitectureModuleBoundaryTest`, `ArchitectureOwnershipBoundaryTest` | does not own application selectors |
 | relocatable documentation and consistent sources | `governance.documentation.*`, `AtfSourceReadabilityGovernanceTest` | does not validate one consumer's content |
+| developer-authored source language | `SourceLanguageGovernanceTest` via the selected Test Kit binary | Java/MJS identifiers, comments, and recognized technical diagnostics; localized literals remain data |
 | constant ownership and package cohesion | `ConstantsOwnershipGovernanceTest`, `AtfPackageCohesionGovernanceTest` | maximum 8 classes per package in production and test source sets across all reactor modules; exceptions must be explicit |
 | Practice Shop purchase journey | `atf-test-practice-shop` | is not copied here |
 | Shop/AutoEx consumer report scenarios and assertions | their own consumer modules | remain with the consumer |
@@ -86,8 +87,8 @@ layouts before moving any tests.
 
 | Surface | Local source of truth | Governing evidence |
 |---|---|---|
-| J1 reactor | root Maven POM and six declared modules | module and dependency-boundary checks |
-| Consumed libraries | five versioned JAR/POM pairs in `lib` | coordinates, physical bytes, provenance, and loaded identity |
+| J1 reactor | root Maven POM and five declared modules | module and dependency-boundary checks |
+| Consumed libraries | six versioned JAR/POM pairs in `lib` | coordinates, physical bytes, provenance, and loaded identity |
 | Reporting acceptance | selected J1 component and UI scenarios | assertion structure, HTML rendering, and report navigation |
 
 A declared local module that is missing is an error; profiles are not inferred
@@ -129,6 +130,7 @@ src/test/java/atf/api/tests/governance/
 ├── AtfGovernanceRules.java
 ├── AtfGovernanceTestSupport.java
 ├── AtfSourceReadabilityGovernanceTest.java
+├── SourceLanguageGovernanceTest.java
 ├── ConstantsOwnershipGovernanceTest.java
 ├── changes/          change-control schema, Git diff, and negative checks
 ├── console/          UI/API defaults and composition roots
@@ -165,10 +167,11 @@ keeps ownership of its application scenarios:
 - `ArchitectureOwnershipBoundaryTest` — module placement, package roots,
   reporting/UI ownership, and absence of duplicates;
 - `AtfPackageCohesionGovernanceTest` — cohesion of governed production packages
-  and test source sets in the six modules declared by the root POM;
+  and test source sets in the five local modules declared by the root POM;
   the limit is eight classes maximum, and the diagnostic identifies the module,
   package, and concrete classes for any new hotspot or stale exception;
 - `AtfSourceReadabilityGovernanceTest` — duplicate imports in local Maven main/test sources and the configured reporting-call boundary; comments and literals are lexically excluded;
+- `SourceLanguageGovernanceTest` — applies the shared Test Kit scanner to all declared Java source roots and `atf-tests/tools/*.mjs`, verifies path/line/construct diagnostics, and keeps localized fixture values out of the source-language verdict;
 - `layers.AtfTestLayerArchitectureTest` — inventories `sourceDirectory` and
   `testSourceDirectory` roots from the POM (using Maven defaults), then checks
   the level of every executable class; nested fixtures do not change the level
@@ -359,7 +362,7 @@ writes only under JUnit temporary storage.
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compares the modules and Kit scope with the actual POMs.
 [DocumentedLibraryCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java)
-compares the five documented library coordinates and JAR/POM paths with the root POM, physical files, and local library guides. Mutants in version, artifact path, and guide inventory must be rejected. It requires no neighboring checkout.
+compares the six documented library coordinates and JAR/POM paths with the root POM, physical files, and local library guides. Mutants in version, artifact path, and guide inventory must be rejected. It requires no neighboring checkout.
 [DocumentedUiGeometryContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedUiGeometryContractTest.java)
 extends the same factual boundary to selected numeric geometry, without
 Reporting sources. These checks are explicitly selected by

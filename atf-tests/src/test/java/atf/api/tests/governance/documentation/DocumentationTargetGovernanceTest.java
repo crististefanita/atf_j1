@@ -27,6 +27,7 @@ import static atf.api.tests.governance.AtfGovernanceTestSupport.locateProjectRoo
 @DocumentationTarget("atf-reporting-tests/src/test/java/atf/ui/tests/extent/README.md")
 @DocumentationTarget("atf-reporting/README.md")
 @DocumentationTarget("atf-test-kit/README.md")
+@DocumentationTarget("lib/README.DebugUi.md")
 @DocumentationTarget("docs/ATF_Api_Test_Guide.md")
 @DocumentationTarget("docs/ATF_Architecture.md")
 @DocumentationTarget("docs/ATF_Build_And_Execution_Safety.md")

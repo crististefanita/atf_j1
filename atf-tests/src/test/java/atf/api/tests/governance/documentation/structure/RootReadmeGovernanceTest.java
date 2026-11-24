@@ -37,7 +37,7 @@ public class RootReadmeGovernanceTest {
     private static final Pattern MERMAID_FENCE = Pattern.compile("^\\s*```mermaid\\s*$");
 
     private static final List<String> LOCAL_MODULES = List.of(
-            "atf-validation", "atf-ui", "atf-debug-ui",
+            "atf-validation", "atf-ui",
             "atf-test-practice-shop", "atf-test-auto-ex", "atf-tests");
 
     @Test
@@ -81,7 +81,7 @@ public class RootReadmeGovernanceTest {
 
     @Test
     void missingLocalModuleAndOversizedOverviewAreRejected(@TempDir Path root) {
-        String missing = fixture("en").replace("| atf-debug-ui | Read-only report inspection |\n", "");
+        String missing = fixture("en").replace("| atf-validation | Validation |\n", "");
         var missingViolations = inspect(root, missing, "en", Set.copyOf(LOCAL_MODULES));
         assertTrue(missingViolations.stream().anyMatch(v -> v.code().equals("DOC-ROOT-MODULES")),
                 missingViolations.toString());
@@ -90,6 +90,14 @@ public class RootReadmeGovernanceTest {
         var sizeViolations = inspect(root, oversized, "en", Set.copyOf(LOCAL_MODULES));
         assertTrue(sizeViolations.stream().anyMatch(v -> v.code().equals("DOC-ROOT-SIZE")),
                 sizeViolations.toString());
+    }
+
+    @Test
+    void binaryDebugUiCannotBePresentedAsALocalReactorModule(@TempDir Path root) {
+        String counterfeitModule = fixture("en").replace("| atf-ui | Browser |\n",
+                "| atf-ui | Browser |\n| atf-debug-ui | local report inspector |\n");
+        var violations = inspect(root, counterfeitModule, "en", Set.copyOf(LOCAL_MODULES));
+        assertTrue(violations.stream().anyMatch(v -> v.code().equals("DOC-ROOT-MODULES")), violations.toString());
     }
 
     @Test
@@ -268,6 +276,12 @@ public class RootReadmeGovernanceTest {
                         "reconcile the module inventory with the root POM before changing the overview");
             }
         }
+        if (lines.stream().anyMatch(line -> line.matches("\\|\\s*atf-debug-ui\\s*\\|.*"))) {
+            add(violations, root, readme, "DOC-ROOT-MODULES", 1,
+                    "J0-owned Debug UI is listed as a local J1 module",
+                    "J1 consumes Debug UI as a test-scoped binary; source ownership remains in J0",
+                    "remove it from the local module table and identify it only as a selected library");
+        }
         return List.copyOf(violations);
     }
 
@@ -292,11 +306,9 @@ public class RootReadmeGovernanceTest {
         boolean romanian = language.equals("ro");
         String[] rows = romanian
                 ? new String[]{"| atf-validation | Validare |", "| atf-ui | Browser |",
-                    "| atf-debug-ui | Inspectare raport doar pentru citire |",
                     "| atf-test-practice-shop | Practice Shop |", "| atf-test-auto-ex | AutoEx |",
                     "| atf-tests | Guvernanță |"}
                 : new String[]{"| atf-validation | Validation |", "| atf-ui | Browser |",
-                    "| atf-debug-ui | Read-only report inspection |",
                     "| atf-test-practice-shop | Practice Shop |", "| atf-test-auto-ex | AutoEx |",
                     "| atf-tests | Governance |"};
         String introduction = romanian
@@ -320,8 +332,8 @@ public class RootReadmeGovernanceTest {
                         + "appear in the collapsible Component assertions step; unit tests do not publish "
                         + "Extent reports.";
         String inspectorSummary = romanian
-                ? "atf-debug-ui citește rapoartele HTML generate; atf-tests verifică regulile reactorului."
-                : "atf-debug-ui reads generated HTML reports; atf-tests checks reactor rules.";
+                ? "Inspectorul read-only verifică HTML-ul generat; atf-tests controlează regulile reactorului."
+                : "The read-only inspector checks generated HTML; atf-tests checks reactor rules.";
         String detailsTitle = romanian ? "Legendă — flux și limite" : "Legend — flow and boundaries";
         String detailsText = romanian
                 ? "Raportul prezintă dovezile scenariilor; inspectorul citește HTML-ul generat."
@@ -371,7 +383,7 @@ public class RootReadmeGovernanceTest {
                 "  Checks[\"Domain checks\"]",
                 "  Evidence[\"Scenario evidence\"]",
                 "  Report[\"Extent HTML\"]",
-                "  Inspector[\"atf-debug-ui\"]",
+                "  Inspector[\"atf-debug-ui<br/>read-only\"]",
                 "  App -->|calls| API", "  App -->|drives| Browser",
                 "  API -->|returns responses| Checks", "  Browser -->|returns observations| Checks",
                 "  Checks -->|binds expectations| Evidence",

@@ -1,11 +1,11 @@
 # ATF — platform library consumption
 
-This guide describes the five versioned library artifacts consumed by the J1
+This guide describes the six versioned library artifacts selected by the J1
 reactor and the checks that protect their use.
 
 ## At a glance
 
-J1 resolves Core, Reporting, Console, Mock, and Test Kit from flat JAR/POM pairs
+J1 resolves Core, Reporting, Console, Mock, Test Kit, and Debug UI from flat JAR/POM pairs
 in `lib`. The root POM selects versions; local adapters, configuration,
 business scenarios, and acceptance tests stay in their owning J1 modules.
 Library details are summarized in the [artifact catalog](ATF_Workspace_Synchronization.md#consumed-library-catalog)
@@ -20,6 +20,7 @@ and the [local library index](../lib/README.md).
 | Console | Neutral event formatting and configured diagnostics |
 | Mock | Deterministic HTTP-port replacement and strict request matching |
 | Test Kit | JUnit classification, comparisons, and test lifecycle support |
+| Debug UI | Read-only inspection of an existing report from `atf-tests` test scope; not a report producer |
 
 - The Console JUnit bridge is optional. Consumer modules that use it declare
   Test Kit directly because optional Maven dependencies are not transitive.
@@ -31,7 +32,7 @@ and the [local library index](../lib/README.md).
 
 ~~~mermaid
 flowchart LR
-    Coordinates["Root POM<br/>library versions"] -->|selects| Pair["lib/<br/>five JAR/POM pairs"]
+    Coordinates["Root POM<br/>library versions"] -->|selects| Pair["lib/<br/>six JAR/POM pairs"]
     Pair -->|validate installs| Maven["Maven local repository"]
     Maven -->|dependency resolution| Consumer["J1 modules"]
     Consumer -->|local scenarios| Acceptance["Component and integration evidence"]
@@ -61,11 +62,11 @@ mvn -B -ntp -N validate
 mvn -B -ntp -DskipTests test-compile
 ~~~
 
-The root `validate` phase installs the five real POM/JAR pairs into the selected
+The root `validate` phase installs the six selected POM/JAR pairs into the selected
 Maven repository. Use the same JDK, Maven settings, and repository in IntelliJ,
 then reload the root POM. Dependency versions are selected with
 `atf.core.version`, `atf.reporting.version`, `atf.console.version`,
-`atf.mock.version`, and `atf.testkit.version`.
+`atf.mock.version`, `atf.testkit.version`, and `atf.debugui.version`.
 
 Do not select nested JUnit fixture classes directly: their intentional failures
 are asserted by their enclosing tests. Verify the physical JAR `CodeSource`
@@ -73,7 +74,7 @@ when diagnosing classpath conflicts.
 
 ## Integrity and maintenance
 
-- `lib` contains five current JAR/POM pairs, an index, and one usage guide per
+- `lib` contains six current JAR/POM pairs, an index, and one usage guide per
   library. It has no nested repository, source tree, or stale version pair.
 - `library-provenance.json` records coordinates, binary/POM hashes, and
   package-input evidence. Historical entries remain available for audit.
@@ -88,4 +89,5 @@ when diagnosing classpath conflicts.
 
 See [artifact synchronization](ATF_Workspace_Synchronization.md) and
 [isolated execution](ATF_Build_And_Execution_Safety.md), plus the individual
-[Console](../lib/README.Console.md) and [Mock](../lib/README.Mock.md) guides.
+[Console](../lib/README.Console.md), [Mock](../lib/README.Mock.md), and
+[Debug UI](../lib/README.DebugUi.md) guides.

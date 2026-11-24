@@ -41,3 +41,7 @@
 - Library guides in `lib` may end with one marked canonical source note.
   Keep the consumed version and acceptance local; this navigation exception
   does not allow workspace catalogs or other project references elsewhere.
+- Developer-authored Java and JavaScript/MJS identifiers, comments, test names,
+  and technical diagnostics use English. Use the scanner shipped in the selected
+  versioned Test Kit JAR; do not copy or fork its implementation.
+  Localized product strings and deliberate fixture/payload values remain data.

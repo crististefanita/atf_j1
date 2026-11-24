@@ -45,5 +45,5 @@ Record Core findings against its Maven coordinate, version, and JAR/POM hashes. 
 
 <a id="shared-library-source"></a>
 
-> **Library source:** [Core · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Core.md).
+> **Library source:** [Core · ATF J0](https://github.com/crististefanita/atf_j0/blob/main/lib/README.Core.md).
 > This project’s POM, provenance and tests define the consumed version and local acceptance.

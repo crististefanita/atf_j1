@@ -2,7 +2,7 @@
 
 ## At a glance
 
-Java 21 and Maven; five thin JARs, with transitive dependencies declared in
+Java 21 and Maven; six thin JARs, with transitive dependencies declared in
 each POM. These guides describe the artifacts and their observable contracts
 without requiring library source.
 
@@ -13,6 +13,7 @@ without requiring library source.
 | [Console](README.Console.md) | `atf-console` | Maven and IntelliJ diagnostics. |
 | [Mock](README.Mock.md) | `atf-mock` | Components and offline HTTP contracts. |
 | [Test Kit](README.TestKit.md) | `atf-test-kit` | JUnit classification, comparisons, and test support. |
+| [Debug UI](README.DebugUi.md) | `atf-debug-ui` | Read-only local inspection of an existing HTML report; test scope only. |
 
 ## Integration
 
@@ -37,7 +38,7 @@ dependency. Use `compile` scope for support in `src/main` and `test` only in
 
 ## Identity and verification
 
-- One JAR/POM pair per library, the index, and five guides, directly in `lib`.
+- One JAR/POM pair per selected library, the index, and six guides, directly in `lib`.
 - The root `pom.xml` selects versions; `library-provenance.json` records
   coordinates, hashes, and package-origin evidence.
 - Governance and acceptance run in TMP; each consumer verifies its own
@@ -55,5 +56,5 @@ duplicating unresolved library criteria in a consumer README.
 
 <a id="shared-library-source"></a>
 
-> **Library sources:** [Catalog · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.md).
+> **Library sources:** [Catalog · ATF J0](https://github.com/crististefanita/atf_j0/blob/main/lib/README.md).
 > This project’s POM, provenance and tests define the consumed version and local acceptance.

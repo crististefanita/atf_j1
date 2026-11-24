@@ -16,13 +16,12 @@ ATF J1 is a Java/Maven project for testing two sample applications: Practice Sho
 
 ## Local modules
 
-The [root POM](pom.xml) declares six modules. The table describes ownership; diagram arrows below describe execution and evidence, rather than Maven dependency direction.
+The [root POM](pom.xml) declares five local modules. The table describes local ownership; diagram arrows below describe execution and evidence, rather than Maven dependency direction.
 
 | Module | Owns | Boundary |
 |---|---|---|
 | atf-validation | [Response contracts and validation rules](atf-validation/README.md) | Reusable validation port; Shop and AutoEx keep their own domain checks. |
 | atf-ui | [Playwright sessions, browser policies and observations](atf-ui/README.md) | Browser mechanics, without application-specific verdicts. |
-| atf-debug-ui | [Read-only HTML inspection](atf-debug-ui/README.md) | Reads an existing report; does not execute the tested journey. |
 | atf-test-practice-shop | [Practice Shop scenarios and evidence](atf-test-practice-shop/README.md) | API, UI and checkout expectations belong to Shop. |
 | atf-test-auto-ex | [Automation Exercise scenarios and evidence](atf-test-auto-ex/README.md) | AutoEx owns its API/UI adapters and opt-in E2E journeys. |
 | atf-tests | [Reactor governance](atf-tests/README.md) | Checks architecture, artifacts, code, tests and guides. |
@@ -45,7 +44,7 @@ flowchart LR
     Checks["Domain<br/>checks"]
     Evidence["Scenario<br/>evidence"]
     Report["Extent HTML"]
-    Inspector["atf-debug-ui"]
+    Inspector["atf-debug-ui<br/>read-only"]
     App -->|calls| API
     App -->|drives| Browser
     API -->|responses| Checks
@@ -61,7 +60,7 @@ flowchart LR
 - Shop and AutoEx own the expected HTTP results, page state and business outcome. Their API evidence mappers and report publishers retain that ownership.
 - `atf-ui` returns neutral observations. Screenshots, selected traffic and assertion details follow the scenario's evidence policy.
 - `atf-validation` is a separate reusable module, not an automatic stage in the two consumers' API paths. Its contract is verified independently.
-- `atf-debug-ui` inspects the generated file. A successful file write does not establish that controls render or expand correctly. [Reporting contract](docs/ATF_Reporting_Contract.md)
+- The read-only inspector examines the generated HTML; it does not create the report or establish that controls render or expand correctly. [Reporting contract](docs/ATF_Reporting_Contract.md)
 
 </details>
 
@@ -167,3 +166,5 @@ flowchart LR
 <a id="indexul-bibliotecilor-consumate"></a>
 
 Dependency contracts, selected artifacts and their source notes are collected in the [local library index](lib/README.md).
+
+The producer-owned Debug UI dependency is test-scoped and inspects existing HTML; it does not create or qualify reports. See the [J1 consumer guide](lib/README.DebugUi.md).

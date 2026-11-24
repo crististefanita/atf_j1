@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>atf.api</groupId><artifactId>atf-debug-ui</artifactId><version>1.0.0-d1</version>
+  <name>ATF Debug UI</name>
+  <description>Loopback publisher for read-only inspection of local HTML artifacts</description>
+  <properties><maven.compiler.release>21</maven.compiler.release><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding><project.build.outputTimestamp>2026-11-24T00:00:00Z</project.build.outputTimestamp></properties>
+  <dependencies>
+    <dependency><groupId>atf.api</groupId><artifactId>atf-console</artifactId><version>1.0.0-c2</version></dependency>
+    <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><version>5.11.0</version><scope>test</scope></dependency>
+    <dependency><groupId>atf.api</groupId><artifactId>atf-test-kit</artifactId><version>1.0.0-k4</version><scope>test</scope></dependency>
+  </dependencies>
+  <build><plugins>
+    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.13.0</version><configuration><proc>none</proc></configuration></plugin>
+    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.2</version><configuration><argLine>-Xms64m -Xmx256m -XX:MaxMetaspaceSize=128m</argLine></configuration></plugin>
+    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-jar-plugin</artifactId><version>3.5.1</version></plugin>
+  </plugins></build>
+</project>

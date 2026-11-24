@@ -27,7 +27,6 @@ annotation. `atf-reporting` remains usable independently of Test Kit.
 |---|---|---|
 | `atf-validation` | `test` | validation unit and component tests |
 | `atf-ui` | `test` | browser policy and adapter tests |
-| `atf-debug-ui` | `test` | local server tests |
 | `atf-test-practice-shop` | `test` | Shop component, API, and UI suites |
 | `atf-test-auto-ex` | `test` | AutoEx component, API, and UI suites |
 | `atf-tests` | `test` | local reactor and documentation governance |
@@ -37,6 +36,10 @@ check `pom.xml`, imports in `src/main`/`src/test`, and the architecture guard
 together; do not change scope just to make the table look uniform. The
 dependency map is in [ATF Architecture](ATF_Architecture.md), and the Practice
 Shop case is detailed in the [consumer README](../atf-test-practice-shop/README.md).
+
+Debug UI is a producer-owned library, not a J1 module. The J1 root POM selects its
+JAR/POM pair; `atf-tests` declares it in `test` scope for report inspection and
+physical-artifact checks. Shop and AutoEx do not depend on it.
 
 ## Composition and roles
 

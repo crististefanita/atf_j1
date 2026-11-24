@@ -24,7 +24,7 @@ mvn -B -ntp -N validate
 mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
 ~~~
 
-The first command installs the five library pairs into the selected Maven
+The first command installs the six selected library pairs into the selected Maven
 repository. Reload the root POM in IntelliJ after selecting the same JDK and
 repository. Do not use `systemPath`, a hierarchical file repository, or a
 manually added IDE JAR.
@@ -111,6 +111,6 @@ errors remain suppressed.
 
 ## Shared platform libraries
 
-[Platform library consumption](ATF_Platform_Libraries.md) documents the five
+[Platform library consumption](ATF_Platform_Libraries.md) documents the six
 artifact contracts, flat distribution, Maven/IntelliJ bootstrap, and local
 acceptance. Adapter and catalog behavior stays in J1 modules.

@@ -70,10 +70,9 @@ The short labels have the following meanings:
 
 | Area | Responsibility | Does not own |
 |---|---|---|
-| Selected library artifacts in `lib` | versioned Core, Reporting, Console, Mock, and Test Kit APIs | J1 consumer scenarios or business expectations |
+| Selected library artifacts in `lib` | versioned Core, Reporting, Console, Mock, Test Kit, and Debug UI APIs | J1 consumer scenarios or business expectations |
 | `atf-validation` | response contracts, validation rules, and local verdict publication | report rendering or application routes |
 | `atf-ui` | shared Playwright adapter and browser policies | product locators, report configuration, or business flow |
-| `atf-debug-ui` | read-only local inspection of generated HTML | report generation or application behavior |
 | `atf-test-practice-shop` | Shop configuration, adapters, and application tests | generic browser or renderer implementation |
 | `atf-test-auto-ex` | AutoEx configuration, adapters, and application tests | generic browser or renderer implementation |
 | `atf-tests` | local reactor, artifact, and documentation governance | Shop/AutoEx business flows |
@@ -580,12 +579,28 @@ Required checklist for a test module:
 | Package cohesion | [AtfPackageCohesionGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfPackageCohesionGovernanceTest.java) | an inventory limit does not justify mechanically splitting a class |
 | Layer and Java sources | [AtfTestLayerArchitectureTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java) | includes roots from the POM; does not demonstrate functional coverage |
 | Constants and source readability | [ConstantsOwnershipGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/ConstantsOwnershipGovernanceTest.java) and [AtfSourceReadabilityGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfSourceReadabilityGovernanceTest.java) | protects semantic ownership and readable call sites, not every naming choice |
+| Developer-authored source language | [SourceLanguageGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/source/SourceLanguageGovernanceTest.java) using the selected Test Kit scanner | checks Java/MJS identifiers, comments, and recognized developer diagnostics; curated lexical guard, not general translation |
 | Consumer source and suite coverage | [ConsumerModuleArchitectureGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java) and [ConsumerSuiteCoverageGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/ConsumerSuiteCoverageGovernanceTest.java) | guards source boundaries and declared suite selection, not business completeness |
 | Code-gate enrollment | [CodeGovernanceSuiteCoverageTest](../atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java) | proves required code gates remain selected by the whole-reactor suite |
 
-[The whole-ATF command](../atf-tests/README.md#quick-verification) runs in staging.
-The owner's unit/component tests verify changed behavior;
-a green governance suite does not replace those probes or report audit.
+### Source language
+
+Use English for developer-authored Java and JavaScript/MJS identifiers,
+comments, Javadocs/docstrings, test names, and technical diagnostics.
+
+- Keep source and tests byte-identical between `main` and `main_RO`; translate
+  only governed documentation prose.
+- Preserve localized product text, deliberate fixture/payload values,
+  protocol/API names, chess notation, and generated output as data or contracts.
+- Run `SourceLanguageGovernanceTest` through the selected Test Kit scanner; do
+  not keep a J1 copy of the scanner.
+- Findings include file, line, construct, and token. The scanner masks ordinary
+  literals and checks recognized exception, console/log, and assertion messages.
+- Coverage is a curated lexical guard, not a general English classifier. Add
+  source roots, syntax, and positive/negative fixtures before claiming coverage.
+
+Run [the whole-ATF command](../atf-tests/README.md#quick-verification) in staging.
+Unit/component probes still verify changed behavior and report audit.
 
 ## Module reassessment rubric
 

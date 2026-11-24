@@ -71,6 +71,12 @@ function linkDestination(path, destination) {
   return posix.normalize(posix.join(posix.dirname(path), clean));
 }
 
+function normalizeLocalizedOwnerBranches(destinations) {
+  return destinations.map(destination => destination.replace(
+    /^https:\/\/github\.com\/crististefanita\/atf_j0\/blob\/(?:main|main_RO)(\/.*)$/,
+    'https://github.com/crististefanita/atf_j0/blob/{localized}$1'));
+}
+
 export function markdownContract(path, source) {
   const structure = [];
   const destinations = [];
@@ -237,7 +243,9 @@ export function compareDocumentationEditions(englishRoot, romanianRoot) {
     const en = markdownContract(path, utf8.decode(readFileSync(join(englishRoot, path))));
     const ro = markdownContract(path, utf8.decode(readFileSync(join(romanianRoot, path))));
     if (!isDeepStrictEqual(en.structure, ro.structure)) problems.push(`Markdown structure differs: ${path}`);
-    if (!isDeepStrictEqual(en.destinations, ro.destinations)) {
+    const enDestinations = normalizeLocalizedOwnerBranches(en.destinations);
+    const roDestinations = normalizeLocalizedOwnerBranches(ro.destinations);
+    if (!isDeepStrictEqual(enDestinations, roDestinations)) {
       problems.push(`Link destinations differ: ${path}\n  en: ${JSON.stringify(en.destinations)}\n  ro: ${JSON.stringify(ro.destinations)}`);
     }
   }
@@ -328,7 +336,8 @@ export function inspectDocumentationEditions(project, englishRef, romanianRef) {
     const en = markdownContract(path, utf8.decode(englishFiles.get(path)));
     const ro = markdownContract(path, utf8.decode(romanianFiles.get(path)));
     if (!isDeepStrictEqual(en.structure, ro.structure)) problems.push(`Markdown structure differs: ${path}`);
-    if (!isDeepStrictEqual(en.destinations, ro.destinations)) problems.push(`Link destinations differ: ${path}`);
+    if (!isDeepStrictEqual(normalizeLocalizedOwnerBranches(en.destinations),
+      normalizeLocalizedOwnerBranches(ro.destinations))) problems.push(`Link destinations differ: ${path}`);
   }
 
   const review = {...createReview(englishFiles, romanianFiles), schemaVersion: 2, romanianCommit};

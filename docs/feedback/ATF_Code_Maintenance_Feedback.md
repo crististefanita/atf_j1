@@ -2,8 +2,9 @@
 
 ## At a glance
 
-The findings below are closed. Durable rules remain with the module owners and
-executable governance; historical execution evidence remains in Git history.
+All code-maintenance findings on this page are verified and closed. Durable
+rules remain with module owners and executable governance; historical execution
+evidence remains in Git history.
 
 <a id="gov-package-cohesion-2026-11-19"></a>
 ## GOV-PACKAGE-COHESION-2026-11-19 — package cohesion
@@ -37,3 +38,22 @@ assertions and trace disclosures, expansion, redaction and stable verdicts.
 [Reporting feedback](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22)
 retains the separate IntelliJ check. Verified change controls remain in the
 [baseline](../ATF_Test_Changes_Baseline.md).
+
+## Verified change control — Debug UI binary adoption
+
+The Debug UI implementation and native tests now have one canonical owner and
+a versioned consumer artifact. The former J1 source module was removed after
+whole-reactor governance passed; the binary contract, integrity, ownership, and
+documentation controls remain in the
+[verified change baseline](../ATF_Test_Changes_Baseline.md).
+
+<a id="source-language-en-2026-11-24"></a>
+## SOURCE-LANGUAGE-EN-2026-11-24 — English source and comments
+
+**Status: Verified and closed.** The selected Test Kit k5 artifact supplies the canonical scanner; J1 owns the Java/MJS inventory, localized-data exceptions, and suite enrollment. Source remains byte-identical between `main` and `main_RO`.
+
+- Negative Romanian and positive localized-data fixtures pass, including recognized diagnostic-message contexts.
+- The gate reports file, line, construct, and token and is selected by both the code governance gate and whole-ATF suite.
+- Documentation, artifact coordinate, JAR/POM identity, integrity, and exact-path change governance passed in staged verification.
+
+The verified test-change control is retained in the [baseline](../ATF_Test_Changes_Baseline.md). Future consumers remain with their own owners and the shared rollout feedback in the producer workspace.

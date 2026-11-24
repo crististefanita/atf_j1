@@ -37,6 +37,64 @@ consumer's fresh execution; no historical control is rebased or extended.
 </details>
 
 <details>
+<summary><strong>Verified control — source-language governance</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-SOURCE-LANGUAGE-GOVERNANCE-20261124
+    status: VERIFIED
+    base: 13e9825714a9dea56e03a4b76518e71cc18f79d7
+    expires: 2026-12-24
+    reason: Add the shared Test Kit source-language guard to the explicit J1 governance suite and preserve localized fixture data.
+    proof: mvn -o -B -ntp -pl atf-tests -am "-Dtest=TestChangeGovernanceTest" "-Datf.governance.testChanges.baseRef=13e9825714a9dea56e03a4b76518e71cc18f79d7" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/source/SourceLanguageGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java
+```
+
+</details>
+
+<details>
+<summary><strong>Verified control — Debug UI binary adoption</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DEBUG-UI-BINARY-MIGRATION-20261124
+    status: VERIFIED
+    base: 13e9825714a9dea56e03a4b76518e71cc18f79d7
+    expires: 2026-12-24
+    reason: Remove the duplicated Debug UI producer module after packaging its sources and native tests; select Test Kit k5 for the shared source-language gate and retain binary identity, scope, and documentation checks.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=13e9825714a9dea56e03a4b76518e71cc18f79d7" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    allowDelete: true
+    paths:
+      - atf-debug-ui/pom.xml
+      - atf-debug-ui/src/test/java/atf/debugui/AtfDebugUiLauncherParallelTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiMemoryPolicyTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiParallelStartupTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiServerTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiShutdownComponentTest.java
+      - pom.xml
+      - atf-tests/pom.xml
+      - atf-tests/src/test/java/atf/api/tests/governance/ArchitectureModuleBoundaryTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeployment.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeploymentTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/core/BinaryCoreFixture.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationGovernanceSupport.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationTargetGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/LibraryDocumentationInventoryTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalog.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibraryContractTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibraryIntegrityTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibrarySurface.java
+```
+
+</details>
+
+<details>
 <summary><strong>Verified control — undated verification-record governance</strong></summary>
 
 ```yaml

@@ -1,6 +1,6 @@
 # Safe ATF J1 Builds and Execution
 
-J1 consumes five versioned library JAR/POM pairs and verifies them through local
+J1 selects six versioned library JAR/POM pairs and verifies them through local
 artifact-integrity governance and the consumer tests that exercise them.
 Builds and tests run in owned staging; source synchronization and promotion
 follow the [library artifact procedure](ATF_Workspace_Synchronization.md).

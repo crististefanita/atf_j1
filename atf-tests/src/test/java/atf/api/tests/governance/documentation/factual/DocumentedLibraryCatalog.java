@@ -19,7 +19,8 @@ final class DocumentedLibraryCatalog {
             new Library("Reporting", "atf-reporting", "atf.reporting.version", "README.Reporting.md"),
             new Library("Console", "atf-console", "atf.console.version", "README.Console.md"),
             new Library("Mock", "atf-mock", "atf.mock.version", "README.Mock.md"),
-            new Library("Test Kit", "atf-test-kit", "atf.testkit.version", "README.TestKit.md"));
+            new Library("Test Kit", "atf-test-kit", "atf.testkit.version", "README.TestKit.md"),
+            new Library("Debug UI", "atf-debug-ui", "atf.debugui.version", "README.DebugUi.md"));
 
     private DocumentedLibraryCatalog() { }
 

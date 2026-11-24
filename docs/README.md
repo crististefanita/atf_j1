@@ -1,6 +1,6 @@
 # ATF J1 Documentation
 
-This index describes the six-module J1 reactor and the five versioned libraries it consumes. Start with [Architecture](ATF_Architecture.md) for local modules and dependency scope, then use the relevant guide for implementation details.
+This index describes the five-module J1 reactor and the six versioned libraries it consumes. Start with [Architecture](ATF_Architecture.md) for local modules and dependency scope, then use the relevant guide for implementation details.
 
 ## At a glance
 
@@ -17,8 +17,8 @@ This index describes the six-module J1 reactor and the five versioned libraries 
 ~~~mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-  POM[Root POM] -->|selects versions| Libraries[Five library JAR/POM pairs]
-  POM -->|declares| Modules[Six local J1 modules]
+  POM[Root POM] -->|selects versions| Libraries[Six library JAR/POM pairs]
+  POM -->|declares| Modules[Five local J1 modules]
   Modules -->|own scenarios and tests| Evidence[Local test evidence and Extent reports]
   Governance[atf-tests] -.->|checks facts, links, and boundaries| Docs[English and Romanian documentation]
 ~~~
@@ -39,7 +39,7 @@ those dependencies are used and how local behavior is verified.
 | Topic | Documents |
 |---|---|
 | Architecture | [Architecture](ATF_Architecture.md) · [root README](../README.md) |
-| Library contracts | [Core](ATF_Core_Consumer.md) · [Reporting](ATF_Reporting_Library_Atlas.md) · [Console](../lib/README.Console.md) · [Mock](../lib/README.Mock.md) · [Test Kit](../lib/README.TestKit.md) |
+| Library contracts | [Core](ATF_Core_Consumer.md) · [Reporting](ATF_Reporting_Library_Atlas.md) · [Console](../lib/README.Console.md) · [Mock](../lib/README.Mock.md) · [Test Kit](../lib/README.TestKit.md) · [Debug UI](../lib/README.DebugUi.md) |
 | Consumers | [Practice Shop](../atf-test-practice-shop/README.md) · [AutoEx](../atf-test-auto-ex/README.md) |
 | Evidence and rendered reports | [Evidence contract](ATF_Evidence_Capture_Contract.md) · [Reporting consumer](ATF_Reporting_Consumer.md) · [Reporting contract](ATF_Reporting_Contract.md) · [Display contract](ATF_Reporting_Display_Contract.md) |
 | Test design and execution | [API guide](ATF_Api_Test_Guide.md) · [Testing guide](ATF_Testing_Guide.md) · [annotations](ATF_Test_Infrastructure_Annotations.md) · [build safety](ATF_Build_And_Execution_Safety.md) |
@@ -78,7 +78,7 @@ For a report-producing component or UI test, inspect the generated HTML against 
 
 | Term | Meaning in this documentation |
 |---|---|
-| J1 reactor | The six Maven modules listed by the root POM |
+| J1 reactor | The five local Maven modules listed by the root POM |
 | Consumed library | A versioned JAR/POM pair under lib selected by the root POM |
 | Consumer acceptance | Evidence produced by a J1 module for the scenarios it actually runs |
 | Governance | Tests in atf-tests that check local architecture, documentation, and artifact identity |
