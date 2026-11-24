@@ -24,7 +24,7 @@ mvn -B -ntp -N validate
 mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Dsurefire.failIfNoSpecifiedTests=false" test
 ~~~
 
-Prima comandă instalează cele cinci perechi de biblioteci în repository-ul
+Prima comandă instalează cele șase perechi de biblioteci în repository-ul
 Maven selectat. Reîncarcă POM-ul rădăcină în IntelliJ după selectarea aceluiași
 JDK și repository. Nu folosi `systemPath`, repository ierarhic de fișiere sau
 JAR adăugat manual în IDE.
@@ -112,6 +112,6 @@ cleanup rămân suprimate.
 ## Bibliotecile comune ale platformei
 
 [Consumul bibliotecilor platformei](ATF_Platform_Libraries.md) documentează
-contractele celor cinci artefacte, distribuția plată, bootstrap-ul
+contractele celor șase artefacte, distribuția plată, bootstrap-ul
 Maven/IntelliJ și acceptanța locală. Comportamentul adaptorului și catalogului
 rămâne în modulele J1.

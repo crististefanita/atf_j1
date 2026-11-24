@@ -45,3 +45,4 @@
 - Ghidurile bibliotecilor din `lib` pot încheia cu o singură notă marcată către sursa canonică.
   Păstrează versiunea consumată și acceptanța locale; această excepție de navigare
   nu permite cataloage de workspace-uri sau referințe la alte proiecte în alte documente.
+- Scrie în engleză identificatorii, comentariile, Javadocs/docstrings, numele testelor și mesajele tehnice create de dezvoltatori. Folosește scannerul din JAR-ul Test Kit selectat; nu-i copia și nu-i bifurca implementarea. Textele localizate ale produsului și valorile intenționat localizate din fixture-uri rămân date.

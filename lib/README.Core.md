@@ -45,5 +45,5 @@ var total = body.path("total").decimalValue();
 
 <a id="shared-library-source"></a>
 
-> **Sursa bibliotecii:** [Core · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Core.md).
+> **Sursa bibliotecii:** [Core · ATF J0](https://github.com/crististefanita/atf_j0/blob/main_RO/lib/README.Core.md).
 > POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

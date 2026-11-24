@@ -70,10 +70,9 @@ Etichetele scurte păstrează următorul sens:
 
 | Zonă | Responsabilitate | Nu deține |
 |---|---|---|
-| Biblioteci selectate în `lib` | API-uri versionate Core, Reporting, Console, Mock și Test Kit | scenarii consumer J1 sau așteptări business |
+| Biblioteci selectate în `lib` | API-uri versionate Core, Reporting, Console, Mock, Test Kit și Debug UI | scenarii consumer J1 sau așteptări business |
 | `atf-validation` | contracte de răspuns, reguli de validare și publicarea verdictului local | randarea raportului sau rutele aplicației |
 | `atf-ui` | adaptor Playwright comun și politici browser | locatori de produs, configurarea raportului sau flow business |
-| `atf-debug-ui` | inspecție read-only locală a HTML-ului generat | generarea raportului sau comportamentul aplicației |
 | `atf-test-practice-shop` | configurare Shop, adaptoare și teste de aplicație | implementarea generică browser sau renderer |
 | `atf-test-auto-ex` | configurare AutoEx, adaptoare și teste de aplicație | implementarea generică browser sau renderer |
 | `atf-tests` | guvernanța reactorului, artifactelor și documentației locale | flow-uri business Shop/AutoEx |
@@ -583,8 +582,29 @@ Checklist obligatoriu pentru un modul de test:
 | Coeziunea pachetelor | [AtfPackageCohesionGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfPackageCohesionGovernanceTest.java) | limita de inventar nu justifică împărțirea mecanică a unei clase |
 | Layer și surse Java | [AtfTestLayerArchitectureTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/AtfTestLayerArchitectureTest.java) | include rădăcinile din POM; nu demonstrează acoperirea funcțională |
 | Constante și lizibilitatea sursei | [ConstantsOwnershipGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/ConstantsOwnershipGovernanceTest.java) și [AtfSourceReadabilityGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/AtfSourceReadabilityGovernanceTest.java) | protejează ownership-ul semantic și apelurile lizibile, nu fiecare alegere de naming |
+| Limba sursei scrise de dezvoltatori | [SourceLanguageGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/source/SourceLanguageGovernanceTest.java) cu scannerul Test Kit selectat | verifică identificatorii Java/MJS, comentariile și diagnosticele recunoscute; guard lexical controlat, nu traducere generală |
 | Sursa consumerilor și acoperirea suitelor | [ConsumerModuleArchitectureGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/consumers/ConsumerModuleArchitectureGovernanceTest.java) și [ConsumerSuiteCoverageGovernanceTest](../atf-tests/src/test/java/atf/api/tests/governance/layers/ConsumerSuiteCoverageGovernanceTest.java) | guvernează boundary-urile sursei și selecția declarată, nu completitudinea business |
 | Înrolarea gate-urilor de cod | [CodeGovernanceSuiteCoverageTest](../atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java) | verifică dacă suita reactorului păstrează gate-urile de cod obligatorii |
+
+### Regula limbii sursei
+
+Folosește engleza pentru identificatorii Java și JavaScript/MJS scriși de
+dezvoltatori, comentarii, Javadocs/docstrings, nume de teste și diagnostice
+tehnice.
+
+- Păstrează sursa și testele identice între `main` și `main_RO`; traduce numai
+  proza documentației guvernate.
+- Păstrează textele localizate ale produsului, valorile deliberate din
+  fixture/payload, numele API/protocol, notația de șah și output-ul generat ca
+  date sau contracte.
+- Rulează `SourceLanguageGovernanceTest` prin scannerul Test Kit selectat; nu
+  păstra o copie a scannerului în J1.
+- Diagnosticul include fișierul, linia, construcția și tokenul. Scannerul
+  maschează literalii obișnuiți și verifică mesajele recunoscute de excepție,
+  consolă/log și aserțiune.
+- Acoperirea este un guard lexical controlat, nu un clasificator general de
+  engleză. Adaugă rădăcini, sintaxă și fixture-uri pozitive/negative înainte să
+  declari acoperirea.
 
 [Comanda whole-ATF](../atf-tests/README.md#verificare-rapidă) rulează în staging.
 Testele unit/component ale ownerului verifică comportamentul schimbat;

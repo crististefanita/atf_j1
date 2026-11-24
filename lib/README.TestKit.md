@@ -12,6 +12,7 @@ Kit oferă adnotări, comparații evaluate și lifecycle neutru. JAR-ul nu porne
 | Valori integrale | `AssertionValueDisplay` poate primi un observer `Projection` cu rol expected/actual și text redactat, înainte de preview; consumerul deține retenția. |
 | Faze și cleanup | `ComponentAuditExtension` / `ComponentAuditAdapter`, `TestRunInitialization`, `FailureAwareCleanup`. |
 | Politici și resurse | Resolverele `Atf*Policy`; `readResourceUtf8` pentru classpath/JAR, `requiredPath` pentru fișier real. |
+| Guvernanța limbii sursei | `AtfSourceLanguageScanner` din artifactul Test Kit selectat; identificatori și comentarii Java/MJS deterministe, plus diagnostice recunoscute cu fișier/linie/construcție; fără inventar de fișiere sau excepții specifice proiectului. |
 
 ## Exemplu minim
 
@@ -35,6 +36,7 @@ public static void verifyState(RecordedAssertions audit, String actual) {
 - `RecordedAssertions.observe(ComponentAuditObservation)` păstrează fapte imuabile pentru faza curentă, separat de checks și coverage-ul aserțiunilor. Adaptorul consumerului decide dacă și cum le mapează în Reporting; Kit nu depinde de Reporting și nu publică un renderer.
 - Sanitizer-ul se injectează prin `AssertionValueDisplay` înainte de preview. Comparația rulează o dată; valorile stocate sunt limitate și nu constituie arhivă integrală. Unitățile pure își păstrează politica proprie.
 - Scope-urile și resursele sunt per invocare; închideți-le și păstrați cauza inițială. Politicile globale nu devin izolate între cititori externi printr-un lock local.
+- Scannerul limbii sursei este folosit numai de testele de guvernanță, nu de aplicație. Fiecare consumer deține inventarul surselor, excepțiile pentru date localizate și testul de adopție.
 
 ---
 
@@ -57,5 +59,5 @@ publică snapshot-ul și verifică binarul selectat în raportul său.
 
 <a id="shared-library-source"></a>
 
-> **Sursa bibliotecii:** [Test Kit · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.TestKit.md).
+> **Sursa bibliotecii:** [Test Kit · ATF J0](https://github.com/crististefanita/atf_j0/blob/main_RO/lib/README.TestKit.md).
 > POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

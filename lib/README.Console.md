@@ -46,5 +46,5 @@ Console depinde de Core; Kit este opțional pentru legătura JUnit. Proiecția r
 
 <a id="shared-library-source"></a>
 
-> **Sursa bibliotecii:** [Console · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Console.md).
+> **Sursa bibliotecii:** [Console · ATF J0](https://github.com/crististefanita/atf_j0/blob/main_RO/lib/README.Console.md).
 > POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

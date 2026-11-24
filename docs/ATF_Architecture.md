@@ -1,13 +1,14 @@
 # Arhitectura ATF J1
 
-Acest document descrie reactorul Maven ATF J1 din acest checkout. Cele șase module locale și testele lor sunt subiectul arhitecturii. Cinci biblioteci ATF versionate sunt consumate ca dependențe binare selectate de POM-ul rădăcină.
+Acest document descrie reactorul Maven ATF J1 din acest checkout. Cele cinci module locale și testele lor sunt subiectul arhitecturii. Șase biblioteci ATF versionate sunt consumate ca dependențe binare selectate de POM-ul rădăcină.
 
-Reactorul păstrează exact cele 6 module existente.
+Reactorul păstrează exact cele 5 module existente.
 
 ## Pe scurt
 
-- Reactorul conține șase module: Validation, UI, Debug UI, Practice Shop, AutoEx și teste de guvernanță.
-- Core, Reporting, Console, Mock și Test Kit sunt consumate din perechile JAR/POM versionate din lib.
+- Reactorul conține cinci module: Validation, UI, Practice Shop, AutoEx și teste de guvernanță.
+- Core, Reporting, Console, Mock, Test Kit și Debug UI sunt consumate din perechile JAR/POM versionate din lib.
+- Debug UI rămâne deținut de producător și apare numai în classpath-ul de test al `atf-tests`; în J1 nu există un modul sursă Debug UI.
 - POM-ul rădăcină și POM-ul fiecărui modul sunt sursele normative pentru module, versiuni și scope-urile dependențelor.
 - [Sincronizarea bibliotecilor](ATF_Workspace_Synchronization.md#consumed-library-catalog) înregistrează artefactele selectate; [ghidurile bibliotecilor](../lib/README.md) descriu contractele folosite de consumatori.
 
@@ -17,7 +18,6 @@ Reactorul păstrează exact cele 6 module existente.
 |---|---|---|
 | atf-validation | Contracte de răspuns, reguli de validare și publicarea verdictului prin portul local de validare | Teste unitare și de componentă |
 | atf-ui | Adaptor Playwright comun și politici de browser folosite de consumatorii locali | Teste unitare și de componentă |
-| atf-debug-ui | Server local doar pentru citirea și inspectarea artefactelor HTML generate | Verificări de componentă și browser |
 | atf-test-practice-shop | Configurația Practice Shop, pagini, fluxuri API/UI și dovezi specifice aplicației | Suite de componentă, API, UI și E2E |
 | atf-test-auto-ex | Configurația AutoEx, fluxuri API/UI și dovezi specifice aplicației | Suite de componentă, API, UI și E2E opționale |
 | atf-tests | Guvernanța arhitecturii, documentației, dependențelor și împachetării acestui reactor | Suite de guvernanță |
@@ -37,7 +37,8 @@ Cele două module ale aplicațiilor păstrează Test Kit în scopul de test. Dep
 | Reporting | atf.api:atf-reporting:1.0.0-j26 | Modelul Extent și publicarea rapoartelor HTML consumate de testele locale |
 | Console | atf.api:atf-console:1.0.0-c2 | Ieșire diagnostică structurată |
 | Mock | atf.api:atf-mock:1.0.0-m2 | Transport fals determinist în guvernanță și scenarii de test |
-| Test Kit | atf.api:atf-test-kit:1.0.0-k4 | Adnotări pentru nivelul testelor, resolvere și suport de testare |
+| Test Kit | atf.api:atf-test-kit:1.0.0-k5 | Adnotări pentru teste, resolvere, suport și guvernanța limbii sursei |
+| Debug UI | atf.api:atf-debug-ui:1.0.0-d1 | Inspectarea read-only a rapoartelor existente, numai din scope-ul de test al `atf-tests` |
 
 J1 verifică exact octeții JAR/POM selectați și integrările exercitate de propriile teste. Ghidurile bibliotecilor descriu contractele disponibile; acceptanța locală nu pretinde că rulează suita independentă de teste a unei biblioteci.
 
@@ -53,12 +54,12 @@ flowchart LR
     Console[Console]
     Mock[Mock]
     Kit[Test Kit]
+    DebugUI[Debug UI · bibliotecă a producătorului]
   end
 
-  subgraph Reactor[Cele șase module locale J1]
+  subgraph Reactor[Cele cinci module locale J1]
     Validation[atf-validation]
     UI[atf-ui]
-    Debug[atf-debug-ui]
     Shop[atf-test-practice-shop]
     AutoEx[atf-test-auto-ex]
     Governance[atf-tests]
@@ -68,8 +69,7 @@ flowchart LR
   Kit -->|test| Validation
   Core -->|compile| UI
   Kit -->|test| UI
-  Console -->|compile| Debug
-  Kit -->|test| Debug
+  DebugUI -.->|test| Governance
   Core -->|compile| Shop
   Console -->|compile| Shop
   Reporting -->|compile| Shop

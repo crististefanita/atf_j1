@@ -1,11 +1,11 @@
 # ATF — consumul bibliotecilor platformei
 
-Acest ghid descrie cele cinci artefacte de bibliotecă versionate consumate de
+Acest ghid descrie cele șase artefacte de bibliotecă versionate consumate de
 reactorul J1 și verificările care le protejează utilizarea.
 
 ## Pe scurt
 
-J1 rezolvă Core, Reporting, Console, Mock și Test Kit din perechile JAR/POM
+J1 rezolvă Core, Reporting, Console, Mock, Test Kit și Debug UI din perechile JAR/POM
 plate din `lib`. POM-ul rădăcină selectează versiunile; adaptoarele locale,
 configurația, scenariile business și testele de acceptanță rămân în modulele J1
 care le dețin. Detaliile bibliotecilor sunt rezumate în
@@ -21,6 +21,7 @@ care le dețin. Detaliile bibliotecilor sunt rezumate în
 | Console | Formatarea neutră a evenimentelor și diagnostice configurate |
 | Mock | Înlocuitor determinist al portului HTTP și potrivire strictă a cererilor |
 | Test Kit | Clasificare JUnit, comparații și suport pentru lifecycle-ul testelor |
+| Debug UI | Inspectarea read-only a unui raport existent, numai din scope-ul de test `atf-tests`; nu produce rapoarte |
 
 - Bridge-ul JUnit din Console este opțional. Modulele consumer care îl folosesc
   declară direct Test Kit, deoarece dependențele Maven opționale nu sunt
@@ -32,7 +33,7 @@ care le dețin. Detaliile bibliotecilor sunt rezumate în
 
 ~~~mermaid
 flowchart LR
-    Coordinates["POM rădăcină<br/>versiunile bibliotecilor"] -->|selectează| Pair["lib/<br/>cinci perechi JAR/POM"]
+    Coordinates["POM rădăcină<br/>versiunile bibliotecilor"] -->|selectează| Pair["lib/<br/>șase perechi JAR/POM"]
     Pair -->|validate instalează| Maven["Repository Maven local"]
     Maven -->|rezolvarea dependențelor| Consumer["Module J1"]
     Consumer -->|scenarii locale| Acceptance["Dovezi component și integrare"]
@@ -62,7 +63,7 @@ mvn -B -ntp -N validate
 mvn -B -ntp -DskipTests test-compile
 ~~~
 
-Faza `validate` a POM-ului rădăcină instalează cele cinci perechi POM/JAR reale
+Faza `validate` a POM-ului rădăcină instalează cele șase perechi POM/JAR reale
 în repository-ul Maven selectat. Folosește același JDK, setări Maven și
 repository în IntelliJ, apoi reîncarcă POM-ul rădăcină. Versiunile dependențelor
 sunt selectate prin `atf.core.version`, `atf.reporting.version`,
@@ -74,7 +75,7 @@ când investighezi conflicte de classpath.
 
 ## Integritate și mentenanță
 
-- `lib` conține cinci perechi JAR/POM curente, un index și câte un ghid per
+- `lib` conține șase perechi JAR/POM curente, un index și câte un ghid per
   bibliotecă. Nu conține repository imbricat, arbore de surse sau perechi vechi.
 - `library-provenance.json` înregistrează coordonate, hash-urile binar/POM și
   dovezi despre inputul pachetului. Intrările istorice rămân disponibile pentru audit.
@@ -89,4 +90,5 @@ când investighezi conflicte de classpath.
 
 Vezi [sincronizarea artefactelor](ATF_Workspace_Synchronization.md) și
 [execuția izolată](ATF_Build_And_Execution_Safety.md), precum și ghidurile
-individuale pentru [Console](../lib/README.Console.md) și [Mock](../lib/README.Mock.md).
+individuale pentru [Console](../lib/README.Console.md), [Mock](../lib/README.Mock.md)
+și [Debug UI](../lib/README.DebugUi.md).

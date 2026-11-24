@@ -44,6 +44,7 @@ Etichetele scurte păstrează următorul sens:
 | reactor, POM și dependency direction | `atf-tests` | nu modifică production code |
 | source/package ownership și module placement | `ArchitectureModuleBoundaryTest`, `ArchitectureOwnershipBoundaryTest` | nu deține selectorii unei aplicații |
 | documentație relocabilă și surse coerente | `governance.documentation.*`, `AtfSourceReadabilityGovernanceTest` | nu validează conținutul unui singur consumer |
+| limba sursei scrise de dezvoltatori | `SourceLanguageGovernanceTest` prin binarul Test Kit selectat | identificatori Java/MJS, comentarii și diagnostice tehnice recunoscute; literalii localizați rămân date |
 | ownership de constante și coeziune de package | `ConstantsOwnershipGovernanceTest`, `AtfPackageCohesionGovernanceTest` | maximum 8 clase/pachet în producție și în source-set-urile de test ale tuturor modulelor din reactor; excepțiile trebuie să fie explicite |
 | Practice Shop purchase journey | `atf-test-practice-shop` | nu se copiază aici |
 | Scenarii și aserțiuni de raportare ale consumatorilor Shop/AutoEx | modulele lor consumatoare | rămân la consumator |
@@ -86,8 +87,8 @@ consumerilor înaintea oricărei mutări de teste.
 
 | Suprafață | Sursa locală de adevăr | Dovezi de guvernanță |
 |---|---|---|
-| Reactorul J1 | POM-ul Maven rădăcină și cele șase module declarate | verificări de module și limite ale dependențelor |
-| Biblioteci consumate | cinci perechi JAR/POM versionate în `lib` | coordonate, octeți fizici, proveniență și identitatea clasei încărcate |
+| Reactorul J1 | POM-ul Maven rădăcină și cele cinci module declarate | verificări de module și limite ale dependențelor |
+| Biblioteci consumate | șase perechi JAR/POM versionate în `lib` | coordonate, octeți fizici, proveniență și identitatea clasei încărcate |
 | Acceptanță Reporting | scenarii component și UI J1 selectate | structura aserțiunilor, randarea HTML și navigarea raportului |
 
 Lipsa unui modul local declarat este o eroare; profilele nu se deduc din
@@ -128,6 +129,7 @@ src/test/java/atf/api/tests/governance/
 ├── AtfGovernanceRules.java
 ├── AtfGovernanceTestSupport.java
 ├── AtfSourceReadabilityGovernanceTest.java
+├── SourceLanguageGovernanceTest.java
 ├── ConstantsOwnershipGovernanceTest.java
 ├── changes/          change-control schema, diferență Git și probe negative
 ├── console/          default-uri și composition root-uri UI/API
@@ -164,11 +166,12 @@ fiecare consumer păstrează responsabilitatea scenariilor proprii:
 - `ArchitectureOwnershipBoundaryTest` — placement-ul modulelor, package roots,
   ownership-ul reporting/UI și absența duplicărilor;
 - `AtfPackageCohesionGovernanceTest` — coeziunea package-urilor de producție
-  guvernate și a source-set-urilor de test din cele șase module declarate în
+  guvernate și a source-set-urilor de test din cele cinci module declarate în
   root POM;
   pragul este de maximum opt clase, iar diagnosticul identifică modulul,
   package-ul și clasele concrete pentru orice hotspot nou sau excepție stale;
 - `AtfSourceReadabilityGovernanceTest` — importuri duplicate în sursele Maven main/test și invocații ATF complet calificate în testele locale care folosesc Reporting; comentariile și literalii sunt excluși lexical;
+- `SourceLanguageGovernanceTest` — aplică scannerul comun din Test Kit tuturor rădăcinilor Java declarate și `atf-tests/tools/*.mjs`; verifică diagnosticul fișier/linie/construcție și exclude valorile localizate din fixture-uri din verdictul limbii sursei;
 - `layers.AtfTestLayerArchitectureTest` — inventariază rădăcinile `sourceDirectory` și `testSourceDirectory` din POM (cu default Maven), apoi verifică nivelul fiecărei clase executabile; fixture-urile imbricate nu schimbă nivelul clasei exterioare;
 - `layers.ConsumerSuiteCoverageGovernanceTest` — exact trei suite principale per consumer, fără clase omise, selecții suprapuse sau amestec local/E2E/API live; citește declarația ownerului și selectorii executabili, fără comentarii ori fixture-uri nested promovate la gate. Probează și scope-ul explicit al rapoartelor componentelor;
 - `consumers.ConsumerModuleArchitectureGovernanceTest` și `ConsumerAuditSourceGraphTest` — resolver comun de adnotări pentru audit/layer, alias-uri, moștenire și helperi importați; comentariile, literalii și fixture-urile nested nu exclud ownerul executabil. Analiza sursei nu înlocuiește proba launcher/raport;
@@ -342,7 +345,7 @@ directorul temporar JUnit.
 [DocumentedBuildContractTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedBuildContractTest.java)
 compară modulele și scope-ul Kit cu POM-urile reale.
 [DocumentedLibraryCatalogTest](src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalogTest.java)
-compară coordonatele celor cinci biblioteci și căile perechilor JAR/POM
+compară coordonatele celor șase biblioteci și căile perechilor JAR/POM
 documentate cu root POM, fișierele fizice și ghidurile locale. Mutanții de
 versiune, cale de artifact și inventar de ghiduri trebuie respinși. Nu cere
 checkout-uri învecinate.

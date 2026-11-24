@@ -16,13 +16,12 @@ ATF J1 este un proiect Java/Maven pentru testarea automată a două aplicații d
 
 ## Module locale
 
-[POM-ul rădăcină](pom.xml) declară șase module. Tabelul descrie responsabilitățile; săgețile diagramelor de mai jos descriu execuția și dovezile, fără a reprezenta direcția dependențelor Maven.
+[POM-ul rădăcină](pom.xml) declară cinci module locale. Tabelul descrie responsabilitățile locale; săgețile diagramelor de mai jos descriu execuția și dovezile, fără a reprezenta direcția dependențelor Maven.
 
 | Modul | Deține | Limită |
 |---|---|---|
 | atf-validation | [Contracte de răspuns și reguli de validare](atf-validation/README.md) | Port reutilizabil de validare; Shop și AutoEx își păstrează propriile verificări de domeniu. |
 | atf-ui | [Sesiuni Playwright, politici de browser și observații](atf-ui/README.md) | Mecanisme de browser, fără verdicte specifice aplicației. |
-| atf-debug-ui | [Inspectare HTML doar pentru citire](atf-debug-ui/README.md) | Citește un raport existent; nu execută scenariul testat. |
 | atf-test-practice-shop | [Scenarii și dovezi Practice Shop](atf-test-practice-shop/README.md) | Rezultatele așteptate pentru API, UI și checkout aparțin Shop. |
 | atf-test-auto-ex | [Scenarii și dovezi Automation Exercise](atf-test-auto-ex/README.md) | AutoEx deține adaptoarele sale API/UI și scenariile E2E activate explicit. |
 | atf-tests | [Guvernanța reactorului](atf-tests/README.md) | Verifică arhitectura, artefactele, codul, testele și ghidurile. |
@@ -45,7 +44,7 @@ flowchart LR
     Checks["Verificări<br/>de domeniu"]
     Evidence["Dovezi ale<br/>scenariului"]
     Report["Extent HTML"]
-    Inspector["atf-debug-ui"]
+    Inspector["atf-debug-ui<br/>read-only"]
     App -->|apelează| API
     App -->|controlează| Browser
     API -->|răspunsuri| Checks
@@ -61,7 +60,7 @@ flowchart LR
 - Shop și AutoEx dețin rezultatele HTTP așteptate, starea paginii și rezultatul de business. Mapările de dovezi API și publicarea rapoartelor păstrează această responsabilitate.
 - `atf-ui` întoarce observații neutre. Capturile, traficul selectat și detaliile aserțiunilor respectă politica de dovezi a scenariului.
 - `atf-validation` este un modul reutilizabil separat, fără a fi o etapă automată în traseele API ale celor două aplicații. Contractul său este verificat independent.
-- `atf-debug-ui` inspectează fișierul generat. Scrierea reușită a fișierului nu demonstrează că elementele se randează sau se expandează corect. [Contractul de raportare](docs/ATF_Reporting_Contract.md)
+- Inspectorul read-only verifică HTML-ul generat; nu creează raportul și nu stabilește dacă elementele se randează sau se expandează corect. [Contractul de raportare](docs/ATF_Reporting_Contract.md)
 
 </details>
 
@@ -167,3 +166,5 @@ flowchart LR
 <a id="indexul-bibliotecilor-consumate"></a>
 
 Contractele dependențelor, artefactele selectate și notele privind sursa lor sunt reunite în [indexul local al bibliotecilor](lib/README.md).
+
+Debug UI este o dependență binară deținută de producător, declarată numai în scope-ul `test` al `atf-tests`; inspectează HTML existent, fără să creeze sau să califice rapoarte. Detaliile sunt în [ghidul local al bibliotecii](lib/README.DebugUi.md).

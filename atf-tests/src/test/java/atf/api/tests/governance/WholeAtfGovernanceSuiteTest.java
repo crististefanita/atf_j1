@@ -3,6 +3,7 @@ import atf.api.tests.governance.changes.TestChangeGovernanceTest;
 import atf.api.tests.governance.changes.TestChangePolicyTest;
 import atf.api.tests.governance.changes.GitTestChangesTest;
 import atf.api.tests.governance.console.ConsoleDefaultsGovernanceTest;
+import atf.api.tests.governance.source.SourceLanguageGovernanceTest;
 
 import atf.testkit.AtfIntegrationTest;
 import atf.api.tests.governance.distribution.GovernanceDeploymentTest;
@@ -46,6 +47,7 @@ import org.junit.platform.suite.api.Suite;
         ArchitectureOwnershipBoundaryTest.class,
         AtfPackageCohesionGovernanceTest.class,
         AtfSourceReadabilityGovernanceTest.class,
+        SourceLanguageGovernanceTest.class,
         ConstantsOwnershipGovernanceTest.class,
         DynamicPathDocumentationArchitectureTest.class,
         DocumentationContextArtifactGovernanceTest.class,

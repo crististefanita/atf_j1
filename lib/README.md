@@ -2,7 +2,7 @@
 
 ## Pe scurt
 
-Java 21 și Maven; cinci JAR-uri subțiri, cu dependențele tranzitive declarate
+Java 21 și Maven; șase JAR-uri subțiri, cu dependențele tranzitive declarate
 în fiecare POM. Aceste ghiduri descriu artifactele și contractele observabile
 fără a cere sursa bibliotecilor.
 
@@ -13,6 +13,7 @@ fără a cere sursa bibliotecilor.
 | [Console](README.Console.md) | `atf-console` | Diagnostic Maven și IntelliJ. |
 | [Mock](README.Mock.md) | `atf-mock` | Componente și contracte HTTP offline. |
 | [Test Kit](README.TestKit.md) | `atf-test-kit` | Clasificare JUnit, comparații și suport pentru teste. |
+| [Debug UI](README.DebugUi.md) | `atf-debug-ui` | Inspectare locală, read-only, a unui raport HTML existent; numai în scope-ul de test. |
 
 ## Integrare
 
@@ -37,7 +38,7 @@ Folosește scope-ul `compile` pentru suport în `src/main` și `test` numai în
 
 ## Identitate și verificare
 
-- O singură pereche JAR/POM per bibliotecă, indexul și cinci ghiduri, direct
+- O singură pereche JAR/POM per bibliotecă, indexul și șase ghiduri, direct
   în `lib`.
 - POM-ul rădăcină `pom.xml` selectează versiunile; `library-provenance.json`
   înregistrează coordonatele, hash-urile și proveniența pachetelor.
@@ -57,5 +58,5 @@ bibliotecă.
 
 <a id="shared-library-source"></a>
 
-> **Sursa bibliotecilor:** [Catalog · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.md).
+> **Sursa bibliotecilor:** [Catalog · ATF J0](https://github.com/crististefanita/atf_j0/blob/main_RO/lib/README.md).
 > POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

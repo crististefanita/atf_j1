@@ -1,6 +1,6 @@
 # Build-uri și execuții ATF J1 sigure
 
-J1 consumă cinci perechi JAR/POM versionate și le verifică prin guvernanța
+J1 consumă șase perechi JAR/POM versionate și le verifică prin guvernanța
 locală a integrității artefactelor și prin testele consumatorilor care le
 exercită. Build-urile și testele rulează în staging deținut; sincronizarea și
 promovarea surselor urmează [procedura artefactelor bibliotecilor](ATF_Workspace_Synchronization.md).

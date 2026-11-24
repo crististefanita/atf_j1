@@ -38,6 +38,64 @@ rebazat sau extins.
 </details>
 
 <details>
+<summary><strong>Control verificat — guvernanța limbii sursei</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-SOURCE-LANGUAGE-GOVERNANCE-20261124
+    status: VERIFIED
+    base: 13e9825714a9dea56e03a4b76518e71cc18f79d7
+    expires: 2026-12-24
+    reason: Adaugă guard-ul comun pentru limba sursei din Test Kit în suita explicită de guvernanță J1 și păstrează datele localizate din fixture-uri.
+    proof: mvn -o -B -ntp -pl atf-tests -am "-Dtest=TestChangeGovernanceTest" "-Datf.governance.testChanges.baseRef=13e9825714a9dea56e03a4b76518e71cc18f79d7" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    paths:
+      - atf-tests/src/test/java/atf/api/tests/governance/source/SourceLanguageGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/WholeAtfGovernanceSuiteTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/quality/CodeGovernanceSuiteCoverageTest.java
+```
+
+</details>
+
+<details>
+<summary><strong>Control verificat — adoptarea binară Debug UI</strong></summary>
+
+```yaml
+testChanges:
+  - id: J1-DEBUG-UI-BINARY-MIGRATION-20261124
+    status: VERIFIED
+    base: 4b0d993ac24e8e11cc2223cc5bf996a0bf27a82d
+    expires: 2026-12-24
+    reason: Elimină modulul Debug UI duplicat din reactorul consumer J1 după împachetarea sursei și a testelor native în proiectul owner; păstrează verificările contractului binar, hash-ului, CodeSource-ului, scope-ului și documentației.
+    proof: mvn -B -ntp -pl atf-tests -am "-Dtest=WholeAtfGovernanceSuiteTest" "-Datf.governance.testChanges.baseRef=4b0d993ac24e8e11cc2223cc5bf996a0bf27a82d" "-Dsurefire.failIfNoSpecifiedTests=false" test
+    allowDelete: true
+    paths:
+      - atf-debug-ui/pom.xml
+      - atf-debug-ui/src/test/java/atf/debugui/AtfDebugUiLauncherParallelTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiMemoryPolicyTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiParallelStartupTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiServerTest.java
+      - atf-debug-ui/src/test/java/atf/debugui/DebugUiShutdownComponentTest.java
+      - pom.xml
+      - atf-tests/pom.xml
+      - atf-tests/src/test/java/atf/api/tests/governance/ArchitectureModuleBoundaryTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeployment.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/GovernanceDeploymentTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/README.md
+      - atf-tests/src/test/java/atf/api/tests/governance/distribution/core/BinaryCoreFixture.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationGovernanceSupport.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/DocumentationTargetGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/LibraryDocumentationInventoryTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/factual/DocumentedLibraryCatalog.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/relationship/DocumentationDirectRelationshipGovernanceTest.java
+      - atf-tests/src/test/java/atf/api/tests/governance/documentation/structure/RootReadmeGovernanceTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibraryContractTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibraryIntegrityTest.java
+      - atf-tests/src/test/java/atf/libraries/PlatformLibrarySurface.java
+```
+
+</details>
+
+<details>
 <summary><strong>Control verificat — guvernanța înregistrărilor nedatate de verificare</strong></summary>
 
 ```yaml

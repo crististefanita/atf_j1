@@ -14,7 +14,6 @@
     <modules>
         <module>atf-validation</module>
         <module>atf-ui</module>
-        <module>atf-debug-ui</module>
         <module>atf-test-practice-shop</module>
         <module>atf-test-auto-ex</module>
         <module>atf-tests</module>
@@ -29,7 +28,8 @@
         <atf.reporting.version>1.0.0-j26</atf.reporting.version>
         <atf.console.version>1.0.0-c2</atf.console.version>
         <atf.mock.version>1.0.0-m2</atf.mock.version>
-        <atf.testkit.version>1.0.0-k4</atf.testkit.version>
+        <atf.testkit.version>1.0.0-k5</atf.testkit.version>
+        <atf.debugui.version>1.0.0-d1</atf.debugui.version>
         <atf.test.heap.max>2g</atf.test.heap.max>
     </properties>
 
@@ -104,6 +104,16 @@
                         <configuration>
                             <file>${maven.multiModuleProjectDirectory}/lib/atf-test-kit-${atf.testkit.version}.jar</file>
                             <pomFile>${maven.multiModuleProjectDirectory}/lib/atf-test-kit-${atf.testkit.version}.pom</pomFile>
+                            <generatePom>false</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bootstrap-debug-ui-library</id>
+                        <phase>validate</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <file>${maven.multiModuleProjectDirectory}/lib/atf-debug-ui-${atf.debugui.version}.jar</file>
+                            <pomFile>${maven.multiModuleProjectDirectory}/lib/atf-debug-ui-${atf.debugui.version}.pom</pomFile>
                             <generatePom>false</generatePom>
                         </configuration>
                     </execution>

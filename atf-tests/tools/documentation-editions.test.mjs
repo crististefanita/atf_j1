@@ -159,6 +159,23 @@ test('rejects missing document counterparts and changed link destinations', t =>
     .includes('Missing Markdown counterpart: docs/guide.md'));
 });
 
+test('accepts language-matched source links to the corresponding owner branch', t => {
+  const roots = pair(t);
+  const source = language => `\n[Library source](https://github.com/crististefanita/atf_j0/blob/${language}/lib/README.DebugUi.md)\n`;
+  for (const [root, language] of [[roots.english, 'main'], [roots.romanian, 'main_RO']]) {
+    const path = join(root, 'lib/README.DebugUi.md');
+    mkdirSync(join(root, 'lib'), {recursive: true});
+    writeFileSync(path, `# Debug UI\n\n${language}\n`);
+    writeFileSync(join(root, 'README.md'), readFileSync(join(root, 'README.md'), 'utf8') + source(language));
+  }
+  assert.deepEqual(compareDocumentationEditions(roots.english, roots.romanian).problems, []);
+
+  const roReadme = join(roots.romanian, 'README.md');
+  writeFileSync(roReadme, readFileSync(roReadme, 'utf8').replace('README.DebugUi.md', 'README.Core.md'));
+  assert.ok(compareDocumentationEditions(roots.english, roots.romanian).problems
+    .some(problem => problem.startsWith('Link destinations differ: README.md')));
+});
+
 test('rejects structural drift and non-Markdown implementation drift', t => {
   const roots = pair(t);
   writeFileSync(join(roots.romanian, 'docs/guide.md'), readFileSync(join(roots.romanian, 'docs/guide.md'), 'utf8')

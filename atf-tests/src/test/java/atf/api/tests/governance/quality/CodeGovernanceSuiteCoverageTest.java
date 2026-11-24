@@ -4,6 +4,7 @@ import atf.api.tests.governance.ArchitectureModuleBoundaryTest;
 import atf.api.tests.governance.ArchitectureOwnershipBoundaryTest;
 import atf.api.tests.governance.AtfPackageCohesionGovernanceTest;
 import atf.api.tests.governance.AtfSourceReadabilityGovernanceTest;
+import atf.api.tests.governance.source.SourceLanguageGovernanceTest;
 import atf.api.tests.governance.ConstantsOwnershipGovernanceTest;
 import atf.api.tests.governance.consumers.ConsumerModuleArchitectureGovernanceTest;
 import atf.api.tests.governance.WholeAtfGovernanceSuiteTest;
@@ -29,6 +30,7 @@ public class CodeGovernanceSuiteCoverageTest {
             ArchitectureOwnershipBoundaryTest.class,
             AtfPackageCohesionGovernanceTest.class,
             AtfSourceReadabilityGovernanceTest.class,
+            SourceLanguageGovernanceTest.class,
             ConstantsOwnershipGovernanceTest.class,
             ConsumerModuleArchitectureGovernanceTest.class,
             AtfTestLayerArchitectureTest.class,
@@ -55,7 +57,7 @@ public class CodeGovernanceSuiteCoverageTest {
 
     @Test
     void omissionMutantsAreDetectedForEveryRequiredCodeGate() {
-        assertEquals(8, REQUIRED_CODE_GATES.size());
+        assertEquals(9, REQUIRED_CODE_GATES.size());
         for (Class<?> required : REQUIRED_CODE_GATES) {
             var mutant = new HashSet<>(REQUIRED_CODE_GATES);
             mutant.remove(required);

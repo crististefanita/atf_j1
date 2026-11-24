@@ -25,8 +25,24 @@ public class GovernanceDeploymentTest {
         var deployment = new GovernanceDeployment(root, List.of(), true);
         assertEquals(List.of("docs/ATF_Architecture.md", "docs/ATF_Testing_Guide.md"),
                 deployment.documentationTargets("atf-ui/README.md"));
-        assertEquals(List.of("docs/ATF_Architecture.md", "docs/ATF_Testing_Guide.md"),
+        assertEquals(List.of("lib/README.DebugUi.md"),
                 deployment.documentationTargets("atf-debug-ui/README.md"));
+    }
+
+    @Test void binaryDebugUiRequiresADeclaredCoordinateAndRejectsParallelSources() throws Exception {
+        prepare(false);
+        Path pom = root.resolve("pom.xml");
+        String sourcePom = Files.readString(pom);
+        String binaryPom = sourcePom.replace("<module>atf-debug-ui</module>", "")
+                .replace("<properties>", "<properties><atf.debugui.version>fixture</atf.debugui.version>");
+        Files.writeString(pom, binaryPom);
+        Files.delete(root.resolve("atf-debug-ui/pom.xml")); Files.delete(root.resolve("atf-debug-ui"));
+        var binary = GovernanceDeployment.read(root);
+        assertFalse(binary.sourceModules().contains("atf-debug-ui"));
+        assertEquals(List.of("lib/README.DebugUi.md"), binary.documentationTargets("atf-debug-ui/README.md"));
+        Files.createDirectory(root.resolve("atf-debug-ui"));
+        assertEquals("GOV-DEBUGUI-SHADOW: source in binary deployment",
+                assertThrows(IllegalStateException.class, () -> GovernanceDeployment.read(root)).getMessage());
     }
 
     @Test void aDeletedModuleOrPomCannotChooseASmallerPerimeter() throws Exception {

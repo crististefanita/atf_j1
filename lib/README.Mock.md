@@ -49,5 +49,5 @@ var response = mock.send(ApiRequest.of("GET", "/health"),
 
 <a id="shared-library-source"></a>
 
-> **Sursa bibliotecii:** [Mock · ATF J0](https://github.com/crististefanita/atf_j0/blob/HEAD/lib/README.Mock.md).
+> **Sursa bibliotecii:** [Mock · ATF J0](https://github.com/crististefanita/atf_j0/blob/main_RO/lib/README.Mock.md).
 > POM-ul, proveniența și testele acestui proiect stabilesc versiunea consumată și acceptanța locală.

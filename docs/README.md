@@ -1,6 +1,6 @@
 # Documentația ATF J1
 
-Acest index descrie reactorul J1 cu șase module și cele cinci biblioteci versionate pe care le consumă. Începe cu [Arhitectura](ATF_Architecture.md) pentru modulele locale și scope-ul dependențelor, apoi consultă ghidul relevant pentru detaliile de implementare.
+Acest index descrie reactorul J1 cu cinci module și cele șase biblioteci versionate pe care le consumă. Începe cu [Arhitectura](ATF_Architecture.md) pentru modulele locale și scope-ul dependențelor, apoi consultă ghidul relevant pentru detaliile de implementare.
 
 ## Pe scurt
 
@@ -17,8 +17,8 @@ Acest index descrie reactorul J1 cu șase module și cele cinci biblioteci versi
 ~~~mermaid
 %%{init: {"themeVariables":{"fontSize":"15px"},"themeCSS":".edgeLabel, .edgeLabel p { font-size: 12px !important; } .node rect { rx: 6px; ry: 6px; }","flowchart":{"curve":"linear","nodeSpacing":24,"rankSpacing":22,"padding":6},"sequence":{"mirrorActors":false,"messageMargin":24,"wrap":true}}}%%
 flowchart LR
-  POM[POM rădăcină] -->|selectează versiunile| Libraries[Cinci perechi JAR/POM]
-  POM -->|declară| Modules[Șase module locale J1]
+  POM[POM rădăcină] -->|selectează versiunile| Libraries[Șase perechi JAR/POM]
+  POM -->|declară| Modules[Cinci module locale J1]
   Modules -->|dețin scenariile și testele| Evidence[Dovezi locale și rapoarte Extent]
   Governance[atf-tests] -.->|verifică fapte, linkuri și limite| Docs[Documentație în engleză și română]
 ~~~
@@ -37,7 +37,7 @@ POM-ul rădăcină este sursa normativă pentru reactor și versiunile dependen�
 | Subiect | Documente |
 |---|---|
 | Arhitectură | [Arhitectură](ATF_Architecture.md) · [README rădăcină](../README.md) |
-| Contractele bibliotecilor | [Core](ATF_Core_Consumer.md) · [Reporting](ATF_Reporting_Library_Atlas.md) · [Console](../lib/README.Console.md) · [Mock](../lib/README.Mock.md) · [Test Kit](../lib/README.TestKit.md) |
+| Contractele bibliotecilor | [Core](ATF_Core_Consumer.md) · [Reporting](ATF_Reporting_Library_Atlas.md) · [Console](../lib/README.Console.md) · [Mock](../lib/README.Mock.md) · [Test Kit](../lib/README.TestKit.md) · [Debug UI](../lib/README.DebugUi.md) |
 | Consumatori | [Practice Shop](../atf-test-practice-shop/README.md) · [AutoEx](../atf-test-auto-ex/README.md) |
 | Dovezi și rapoarte randate | [Contractul dovezilor](ATF_Evidence_Capture_Contract.md) · [Consumatorul Reporting](ATF_Reporting_Consumer.md) · [Contractul Reporting](ATF_Reporting_Contract.md) · [Contractul de afișare](ATF_Reporting_Display_Contract.md) |
 | Proiectarea și execuția testelor | [Ghid API](ATF_Api_Test_Guide.md) · [Ghid de testare](ATF_Testing_Guide.md) · [adnotări](ATF_Test_Infrastructure_Annotations.md) · [siguranța build-ului](ATF_Build_And_Execution_Safety.md) |
@@ -76,7 +76,7 @@ Pentru un test de componentă sau UI care generează raport, inspectează HTML-u
 
 | Termen | Sens în această documentație |
 |---|---|
-| Reactor J1 | Cele șase module Maven declarate de POM-ul rădăcină |
+| Reactor J1 | Cele cinci module Maven declarate de POM-ul rădăcină |
 | Bibliotecă consumată | O pereche JAR/POM versionată din lib, selectată de POM-ul rădăcină |
 | Acceptanță a consumatorului | Dovezi produse de un modul J1 pentru scenariile pe care le rulează efectiv |
 | Guvernanță | Teste din atf-tests care verifică arhitectura, documentația și identitatea artefactelor locale |

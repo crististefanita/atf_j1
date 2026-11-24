@@ -27,10 +27,14 @@ adnotării. `atf-reporting` rămâne utilizabil independent de Test Kit.
 |---|---|---|
 | `atf-validation` | `test` | teste unitare și componente pentru validare |
 | `atf-ui` | `test` | teste pentru politica browserului și adaptor |
-| `atf-debug-ui` | `test` | teste pentru serverul local |
 | `atf-test-practice-shop` | `test` | suite Shop de componentă, API și UI |
 | `atf-test-auto-ex` | `test` | suite AutoEx de componentă, API și UI |
 | `atf-tests` | `test` | guvernanța reactorului și documentației locale |
+
+Debug UI este o bibliotecă deținută de producător, nu un modul J1. POM-ul
+rădăcină selectează perechea sa JAR/POM, iar `atf-tests` o declară doar în
+scope-ul `test` pentru inspectarea HTML-ului existent. Nu generează rapoarte și
+nu stabilește verdictul unui test.
 
 Nu deduce scope-ul din numele modulului sau din adnotare. Pentru o schimbare de
 ambalare, verifică simultan `pom.xml`, importurile din `src/main`/`src/test` și

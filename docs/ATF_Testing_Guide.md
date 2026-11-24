@@ -192,7 +192,7 @@ Celulele arată doar nivelurile care există în suitele executabile curente.
 | Biblioteca Console | — | — | — | — | ieșire diagnostică structurată, consumată de modulele locale |
 | Biblioteca Mock | — | — | — | — | transport fals determinist folosit de testele locale |
 | [`atf-ui`](../atf-ui/README.md) | ✅ | ✅ | — | — | politici și adaptor Playwright generic |
-| [`atf-debug-ui`](../atf-debug-ui/README.md) | — | ✅ | — | — | server și lansator pentru inspecție fără scriere |
+| [Biblioteca Debug UI](../lib/README.DebugUi.md) | — | ✅ | — | — | inspector deținut de producător, numai pentru HTML existent și în scope-ul de test |
 | Biblioteca Reporting selectată | — | — | — | — | dependență binară versionată; testele sursei sunt în afara acestui reactor |
 | Dovezi J1 pentru consumul Reporting | — | ✅ | ✅ | ✅ | adaptoare, scenarii și comportamentul raportului randat local |
 | [`atf-test-practice-shop`](../atf-test-practice-shop/README.md) | ✅ | ✅ | ✅ | ✅ | consumator: contracte, API, fluxuri și parcurs în browser |

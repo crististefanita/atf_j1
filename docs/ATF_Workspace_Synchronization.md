@@ -1,6 +1,6 @@
 # ATF J1 — sincronizarea artefactelor bibliotecilor
 
-Acest ghid descrie cum reactorul J1 selectează, instalează și verifică cele cinci
+Acest ghid descrie cum reactorul J1 selectează, instalează și verifică cele șase
 biblioteci consumate. Reactorul și criteriile sale de acceptanță rămân locale;
 dependențele sunt identificate prin coordonate Maven și octeții artifactelor.
 
@@ -22,7 +22,8 @@ proveniența pachetelor.
 | Reporting | `atf.api:atf-reporting:1.0.0-j26` | `lib/atf-reporting-1.0.0-j26.jar` | `lib/atf-reporting-1.0.0-j26.pom` |
 | Console | `atf.api:atf-console:1.0.0-c2` | `lib/atf-console-1.0.0-c2.jar` | `lib/atf-console-1.0.0-c2.pom` |
 | Mock | `atf.api:atf-mock:1.0.0-m2` | `lib/atf-mock-1.0.0-m2.jar` | `lib/atf-mock-1.0.0-m2.pom` |
-| Test Kit | `atf.api:atf-test-kit:1.0.0-k4` | `lib/atf-test-kit-1.0.0-k4.jar` | `lib/atf-test-kit-1.0.0-k4.pom` |
+| Test Kit | `atf.api:atf-test-kit:1.0.0-k5` | `lib/atf-test-kit-1.0.0-k5.jar` | `lib/atf-test-kit-1.0.0-k5.pom` |
+| Debug UI | `atf.api:atf-debug-ui:1.0.0-d1` | `lib/atf-debug-ui-1.0.0-d1.jar` | `lib/atf-debug-ui-1.0.0-d1.pom` |
 
 Versiunile de mai sus trebuie să corespundă proprietăților din POM-ul rădăcină
 și numelor de fișier din `lib`. Utilizarea bibliotecilor și limitele
@@ -63,10 +64,14 @@ mvn -B -ntp -N validate
 mvn -B -ntp -DskipTests test-compile
 ~~~
 
-Faza `validate` a POM-ului rădăcină instalează cele cinci perechi JAR/POM
+Faza `validate` a POM-ului rădăcină instalează cele șase perechi JAR/POM
 alăturate. Reîncarcă POM-ul rădăcină în IntelliJ după selectarea aceluiași JDK,
 fișier de setări și repository local. Nu adăuga modulele-sursă ale bibliotecilor
 în reactor pentru a satisface importurile.
+
+Debug UI este selectat numai în scope-ul `test` al `atf-tests`. Producătorul
+deține sursa și feedback-ul comun; J1 deține dependența selectată și acceptanța
+artifactului fizic. Shop și AutoEx nu depind de inspector.
 
 ## Modificări și păstrarea dovezilor
 

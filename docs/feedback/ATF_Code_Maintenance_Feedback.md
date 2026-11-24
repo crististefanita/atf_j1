@@ -2,8 +2,8 @@
 
 ## Pe scurt
 
-Constatările de mai jos sunt închise. Regulile durabile rămân la ownerii modulelor
-și în guvernanța executabilă; dovezile istorice de execuție rămân în istoricul Git.
+Registrul păstrează constatările active și închise. Regulile durabile rămân la ownerii modulelor și în
+guvernanța executabilă; dovezile istorice rămân în istoricul Git.
 
 <a id="gov-package-cohesion-2026-11-19"></a>
 ## GOV-PACKAGE-COHESION-2026-11-19 — coeziunea pachetelor
@@ -38,3 +38,22 @@ redactarea și verdicturile stabile.
 [Feedback-ul Reporting](ATF_Reporting_Feedback.md#j1-recovery-ide-report-parity-2026-11-22)
 păstrează verificarea IntelliJ separată. Controalele verificate rămân în
 [baseline](../ATF_Test_Changes_Baseline.md).
+
+## Control verificat — adoptarea binară Debug UI
+
+Implementarea Debug UI și testele native au acum un singur owner canonic și un
+artifact versionat pentru consumer. Modulul sursă J1 a fost eliminat după ce a
+trecut guvernanța întregului reactor; contractul binar, integritatea, ownership-ul
+și documentația rămân protejate de controalele din
+[baseline-ul verificat](../ATF_Test_Changes_Baseline.md).
+
+<a id="source-language-en-2026-11-24"></a>
+## SOURCE-LANGUAGE-EN-2026-11-24 — sursă și comentarii în engleză
+
+**Stare: Verificat și închis pentru J0/J1.** J0 publică scannerul comun în Test Kit K5, iar suita J1 îl aplică surselor Java/MJS declarate. Testele negative resping identificatori și comentarii localizate; textele UI și payload-urile fixture localizate rămân acceptate. Diagnosticul păstrează fișierul, linia și construcția.
+
+- Păstrează în engleză sursa J1 scrisă de dezvoltatori: identificatori Java/MJS, comentarii/docstrings, nume de teste și mesaje tehnice. Sursa rămâne identică între `main` și `main_RO`; se traduce doar documentația guvernată.
+- Exclude din verdict textele localizate ale produsului și datele de test intenționat localizate. Testele negative și pozitive verifică această limită, iar diagnosticul indică fișierul, linia și construcția.
+- J1 folosește scannerul Test Kit K5 deținut de J0, fără o copie locală. Gate-ul rulează în suita whole-reactor și în verificarea de inventariere a suitei de cod; adopția J2–J7 rămâne o etapă separată, urmărită de feedback-ul de rollout al ownerului J0.
+
+Închiderea locală este susținută de verificările J0/J1 și de guvernanța documentației; rollout-ul către alți consumatori nu este implicit închis. Controlul tehnic verificat este în [baseline](../ATF_Test_Changes_Baseline.md).
